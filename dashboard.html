@@ -332,11 +332,11 @@
     <!-- Proposal Generator -->
     <div class="tool-card" id="card-proposal">
       <div class="tool-icon icon-proposal">&#9997;</div>
-      <div class="tag tag-local">Requires Main Machine</div>
+      <div class="tag tag-local">Runs on Main Machine</div>
       <h3>Proposal Generator</h3>
-      <p>Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send.</p>
+      <p>Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send. Accessible remotely via tunnel.</p>
       <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:3000" target="_blank">Open</a>
+        <a class="btn btn-primary" href="#" target="_blank">Open</a>
         <button class="btn btn-secondary" onclick="startServer('proposal')">Start Server</button>
         <span class="status-dot checking" id="status-proposal"></span>
         <span class="status-text" id="status-text-proposal">Checking...</span>
@@ -373,40 +373,64 @@
     badge.className = 'env-badge online';
   }
 
-  // Health-check server-dependent tools (only meaningful when local)
+  // Server-dependent tools with local and tunnel URLs
+  // tunnel-config.json is auto-updated when a tunnel starts
   const serverTools = {
-    proposal: { port: 3000, url: 'http://localhost:3000' }
+    proposal: { port: 3000, localUrl: 'http://localhost:3000', tunnelUrl: null }
   };
+
+  // Fetch tunnel config (updated by main machine when tunnel starts)
+  async function loadTunnelConfig() {
+    try {
+      const resp = await fetch('tunnel-config.json?t=' + Date.now());
+      if (resp.ok) {
+        const config = await resp.json();
+        if (config.proposal) {
+          serverTools.proposal.tunnelUrl = config.proposal.url;
+        }
+      }
+    } catch (e) { /* no config yet */ }
+  }
+
+  function getToolUrl(name) {
+    const tool = serverTools[name];
+    if (isLocal) return tool.localUrl;
+    return tool.tunnelUrl || tool.localUrl;
+  }
 
   async function checkStatus(name) {
     const dot = document.getElementById('status-' + name);
     const text = document.getElementById('status-text-' + name);
+    const openBtn = document.querySelector('#card-' + name + ' .btn-primary');
     if (!dot || !text) return;
 
-    if (!isLocal) {
-      dot.className = 'status-dot offline';
-      text.textContent = 'Use main machine';
-      return;
-    }
+    const url = getToolUrl(name);
+
+    // Update the Open button href
+    if (openBtn) openBtn.href = url;
 
     dot.className = 'status-dot checking';
     text.textContent = 'Checking...';
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 2000);
-      await fetch(serverTools[name].url, { mode: 'no-cors', signal: controller.signal });
+      const timeout = setTimeout(() => controller.abort(), 4000);
+      await fetch(url, { mode: 'no-cors', signal: controller.signal });
       clearTimeout(timeout);
       dot.className = 'status-dot online';
       text.textContent = 'Running';
     } catch (e) {
       dot.className = 'status-dot offline';
-      text.textContent = 'Offline';
+      if (!isLocal && !serverTools[name].tunnelUrl) {
+        text.textContent = 'Tunnel not configured';
+      } else {
+        text.textContent = 'Offline';
+      }
     }
   }
 
   function startServer(name) {
     if (!isLocal) {
-      alert('This tool requires the main machine.\n\nPlease remote control into the main device to use this tool.');
+      alert('The server must be started from the main machine.\n\nRemote control into the Mac and run:\n~/proposal-generator/start.sh');
       return;
     }
     const text = document.getElementById('status-text-' + name);
@@ -417,12 +441,16 @@
     setTimeout(() => checkStatus(name), 3000);
   }
 
-  // Check server tools on load
-  Object.keys(serverTools).forEach(name => checkStatus(name));
-  // Re-check every 10 seconds
-  setInterval(() => {
+  // Init: load tunnel config, then check statuses
+  loadTunnelConfig().then(() => {
     Object.keys(serverTools).forEach(name => checkStatus(name));
-  }, 10000);
+  });
+  // Re-check every 15 seconds (reload tunnel config too)
+  setInterval(() => {
+    loadTunnelConfig().then(() => {
+      Object.keys(serverTools).forEach(name => checkStatus(name));
+    });
+  }, 15000);
 </script>
 
 </body>
