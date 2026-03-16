@@ -265,15 +265,37 @@
   </div>
 
   <!-- ONLINE TOOLS — static HTML, work everywhere -->
-  <div class="section-label">Online Tools <span class="count">3</span></div>
+  <div class="section-label">Online Tools <span class="count">5</span></div>
   <div class="tools-grid">
+
+    <!-- Feedback Form Generator (browser-based) -->
+    <div class="tool-card">
+      <div class="tool-icon icon-feedback">&#9998;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Feedback Form & QR Generator</h3>
+      <p>Enter a workshop name and date &mdash; creates a Google Form and generates a downloadable QR code PNG, ready to paste into your slides and handouts.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="feedback-form-generator.html" target="_blank">Open</a>
+      </div>
+    </div>
+
+    <!-- Banner Generator (browser-based) -->
+    <div class="tool-card">
+      <div class="tool-icon icon-banner">&#9881;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Eventbrite Banner Generator</h3>
+      <p>Fill in workshop details and generate a ready-to-paste prompt for Claude Code to create branded Eventbrite banners via Canva.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="banner-generator-online.html" target="_blank">Open</a>
+      </div>
+    </div>
 
     <!-- Feedback QR Generator (static HTML) -->
     <div class="tool-card">
       <div class="tool-icon icon-feedback">&#9998;</div>
       <div class="tag tag-online">Available Online</div>
-      <h3>Feedback QR Generator</h3>
-      <p>Generate QR codes for workshop feedback forms. Enter the workshop name and date to create a scannable QR code ready for your slides and handouts.</p>
+      <h3>Feedback QR Generator (Quick)</h3>
+      <p>Quick QR code generator for any URL. Enter a link and get a scannable QR code for your workshop materials.</p>
       <div class="tool-actions">
         <a class="btn btn-primary" href="feedback-qr-generator.html" target="_blank">Open</a>
       </div>
@@ -304,7 +326,7 @@
   </div>
 
   <!-- ON-DEVICE TOOLS — need main machine -->
-  <div class="section-label">On-Device Tools <span class="count">3</span></div>
+  <div class="section-label">On-Device Tools <span class="count">1</span></div>
   <div class="tools-grid">
 
     <!-- Proposal Generator -->
@@ -318,34 +340,6 @@
         <button class="btn btn-secondary" onclick="startServer('proposal')">Start Server</button>
         <span class="status-dot checking" id="status-proposal"></span>
         <span class="status-text" id="status-text-proposal">Checking...</span>
-      </div>
-    </div>
-
-    <!-- Banner Generator -->
-    <div class="tool-card" id="card-banner">
-      <div class="tool-icon icon-banner">&#9881;</div>
-      <div class="tag tag-local">Requires Main Machine</div>
-      <h3>Eventbrite Banner Generator</h3>
-      <p>Generate Eventbrite event banners with correct Dale Carnegie branding, colours, and layout. Works with Claude Code to create designs via Canva.</p>
-      <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:8765" target="_blank">Open</a>
-        <button class="btn btn-secondary" onclick="startServer('banner')">Start Server</button>
-        <span class="status-dot checking" id="status-banner"></span>
-        <span class="status-text" id="status-text-banner">Checking...</span>
-      </div>
-    </div>
-
-    <!-- Feedback Form Generator (server version) -->
-    <div class="tool-card" id="card-feedback-server">
-      <div class="tool-icon icon-feedback">&#9998;</div>
-      <div class="tag tag-local">Requires Main Machine</div>
-      <h3>Feedback Form Generator</h3>
-      <p>Enter a workshop name and date &mdash; automatically creates a Google Form and saves a QR code PNG to your Desktop, ready to paste into visuals.</p>
-      <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:8766" target="_blank">Open</a>
-        <button class="btn btn-secondary" onclick="startServer('feedback')">Start Server</button>
-        <span class="status-dot checking" id="status-feedback"></span>
-        <span class="status-text" id="status-text-feedback">Checking...</span>
       </div>
     </div>
 
@@ -381,9 +375,7 @@
 
   // Health-check server-dependent tools (only meaningful when local)
   const serverTools = {
-    proposal: { port: 3000, url: 'http://localhost:3000' },
-    banner:   { port: 8765, url: 'http://localhost:8765' },
-    feedback: { port: 8766, url: 'http://localhost:8766' }
+    proposal: { port: 3000, url: 'http://localhost:3000' }
   };
 
   async function checkStatus(name) {
@@ -421,10 +413,6 @@
     text.textContent = 'Starting...';
     if (name === 'proposal') {
       alert('To start the Proposal Generator:\n\n1. Open Terminal\n2. Run: ~/proposal-generator/start.sh\n\nOr double-click "DC Proposal Generator" on your Desktop if available.');
-    } else if (name === 'banner') {
-      alert('To start the Banner Generator:\n\n1. Double-click "DC Banner Generator.command" on your Desktop\n\nOr open Terminal and run:\npython3 ~/.dc-tools/banner-generator.py');
-    } else if (name === 'feedback') {
-      alert('To start the Feedback Form Generator:\n\n1. Double-click "DC Feedback Generator.command" on your Desktop\n\nOr open Terminal and run:\npython3 ~/.dc-tools/feedback-generator.py');
     }
     setTimeout(() => checkStatus(name), 3000);
   }

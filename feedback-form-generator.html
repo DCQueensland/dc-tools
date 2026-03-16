@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD - Feedback Form Generator</title>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #000;
+    padding: 24px 40px;
+    border-bottom: 3px solid #ffc708;
+  }
+  header .back { color: #ffc708; text-decoration: none; font-size: 13px; }
+  header .back:hover { text-decoration: underline; }
+  header h1 { font-size: 22px; font-weight: 600; margin-top: 4px; }
+  header h1 span { color: #ffc708; }
+  header .subtitle { color: #999; font-size: 13px; margin-top: 2px; }
+
+  .container {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 0 24px;
+  }
+
+  .card {
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 24px;
+  }
+
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%;
+    padding: 12px 16px;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 15px;
+    font-family: inherit;
+  }
+  .field input:focus { outline: none; border-color: #ffc708; }
+  .field .hint { font-size: 11px; color: #666; margin-top: 6px; line-height: 1.4; }
+
+  .btn-generate {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #ffc708;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .btn-generate:hover { opacity: 0.85; }
+  .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-save {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #333;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .btn-save:hover { border-color: #ffc708; color: #ffc708; }
+
+  .btn-download {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #84c44c;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+  }
+  .btn-download:hover { opacity: 0.85; }
+
+  .status {
+    margin-top: 24px;
+    padding: 20px;
+    border-radius: 8px;
+    display: none;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .status.loading { display: block; background: #2a2a1a; border: 1px solid #ffc708; color: #ffc708; }
+  .status.success { display: block; background: #1a2a1a; border: 1px solid #84c44c; color: #84c44c; }
+  .status.error   { display: block; background: #2a1a1a; border: 1px solid #e55; color: #e55; }
+
+  .result { margin-top: 24px; display: none; }
+  .result.show { display: block; }
+
+  .result-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .result-row .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 4px; }
+  .result-row .value { font-size: 14px; word-break: break-all; }
+  .result-row a { color: #ffc708; }
+  .result-row .copy-btn {
+    margin-left: auto;
+    padding: 6px 14px;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #ccc;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .result-row .copy-btn:hover { border-color: #ffc708; color: #ffc708; }
+
+  .qr-preview { text-align: center; margin-top: 20px; }
+  .qr-preview .qr-container {
+    display: inline-block;
+    border-radius: 8px;
+    border: 4px solid #333;
+    overflow: hidden;
+    background: #fff;
+  }
+  .qr-preview .qr-note { font-size: 12px; color: #666; margin-top: 8px; }
+
+  .history { margin-top: 16px; }
+  .history h3 { font-size: 14px; color: #666; margin-bottom: 12px; }
+  .history-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  .history-item .name { color: #ccc; }
+  .history-item .date { color: #666; font-size: 12px; }
+  .history-item a { color: #ffc708; font-size: 12px; margin-left: 12px; }
+  .history-item .delete-btn {
+    color: #666;
+    font-size: 12px;
+    margin-left: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+  }
+  .history-item .delete-btn:hover { color: #e55; }
+
+  .setup-card {
+    background: #2a2a1a;
+    border: 1px solid #ffc708;
+    border-radius: 12px;
+    padding: 28px 36px;
+    margin-bottom: 24px;
+  }
+  .setup-card h2 { font-size: 16px; color: #ffc708; margin-bottom: 16px; }
+  .setup-card ol { padding-left: 20px; color: #ccc; font-size: 13px; line-height: 2; }
+  .setup-card code {
+    background: #1a1a1a;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #ffc708;
+  }
+  .setup-card .script-box {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    font-family: monospace;
+    font-size: 11px;
+    color: #ccc;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 300px;
+    overflow-y: auto;
+    line-height: 1.5;
+  }
+  .setup-card .copy-script {
+    display: inline-block;
+    padding: 6px 16px;
+    background: #ffc708;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 4px;
+  }
+
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="dashboard.html" class="back">&larr; Back to Dashboard</a>
+  <h1>Feedback Form <span>Generator</span></h1>
+  <div class="subtitle">Creates a Google Form + QR code for any public workshop</div>
+</header>
+
+<div class="container">
+
+  <!-- Setup panel (shown if no Apps Script URL configured) -->
+  <div class="setup-card" id="setupPanel">
+    <h2>One-Time Setup (2 minutes)</h2>
+    <ol>
+      <li>Go to <a href="https://script.google.com" target="_blank" style="color:#ffc708;">script.google.com</a> and click <strong>New Project</strong></li>
+      <li>Delete everything in the editor and paste the script below</li>
+      <li>Click <strong>Deploy &gt; New deployment</strong></li>
+      <li>Select type: <strong>Web app</strong></li>
+      <li>Set "Execute as" to <strong>Me</strong>, "Who has access" to <strong>Anyone</strong></li>
+      <li>Click <strong>Deploy</strong>, then <strong>Authorize access</strong> (grant Forms permissions)</li>
+      <li>Copy the <strong>Web app URL</strong> and paste it below</li>
+    </ol>
+
+    <div class="script-box" id="scriptContent">function doPost(e) {
+  try {
+    var data = JSON.parse(e.postData.contents);
+    var title = data.title || "Workshop Feedback";
+    var description = data.description || "";
+
+    var form = FormApp.create(title);
+    form.setDescription(description);
+    form.setCollectEmail(false);
+    form.setLimitOneResponsePerUser(false);
+
+    form.addTextItem().setTitle("Full Name").setRequired(true);
+    form.addTextItem().setTitle("Email Address").setRequired(true);
+    form.addTextItem().setTitle("Best Contact Number").setRequired(true);
+    form.addTextItem().setTitle("Company/Organisation Name").setRequired(true);
+    form.addTextItem().setTitle("Title/Position").setRequired(true);
+
+    form.addScaleItem()
+      .setTitle("Please rate the workshop on a scale of 1 - 10")
+      .setBounds(1, 10)
+      .setLabels("Unsatisfactory", "Excellent")
+      .setRequired(true);
+
+    form.addParagraphTextItem()
+      .setTitle("What was your biggest take away from today's workshop?")
+      .setRequired(true);
+
+    var interest = form.addMultipleChoiceItem()
+      .setTitle("Would you be interested in learning how Dale Carnegie can support you in the future?")
+      .setRequired(true);
+    interest.setChoices([
+      interest.createChoice("For Self"),
+      interest.createChoice("For Team"),
+      interest.createChoice("Both"),
+      interest.createChoice("No thanks")
+    ]);
+
+    form.addParagraphTextItem()
+      .setTitle("General Comments")
+      .setRequired(false);
+
+    var url = form.getPublishedUrl();
+    var editUrl = form.getEditUrl();
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ success: true, formUrl: url, editUrl: editUrl })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (err) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ success: false, error: err.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  return ContentService.createTextOutput(
+    JSON.stringify({ status: "ok", message: "DC Feedback Form Creator is running" })
+  ).setMimeType(ContentService.MimeType.JSON);
+}</div>
+    <button class="copy-script" onclick="copyScript(this)">Copy Script</button>
+
+    <div class="field" style="margin-top: 20px;">
+      <label>Apps Script Web App URL</label>
+      <input type="url" id="appsScriptUrl" placeholder="https://script.google.com/macros/s/.../exec">
+    </div>
+    <button class="btn-save" onclick="saveSetup()">Save & Continue</button>
+  </div>
+
+  <!-- Main generator (shown after setup) -->
+  <div class="card hidden" id="mainPanel">
+    <div class="field">
+      <label>Workshop Name</label>
+      <input type="text" id="workshopName" placeholder="e.g. Winning with Relationship Selling">
+    </div>
+
+    <div class="field">
+      <label>Workshop Date</label>
+      <input type="date" id="workshopDate" onclick="this.showPicker()" style="cursor: pointer;">
+      <div class="hint">Click to select from calendar</div>
+    </div>
+
+    <button class="btn-generate" id="generateBtn" onclick="generate()">
+      Generate Form & QR Code
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      <div class="result-row">
+        <div style="min-width:0; flex:1;">
+          <div class="label">Google Form Link (for respondents)</div>
+          <div class="value"><a id="formLink" href="#" target="_blank"></a></div>
+        </div>
+        <button class="copy-btn" onclick="copyLink(this)">Copy</button>
+      </div>
+
+      <div class="result-row">
+        <div style="min-width:0; flex:1;">
+          <div class="label">Edit Form (add/change questions)</div>
+          <div class="value"><a id="editLink" href="#" target="_blank" style="color:#84c44c;">Open in Google Forms Editor</a></div>
+        </div>
+      </div>
+
+      <div class="qr-preview">
+        <div class="qr-container" id="qrcode"></div>
+        <div class="qr-note">QR code generated — use the button below to download the PNG</div>
+        <div style="margin-top: 12px;">
+          <button class="btn-download" onclick="downloadQR()">Download QR Code PNG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="history" id="historySection">
+    <h3>Recent Forms</h3>
+    <div id="historyList"></div>
+  </div>
+
+  <div style="text-align:center; margin-top:24px; padding-bottom: 40px;">
+    <button class="btn-save" onclick="showSetup()" style="font-size:11px; color:#666; border-color:#333;">Change Apps Script URL</button>
+    <button class="btn-save" onclick="clearHistory()" style="font-size:11px; color:#666; border-color:#333; margin-left:8px;">Clear History</button>
+  </div>
+</div>
+
+<script>
+  // -- localStorage keys --
+  const LS_CONFIG = 'dc-feedback-config';
+  const LS_HISTORY = 'dc-feedback-history';
+
+  // -- Current QR state for download --
+  let currentQRSlug = '';
+  let currentQRDate = '';
+
+  // -- Config (Apps Script URL) --
+  function loadConfig() {
+    try { return JSON.parse(localStorage.getItem(LS_CONFIG) || '{}'); } catch { return {}; }
+  }
+
+  function saveConfig(config) {
+    localStorage.setItem(LS_CONFIG, JSON.stringify(config));
+  }
+
+  // -- History --
+  function loadHistory() {
+    try { return JSON.parse(localStorage.getItem(LS_HISTORY) || '[]'); } catch { return []; }
+  }
+
+  function saveHistory(history) {
+    localStorage.setItem(LS_HISTORY, JSON.stringify(history));
+  }
+
+  function addToHistory(entry) {
+    const history = loadHistory();
+    history.unshift(entry);
+    // Keep last 50 entries
+    saveHistory(history.slice(0, 50));
+  }
+
+  // -- Initialise UI --
+  function initUI() {
+    const config = loadConfig();
+    if (config.apps_script_url) {
+      document.getElementById('setupPanel').classList.add('hidden');
+      document.getElementById('mainPanel').classList.remove('hidden');
+    } else {
+      document.getElementById('setupPanel').classList.remove('hidden');
+      document.getElementById('mainPanel').classList.add('hidden');
+    }
+    renderHistory();
+  }
+
+  // -- Setup --
+  function showSetup() {
+    document.getElementById('setupPanel').classList.remove('hidden');
+    const config = loadConfig();
+    if (config.apps_script_url) {
+      document.getElementById('appsScriptUrl').value = config.apps_script_url;
+    }
+  }
+
+  function copyScript(btn) {
+    const text = document.getElementById('scriptContent').textContent;
+    navigator.clipboard.writeText(text).then(function() {
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy Script'; }, 1500);
+    });
+  }
+
+  function saveSetup() {
+    const url = document.getElementById('appsScriptUrl').value.trim();
+    if (!url || !url.startsWith('https://script.google.com/')) {
+      alert('Please paste a valid Apps Script web app URL.');
+      return;
+    }
+    const config = loadConfig();
+    config.apps_script_url = url;
+    saveConfig(config);
+    document.getElementById('setupPanel').classList.add('hidden');
+    document.getElementById('mainPanel').classList.remove('hidden');
+  }
+
+  // -- Date formatting --
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // -- Slug helper --
+  function makeSlug(name) {
+    return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  }
+
+  // -- Generate Form & QR --
+  async function generate() {
+    const name = document.getElementById('workshopName').value.trim();
+    const date = document.getElementById('workshopDate').value;
+
+    if (!name) { alert('Enter a workshop name.'); return; }
+    if (!date) { alert('Enter a workshop date.'); return; }
+
+    const config = loadConfig();
+    if (!config.apps_script_url) {
+      alert('Apps Script URL not configured. Complete the setup first.');
+      showSetup();
+      return;
+    }
+
+    const btn = document.getElementById('generateBtn');
+    const status = document.getElementById('status');
+    const result = document.getElementById('result');
+
+    btn.disabled = true;
+    btn.textContent = 'Generating...';
+    result.classList.remove('show');
+    status.className = 'status loading';
+    status.textContent = 'Creating Google Form and generating QR code...';
+
+    const formTitle = 'Dale Carnegie ' + name + ' Workshop Feedback';
+    const formDescription = 'Fill in the below fields to go into the draw to win a $1,000 credit to go towards any public Dale Carnegie Program! *Conditions Apply';
+
+    const payload = {
+      title: formTitle,
+      description: formDescription
+    };
+
+    try {
+      const resp = await fetch(config.apps_script_url, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        redirect: 'follow'
+      });
+
+      if (!resp.ok) {
+        throw new Error('Apps Script returned status ' + resp.status);
+      }
+
+      const data = await resp.json();
+
+      if (!data.success) {
+        throw new Error(data.error || 'Unknown error from Apps Script');
+      }
+
+      const formUrl = data.formUrl;
+      const editUrl = data.editUrl || '';
+
+      // Update UI with results
+      status.className = 'status success';
+      status.textContent = 'Done! Form created and QR code generated.';
+
+      document.getElementById('formLink').href = formUrl;
+      document.getElementById('formLink').textContent = formUrl;
+      document.getElementById('editLink').href = editUrl;
+
+      // Generate QR code
+      const qrDiv = document.getElementById('qrcode');
+      qrDiv.innerHTML = '';
+      new QRCode(qrDiv, {
+        text: formUrl,
+        width: 250,
+        height: 250,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      // Store state for download
+      currentQRSlug = makeSlug(name);
+      currentQRDate = date;
+
+      result.classList.add('show');
+
+      // Save to history
+      const dateFormatted = formatDate(date);
+      addToHistory({
+        name: name,
+        date: dateFormatted,
+        form_url: formUrl,
+        edit_url: editUrl,
+        created: new Date().toISOString()
+      });
+      renderHistory();
+
+    } catch (e) {
+      status.className = 'status error';
+      status.innerHTML = 'Error: ' + escapeHtml(e.message) +
+        '<br><br><span style="font-size:12px; color:#999;">If you see a CORS error, make sure your Apps Script is deployed as:<br>' +
+        '- Execute as: <strong>Me</strong><br>' +
+        '- Who has access: <strong>Anyone</strong><br>' +
+        'Then re-deploy with a new version.</span>';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Generate Form & QR Code';
+    }
+  }
+
+  // -- Download QR code --
+  function downloadQR() {
+    const canvas = document.querySelector('#qrcode canvas');
+    if (!canvas) {
+      // Fallback: try img tag (qrcodejs sometimes uses img instead of canvas)
+      const img = document.querySelector('#qrcode img');
+      if (img) {
+        const link = document.createElement('a');
+        link.download = 'dc-feedback-qr-' + currentQRSlug + '-' + currentQRDate + '.png';
+        link.href = img.src;
+        link.click();
+      } else {
+        alert('No QR code to download. Generate one first.');
+      }
+      return;
+    }
+    const link = document.createElement('a');
+    link.download = 'dc-feedback-qr-' + currentQRSlug + '-' + currentQRDate + '.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  }
+
+  // -- Copy form link --
+  function copyLink(btn) {
+    const url = document.getElementById('formLink').href;
+    navigator.clipboard.writeText(url).then(function() {
+      btn.textContent = 'Copied!';
+      setTimeout(function() { btn.textContent = 'Copy'; }, 1500);
+    });
+  }
+
+  // -- Render history --
+  function renderHistory() {
+    const list = document.getElementById('historyList');
+    const history = loadHistory();
+    if (!history.length) {
+      list.innerHTML = '<div style="color:#555; font-size:13px;">No forms generated yet.</div>';
+      return;
+    }
+    list.innerHTML = history.map(function(h, idx) {
+      return '<div class="history-item">' +
+        '<div>' +
+          '<div class="name">' + escapeHtml(h.name) + '</div>' +
+          '<div class="date">' + escapeHtml(h.date) + '</div>' +
+        '</div>' +
+        '<div>' +
+          '<a href="' + escapeHtml(h.form_url) + '" target="_blank">Form</a>' +
+          (h.edit_url ? '<a href="' + escapeHtml(h.edit_url) + '" target="_blank">Edit</a>' : '') +
+          '<button class="delete-btn" onclick="deleteHistoryItem(' + idx + ')" title="Remove">&times;</button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  // -- Delete a single history item --
+  function deleteHistoryItem(idx) {
+    const history = loadHistory();
+    history.splice(idx, 1);
+    saveHistory(history);
+    renderHistory();
+  }
+
+  // -- Clear all history --
+  function clearHistory() {
+    if (confirm('Clear all form history?')) {
+      saveHistory([]);
+      renderHistory();
+    }
+  }
+
+  // -- HTML escape helper --
+  function escapeHtml(str) {
+    if (!str) return '';
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // -- Init --
+  initUI();
+</script>
+</body>
+</html>
