@@ -1,0 +1,9 @@
+{
+  "name": "Feedback QR Generator (Quick)",
+  "description": "Quick QR code generator for any URL. Enter a link and get a scannable QR code for your workshop materials.",
+  "file": "feedback-qr-generator.html",
+  "icon": "✎",
+  "category": "online-tool",
+  "type": "online",
+  "order": 5
+}

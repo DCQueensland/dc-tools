@@ -1,0 +1,9 @@
+{
+  "name": "Telemarketer Training Portal",
+  "description": "6-phase outbound call training. New relationship calls, post-workshop follow-up, special call types, 15 objection scripts with responses, and a knowledge quiz.",
+  "file": "telemarketer-training-portal.html",
+  "icon": "📞",
+  "category": "training-portal",
+  "type": "online",
+  "order": 2
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Feedback Form & QR Generator",
+  "description": "Enter a workshop name and date — creates a Google Form and generates a downloadable QR code PNG, ready to paste into your slides and handouts.",
+  "file": "feedback-form-generator.html",
+  "icon": "✎",
+  "category": "online-tool",
+  "type": "online",
+  "order": 3
+}

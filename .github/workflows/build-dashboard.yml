@@ -1,0 +1,24 @@
+name: Build Dashboard
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build dashboard from tool configs
+        run: |
+          node build-dashboard.js
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "DC Tools Bot"
+          git config user.email "bot@dcqueensland.github.io"
+          git add dashboard.html
+          git diff --staged --quiet || (git commit -m "Auto-rebuild dashboard" && git push)

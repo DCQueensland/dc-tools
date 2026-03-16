@@ -1,0 +1,13 @@
+{
+  "name": "Proposal Generator",
+  "description": "Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send. Accessible remotely via tunnel.",
+  "file": null,
+  "icon": "✍",
+  "category": "on-device",
+  "type": "server",
+  "server": {
+    "port": 3000,
+    "localUrl": "http://localhost:3000"
+  },
+  "order": 100
+}

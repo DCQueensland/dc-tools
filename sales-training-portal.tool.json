@@ -1,0 +1,9 @@
+{
+  "name": "Sales Training Portal",
+  "description": "Complete 4-phase sales process training. Covers Meeting 1 (Awareness), Meeting 2 (Proposal), Closing & Pricing, plus a live example and 15-question quiz.",
+  "file": "sales-training-portal.html",
+  "icon": "🎯",
+  "category": "training-portal",
+  "type": "online",
+  "order": 1
+}

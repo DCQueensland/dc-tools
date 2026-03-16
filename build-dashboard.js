@@ -1,4 +1,92 @@
-<!DOCTYPE html>
+const fs = require('fs');
+const path = require('path');
+
+// Collect all .tool.json files
+const files = fs.readdirSync('.').filter(f => f.endsWith('.tool.json'));
+const tools = files.map(f => JSON.parse(fs.readFileSync(f, 'utf8'))).sort((a, b) => a.order - b.order);
+
+// Read tunnel config if exists
+let tunnelConfig = {};
+try {
+  tunnelConfig = JSON.parse(fs.readFileSync('tunnel-config.json', 'utf8'));
+} catch (e) {}
+
+// Group by category
+const categories = {
+  'training-portal': { label: 'Training Portals', tools: [] },
+  'online-tool': { label: 'Online Tools', tools: [] },
+  'on-device': { label: 'On-Device Tools', tools: [] }
+};
+
+tools.forEach(t => {
+  const cat = categories[t.category] || categories['online-tool'];
+  cat.tools.push(t);
+});
+
+// Icon CSS class mapping
+function iconClass(cat) {
+  const map = {
+    'training-portal': 'icon-sales',
+    'online-tool': 'icon-banner',
+    'on-device': 'icon-proposal'
+  };
+  return map[cat] || 'icon-banner';
+}
+
+// Build tool cards
+function buildCard(tool) {
+  const isServer = tool.type === 'server';
+  const tagClass = isServer ? 'tag-local' : 'tag-online';
+  const tagText = isServer ? 'Runs on Main Machine' : 'Available Online';
+  const idAttr = isServer ? ` id="card-${tool.category}-${tool.order}"` : '';
+
+  let actions = '';
+  if (isServer) {
+    const serverName = tool.name.toLowerCase().replace(/\s+/g, '-');
+    actions = `
+        <a class="btn btn-primary" href="#" target="_blank" data-server="${serverName}">Open</a>
+        <button class="btn btn-secondary" onclick="startServer('${serverName}')">Start Server</button>
+        <span class="status-dot checking" id="status-${serverName}"></span>
+        <span class="status-text" id="status-text-${serverName}">Checking...</span>`;
+  } else {
+    actions = `<a class="btn btn-primary" href="${tool.file}" target="_blank">Open</a>`;
+  }
+
+  return `
+    <div class="tool-card"${idAttr}>
+      <div class="tool-icon ${iconClass(tool.category)}">${tool.icon}</div>
+      <div class="tag ${tagClass}">${tagText}</div>
+      <h3>${tool.name}</h3>
+      <p>${tool.description}</p>
+      <div class="tool-actions">${actions}
+      </div>
+    </div>`;
+}
+
+// Build server tools config for JS
+const serverToolsJS = {};
+tools.filter(t => t.type === 'server').forEach(t => {
+  const name = t.name.toLowerCase().replace(/\s+/g, '-');
+  serverToolsJS[name] = {
+    port: t.server.port,
+    localUrl: t.server.localUrl
+  };
+});
+
+// Build sections HTML
+let sectionsHTML = '';
+for (const [key, cat] of Object.entries(categories)) {
+  if (cat.tools.length === 0) continue;
+  sectionsHTML += `
+  <div class="section-label">${cat.label} <span class="count">${cat.tools.length}</span></div>
+  <div class="tools-grid">
+${cat.tools.map(t => buildCard(t)).join('\n')}
+  </div>
+`;
+}
+
+// Final HTML
+const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -104,95 +192,7 @@
 </header>
 
 <div class="dashboard">
-
-  <div class="section-label">Training Portals <span class="count">2</span></div>
-  <div class="tools-grid">
-
-    <div class="tool-card">
-      <div class="tool-icon icon-sales">🎯</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Sales Training Portal</h3>
-      <p>Complete 4-phase sales process training. Covers Meeting 1 (Awareness), Meeting 2 (Proposal), Closing & Pricing, plus a live example and 15-question quiz.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="sales-training-portal.html" target="_blank">Open</a>
-      </div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon icon-sales">📞</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Telemarketer Training Portal</h3>
-      <p>6-phase outbound call training. New relationship calls, post-workshop follow-up, special call types, 15 objection scripts with responses, and a knowledge quiz.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="telemarketer-training-portal.html" target="_blank">Open</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">Online Tools <span class="count">5</span></div>
-  <div class="tools-grid">
-
-    <div class="tool-card">
-      <div class="tool-icon icon-banner">✎</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Feedback Form & QR Generator</h3>
-      <p>Enter a workshop name and date — creates a Google Form and generates a downloadable QR code PNG, ready to paste into your slides and handouts.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="feedback-form-generator.html" target="_blank">Open</a>
-      </div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon icon-banner">⚙</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Eventbrite Banner Generator</h3>
-      <p>Fill in workshop details and generate a ready-to-paste prompt for Claude Code to create branded Eventbrite banners via Canva.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="banner-generator-online.html" target="_blank">Open</a>
-      </div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon icon-banner">✎</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Feedback QR Generator (Quick)</h3>
-      <p>Quick QR code generator for any URL. Enter a link and get a scannable QR code for your workshop materials.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="feedback-qr-generator.html" target="_blank">Open</a>
-      </div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon icon-banner">🔍</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Program Finder</h3>
-      <p>Look up Dale Carnegie programs, descriptions, outcomes, and pricing. Quick reference for the full program catalogue.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="program-finder.html" target="_blank">Open</a>
-      </div>
-    </div>
-
-    <div class="tool-card">
-      <div class="tool-icon icon-banner">📈</div>
-      <div class="tag tag-online">Available Online</div>
-      <h3>Weekly Dashboard</h3>
-      <p>Weekly status overview showing key metrics, upcoming events, and action items at a glance.</p>
-      <div class="tool-actions"><a class="btn btn-primary" href="weekly-dashboard.html" target="_blank">Open</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="section-label">On-Device Tools <span class="count">1</span></div>
-  <div class="tools-grid">
-
-    <div class="tool-card" id="card-on-device-100">
-      <div class="tool-icon icon-proposal">✍</div>
-      <div class="tag tag-local">Runs on Main Machine</div>
-      <h3>Proposal Generator</h3>
-      <p>Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send. Accessible remotely via tunnel.</p>
-      <div class="tool-actions">
-        <a class="btn btn-primary" href="#" target="_blank" data-server="proposal-generator">Open</a>
-        <button class="btn btn-secondary" onclick="startServer('proposal-generator')">Start Server</button>
-        <span class="status-dot checking" id="status-proposal-generator"></span>
-        <span class="status-text" id="status-text-proposal-generator">Checking...</span>
-      </div>
-    </div>
-  </div>
-
+${sectionsHTML}
   <div class="tools-grid">
     <div class="tool-card add-new">
       <div class="add-new-inner">
@@ -218,12 +218,7 @@
     badge.className = 'env-badge online';
   }
 
-  const serverTools = {
-  "proposal-generator": {
-    "port": 3000,
-    "localUrl": "http://localhost:3000"
-  }
-};
+  const serverTools = ${JSON.stringify(serverToolsJS, null, 2)};
 
   // Add tunnelUrl property
   Object.keys(serverTools).forEach(k => { serverTools[k].tunnelUrl = null; });
@@ -234,7 +229,7 @@
       if (resp.ok) {
         const config = await resp.json();
         Object.keys(config).forEach(k => {
-          const name = k.toLowerCase().replace(/\s+/g, '-');
+          const name = k.toLowerCase().replace(/\\s+/g, '-');
           if (serverTools[name]) serverTools[name].tunnelUrl = config[k].url;
           // Also try exact key match
           if (serverTools[k]) serverTools[k].tunnelUrl = config[k].url;
@@ -280,7 +275,7 @@
 
   function startServer(name) {
     if (!isLocal) {
-      alert('The server must be started from the main machine.\n\nRemote control into the Mac and run:\n~/proposal-generator/start-remote.sh');
+      alert('The server must be started from the main machine.\\n\\nRemote control into the Mac and run:\\n~/proposal-generator/start-remote.sh');
       return;
     }
     const text = document.getElementById('status-text-' + name);
@@ -300,4 +295,7 @@
 </script>
 
 </body>
-</html>
+</html>`;
+
+fs.writeFileSync('dashboard.html', html);
+console.log(`Dashboard built with ${tools.length} tools from ${files.length} config files.`);

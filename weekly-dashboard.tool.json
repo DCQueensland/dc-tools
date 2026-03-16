@@ -1,0 +1,9 @@
+{
+  "name": "Weekly Dashboard",
+  "description": "Weekly status overview showing key metrics, upcoming events, and action items at a glance.",
+  "file": "weekly-dashboard.html",
+  "icon": "📈",
+  "category": "online-tool",
+  "type": "online",
+  "order": 7
+}

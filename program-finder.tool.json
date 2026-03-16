@@ -1,0 +1,9 @@
+{
+  "name": "Program Finder",
+  "description": "Look up Dale Carnegie programs, descriptions, outcomes, and pricing. Quick reference for the full program catalogue.",
+  "file": "program-finder.html",
+  "icon": "🔍",
+  "category": "online-tool",
+  "type": "online",
+  "order": 6
+}

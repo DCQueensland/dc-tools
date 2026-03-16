@@ -1,0 +1,9 @@
+{
+  "name": "Eventbrite Banner Generator",
+  "description": "Fill in workshop details and generate a ready-to-paste prompt for Claude Code to create branded Eventbrite banners via Canva.",
+  "file": "banner-generator-online.html",
+  "icon": "⚙",
+  "category": "online-tool",
+  "type": "online",
+  "order": 4
+}
