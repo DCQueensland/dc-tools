@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Program Material Finder - Dale Carnegie QLD</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    min-height: 100vh;
+  }
+  header {
+    background: #000;
+    padding: 24px 40px;
+    border-bottom: 3px solid #ffc708;
+  }
+  header h1 { font-size: 22px; font-weight: 600; }
+  header h1 span { color: #ffc708; }
+  header .subtitle { color: #999; font-size: 13px; margin-top: 2px; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  .brief-section {
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  .brief-section h2 {
+    font-size: 16px;
+    margin-bottom: 16px;
+    color: #ffc708;
+  }
+  .brief-section textarea {
+    width: 100%;
+    min-height: 140px;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    resize: vertical;
+  }
+  .brief-section textarea::placeholder { color: #666; }
+  .brief-section textarea:focus { outline: none; border-color: #ffc708; }
+
+  .search-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: #ffc708; color: #000; }
+  .btn-secondary { background: #333; color: #ccc; }
+
+  .quick-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+  }
+  .quick-tag {
+    padding: 5px 12px;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 16px;
+    color: #bbb;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .quick-tag:hover { border-color: #ffc708; color: #ffc708; }
+
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .results-header h2 { font-size: 16px; color: #ccc; }
+  .results-count { font-size: 13px; color: #666; }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 5px 14px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 16px;
+    color: #999;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: #ffc708;
+    color: #ffc708;
+    background: #33300a;
+  }
+
+  .result-group {
+    background: #242424;
+    border: 1px solid #333;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .group-header {
+    padding: 14px 20px;
+    background: #2a2a2a;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #333;
+  }
+  .group-header:hover { background: #303030; }
+  .group-path {
+    font-size: 13px;
+    color: #aaa;
+    word-break: break-all;
+    flex: 1;
+  }
+  .group-path .highlight { color: #ffc708; font-weight: 600; }
+  .group-score {
+    font-size: 11px;
+    color: #666;
+    white-space: nowrap;
+    background: #333;
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+  .group-chevron {
+    color: #666;
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+  .result-group.open .group-chevron { transform: rotate(90deg); }
+
+  .group-files { display: none; padding: 8px 0; }
+  .result-group.open .group-files { display: block; }
+
+  .file-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    transition: background 0.1s;
+  }
+  .file-row:hover { background: #2a2a2a; }
+
+  .file-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .file-icon.pptx { background: #c44c2422; color: #e06040; }
+  .file-icon.pdf { background: #cf001a22; color: #ff4060; }
+  .file-icon.docx { background: #0090cf22; color: #0090cf; }
+  .file-icon.xlsx { background: #84c44c22; color: #84c44c; }
+  .file-icon.media { background: #9b59b622; color: #bb77dd; }
+  .file-icon.image { background: #ffc70822; color: #ffc708; }
+
+  .file-info { flex: 1; min-width: 0; }
+  .file-name {
+    font-size: 13px;
+    color: #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .file-meta { font-size: 11px; color: #666; margin-top: 2px; }
+
+  .file-type-tag {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: #333;
+    color: #999;
+    white-space: nowrap;
+  }
+  .file-type-tag.visuals { background: #ffc70822; color: #ffc708; }
+  .file-type-tag.participant_manual { background: #0090cf22; color: #0090cf; }
+  .file-type-tag.trainer_manual { background: #84c44c22; color: #84c44c; }
+  .file-type-tag.breakthrough { background: #e0604022; color: #e06040; }
+  .file-type-tag.video { background: #9b59b622; color: #bb77dd; }
+
+  .file-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .file-btn {
+    padding: 4px 10px;
+    background: #333;
+    border: 1px solid #444;
+    border-radius: 5px;
+    color: #aaa;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .file-btn:hover { border-color: #ffc708; color: #ffc708; }
+
+  .matched-terms { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+  .match-tag {
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: #ffc70815;
+    color: #ffc708;
+  }
+
+  .empty-state { text-align: center; padding: 60px 20px; color: #555; }
+  .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 14px; line-height: 1.6; }
+
+  .loading { text-align: center; padding: 40px; color: #666; }
+  .loading .spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #444;
+    border-top-color: #ffc708;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .stats-bar { font-size: 12px; color: #555; padding: 12px 0; text-align: right; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Program <span>Material Finder</span></h1>
+    <div class="subtitle">Search all Dropbox materials by project brief, outcomes, or topics</div>
+  </div>
+</header>
+
+<div class="container">
+  <div class="brief-section">
+    <h2>Project Brief / Search</h2>
+    <textarea id="briefInput" placeholder="Paste your project brief here, or describe what you need...&#10;&#10;Examples:&#10;- 2-day leadership program for mid-level managers focusing on delegation, coaching, and running effective meetings&#10;- Customer service training for call centre staff - handling complaints, telephone skills, building rapport&#10;- Confidence and communication workshop for emerging leaders - public speaking, influence, self-awareness"></textarea>
+    <div class="search-row">
+      <button class="btn btn-primary" onclick="doSearch()">Find Materials</button>
+      <button class="btn btn-secondary" onclick="clearAll()">Clear</button>
+      <button class="btn btn-secondary" onclick="rescan()" id="rescanBtn">Rescan Dropbox</button>
+      <span class="stats-bar" id="statsBar"></span>
+    </div>
+    <div class="quick-tags">
+      <span class="quick-tag" onclick="addTag('leadership')">Leadership</span>
+      <span class="quick-tag" onclick="addTag('communication')">Communication</span>
+      <span class="quick-tag" onclick="addTag('sales')">Sales</span>
+      <span class="quick-tag" onclick="addTag('confidence')">Confidence</span>
+      <span class="quick-tag" onclick="addTag('teamwork')">Teamwork</span>
+      <span class="quick-tag" onclick="addTag('customer service')">Customer Service</span>
+      <span class="quick-tag" onclick="addTag('conflict resolution')">Conflict</span>
+      <span class="quick-tag" onclick="addTag('coaching')">Coaching</span>
+      <span class="quick-tag" onclick="addTag('change management')">Change</span>
+      <span class="quick-tag" onclick="addTag('presentations')">Presentations</span>
+      <span class="quick-tag" onclick="addTag('stress management')">Stress</span>
+      <span class="quick-tag" onclick="addTag('time management')">Time Mgmt</span>
+      <span class="quick-tag" onclick="addTag('personality styles DISC')">DISC/Personality</span>
+      <span class="quick-tag" onclick="addTag('school education')">Schools</span>
+      <span class="quick-tag" onclick="addTag('habits what got you here')">WGYH</span>
+    </div>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<script>
+const BASE = window.location.origin;
+let currentFilter = 'all';
+let lastResults = null;
+
+fetch(BASE + '/api/stats')
+  .then(r => r.json())
+  .then(data => {
+    document.getElementById('statsBar').textContent =
+      data.total_files.toLocaleString() + ' files indexed across Dropbox';
+  })
+  .catch(() => {});
+
+function addTag(tag) {
+  const ta = document.getElementById('briefInput');
+  const current = ta.value.trim();
+  ta.value = current ? current + ', ' + tag : tag;
+  ta.focus();
+}
+
+function clearAll() {
+  document.getElementById('briefInput').value = '';
+  document.getElementById('results').innerHTML = '';
+  lastResults = null;
+}
+
+function doSearch() {
+  const query = document.getElementById('briefInput').value.trim();
+  if (!query) return;
+
+  const resultsDiv = document.getElementById('results');
+  resultsDiv.innerHTML = '<div class="loading"><div class="spinner"></div><br>Searching materials...</div>';
+
+  fetch(BASE + '/api/search?q=' + encodeURIComponent(query))
+    .then(r => r.json())
+    .then(data => {
+      lastResults = data;
+      currentFilter = 'all';
+      renderResults(data);
+    })
+    .catch(err => {
+      resultsDiv.innerHTML = '<div class="empty-state"><p>Error searching. Is the server running?</p></div>';
+    });
+}
+
+function renderResults(data) {
+  const resultsDiv = document.getElementById('results');
+
+  if (!data.groups || data.groups.length === 0) {
+    resultsDiv.innerHTML = '<div class="empty-state"><div class="icon">&#128269;</div><p>No materials found matching your brief.<br>Try different keywords or broader terms.</p></div>';
+    return;
+  }
+
+  const typeCounts = {};
+  let totalFiles = 0;
+  data.groups.forEach(g => g.files.forEach(f => {
+    typeCounts[f.type] = (typeCounts[f.type] || 0) + 1;
+    totalFiles++;
+  }));
+
+  let html = '';
+  html += '<div class="results-header">';
+  html += '<h2>Found Materials</h2>';
+  html += '<span class="results-count">' + totalFiles + ' files in ' + data.groups.length + ' locations</span>';
+  html += '</div>';
+
+  html += '<div class="filter-bar">';
+  html += '<span class="filter-btn ' + (currentFilter === 'all' ? 'active' : '') + '" onclick="filterResults(\'all\')">All</span>';
+  const filterTypes = [
+    ['visuals', 'Visuals/Slides'],
+    ['participant_manual', 'Participant Manuals'],
+    ['trainer_manual', 'Trainer Manuals'],
+    ['breakthrough', 'Breakthroughs'],
+    ['presentation', 'Presentations'],
+    ['video', 'Videos'],
+    ['document_pdf', 'PDFs'],
+    ['document_word', 'Word Docs'],
+  ];
+  filterTypes.forEach(function(ft) {
+    var type = ft[0], label = ft[1];
+    if (typeCounts[type]) {
+      html += '<span class="filter-btn ' + (currentFilter === type ? 'active' : '') + '" onclick="filterResults(\'' + type + '\')">' + label + ' (' + typeCounts[type] + ')</span>';
+    }
+  });
+  html += '</div>';
+
+  data.groups.forEach(function(group, gi) {
+    var filteredFiles = currentFilter === 'all'
+      ? group.files
+      : group.files.filter(function(f) { return f.type === currentFilter; });
+
+    if (filteredFiles.length === 0) return;
+
+    var bestScore = Math.max.apply(null, filteredFiles.map(function(f) { return f.score; }));
+    var isOpen = gi < 5;
+
+    html += '<div class="result-group ' + (isOpen ? 'open' : '') + '">';
+    html += '<div class="group-header" onclick="toggleGroup(event, this.parentElement)">';
+
+    var displayPath = group.folder || '(root)';
+    html += '<span class="group-path">' + highlightPath(displayPath, data.query) + '</span>';
+    html += '<span class="group-score">relevance: ' + bestScore + '</span>';
+    html += '<span class="group-chevron">&#9654;</span>';
+    html += '</div>';
+
+    html += '<div class="group-files">';
+    filteredFiles.forEach(function(f) {
+      var iconClass = getIconClass(f.ext);
+      var extLabel = f.ext.replace('.', '').toUpperCase();
+      var size = formatSize(f.size);
+      var date = formatDate(f.mtime);
+      var typeTag = getTypeTag(f.type);
+      var safePathAttr = f.path.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+
+      html += '<div class="file-row">';
+      html += '<div class="file-icon ' + iconClass + '">' + extLabel + '</div>';
+      html += '<div class="file-info">';
+      html += '<div class="file-name" title="' + escapeHtml(f.name) + '">' + escapeHtml(f.name) + '</div>';
+      html += '<div class="file-meta">' + size + ' &middot; ' + date + '</div>';
+      if (f.matched_terms && f.matched_terms.length > 0) {
+        html += '<div class="matched-terms">';
+        f.matched_terms.slice(0, 5).forEach(function(t) {
+          html += '<span class="match-tag">' + escapeHtml(t) + '</span>';
+        });
+        html += '</div>';
+      }
+      html += '</div>';
+      html += typeTag;
+      html += '<div class="file-actions">';
+      html += '<button class="file-btn" data-path="' + safePathAttr + '" data-action="open">Open</button>';
+      html += '<button class="file-btn" data-path="' + safePathAttr + '" data-action="folder">Folder</button>';
+      html += '</div>';
+      html += '</div>';
+    });
+    html += '</div></div>';
+  });
+
+  resultsDiv.innerHTML = html;
+}
+
+// Use event delegation for file action buttons
+document.getElementById('results').addEventListener('click', function(e) {
+  var btn = e.target.closest('.file-btn');
+  if (!btn) return;
+  e.stopPropagation();
+  var path = btn.getAttribute('data-path');
+  var action = btn.getAttribute('data-action');
+  if (action === 'open') {
+    fetch(BASE + '/api/open?path=' + encodeURIComponent(path));
+  } else if (action === 'folder') {
+    fetch(BASE + '/api/open-folder?path=' + encodeURIComponent(path));
+  }
+});
+
+function filterResults(type) {
+  currentFilter = type;
+  if (lastResults) renderResults(lastResults);
+}
+
+function toggleGroup(event, el) {
+  if (event.target.closest('.file-btn')) return;
+  el.classList.toggle('open');
+}
+
+function rescan() {
+  var btn = document.getElementById('rescanBtn');
+  btn.textContent = 'Scanning...';
+  btn.disabled = true;
+  fetch(BASE + '/api/rescan')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      btn.textContent = 'Rescan Dropbox';
+      btn.disabled = false;
+      document.getElementById('statsBar').textContent = data.count.toLocaleString() + ' files indexed';
+    })
+    .catch(function() {
+      btn.textContent = 'Rescan Dropbox';
+      btn.disabled = false;
+    });
+}
+
+function highlightPath(path, query) {
+  if (!query) return escapeHtml(path);
+  var words = query.toLowerCase().split(/[\s,;.]+/).filter(function(w) { return w.length > 2; });
+  var result = escapeHtml(path);
+  words.forEach(function(w) {
+    var escaped = w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    var regex = new RegExp('(' + escaped + ')', 'gi');
+    result = result.replace(regex, '<span class="highlight">$1</span>');
+  });
+  return result;
+}
+
+function getIconClass(ext) {
+  if (ext === '.pptx' || ext === '.ppt') return 'pptx';
+  if (ext === '.pdf') return 'pdf';
+  if (ext === '.docx' || ext === '.doc') return 'docx';
+  if (ext === '.xlsx' || ext === '.xls') return 'xlsx';
+  if (ext === '.mp4' || ext === '.mov') return 'media';
+  if (ext === '.png' || ext === '.jpg' || ext === '.jpeg') return 'image';
+  return '';
+}
+
+function getTypeTag(type) {
+  var labels = {
+    visuals: 'Visuals', participant_manual: 'Participant Manual',
+    trainer_manual: 'Trainer Manual', breakthrough: 'Breakthrough',
+    video: 'Video', template: 'Template', proposal: 'Proposal',
+    presentation: 'Presentation', document_pdf: 'PDF', document_word: 'Word Doc'
+  };
+  var label = labels[type] || '';
+  if (!label) return '';
+  return '<span class="file-type-tag ' + type + '">' + label + '</span>';
+}
+
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1048576) return (bytes / 1024).toFixed(0) + ' KB';
+  return (bytes / 1048576).toFixed(1) + ' MB';
+}
+
+function formatDate(ts) {
+  if (!ts) return '';
+  var d = new Date(ts * 1000);
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function escapeHtml(s) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(s));
+  return div.innerHTML;
+}
+
+document.getElementById('briefInput').addEventListener('keydown', function(e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+    doSearch();
+  }
+});
+</script>
+
+</body>
+</html>

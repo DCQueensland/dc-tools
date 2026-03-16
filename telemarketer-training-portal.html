@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD — Telemarketer Training Portal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6e6e6; }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px 24px; text-align: center; border-bottom: 4px solid #0090cf; }
+  .header h1 { font-size: 32px; color: #0090cf; margin-bottom: 8px; }
+  .header p { color: #999; font-size: 16px; }
+  .progress-container { background: #161b22; padding: 16px 24px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #30363d; }
+  .progress-bar { display: flex; align-items: center; gap: 4px; max-width: 1200px; margin: 0 auto; }
+  .progress-step { flex: 1; height: 8px; border-radius: 4px; background: #30363d; cursor: pointer; transition: background 0.3s; }
+  .progress-step.completed { background: #84c44c; }
+  .progress-label { display: flex; justify-content: space-between; max-width: 1200px; margin: 8px auto 0; font-size: 11px; color: #666; }
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+  .phase { margin-bottom: 48px; }
+  .phase-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #30363d; }
+  .phase-number { background: #0090cf; color: #fff; font-size: 14px; font-weight: 800; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .phase-title { font-size: 24px; font-weight: 700; color: #fff; }
+  .phase-subtitle { font-size: 14px; color: #999; }
+  .stage { background: #161b22; border: 1px solid #30363d; border-radius: 12px; margin-bottom: 16px; overflow: hidden; transition: border-color 0.3s; }
+  .stage:hover { border-color: #0090cf; }
+  .stage-header { padding: 20px 24px; cursor: pointer; display: flex; align-items: center; gap: 16px; }
+  .stage-icon { font-size: 24px; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .stage-icon.blue { background: rgba(0,144,207,0.15); color: #0090cf; }
+  .stage-icon.green { background: rgba(132,196,76,0.15); color: #84c44c; }
+  .stage-icon.yellow { background: rgba(255,199,8,0.15); color: #ffc708; }
+  .stage-icon.orange { background: rgba(230,126,34,0.15); color: #e67e22; }
+  .stage-icon.red { background: rgba(231,76,60,0.15); color: #e74c3c; }
+  .stage-icon.purple { background: rgba(155,89,182,0.15); color: #9b59b6; }
+  .stage-icon.teal { background: rgba(26,188,156,0.15); color: #1abc9c; }
+  .stage-info { flex: 1; }
+  .stage-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .stage-desc { font-size: 13px; color: #999; }
+  .stage-toggle { color: #666; font-size: 20px; transition: transform 0.3s; padding: 0 8px; }
+  .stage.open .stage-toggle { transform: rotate(180deg); }
+  .stage-check { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #30363d; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.3s; }
+  .stage-check.done { background: #84c44c; border-color: #84c44c; }
+  .stage-check.done::after { content: '\2713'; color: #fff; font-size: 14px; font-weight: 700; }
+  .stage-content { display: none; padding: 0 24px 24px; }
+  .stage.open .stage-content { display: block; }
+  .video-slot { background: #0d1117; border: 2px dashed #30363d; border-radius: 10px; padding: 48px 24px; text-align: center; margin-bottom: 20px; }
+  .video-slot video { width: 100%; border-radius: 8px; }
+  .video-placeholder { color: #555; }
+  .video-placeholder .play-icon { font-size: 48px; margin-bottom: 12px; }
+  .video-placeholder p { font-size: 14px; }
+  .video-placeholder .upload-hint { font-size: 12px; color: #444; margin-top: 8px; }
+  .key-points { margin-bottom: 16px; }
+  .key-points h4 { color: #0090cf; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .point { display: flex; gap: 12px; margin-bottom: 10px; padding: 12px 16px; background: #0d1117; border-radius: 8px; border-left: 3px solid #0090cf; }
+  .point.tip { border-left-color: #84c44c; }
+  .point.warning { border-left-color: #e67e22; }
+  .point.critical { border-left-color: #e74c3c; }
+  .point-text { font-size: 14px; line-height: 1.6; }
+  .point-text strong { color: #fff; }
+  .script { background: #0d1117; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; border: 1px solid #30363d; }
+  .script-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #0090cf; margin-bottom: 8px; }
+  .script q { font-style: italic; color: #ccc; line-height: 1.7; font-size: 14px; }
+  .script .instruction { color: #e67e22; font-style: normal; font-size: 13px; }
+  .objection-card { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .objection-header { padding: 14px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .objection-header h5 { font-size: 15px; color: #e67e22; }
+  .objection-body { display: none; padding: 0 20px 16px; }
+  .objection-card.open .objection-body { display: block; }
+  .call-type-badge { display: inline-block; background: #0090cf; color: #fff; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .call-type-badge.warm { background: #e67e22; }
+  .call-type-badge.hot { background: #e74c3c; }
+  .call-type-badge.grad { background: #84c44c; }
+
+  /* Search */
+  .search-container { max-width: 1000px; margin: 0 auto; padding: 24px 24px 0; }
+  .search-box { display: flex; gap: 10px; }
+  .search-input { flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 18px; color: #eee; font-size: 15px; outline: none; }
+  .search-input:focus { border-color: #0090cf; }
+  .search-input::placeholder { color: #555; }
+  .search-btn { background: #0090cf; color: #fff; border: none; border-radius: 8px; padding: 14px 24px; font-weight: 700; cursor: pointer; font-size: 15px; }
+  .search-results { max-width: 1000px; margin: 0 auto; padding: 12px 24px; }
+  .search-result { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 18px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.3s; }
+  .search-result:hover { border-color: #0090cf; }
+  .search-result-stage { font-size: 12px; color: #0090cf; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .search-result-text { font-size: 14px; color: #ccc; line-height: 1.5; }
+  .search-result-text mark { background: #0090cf; color: #fff; border-radius: 2px; padding: 0 2px; }
+  .search-no-results { color: #666; font-size: 14px; padding: 12px 0; }
+
+  /* Quiz */
+  .quiz-container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+  .quiz-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .quiz-question { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 16px; }
+  .quiz-number { color: #0090cf; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+  .quiz-option:hover { border-color: #0090cf; }
+  .quiz-option.correct { background: rgba(132,196,76,0.15); border-color: #84c44c; color: #84c44c; }
+  .quiz-option.incorrect { background: rgba(231,76,60,0.15); border-color: #e74c3c; color: #e74c3c; }
+  .quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+  .quiz-explanation { display: none; margin-top: 12px; padding: 12px 16px; background: #0d1117; border-radius: 8px; font-size: 13px; color: #999; line-height: 1.6; border-left: 3px solid #84c44c; }
+  .quiz-score { background: #161b22; border: 2px solid #0090cf; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; }
+  .quiz-score-number { font-size: 48px; font-weight: 800; color: #0090cf; }
+  .quiz-score-label { font-size: 14px; color: #999; margin-top: 4px; }
+  .quiz-reset { background: #0090cf; color: #fff; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 700; cursor: pointer; font-size: 14px; margin-top: 12px; }
+
+  /* Tabs */
+  .tab-nav { display: flex; gap: 0; max-width: 1000px; margin: 24px auto 0; padding: 0 24px; }
+  .tab-btn { flex: 1; padding: 14px; text-align: center; background: #161b22; border: 1px solid #30363d; cursor: pointer; font-size: 14px; font-weight: 600; color: #999; transition: all 0.3s; }
+  .tab-btn:first-child { border-radius: 8px 0 0 8px; }
+  .tab-btn:last-child { border-radius: 0 8px 8px 0; }
+  .tab-btn.active { background: #0090cf; color: #fff; border-color: #0090cf; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .footer { text-align: center; padding: 40px 24px; color: #444; font-size: 13px; border-top: 1px solid #30363d; margin-top: 48px; }
+
+  @media (max-width: 768px) {
+    .header h1 { font-size: 24px; }
+    .tab-btn { font-size: 12px; padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Telemarketer Training Portal</h1>
+  <p>Dale Carnegie Queensland — Scripts, Techniques & Call Frameworks</p>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tab-nav">
+  <div class="tab-btn active" onclick="switchTab('training')">Call Scripts</div>
+  <div class="tab-btn" onclick="switchTab('search')">Search</div>
+  <div class="tab-btn" onclick="switchTab('quiz')">Knowledge Quiz</div>
+</div>
+
+<!-- Search Section -->
+<div class="tab-content" id="tab-search">
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search scripts and tips... e.g. 'too busy' or 'brand awareness' or 'decision maker'" onkeyup="if(event.key==='Enter')searchPortal()">
+      <button class="search-btn" onclick="searchPortal()">Search</button>
+    </div>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- Quiz Section -->
+<div class="tab-content" id="tab-quiz">
+  <div class="quiz-container">
+    <div class="quiz-score" id="quizScore" style="display:none;">
+      <div class="quiz-score-number" id="scoreDisplay">0/0</div>
+      <div class="quiz-score-label">Questions Answered Correctly</div>
+      <button class="quiz-reset" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div style="margin-bottom:48px;">
+      <div class="phase-header">
+        <div class="phase-number">Q</div>
+        <div>
+          <div class="phase-title">Test Your Knowledge</div>
+          <div class="phase-subtitle">15 questions across all call types and techniques</div>
+        </div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q1.</span> What's the very first thing you should do after introducing yourself on a new relationship call?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Pitch the Dale Carnegie programs</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Ask "Did I catch you at a bad time?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Ask about their training budget</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Send them an email</div>
+        </div>
+        <div class="quiz-explanation">Always ask permission first: "Did I catch you at a bad time?" This shows respect and gives them the choice to continue. If they say no, you've got their attention.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q2.</span> What are the 3 main pressure areas leaders face that you should mention?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Sales targets, marketing, technology</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Holding onto best people, building teams that own outcomes, achieving results in an unpredictable market</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Hiring, training, compliance</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Revenue, costs, cash flow</div>
+        </div>
+        <div class="quiz-explanation">The 3 pressure points: (1) Holding onto best people, (2) Building teams that get results/own outcomes, (3) Achieving results in an unpredictable market. Then ask "How does that compare to what you're seeing?"</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q3.</span> How long is the meeting you're booking with William?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, true)">A) 15 minutes</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) 30 minutes</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) 1 hour</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) However long they need</div>
+        </div>
+        <div class="quiz-explanation">"It's just a quick 15-minute Teams chat." Keep it short and low-commitment — this removes barriers to saying yes.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q4.</span> When someone says "We're too busy right now," what technique do you use?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Ask them to call back when they're free</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Feel, Felt, Found</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Offer a discount</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Send an email instead</div>
+        </div>
+        <div class="quiz-explanation">Feel, Felt, Found: "I completely understand (Feel). Most leaders I speak with are flat out. Others have felt the same way (Felt). What they found was that 15 minutes with William often gave them back hours (Found)."</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q5.</span> After booking the appointment, what should you ask them to do while still on the phone?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Share with their team</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Check their calendar and accept the invite</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Visit the website</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Nothing — just hang up</div>
+        </div>
+        <div class="quiz-explanation">"Could you check your calendar and accept it while we're on the line? That way it's locked in." This dramatically reduces no-shows.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q6.</span> When calling a workshop attendee who is NOT a decision maker, what's the key qualifying question?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) "What's your budget?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) "Does your company invest in their people, or is professional development something you'd invest in yourself?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) "Can you put me through to your manager?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) "Are you interested in a course?"</div>
+        </div>
+        <div class="quiz-explanation">You need to figure out if the company pays or they pay themselves. This determines whether you're booking a coaching call or moving on. If your gut says it's a waste of time, ask about future workshops and get off the phone — NEXT!</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q7.</span> What's the "magic wand" question used for?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) To close the sale</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) To qualify their pain and find what they'd fix</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) To build rapport</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) To establish credibility</div>
+        </div>
+        <div class="quiz-explanation">"If I had a magic wand and could improve one or two things about how your people develop skills — whether it's leadership presence, sales effectiveness, or team culture — would there be anything to fix?" This uncovers their real pain.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q8.</span> How many years of history does Dale Carnegie have?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) 50 years</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) 80 years</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) 113 years</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) 150 years</div>
+        </div>
+        <div class="quiz-explanation">113-year history. World's largest privately-owned training company. Partners with 428 of the Fortune 500. Know these numbers — they build instant credibility.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q9.</span> When a prospect says "Send me some info first," what should you do?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Send a brochure and wait</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Tell them there's no info to send</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) Feel, Felt, Found — a live chat is far more valuable because William tailors it to their situation</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Email the website link</div>
+        </div>
+        <div class="quiz-explanation">"I get that. Many leaders felt the same way. What they found was that a live chat was far more valuable, because William could tailor it to their exact situation. How about a quick 15 minutes Thursday or Friday, then I can send tailored material after?"</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q10.</span> What's the "upfront contract" before booking a meeting?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Getting them to sign a commitment form</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Sending terms and conditions</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) "If you're 10 minutes in and it's not relevant — just let us know, and we'll do the same. Sound fair?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Asking for payment details</div>
+        </div>
+        <div class="quiz-explanation">The upfront contract removes pressure and builds trust. It shows confidence in the value of the meeting and gives them an easy out — which paradoxically makes them more likely to attend.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q11.</span> When calling a workshop registrant who DIDN'T attend, what should you ask first?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) "Would you like to rebook?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) "Briefly, can I ask why you registered for the workshop in the first place?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) "Can I speak to your manager?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) "Would you like us to send the recording?"</div>
+        </div>
+        <div class="quiz-explanation">Find out WHY they registered — that tells you their pain point and interest level. Then use that to book the coaching call: "During the workshop we offered a coaching call valued at $200..."</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q12.</span> Which Queensland companies should you name-drop for credibility?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Woolworths, Coles, Telstra</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Hutchinson Builders, Bradnam's Windows and Doors, IOR, BDO</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Google, Microsoft, Apple</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) NAB, ANZ, Westpac</div>
+        </div>
+        <div class="quiz-explanation">Local Queensland companies they'll recognise: Hutchinson Builders, Bradnam's Windows and Doors, IOR, and BDO. These are "facing similar challenges to YOU!" — it's relatable credibility.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q13.</span> What's the value of the coaching call offered to workshop attendees?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Free</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) $100</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) $200</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) $500</div>
+        </div>
+        <div class="quiz-explanation">"During the workshop we offered a coaching call valued at $200 for the 15 minutes." Framing it as a $200 value makes the call feel like a gift, not a sales pitch.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q14.</span> How should you close with a day/time option?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) "When are you free?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) "I'll email you some options"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) "Would Thursday or Friday suit you better? Morning or afternoon?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) "Let me know when works"</div>
+        </div>
+        <div class="quiz-explanation">Always give a choice between two options, not an open question. "Thursday or Friday?" then "Morning or afternoon?" then lock in a specific time. This moves them to action.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q15.</span> If your gut tells you a non-DM workshop attendee is a waste of time, what should you do?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Keep pushing for a booking</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Ask to speak to their manager</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) Ask if they'd like to be notified for future workshops, then get off the phone — NEXT!</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Send them a brochure</div>
+        </div>
+        <div class="quiz-explanation">Don't waste time on dead ends. Ask about future workshops to keep it friendly, then move on. Your time is better spent on the next call. NEXT!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Training Content -->
+<div class="tab-content active" id="tab-training">
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-step" data-phase="1"></div>
+    <div class="progress-step" data-phase="2"></div>
+    <div class="progress-step" data-phase="3"></div>
+    <div class="progress-step" data-phase="4"></div>
+    <div class="progress-step" data-phase="5"></div>
+    <div class="progress-step" data-phase="6"></div>
+    <div class="progress-step" data-phase="7"></div>
+    <div class="progress-step" data-phase="8"></div>
+    <div class="progress-step" data-phase="9"></div>
+    <div class="progress-step" data-phase="10"></div>
+    <div class="progress-step" data-phase="11"></div>
+    <div class="progress-step" data-phase="12"></div>
+    <div class="progress-step" data-phase="13"></div>
+    <div class="progress-step" data-phase="14"></div>
+    <div class="progress-step" data-phase="15"></div>
+  </div>
+  <div class="progress-label">
+    <span>Pre-Call</span>
+    <span>New Relationship</span>
+    <span>Post-Workshop</span>
+    <span>Special Calls</span>
+    <span>Objections</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================ -->
+<!-- PHASE 1: PRE-CALL PREPARATION -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase1">
+  <div class="phase-header">
+    <div class="phase-number">1</div>
+    <div>
+      <div class="phase-title">Pre-Call Preparation</div>
+      <div class="phase-subtitle">Set yourself up for success before you pick up the phone</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-1">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon blue">&#9993;</div>
+      <div class="stage-info">
+        <div class="stage-name">1. Pre-Call Email Templates</div>
+        <div class="stage-desc">Send before calling — warms the prospect so your name isn't cold</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Pre-Call Email Strategy</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-01-precall-email.mp4</p>
+        </div>
+      </div>
+      <div class="key-points"><h4>Email Template 1: Keep Your Best People</h4></div>
+      <div class="script">
+        <div class="script-label">Subject Line</div>
+        <q>Keep Your Best People. Build Leaders Who Last.</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Body</div>
+        <q>"In today's climate of rapid change and tight resources, the biggest risk isn't technology — it's losing good people. Research shows employees don't leave jobs, they leave managers."</q><br><br>
+        <q>"That's why leading organisations worldwide turn to Dale Carnegie. For over 110 years, we've helped companies like yours strengthen leadership, build trust, and keep top talent engaged."</q><br><br>
+        <q>"Would you be open to a quick conversation with William Farmer, Managing Director of Dale Carnegie Australia, about how we can support your team?"</q>
+      </div>
+      <div class="key-points"><h4>Email Template 2: The 5 Barriers</h4></div>
+      <div class="script">
+        <div class="script-label">Subject Line</div>
+        <q>The 5 Barriers to Productivity Every Business Faces</q>
+      </div>
+      <div class="script">
+        <div class="script-label">The 5 Barriers</div>
+        <q>1. Engagement — when staff feel overlooked, energy and loyalty vanish<br>
+        2. Communication — mixed messages and unclear priorities drain time<br>
+        3. Collaboration — silos stop teams from sharing ideas<br>
+        4. Adaptability — change is constant; resistance slows everything<br>
+        5. Accountability — without ownership, goals slip and frustration builds</q>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 2: NEW RELATIONSHIP CALLS -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase2">
+  <div class="phase-header">
+    <div class="phase-number">2</div>
+    <div>
+      <div class="phase-title">New Relationship Calls</div>
+      <div class="phase-subtitle">Cold and warm calls to new prospects — the core of appointment setting</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-2">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#128075;</div>
+      <div class="stage-info">
+        <div class="stage-name">2. Opening & Rapport</div>
+        <div class="stage-desc">First 15 seconds — respect, permission, and a human connection</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: The Opening</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-02-opening.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Super Script Version</div>
+        <q>"Hi [First Name], this is [Your Name] from Dale Carnegie Australia. I'm ringing on behalf of our Managing Director William Farmer. Did I catch you at a bad time?"</q><br><br>
+        <span class="instruction">(If no)</span><br>
+        <q>"Thanks — I'll keep this brief. Could I take 30 seconds to explain why I'm calling, and you can decide if it's worth continuing?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Consulting Version (More Casual)</div>
+        <q>"[First Name], it's Mike calling from Dale Carnegie. How's things?"</q><br><br>
+        <span class="instruction">If they say "Good, how are you?"</span><br>
+        <q>"Busy, you know how it is. I'm sure it's the same in your world."</q><br><br>
+        <span class="instruction">If they sound rude/short</span><br>
+        <q>"I didn't catch you at a bad time, did I?"</q><br>
+        <span class="instruction">(Match their tone — mirror without losing courtesy)</span>
+      </div>
+      <div class="point tip">
+        <div class="point-text"><strong>Use their first name with curiosity and energy.</strong> Smile when you speak — they can hear it.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-3">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#127775;</div>
+      <div class="stage-info">
+        <div class="stage-name">3. Brand Awareness</div>
+        <div class="stage-desc">"Have you heard the Dale Carnegie name before?"</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Brand Awareness</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-03-brand.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">If They Say NO</div>
+        <span class="instruction">(Laugh slightly)</span><br>
+        <q>"Ah, this is going to sound like a cold call then. Bear with me — we've been in the leadership and training space for over a century, and of course the book How to Win Friends & Influence People is what most people recognise first. But today, we focus on programs that help organisations drive leadership, sales effectiveness, and team performance."</q>
+      </div>
+      <div class="script">
+        <div class="script-label">If They Say YES</div>
+        <q>"Got it, that makes sense. Out of curiosity, what's your experience been with us so far?"</q><br>
+        <span class="instruction">(Active listen — figure out if they've read the book, done a course, etc.)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-4">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon blue">&#127919;</div>
+      <div class="stage-info">
+        <div class="stage-name">4. Customer's World — The 3 Pressure Points</div>
+        <div class="stage-desc">Empathy first — connect with their reality before pitching</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: The Customer's World</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-04-pressure-points.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Say This</div>
+        <q>"A lot of leaders I'm speaking with right now are telling me they're under pressure in three main areas:</q><br>
+        <q>Holding onto their best people,</q><br>
+        <q>Building teams that own outcomes,</q><br>
+        <q>Achieving results in an unpredictable market.</q><br><br>
+        <q>How does that compare to what you're seeing in your business?"</q>
+      </div>
+      <div class="point tip">
+        <div class="point-text"><strong>Listen. Acknowledge. Mirror back.</strong> Don't rush past their answer — this is where you learn what matters to them.</div>
+      </div>
+      <div class="script">
+        <div class="script-label">Generic Alternative (use 2 or 3)</div>
+        <q>"The major concerns many of our clients face are:</q><br>
+        <q>Attracting and maintaining key staff for their business to thrive</q><br>
+        <q>Engaging staff to take ownership to improve business performance</q><br>
+        <q>Innovating resources to achieve budget in a challenging market</q><br>
+        <q>Keeping a culture of productivity within internal and remote teams</q><br><br>
+        <q>I guess you'd encounter those issues from time to time?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-5">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon purple">&#128269;</div>
+      <div class="stage-info">
+        <div class="stage-name">5. Qualifying Questions</div>
+        <div class="stage-desc">Learn the lay of the land — do they invest in development? What's working? What's not?</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Qualifying Questions</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-05-qualifying.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Ask These (Consulting Approach)</div>
+        <q>"How does your business currently invest in professional development?"</q><br>
+        <q>"What type of training or coaching do you already run for your people?"</q><br>
+        <q>"Why those programs or approaches?"</q><br>
+        <q>"How effective have they been in practice? Are people applying it, or is it more a tick-the-box exercise?"</q><br>
+        <q>"Who usually drives these decisions — is it HR, L&D, or line managers?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Positioning Statement</div>
+        <q>"Usually when I speak with businesses, the struggles aren't about whether training happens — it's that leaders don't see real behavioural change, teams still lack confidence in client conversations, or engagement drops once the course ends. Are you seeing any of that, or am I completely off base?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">The Magic Wand Question</div>
+        <q>"If I had a magic wand and could improve one or two things about how your people develop skills — whether it's leadership presence, sales effectiveness, or team culture — would there be anything to fix?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-6">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#128188;</div>
+      <div class="stage-info">
+        <div class="stage-name">6. Credibility & Value Offer</div>
+        <div class="stage-desc">Reassure them with DC's track record, then offer the 15-minute chat</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Credibility & The Value Offer</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-06-credibility.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Credibility</div>
+        <q>"Dale Carnegie is the world's largest privately-owned training company with a 113-year history. We partner with 428 of the Fortune 500 companies. Here in Queensland, we've worked with leaders at Hutchinson Builders, Bradnam's Windows and Doors, IOR, and BDO — all facing similar challenges to YOU!"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">The Value Offer</div>
+        <q>"Keeping your best people engaged, driving ownership, and hitting ambitious targets — it's a lot to balance... would you agree?"</q><br><br>
+        <q>"My Managing Director, William Farmer, has over 30 years' experience working with Queensland businesses. He'd love to share a few proven strategies that leaders in your position have found really beneficial."</q><br><br>
+        <q>"It's just a quick 15-minute Teams chat — would Thursday or Friday suit you better? Are you a morning or afternoon person?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-7">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#128274;</div>
+      <div class="stage-info">
+        <div class="stage-name">7. Confirm & Lock It In</div>
+        <div class="stage-desc">Get the calendar invite accepted while they're still on the phone</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Locking In the Appointment</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-07-confirm.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Lock It In</div>
+        <q>"Great. I'll send that invite through right now — could you check your calendar and accept it while we're on the line? That way it's locked in."</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Optional Quick Discovery (if rapport is strong)</div>
+        <q>"Before we finish, can I ask you one quick question to help William prepare?"</q><br>
+        <q>"What's working really well for your team right now?"</q><br>
+        <q>"Where do you see the biggest pressure point ahead?"</q><br>
+        <q>"That'll help make the 15 minutes as valuable as possible."</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Upfront Contract (Consulting Approach)</div>
+        <q>"The only thing we ask: if you're 10 minutes into our meeting and you realise the conversation isn't relevant to what we discussed today — just let us know, and we'll do the same. Sound fair?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Close the Call</div>
+        <q>"Thanks, [First Name]. Looking forward to connecting with you on [day/time]. Have a fantastic rest of your week!"</q>
+      </div>
+      <div class="point tip">
+        <div class="point-text"><strong>William has 30 years of experience and your meeting will be insightful as well as impactful.</strong> End on energy!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 3: POST-WORKSHOP FOLLOW-UP -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase3">
+  <div class="phase-header">
+    <div class="phase-number">3</div>
+    <div>
+      <div class="phase-title">Post-Workshop Follow-Up Calls</div>
+      <div class="phase-subtitle">Warm calls to workshop attendees and registrants — 4 different scenarios</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-8">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#9989;</div>
+      <div class="stage-info">
+        <div class="stage-name">8. Decision Maker — Attended Workshop</div>
+        <div class="stage-desc"><span class="call-type-badge">WARM LEAD</span> Hottest follow-up — they came and they make decisions</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: DM Attended Follow-Up</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-08-dm-attended.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Opening</div>
+        <q>"Hi [name], it's [your name] calling from Dale Carnegie Australia. How are you?"</q><br>
+        <span class="instruction">(Use a really friendly tone, smile)</span><br><br>
+        <q>"This is a quick call to connect with you and say thanks for attending our [workshop name] workshop. How'd you find it?"</q><br>
+        <span class="instruction">(Wait for response)</span><br><br>
+        <q>"What was the one thing you got from the workshop?"</q><br>
+        <span class="instruction">(Wait, respond, be genuine)</span><br><br>
+        <q>"Yes — there's definitely a few key takeaways that you can apply and implement in real time."</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Book the Meeting</div>
+        <q>"Our Managing Director, William Farmer, has over 30 years' experience working with Queensland businesses. He would love to share a few proven strategies that leaders in your position have found really beneficial."</q><br><br>
+        <q>"It's just a 15-minute Teams chat — would Thursday or Friday suit you better?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Lock In & Discovery</div>
+        <q>"I'll send that invite through right now — could you check your email and accept it while we're on the line? That way it's locked in."</q><br><br>
+        <q>"Before we finish — what's working really well for your team right now? Where do you see the biggest pressure point ahead?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-9">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon orange">&#10060;</div>
+      <div class="stage-info">
+        <div class="stage-name">9. Decision Maker — Did NOT Attend</div>
+        <div class="stage-desc"><span class="call-type-badge warm">WARM</span> They registered but didn't show — find out why</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: DM Not Attended Follow-Up</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-09-dm-not-attended.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Opening</div>
+        <q>"Hi [name], it's [your name] calling from Dale Carnegie Australia. How are you?"</q><br><br>
+        <q>"This is a quick call to connect and say thanks for registering for our [workshop name] workshop. Were you able to join?"</q><br>
+        <span class="instruction">"Sorry you weren't able to join."</span><br><br>
+        <q>"Briefly, can I ask why you registered for the workshop in the first place?"</q><br>
+        <span class="instruction">(Ask questions, be genuinely interested: "Why is that important?" "How does that affect your team?" "Would you like to know more about what we discussed?")</span>
+      </div>
+      <div class="script">
+        <div class="script-label">If They Don't Remember Registering</div>
+        <q>"Is helping your people adjust to change, upskill and deliver the business results you require, a priority for your company? Well, our company Dale Carnegie has a global reputation and 113 years' history for driving engagement and productivity through teams!"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Book the Coaching Call</div>
+        <q>"During the workshop we offered a coaching call valued at $200 for 15 minutes. Based on our conversation, I'd like to book you in. How's your schedule Thursday or Friday?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-10">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon teal">&#128100;</div>
+      <div class="stage-info">
+        <div class="stage-name">10. Non-Decision Maker — Attended Workshop</div>
+        <div class="stage-desc"><span class="call-type-badge warm">WARM</span> They came but may not control the budget — qualify carefully</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Non-DM Attended Follow-Up</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-10-nondm-attended.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Opening (Same Warmth)</div>
+        <q>"Hi [name], it's [your name] from Dale Carnegie Australia. How are you?"</q><br>
+        <q>"Quick call to say thanks for attending our [workshop] workshop. How'd you find it?"</q><br>
+        <q>"What was the one thing you got from the workshop?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Qualifying — The Key Questions</div>
+        <q>"Do you mind if I ask what your role is? Are you responsible for a team or just yourself?"</q><br><br>
+        <q>"Does your company invest in their people? Or is professional development something you would invest in yourself?"</q>
+      </div>
+      <div class="point critical">
+        <div class="point-text"><strong>Decision point:</strong> If they or their company will invest — book the coaching call. If your gut says it's a waste of time — ask about future workshops and GET OFF THE PHONE. NEXT!</div>
+      </div>
+      <div class="script">
+        <div class="script-label">If Worth Pursuing</div>
+        <q>"During the workshop we offered a coaching call valued at $200 for 15 minutes. Based on our conversation, I'd like to book you in. How's your schedule Thursday or Friday?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-11">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon orange">&#128100;</div>
+      <div class="stage-info">
+        <div class="stage-name">11. Non-Decision Maker — Did NOT Attend</div>
+        <div class="stage-desc"><span class="call-type-badge">COOL</span> Registered but didn't come and doesn't control budget — qualify fast</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Non-DM Not Attended Follow-Up</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-11-nondm-not-attended.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Opening</div>
+        <q>"Hi [name], it's [your name] calling from Dale Carnegie Australia."</q><br>
+        <q>"Quick call to say thanks for registering for our [workshop]. Were you able to join?"</q><br>
+        <q>"Sorry you weren't able to join. Briefly, can I ask why you registered in the first place?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Qualify</div>
+        <q>"What's your role? Are you responsible for a team or just yourself?"</q><br>
+        <q>"Does your company invest in their people, or is professional development something you'd invest in yourself?"</q><br>
+        <q>"Are you willing to invest in your own professional development?"</q>
+      </div>
+      <div class="point critical">
+        <div class="point-text"><strong>Same rule:</strong> If it's going somewhere, book the coaching call. If not — "Would you like to be notified for future workshops?" Then NEXT!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 4: SPECIAL CALLS -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase4">
+  <div class="phase-header">
+    <div class="phase-number">4</div>
+    <div>
+      <div class="phase-title">Special Call Types</div>
+      <div class="phase-subtitle">Graduate invitations, prize winners, and voicemail</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-12">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#127891;</div>
+      <div class="stage-info">
+        <div class="stage-name">12. Invite Graduates to Workshop</div>
+        <div class="stage-desc"><span class="call-type-badge grad">GRAD</span> Re-engage past DC graduates with a free event</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Graduate Invitations</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-12-grad-invite.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">The Call</div>
+        <q>"Hi [name], it's [your name] from Dale Carnegie Australia, how are you today? The reason for my call is to make sure you got our special invitation to the [workshop name], valued at $600 per person, complimentary to you."</q><br><br>
+        <q>"William our Managing Director wanted me to make sure that you got the invite. Our numbers are strictly limited, so you're welcome to attend for free or even send a couple of your people to attend. Would that be valuable to you?"</q><br><br>
+        <q>"The workshop is [date] at [venue] and starts at [time] running until [end time]. Would you like me to register you or some of your team?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">If YES</div>
+        <q>"Great! Who would be attending?"</q><br>
+        <span class="instruction">(Get names and details)</span>
+      </div>
+      <div class="script">
+        <div class="script-label">If NO</div>
+        <q>"Sorry you can't attend this time. When was the last time you had contact from our office? Would you like to be invited to future events?"</q><br>
+        <span class="instruction">(If they're super friendly, dig deeper:)</span><br>
+        <q>"What did you get from your Dale Carnegie experience? What's going on for your business at the moment? I know William would enjoy a catch up — what's a good time?"</q><br>
+        <span class="instruction">(Then follow the process)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-13">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#127942;</div>
+      <div class="stage-info">
+        <div class="stage-name">13. Prize Winner Follow-Through</div>
+        <div class="stage-desc"><span class="call-type-badge hot">HOT</span> They've won the $1,000 credit — easiest call you'll make</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Prize Winner Call</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-13-prize-winner.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">The Call</div>
+        <q>"Hi [name], it's [your name] calling from Dale Carnegie Australia. How are you?"</q><br><br>
+        <q>"This is a quick call to say thanks for attending our [workshop name] workshop and submitting your feedback! As William mentioned during the workshop, we were giving away a $1,000 credit that you can use for any Dale Carnegie public program here in Brisbane — and congratulations, you've won the prize!"</q><br>
+        <span class="instruction">(Wait for response — they'll be excited!)</span><br><br>
+        <q>"Great! I'd like to book you in for a chat with William our Managing Director. He has over 30 years' experience and would love to discuss options for your $1,000 credit, and also share a few proven strategies that leaders in your position have found really helpful."</q><br><br>
+        <q>"It's just a 15-minute Teams chat — would [day] or [day] suit you better?"</q>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-14">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon purple">&#128222;</div>
+      <div class="stage-info">
+        <div class="stage-name">14. Voicemail Scripts</div>
+        <div class="stage-desc">Short and long voicemail options</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Leaving Effective Voicemails</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-14-voicemail.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Short Voicemail (Recommended)</div>
+        <q>"[Name], it's [your name]. Give me a call back."</q><br>
+        <span class="instruction">(That's it. Short, curious, they'll call back.)</span>
+      </div>
+      <div class="script">
+        <div class="script-label">Long Voicemail</div>
+        <q>"Hey [Name], it's [your name] giving you a call from Dale Carnegie Australia. Have been working with tons of [their industry] lately. Appreciate if you can give me a quick call back."</q>
+      </div>
+      <div class="point tip">
+        <div class="point-text"><strong>Short is usually better.</strong> Curiosity gets callbacks. Long pitches on voicemail get deleted.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 5: OBJECTION HANDLING -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase5">
+  <div class="phase-header">
+    <div class="phase-number">5</div>
+    <div>
+      <div class="phase-title">Objection Handling</div>
+      <div class="phase-subtitle">Feel — Felt — Found. Every objection is an opportunity.</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-15">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon red">&#128170;</div>
+      <div class="stage-info">
+        <div class="stage-name">15. All Objections & Responses</div>
+        <div class="stage-desc">Click each objection for the exact script</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Handling Objections on the Phone</strong></p>
+          <p class="upload-hint">Place video in /videos/tm-15-objections.mp4</p>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <h4>The Feel — Felt — Found Framework</h4>
+        <div class="point">
+          <div class="point-text"><strong>Feel:</strong> "I completely understand..." (acknowledge their concern)</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>Felt:</strong> "Others have felt the same way..." (normalise it)</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>Found:</strong> "What they found was..." (give evidence of the opposite)</div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#9200; "We're too busy right now"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"I completely understand — most leaders I speak with are flat out. Others have felt the same way. What they found was that 15 minutes with William often gave them back hours, because they walked away with simple, practical ideas. Would Thursday morning or Friday afternoon be easier?"</q>
+          </div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#128218; "We already have training in place"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"That makes sense — most good companies do. Some of our clients felt the same, including Hutchinson Builders. What they found was that adding Carnegie's approach actually amplified what they already had. Would you be open to exploring how that might work in a short call?"</q>
+          </div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#128233; "Send me some info first"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"I get that. Many leaders felt the same way. What they found was that a live chat was far more valuable, because William could tailor it to their exact situation. How about a quick 15 minutes Thursday or Friday, then I can send tailored material after?"</q>
+          </div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#128176; "We don't have budget right now"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"I understand — many are tightening up. Clients like Woolworths felt the same. What they found was that even small shifts in engagement created measurable savings — one store manager saved $600,000 from a single project. That's why William keeps it short and practical — would you be open to Friday?"</q>
+          </div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#127891; "I did the Dale Carnegie Course years ago"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"We really enjoy catching up with graduates! William would love to invest the time with you to share how we support our graduates and keep them up to date with best practices. There's a lot of change at the moment, and keeping people productive is so important. With that in mind, how is your schedule on Thursday or Friday?"</q>
+          </div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#9203; "It's just not the right time"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"Timing is everything, and with a quick investment of 10-15 minutes, you'll have an outline of some of the best strategies that can help your business this year. With that in mind, how is your schedule on Thursday or Friday?"</q>
+          </div>
+        </div>
+      </div>
+
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#10067; "What will be covered in the meeting?"</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"The agenda is:</q><br>
+            <q>Find out more about what you're wanting to achieve as a leader</q><br>
+            <q>Some of the challenges you might be facing</q><br>
+            <q>How to improve the performance of your business</q><br>
+            <q>How to get stronger returns and performance from your people</q><br><br>
+            <q>How's your schedule Thursday or Friday? I have an opening at..."</q>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 6: LIVE EXAMPLE -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase6">
+  <div class="phase-header">
+    <div class="phase-number">6</div>
+    <div>
+      <div class="phase-title">Live Example</div>
+      <div class="phase-subtitle">Watch the full call process in action</div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage-16">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#127909;</div>
+      <div class="stage-info">
+        <div class="stage-name">16. Live Example — Full Call Recording</div>
+        <div class="stage-desc">Listen to an expert run the entire call from opener to booking</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Live Example: Full Call Recording</strong></p>
+          <p class="upload-hint">Place video/audio in /videos/tm-16-live-example.mp4</p>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>What to Listen For</h4>
+        <div class="point tip">
+          <div class="point-text"><strong>Tone:</strong> Notice how warm and genuine the opener is — they're smiling.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Permission:</strong> How they ask "Did I catch you at a bad time?" and wait for the answer.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Pressure Points:</strong> How naturally the 3 challenges are woven in — it doesn't sound scripted.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Objection Handling:</strong> How Feel-Felt-Found flows naturally in conversation.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>The Close:</strong> How they give two options (Thursday or Friday) and lock in the calendar invite while still on the phone.</div>
+        </div>
+        <div class="point warning">
+          <div class="point-text"><strong>After listening:</strong> Go back through Stages 2-7 and compare. Where did the caller follow the script exactly? Where did they adapt?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</div><!-- end tab-training -->
+
+<div class="footer">
+  <p>Dale Carnegie Queensland — Telemarketer Training Portal</p>
+  <p style="margin-top: 8px;">Built with Claude Code | Last updated: 15 March 2026</p>
+</div>
+
+<script>
+  function toggleStage(header) {
+    const stage = header.parentElement;
+    stage.classList.toggle('open');
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    updateProgress();
+    const stageId = el.closest('.stage').id;
+    const completed = JSON.parse(localStorage.getItem('tmTrainingProgress') || '{}');
+    completed[stageId] = el.classList.contains('done');
+    localStorage.setItem('tmTrainingProgress', JSON.stringify(completed));
+  }
+
+  function updateProgress() {
+    const checks = document.querySelectorAll('.stage-check');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    checks.forEach((check, i) => {
+      if (progressSteps[i]) {
+        progressSteps[i].className = check.classList.contains('done') ? 'progress-step completed' : 'progress-step';
+      }
+    });
+  }
+
+  function loadProgress() {
+    const completed = JSON.parse(localStorage.getItem('tmTrainingProgress') || '{}');
+    Object.keys(completed).forEach(stageId => {
+      if (completed[stageId]) {
+        const stage = document.getElementById(stageId);
+        if (stage) stage.querySelector('.stage-check').classList.add('done');
+      }
+    });
+    updateProgress();
+  }
+
+  loadProgress();
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.remove('active');
+      if ((tab === 'training' && i === 0) || (tab === 'search' && i === 1) || (tab === 'quiz' && i === 2)) btn.classList.add('active');
+    });
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    if (tab === 'search') setTimeout(() => document.getElementById('searchInput').focus(), 100);
+  }
+
+  function searchPortal() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    const resultsDiv = document.getElementById('searchResults');
+    if (!query) { resultsDiv.innerHTML = ''; return; }
+    const stages = document.querySelectorAll('#tab-training .stage');
+    const results = [];
+    stages.forEach(stage => {
+      const name = stage.querySelector('.stage-name').textContent;
+      const content = stage.querySelector('.stage-content');
+      if (!content) return;
+      content.querySelectorAll('q').forEach(script => {
+        if (script.textContent.toLowerCase().includes(query))
+          results.push({ stage: name, text: script.textContent, stageId: stage.id });
+      });
+      content.querySelectorAll('.point-text').forEach(point => {
+        if (point.textContent.toLowerCase().includes(query))
+          results.push({ stage: name, text: point.textContent, stageId: stage.id });
+      });
+    });
+    document.querySelectorAll('.objection-card').forEach(card => {
+      const title = card.querySelector('h5').textContent;
+      card.querySelectorAll('q').forEach(script => {
+        if (script.textContent.toLowerCase().includes(query))
+          results.push({ stage: '15. Objections — ' + title, text: script.textContent, stageId: 'stage-15' });
+      });
+    });
+    if (results.length === 0) {
+      resultsDiv.innerHTML = '<div class="search-no-results">No results found for "' + query + '".</div>';
+      return;
+    }
+    resultsDiv.innerHTML = results.map(r => {
+      const highlighted = r.text.replace(new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark>$1</mark>');
+      return '<div class="search-result" onclick="jumpToStage(\'' + r.stageId + '\')"><div class="search-result-stage">' + r.stage + '</div><div class="search-result-text">' + highlighted + '</div></div>';
+    }).join('');
+  }
+
+  function jumpToStage(stageId) {
+    switchTab('training');
+    setTimeout(() => {
+      const stage = document.getElementById(stageId);
+      if (stage) {
+        stage.classList.add('open');
+        stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        stage.style.borderColor = '#0090cf';
+        setTimeout(() => { stage.style.borderColor = ''; }, 2000);
+      }
+    }, 100);
+  }
+
+  let quizCorrect = 0, quizAnswered = 0;
+  function answerQuiz(el, isCorrect) {
+    const card = el.closest('.quiz-card');
+    const options = card.querySelectorAll('.quiz-option');
+    const explanation = card.querySelector('.quiz-explanation');
+    options.forEach(opt => {
+      opt.classList.add('disabled');
+      if (opt === el) opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+    });
+    if (!isCorrect) options.forEach(opt => { if (opt.getAttribute('onclick').includes('true')) opt.classList.add('correct'); });
+    explanation.style.display = 'block';
+    quizAnswered++;
+    if (isCorrect) quizCorrect++;
+    document.getElementById('quizScore').style.display = 'block';
+    document.getElementById('scoreDisplay').textContent = quizCorrect + '/' + quizAnswered;
+  }
+  function resetQuiz() {
+    quizCorrect = 0; quizAnswered = 0;
+    document.getElementById('quizScore').style.display = 'none';
+    document.querySelectorAll('.quiz-card').forEach(card => {
+      card.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('correct', 'incorrect', 'disabled'));
+      card.querySelector('.quiz-explanation').style.display = 'none';
+    });
+  }
+</script>
+
+</body>
+</html>

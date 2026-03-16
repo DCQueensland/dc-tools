@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD — Sales Training Portal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6e6e6; }
+
+  /* Header */
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); padding: 40px 24px; text-align: center; border-bottom: 4px solid #ffc708; }
+  .header h1 { font-size: 32px; color: #ffc708; margin-bottom: 8px; }
+  .header p { color: #999; font-size: 16px; }
+
+  /* Progress bar */
+  .progress-container { background: #161b22; padding: 16px 24px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #30363d; }
+  .progress-bar { display: flex; align-items: center; gap: 4px; max-width: 1200px; margin: 0 auto; }
+  .progress-step { flex: 1; height: 8px; border-radius: 4px; background: #30363d; cursor: pointer; transition: background 0.3s; }
+  .progress-step.completed { background: #84c44c; }
+  .progress-step.active { background: #ffc708; }
+  .progress-label { display: flex; justify-content: space-between; max-width: 1200px; margin: 8px auto 0; font-size: 11px; color: #666; }
+
+  /* Main content */
+  .container { max-width: 1000px; margin: 0 auto; padding: 24px; }
+
+  /* Phase headers */
+  .phase { margin-bottom: 48px; }
+  .phase-header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 12px; border-bottom: 2px solid #30363d; }
+  .phase-number { background: #ffc708; color: #000; font-size: 14px; font-weight: 800; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .phase-title { font-size: 24px; font-weight: 700; color: #fff; }
+  .phase-subtitle { font-size: 14px; color: #999; }
+
+  /* Stage cards */
+  .stage { background: #161b22; border: 1px solid #30363d; border-radius: 12px; margin-bottom: 16px; overflow: hidden; transition: border-color 0.3s; }
+  .stage:hover { border-color: #ffc708; }
+  .stage-header { padding: 20px 24px; cursor: pointer; display: flex; align-items: center; justify-content: between; gap: 16px; }
+  .stage-icon { font-size: 24px; width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .stage-icon.blue { background: rgba(0,144,207,0.15); color: #0090cf; }
+  .stage-icon.green { background: rgba(132,196,76,0.15); color: #84c44c; }
+  .stage-icon.yellow { background: rgba(255,199,8,0.15); color: #ffc708; }
+  .stage-icon.orange { background: rgba(230,126,34,0.15); color: #e67e22; }
+  .stage-icon.red { background: rgba(231,76,60,0.15); color: #e74c3c; }
+  .stage-icon.purple { background: rgba(155,89,182,0.15); color: #9b59b6; }
+  .stage-info { flex: 1; }
+  .stage-name { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .stage-desc { font-size: 13px; color: #999; }
+  .stage-toggle { color: #666; font-size: 20px; transition: transform 0.3s; padding: 0 8px; }
+  .stage.open .stage-toggle { transform: rotate(180deg); }
+  .stage-check { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #30363d; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: all 0.3s; }
+  .stage-check.done { background: #84c44c; border-color: #84c44c; }
+  .stage-check.done::after { content: '\2713'; color: #fff; font-size: 14px; font-weight: 700; }
+
+  /* Stage content */
+  .stage-content { display: none; padding: 0 24px 24px; }
+  .stage.open .stage-content { display: block; }
+
+  /* Video placeholder */
+  .video-slot { background: #0d1117; border: 2px dashed #30363d; border-radius: 10px; padding: 48px 24px; text-align: center; margin-bottom: 20px; position: relative; overflow: hidden; }
+  .video-slot video { width: 100%; border-radius: 8px; }
+  .video-placeholder { color: #555; }
+  .video-placeholder .play-icon { font-size: 48px; margin-bottom: 12px; }
+  .video-placeholder p { font-size: 14px; }
+  .video-placeholder .upload-hint { font-size: 12px; color: #444; margin-top: 8px; }
+
+  /* Content sections */
+  .key-points { margin-bottom: 16px; }
+  .key-points h4 { color: #ffc708; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+  .point { display: flex; gap: 12px; margin-bottom: 10px; padding: 12px 16px; background: #0d1117; border-radius: 8px; border-left: 3px solid #0090cf; }
+  .point.tip { border-left-color: #84c44c; }
+  .point.warning { border-left-color: #e67e22; }
+  .point.critical { border-left-color: #e74c3c; }
+  .point-text { font-size: 14px; line-height: 1.6; }
+  .point-text strong { color: #fff; }
+
+  /* Script blocks */
+  .script { background: #0d1117; border-radius: 8px; padding: 16px 20px; margin-bottom: 12px; border: 1px solid #30363d; }
+  .script-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #ffc708; margin-bottom: 8px; }
+  .script q { font-style: italic; color: #ccc; line-height: 1.7; font-size: 14px; }
+
+  /* Quadrant grid */
+  .quadrant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  .quadrant { background: #0d1117; border-radius: 8px; padding: 16px; border: 1px solid #30363d; }
+  .quadrant h5 { font-size: 13px; margin-bottom: 6px; }
+  .quadrant.q1 h5 { color: #e74c3c; }
+  .quadrant.q2 h5 { color: #ffc708; }
+  .quadrant.q3 h5 { color: #0090cf; }
+  .quadrant.q4 h5 { color: #84c44c; }
+  .quadrant p { font-size: 13px; color: #999; line-height: 1.5; }
+
+  /* Objection cards */
+  .objection-card { background: #0d1117; border: 1px solid #30363d; border-radius: 10px; margin-bottom: 12px; overflow: hidden; }
+  .objection-header { padding: 14px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+  .objection-header h5 { font-size: 15px; color: #e67e22; }
+  .objection-body { display: none; padding: 0 20px 16px; }
+  .objection-card.open .objection-body { display: block; }
+
+  /* Staircase visual */
+  .staircase { display: flex; gap: 8px; align-items: flex-end; margin: 16px 0; padding: 16px; background: #0d1117; border-radius: 8px; }
+  .stair { text-align: center; flex: 1; }
+  .stair-block { border-radius: 6px; padding: 10px 8px; font-size: 11px; font-weight: 600; color: #fff; }
+  .stair-down { background: #e74c3c; }
+  .stair-bottom { background: #e67e22; }
+  .stair-up { background: #84c44c; }
+  .stair-label { font-size: 10px; color: #999; margin-top: 6px; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; color: #444; font-size: 13px; border-top: 1px solid #30363d; margin-top: 48px; }
+
+  /* Search bar */
+  .search-container { max-width: 1000px; margin: 0 auto; padding: 24px 24px 0; }
+  .search-box { display: flex; gap: 10px; }
+  .search-input { flex: 1; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 18px; color: #eee; font-size: 15px; outline: none; }
+  .search-input:focus { border-color: #ffc708; }
+  .search-input::placeholder { color: #555; }
+  .search-btn { background: #ffc708; color: #000; border: none; border-radius: 8px; padding: 14px 24px; font-weight: 700; cursor: pointer; font-size: 15px; }
+  .search-btn:hover { background: #e6b400; }
+  .search-results { max-width: 1000px; margin: 0 auto; padding: 12px 24px; }
+  .search-result { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 18px; margin-bottom: 8px; cursor: pointer; transition: border-color 0.3s; }
+  .search-result:hover { border-color: #ffc708; }
+  .search-result-stage { font-size: 12px; color: #ffc708; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .search-result-text { font-size: 14px; color: #ccc; line-height: 1.5; }
+  .search-result-text mark { background: #ffc708; color: #000; border-radius: 2px; padding: 0 2px; }
+  .search-no-results { color: #666; font-size: 14px; padding: 12px 0; }
+
+  /* Quiz section */
+  .quiz-container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+  .quiz-phase { margin-bottom: 48px; }
+  .quiz-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+  .quiz-question { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 16px; }
+  .quiz-number { color: #ffc708; }
+  .quiz-options { display: flex; flex-direction: column; gap: 8px; }
+  .quiz-option { background: #0d1117; border: 1px solid #30363d; border-radius: 8px; padding: 12px 16px; cursor: pointer; font-size: 14px; transition: all 0.3s; }
+  .quiz-option:hover { border-color: #0090cf; }
+  .quiz-option.correct { background: rgba(132,196,76,0.15); border-color: #84c44c; color: #84c44c; }
+  .quiz-option.incorrect { background: rgba(231,76,60,0.15); border-color: #e74c3c; color: #e74c3c; }
+  .quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+  .quiz-explanation { display: none; margin-top: 12px; padding: 12px 16px; background: #0d1117; border-radius: 8px; font-size: 13px; color: #999; line-height: 1.6; border-left: 3px solid #84c44c; }
+  .quiz-score { background: #161b22; border: 2px solid #ffc708; border-radius: 12px; padding: 24px; text-align: center; margin-bottom: 24px; }
+  .quiz-score-number { font-size: 48px; font-weight: 800; color: #ffc708; }
+  .quiz-score-label { font-size: 14px; color: #999; margin-top: 4px; }
+  .quiz-reset { background: #ffc708; color: #000; border: none; border-radius: 8px; padding: 12px 24px; font-weight: 700; cursor: pointer; font-size: 14px; margin-top: 12px; }
+
+  /* Tab navigation */
+  .tab-nav { display: flex; gap: 0; max-width: 1000px; margin: 24px auto 0; padding: 0 24px; }
+  .tab-btn { flex: 1; padding: 14px; text-align: center; background: #161b22; border: 1px solid #30363d; cursor: pointer; font-size: 14px; font-weight: 600; color: #999; transition: all 0.3s; }
+  .tab-btn:first-child { border-radius: 8px 0 0 8px; }
+  .tab-btn:last-child { border-radius: 0 8px 8px 0; }
+  .tab-btn.active { background: #ffc708; color: #000; border-color: #ffc708; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  @media (max-width: 768px) {
+    .quadrant-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 24px; }
+    .tab-btn { font-size: 12px; padding: 10px 8px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Sales Training Portal</h1>
+  <p>Dale Carnegie Queensland — Team to Long Term Strategic Proposals</p>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tab-nav">
+  <div class="tab-btn active" onclick="switchTab('training')">Training Stages</div>
+  <div class="tab-btn" onclick="switchTab('search')">Search</div>
+  <div class="tab-btn" onclick="switchTab('quiz')">Knowledge Quiz</div>
+</div>
+
+<!-- Search Section -->
+<div class="tab-content" id="tab-search">
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search scripts, tips, and techniques... e.g. 'cost objection' or 'staircase'" onkeyup="if(event.key==='Enter')searchPortal()">
+      <button class="search-btn" onclick="searchPortal()">Search</button>
+    </div>
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- Quiz Section -->
+<div class="tab-content" id="tab-quiz">
+  <div class="quiz-container">
+    <div class="quiz-score" id="quizScore" style="display:none;">
+      <div class="quiz-score-number" id="scoreDisplay">0/0</div>
+      <div class="quiz-score-label">Questions Answered Correctly</div>
+      <button class="quiz-reset" onclick="resetQuiz()">Reset Quiz</button>
+    </div>
+
+    <div class="quiz-phase">
+      <div class="phase-header">
+        <div class="phase-number">Q</div>
+        <div>
+          <div class="phase-title">Test Your Knowledge</div>
+          <div class="phase-subtitle">15 questions across the entire sales process</div>
+        </div>
+      </div>
+
+      <div class="quiz-card" data-answer="2">
+        <div class="quiz-question"><span class="quiz-number">Q1.</span> What is the #1 quadrant you must absolutely know the answer to during strategic questioning?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Buying Criteria</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Individual Motive</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Risk of not working with us</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Change readiness</div>
+        </div>
+        <div class="quiz-explanation">Individual Motive is the emotional reason why they'll do business with us. It's the #1 priority because people buy on emotion. Buying Criteria (#2) and Risk (#3) are also critical, but motive drives the decision.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q2.</span> In the Staircase (CIS) process, what comes first?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Up the Escalator — explore the gains</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Down the Stairs — explore the pain</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Present the program details</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Ask about budget</div>
+        </div>
+        <div class="quiz-explanation">Always go Down the Stairs first (pain) — "Why is that important?", "Consequences?", "If it continues?" — then Up the Escalator (gain) — "If we helped?", "How would that feel?", "And then what?"</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q3.</span> When presenting program breakdowns, how should you pace the delivery?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Read through every detail slowly and thoroughly</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Skip the breakdown entirely</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) Move fast — people buy on emotion, not detail</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Let the client read it themselves silently</div>
+        </div>
+        <div class="quiz-explanation">Flick through the program breakdown fast. Do NOT read word for word — it takes too much time and people buy on emotion. Present, don't engage on the detail slides.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q4.</span> What's the "smoke out" question in objection handling?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) "What's your budget?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) "How does that sound?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) "Other than that, is there anything else that would stop you from moving forward?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) "Would you like to pay by credit card?"</div>
+        </div>
+        <div class="quiz-explanation">The smoke out isolates the real objection. Once they say "No, that's the only thing," you can address it confidently knowing there's nothing else hiding behind it.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q5.</span> How many breakthrough objectives should the client choose for themselves?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) 1</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) 2</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) 5</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) All 10</div>
+        </div>
+        <div class="quiz-explanation">Ask them to choose 2 for themselves AND 2 they'd like their key people to be better at. Then take each through the Down/Up staircase process.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q6.</span> What should you always pitch for as a minimum?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) 1 individual enrolment</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) 3-pack</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) 6-pack (buy 5, get 1 free)</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Inhouse only</div>
+        </div>
+        <div class="quiz-explanation">"Always go for the cake, not the piece." Pitch 6-pack minimum. It's OK if you only get 1 or 2, but always start high. Bigger companies: offer 12-pack or inhouse.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q7.</span> What are the 3 details you MUST capture when closing a sale?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Name, company, job title</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Name, email, smartphone number</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Name, address, credit card</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Name, email, LinkedIn profile</div>
+        </div>
+        <div class="quiz-explanation">Name, email, and smartphone number are a MUST to enter the person into the system. Without these, you can't register them in the program.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q8.</span> In the BE / DO / GET framework, what does "BE" represent?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, true)">A) Behavioural change through emotional engagement</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Being present in the training room</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Being the best version of yourself</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Before the program starts</div>
+        </div>
+        <div class="quiz-explanation">BE = Behavioural change only happens when we're emotionally engaged. That's why we conduct awareness meetings — to help clients understand WHY it's important to improve skills.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q9.</span> If a client says "I just want to think about it," what's the first thing you should do?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Give them a week to think</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Offer a bigger discount</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) Smoke out — "Other than that, is there anything else?"</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Send them a follow-up email</div>
+        </div>
+        <div class="quiz-explanation">Always smoke out first to isolate the real objection. Then respond: "That's exactly the reason why you need to move forward!" and recap their pain from the awareness discussion.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q10.</span> What's the investment for the 6-pack deal?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) $18,000</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) $15,975 (buy 5, $3,000 credit on 6th)</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) $12,500</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) $20,000</div>
+        </div>
+        <div class="quiz-explanation">The 6-pack: buy 5 enrolments at $3,195 each = $15,975, with a $3,000 credit on the 6th person. Plus a $500 discount if paid within 7 days.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q11.</span> When a client says their team needs to "buy in" first, what do you offer?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Send them brochures to share</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Book a group presentation</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) Offer to interview their team members at no charge or obligation</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Offer a discount to get them over the line</div>
+        </div>
+        <div class="quiz-explanation">"We're engagement specialists — we're happy to interview your potential candidates at no charge or obligation." Then book awareness meetings with each team member and commit to a debrief within 48 hours.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q12.</span> What's the inhouse DCC investment?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) $25,000+GST</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) $30,000+GST</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) $36,995+GST</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) $45,000+GST</div>
+        </div>
+        <div class="quiz-explanation">$36,995+GST for up to 25 people, with a $995 incentive if paid within 7 days. Payment options available over 6 months.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q13.</span> Why does Dale Carnegie use memory techniques in their programs?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) To make the program feel more interactive</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Because people will only use what they can recall in real time</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) To fill time in the program schedule</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Because the textbook is too long to reference</div>
+        </div>
+        <div class="quiz-explanation">"Knowledge is power, but only if you can remember it." That's why Warren Buffet talks about his DC experience 50 years later — he remembers it and uses it.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q14.</span> If the client wants to choose another time for the follow-up meeting, what should you do?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Let them call you when they're ready</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">B) Work with them but keep it tight — within a few days</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">C) Book it for the following month</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Send them a calendar link and wait</div>
+        </div>
+        <div class="quiz-explanation">Keep follow-up meetings tight — a few days after the initial meeting. Mention that other consultants are working on the same programs to create urgency around priority placement.</div>
+      </div>
+
+      <div class="quiz-card">
+        <div class="quiz-question"><span class="quiz-number">Q15.</span> What are the 3 stages that make Dale Carnegie different from other providers?</div>
+        <div class="quiz-options">
+          <div class="quiz-option" onclick="answerQuiz(this, false)">A) Plan, Execute, Review</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">B) Learn, Practice, Test</div>
+          <div class="quiz-option" onclick="answerQuiz(this, true)">C) Awareness, Programs, Sustainment</div>
+          <div class="quiz-option" onclick="answerQuiz(this, false)">D) Engage, Train, Graduate</div>
+        </div>
+        <div class="quiz-explanation">1) Awareness — help people understand what to change and why. 2) Programs — tried and proven processes for skills and behaviours. 3) Sustainment — long-term tools to sustain the investment. "We don't love and leave our customers."</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Training Content (main tab) -->
+<div class="tab-content active" id="tab-training">
+<div class="progress-container">
+  <div class="progress-bar">
+    <div class="progress-step" data-phase="1"></div>
+    <div class="progress-step" data-phase="2"></div>
+    <div class="progress-step" data-phase="3"></div>
+    <div class="progress-step" data-phase="4"></div>
+    <div class="progress-step" data-phase="5"></div>
+    <div class="progress-step" data-phase="6"></div>
+    <div class="progress-step" data-phase="7"></div>
+    <div class="progress-step" data-phase="8"></div>
+    <div class="progress-step" data-phase="9"></div>
+    <div class="progress-step" data-phase="10"></div>
+    <div class="progress-step" data-phase="11"></div>
+    <div class="progress-step" data-phase="12"></div>
+    <div class="progress-step" data-phase="13"></div>
+  </div>
+  <div class="progress-label">
+    <span>Meeting 1: Awareness</span>
+    <span>Meeting 2: Proposal</span>
+    <span>Close & Objections</span>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ============================================ -->
+<!-- PHASE 1: MEETING 1 — AWARENESS -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase1">
+  <div class="phase-header">
+    <div class="phase-number">1</div>
+    <div>
+      <div class="phase-title">Meeting 1 — Awareness Meeting</div>
+      <div class="phase-subtitle">Can be done on phone, Zoom, or face-to-face</div>
+    </div>
+  </div>
+
+  <!-- Stage 1: Rapport -->
+  <div class="stage" id="stage-1">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon blue">&#9829;</div>
+      <div class="stage-info">
+        <div class="stage-name">1. Rapport & Connect</div>
+        <div class="stage-desc">Build genuine connection using Human Relations principles</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Building Rapport</strong></p>
+          <p class="upload-hint">Place video file in /videos/01-rapport.mp4</p>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>Key Points</h4>
+        <div class="point">
+          <div class="point-text"><strong>Remember the 1-9 Human Relations Principles:</strong> People only care when they know how much you care.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Online rapport:</strong> Begin in a friendly way. Check their LinkedIn — consider common photos, interests. "What am I interested in? What are you interested in?"</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>Transition:</strong> Move from rapport into business naturally, then set the agenda.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 2: Agenda Statement -->
+  <div class="stage" id="stage-2">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon blue">&#9776;</div>
+      <div class="stage-info">
+        <div class="stage-name">2. Agenda Statement</div>
+        <div class="stage-desc">Set the frame for the meeting — follow the selling process</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Setting the Agenda</strong></p>
+          <p class="upload-hint">Place video file in /videos/02-agenda.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Say This</div>
+        <q>"I want to understand your business thoroughly. See if there is some common ground. Look at some solutions that could help your business move forward. Do you mind if I ask a few questions?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Then Ask</div>
+        <q>"What's your perception of Dale Carnegie?"</q><br><br>
+        <q>"Okay, let me bring you up to date with our credentials..."</q>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 3: Credibility -->
+  <div class="stage" id="stage-3">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#9733;</div>
+      <div class="stage-info">
+        <div class="stage-name">3. Credibility</div>
+        <div class="stage-desc">Establish DC's track record — 109 years, 9 million graduates</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Establishing Credibility</strong></p>
+          <p class="upload-hint">Place video file in /videos/03-credibility.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Key Statements</div>
+        <q>"Dale Carnegie has helped people improve engagement performance for the last 109 years."</q><br><br>
+        <q>"We have 9 million graduates globally."</q><br><br>
+        <q>"Here are some of the companies we've worked with in Australia..."</q><br><br>
+        <q>"Here are some of our famous graduates, and maybe you :)"</q>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 4: Strategic Questioning -->
+  <div class="stage" id="stage-4">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#10067;</div>
+      <div class="stage-info">
+        <div class="stage-name">4. Interest & Collaborate — Strategic Questioning</div>
+        <div class="stage-desc">The difference for strategic sales is your questioning and what you're listening for</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Strategic Questioning</strong></p>
+          <p class="upload-hint">Place video file in /videos/04-questioning.mp4</p>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <h4>"As Is" Questions — Where are they now?</h4>
+        <div class="script">
+          <div class="script-label">Ask These</div>
+          <q>"How's business going?"</q><br>
+          <q>"What's working for the business?"</q><br>
+          <q>"What's not working?"</q><br>
+          <q>"Is your business performing the way you want it to?"</q><br>
+          <q>"If it could improve, what would the improvements be?"</q><br>
+          <q>"What keeps you awake at night?"</q><br>
+          <q>"If you could change 3 things, what would they be?"</q>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <h4>"Should Be" Questions — Where do they want to go?</h4>
+        <div class="script">
+          <div class="script-label">Ask These</div>
+          <q>"What should the business look like?"</q><br>
+          <q>"How do you see your vision?"</q><br>
+          <q>"Why is it important to grow?"</q><br>
+          <q>"Why are those changes important to the future prosperity of the company?"</q><br>
+          <q>"Do your people see those changes as clearly as you do?"</q>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <h4>The Four Quadrants</h4>
+      </div>
+      <div class="quadrant-grid">
+        <div class="quadrant q1">
+          <h5>#1 Individual Motive (MUST KNOW)</h5>
+          <p>The emotional reason why they'll do business with us. This is the #1 quadrant you must absolutely understand.</p>
+        </div>
+        <div class="quadrant q2">
+          <h5>#2 Buying Criteria (MUST KNOW)</h5>
+          <p>Do they have the money? You need to know the landscape otherwise you'll waste a lot of time.</p>
+        </div>
+        <div class="quadrant q3">
+          <h5>#3 Risk of NOT Working With Us</h5>
+          <p>The risk of not working with us needs to be greater than any investment. Help your client see this clearly.</p>
+        </div>
+        <div class="quadrant q4">
+          <h5>#4 Change</h5>
+          <p>Is there anything that would stop us working together if we had the right solutions?</p>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <h4>Org Chart Discovery</h4>
+        <div class="point tip">
+          <div class="point-text"><strong>Fill out the org chart as you go.</strong> Ask about each key report: "Who looks after operations/sales/finance/customer care? What's their name? What would you like them to improve on as a leader? How would that help the business?"</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Don't forget:</strong> "Obviously... you look after the company, what would you like to improve on as a leader? How would that help the business?"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 5: Payout — Executive Summary -->
+  <div class="stage" id="stage-5">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#128176;</div>
+      <div class="stage-info">
+        <div class="stage-name">5. Payout — Executive Summary</div>
+        <div class="stage-desc">Confirm the dominant buying motive and willingness to invest</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: The Payout</strong></p>
+          <p class="upload-hint">Place video file in /videos/05-payout.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Say This</div>
+        <q>"So if we could [dominant buying motive] help you grow your business more effectively, would you be willing to put time and effort in?"</q>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 6: Capability & Budget -->
+  <div class="stage" id="stage-6">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#128178;</div>
+      <div class="stage-info">
+        <div class="stage-name">6. Capability & Budget Discussion</div>
+        <div class="stage-desc">Establish credibility of results and confirm budget range</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Budget Conversation</strong></p>
+          <p class="upload-hint">Place video file in /videos/06-capability.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Say This</div>
+        <q>"We've been able to help companies like yours achieve the results you're after — e.g. Bradnams Windows and Doors, Mylan — and we can do the same thing for you."</q><br><br>
+        <q>"Do you have budget for upskilling your senior team so they can meet your desired outcomes?"</q><br><br>
+        <q>"The investment would be from $15,000 - $40,000. If the training we provide can help you achieve the performance you need, is that within budget?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Book the Next Meeting</div>
+        <q>"I will write a proposal. What's your schedule like Tuesday at 11am for a Zoom call? I'd like to write a specific proposal for your business based on this discussion."</q><br><br>
+        <q>"Are there other decision makers that should join us? We'll need their support to make real change happen."</q>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 2: MEETING 2 — PROPOSAL -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase2">
+  <div class="phase-header">
+    <div class="phase-number">2</div>
+    <div>
+      <div class="phase-title">Meeting 2 — Proposal Presentation</div>
+      <div class="phase-subtitle">Reconnect, present solutions, and close</div>
+    </div>
+  </div>
+
+  <!-- Stage 7: Reconnect -->
+  <div class="stage" id="stage-7">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon blue">&#128588;</div>
+      <div class="stage-info">
+        <div class="stage-name">7. Reconnect & Credentials</div>
+        <div class="stage-desc">Rebuild rapport, then move quickly through social proof</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: The Proposal Opening</strong></p>
+          <p class="upload-hint">Place video file in /videos/07-reconnect.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Agenda Statement</div>
+        <q>"Thanks for meeting today. Today we'll recap our last discussion, present targeted solutions based on our understanding of your business, and answer any questions as we go."</q>
+      </div>
+      <div class="key-points">
+        <h4>Social Proof Highlights</h4>
+        <div class="point tip">
+          <div class="point-text"><strong>Warren Buffet:</strong> "Warren Buffet advocates us for free, we don't pay him. The Dale Carnegie Program was transformational in the way he communicates to his investors."</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Hutchinson Builders:</strong> "Scott Hutchinson and his father Jack did the program 30 years ago. We've trained Scott's sons, and he puts most of his site managers through the program."</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 8: BE DO GET -->
+  <div class="stage" id="stage-8">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon purple">&#9889;</div>
+      <div class="stage-info">
+        <div class="stage-name">8. BE / DO / GET Framework</div>
+        <div class="stage-desc">Explain the behavioural change model</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: BE DO GET</strong></p>
+          <p class="upload-hint">Place video file in /videos/08-be-do-get.mp4</p>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>The Three Stages</h4>
+        <div class="point" style="border-left-color: #9b59b6;">
+          <div class="point-text"><strong>BE</strong> — Behavioural change only happens when we're emotionally engaged. We conduct awareness meetings to help clients understand why it's important to improve skills.</div>
+        </div>
+        <div class="point" style="border-left-color: #0090cf;">
+          <div class="point-text"><strong>DO</strong> — Our clients want more of the DO experience. Practical, hands-on application.</div>
+        </div>
+        <div class="point" style="border-left-color: #84c44c;">
+          <div class="point-text"><strong>GET</strong> — When individuals shift, it affects the team. Results follow behaviour change.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 9: Breakthrough Objectives & CIS -->
+  <div class="stage" id="stage-9">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon orange">&#127919;</div>
+      <div class="stage-info">
+        <div class="stage-name">9. Breakthrough Objectives & The Staircase (CIS)</div>
+        <div class="stage-desc">Get them to choose objectives, then go Down the Stairs (pain) and Up the Escalator (gain)</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: The CIS Staircase Process</strong></p>
+          <p class="upload-hint">Place video file in /videos/09-cis-staircase.mp4</p>
+        </div>
+      </div>
+      <div class="script">
+        <div class="script-label">Set Up</div>
+        <q>"So you can experience the process, could you please read through the 10 breakthrough objectives and choose 2 for yourself you'd like to take to another level... I also want you to think of your senior team and tick 2 that you'd like your key people to be better at."</q>
+      </div>
+
+      <div class="key-points">
+        <h4>The Staircase Process</h4>
+      </div>
+      <div class="staircase">
+        <div class="stair">
+          <div class="stair-block stair-down" style="height:90px; display:flex; align-items:center; justify-content:center;">Why is that important?</div>
+          <div class="stair-label">Down 1</div>
+        </div>
+        <div class="stair">
+          <div class="stair-block stair-down" style="height:70px; display:flex; align-items:center; justify-content:center;">Consequences?</div>
+          <div class="stair-label">Down 2</div>
+        </div>
+        <div class="stair">
+          <div class="stair-block stair-bottom" style="height:50px; display:flex; align-items:center; justify-content:center;">If it continues?</div>
+          <div class="stair-label">PAIN</div>
+        </div>
+        <div class="stair">
+          <div class="stair-block stair-up" style="height:50px; display:flex; align-items:center; justify-content:center;">If we helped?</div>
+          <div class="stair-label">Up 1</div>
+        </div>
+        <div class="stair">
+          <div class="stair-block stair-up" style="height:70px; display:flex; align-items:center; justify-content:center;">How would that feel?</div>
+          <div class="stair-label">Up 2</div>
+        </div>
+        <div class="stair">
+          <div class="stair-block stair-up" style="height:90px; display:flex; align-items:center; justify-content:center;">And then what?</div>
+          <div class="stair-label">GAIN</div>
+        </div>
+      </div>
+
+      <div class="script">
+        <div class="script-label">Down the Stairs (Pain)</div>
+        <q>"You've chosen [objective]. Why is that important to you?"</q><br>
+        <q>"So what are the consequences of that?"</q><br>
+        <q>"If that was to continue, then what would happen?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">Up the Escalator (Gain)</div>
+        <q>"If we could help you [objective], what would that mean for you?"</q><br>
+        <q>"How would that make you feel?"</q><br>
+        <q>"And then what?"</q>
+      </div>
+      <div class="point warning">
+        <div class="point-text"><strong>Do this for 2 personal objectives, then 2 for the team.</strong> Use the same Down/Up process each time.</div>
+      </div>
+      <div class="script">
+        <div class="script-label">Confirm Commitment</div>
+        <q>"So if we could improve [2 personal objectives] as well as help your team with [2 team objectives], would you be willing to put time and effort into the process to achieve the outcomes you desire?"</q>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 10: Program Presentation -->
+  <div class="stage" id="stage-10">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon green">&#128218;</div>
+      <div class="stage-info">
+        <div class="stage-name">10. Program Presentation</div>
+        <div class="stage-desc">Present DCC and Leadership Training for Managers — move fast, sell on emotion</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Presenting the Programs</strong></p>
+          <p class="upload-hint">Place video file in /videos/10-programs.mp4</p>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>Key Presentation Tips</h4>
+        <div class="point warning">
+          <div class="point-text"><strong>Move FAST through program breakdowns.</strong> Do not read word for word — it takes too much time and people buy on emotion, not detail.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Breakthrough examples:</strong> "If one of your staff never said a thing in meetings, what would be a breakthrough? They talk in meetings! That's a significant shift in performance."</div>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>How We Deliver Results</h4>
+        <div class="point">
+          <div class="point-text"><strong>Awareness:</strong> "Want to, need to, can do, show me how."</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>Knowledge:</strong> "We use memory techniques because people use what they can recall in real time. That's why Warren Buffet talks about his DC experience 50 years later."</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>Skill:</strong> "We only develop skill if we are coached effectively." Read coaching, group dynamics, and trainer from slide.</div>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>Leadership Training for Managers</h4>
+        <div class="point">
+          <div class="point-text"><strong>3 real-time projects over 3 days:</strong> 12-month business plan, innovation/delegation to work ON the business, aligning KPIs with the plan.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 3: CLOSING -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase3">
+  <div class="phase-header">
+    <div class="phase-number">3</div>
+    <div>
+      <div class="phase-title">Closing & Pricing</div>
+      <div class="phase-subtitle">You've earnt the right to ask confidently — expect them to say yes!</div>
+    </div>
+  </div>
+
+  <!-- Stage 11: Pricing & Close -->
+  <div class="stage" id="stage-11">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#9989;</div>
+      <div class="stage-info">
+        <div class="stage-name">11. Pricing, Packages & Close</div>
+        <div class="stage-desc">Present options — individual, 6-pack, or inhouse</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Closing the Sale</strong></p>
+          <p class="upload-hint">Place video file in /videos/11-closing.mp4</p>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>Pricing Options</h4>
+        <div class="point">
+          <div class="point-text"><strong>Individual:</strong> $3,195 per person ($3,095 if paid today). 3 equal payments available for small business.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>6-Pack (always pitch this):</strong> Buy 5 enrolments, get $3,000 credit on the 6th. Investment: $15,975. $500 discount if paid within 7 days.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Inhouse:</strong> $36,995+GST for up to 25 people. $995 incentive if paid within 7 days. Payment options over 6 months.</div>
+        </div>
+      </div>
+      <div class="point critical">
+        <div class="point-text"><strong>Always pitch for the cake, not the piece.</strong> Go for 6-pack minimum. Bigger companies: offer 12-pack or inhouse.</div>
+      </div>
+      <div class="script">
+        <div class="script-label">Close</div>
+        <q>"Would you like us to secure priority placement for you and your people?"</q><br><br>
+        <q>"Would you like to pay by credit card or invoice upfront and save an additional $500/$995, or would you like payment options over the next 3/6 months?"</q>
+      </div>
+      <div class="point critical">
+        <div class="point-text"><strong>MUST capture:</strong> Name, email, smartphone number for every participant. These are required to register in the system.</div>
+      </div>
+      <div class="script">
+        <div class="script-label">If They Say Yes But Need Team Buy-In</div>
+        <q>"Part of our engagement is to help your team see the real value of transformational change. We're engagement specialists — we're happy to interview your potential candidates at no charge or obligation. Can I speak to them now?"</q>
+      </div>
+      <div class="script">
+        <div class="script-label">If They Want to Talk to Team First</div>
+        <q>"That's fine. We have 5 other consultants working on the same programs. I want you to have priority placement. Let's connect tomorrow at 9am."</q><br><br>
+        <em style="color: #e67e22;">GET A YES! Keep it tight — a few days after initial meeting.</em>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stage 12: Objection Handling -->
+  <div class="stage" id="stage-12">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon red">&#128170;</div>
+      <div class="stage-info">
+        <div class="stage-name">12. Objection Handling</div>
+        <div class="stage-desc">Listen, cushion, smoke out, respond with evidence</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Expert Video: Handling Objections</strong></p>
+          <p class="upload-hint">Place video file in /videos/12-objections.mp4</p>
+        </div>
+      </div>
+
+      <div class="key-points">
+        <h4>The Objection Handling Framework</h4>
+        <div class="point">
+          <div class="point-text"><strong>1. Listen & Cushion</strong> — Acknowledge their concern</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>2. Smoke Out</strong> — "Other than that, is there anything else that would stop you from moving forward?"</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>3. Respond</strong> — Use reverse and evidence</div>
+        </div>
+        <div class="point">
+          <div class="point-text"><strong>4. Evaluative Question</strong> — "How does that sound?"</div>
+        </div>
+      </div>
+
+      <!-- Objection: Cost -->
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#128176; Cost</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Smoke Out</div>
+            <q>"I can understand that this is a fair investment. Other than that, is there anything else that would stop you from moving forward?"</q>
+          </div>
+          <div class="script">
+            <div class="script-label">Response (Self)</div>
+            <q>"That's exactly the reason why you need to move forward! You mentioned [objectives] as being very important to you [highlight pain]. That's incredibly costly over the next 12 months, let alone the next 20 years. If I could organise a payment schedule, would that help you move forward today?"</q>
+          </div>
+          <div class="script">
+            <div class="script-label">Response (Team)</div>
+            <q>"What is the real cost of non-performance over the next month? Now multiply that by 12 months — and that's not even considering the opportunity cost. We both know it's far more expensive than this investment."</q>
+          </div>
+        </div>
+      </div>
+
+      <!-- Objection: Timing -->
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#9200; Timing & Time</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response (Self)</div>
+            <q>"You're worth 3 days to make those important changes we discussed! With that in mind, let's get you started."</q>
+          </div>
+          <div class="script">
+            <div class="script-label">Response (Team)</div>
+            <q>"If we could work together on a schedule of key people doing the program throughout the next twelve months, this would take the pressure off the business, and you would still achieve the upskilling your business needs."</q>
+          </div>
+        </div>
+      </div>
+
+      <!-- Objection: Buy-in -->
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#129309; Buy-in From Team</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"Our job is to help you get the willing cooperation of your team. We'll talk to your nominated leaders to help them see how the process will accelerate results. If there are leaders that don't want to engage, or we don't think they're a good investment, we'll let you know at the debrief. You're still not committed until we've had that discussion. Could I speak to them now?"</q>
+          </div>
+          <div class="point warning">
+            <div class="point-text"><strong>Book awareness interviews within 48 hours.</strong> Commit to a debrief meeting with the decision maker — keep it tight!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Objection: Procrastination -->
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#9203; Procrastination</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"That's exactly the reason why you need to move forward! [Recap pain from awareness]. Nothing changes unless something changes — let's get you started."</q>
+          </div>
+        </div>
+      </div>
+
+      <!-- Objection: Fear -->
+      <div class="objection-card" onclick="this.classList.toggle('open')">
+        <div class="objection-header">
+          <h5>&#128552; Fear</h5>
+          <span style="color:#666">&#9660;</span>
+        </div>
+        <div class="objection-body">
+          <div class="script">
+            <div class="script-label">Response</div>
+            <q>"The company has graduated 9 million people globally and your concerns are normal of that group. People choose Dale Carnegie because our methodology significantly shifts the very area that you want to improve. Nothing changes unless something changes — let's get you moving in the right direction, with a trusted vehicle."</q>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- ============================================ -->
+<!-- PHASE 4: LIVE EXAMPLE -->
+<!-- ============================================ -->
+
+<div class="phase" id="phase4">
+  <div class="phase-header">
+    <div class="phase-number">4</div>
+    <div>
+      <div class="phase-title">Live Example</div>
+      <div class="phase-subtitle">Watch the full process in action with a real client</div>
+    </div>
+  </div>
+
+  <!-- Stage 13: Live Example -->
+  <div class="stage" id="stage-13">
+    <div class="stage-header" onclick="toggleStage(this)">
+      <div class="stage-check" onclick="event.stopPropagation(); toggleCheck(this)"></div>
+      <div class="stage-icon yellow">&#127909;</div>
+      <div class="stage-info">
+        <div class="stage-name">13. Live Example — Full Sales Process with a Client</div>
+        <div class="stage-desc">Watch an expert run the entire process from rapport through to close</div>
+      </div>
+      <div class="stage-toggle">&#9660;</div>
+    </div>
+    <div class="stage-content">
+      <div class="video-slot">
+        <div class="video-placeholder">
+          <div class="play-icon">&#9654;</div>
+          <p><strong>Live Example: Full Client Meeting</strong></p>
+          <p class="upload-hint">Place video file in /videos/13-live-example.mp4</p>
+        </div>
+      </div>
+      <div class="key-points">
+        <h4>What to Watch For</h4>
+        <div class="point tip">
+          <div class="point-text"><strong>Rapport:</strong> Notice how the conversation starts friendly and naturally transitions to business.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Questioning:</strong> Listen for the "As Is" and "Should Be" questions — and how the Four Quadrants are uncovered naturally.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>The Staircase:</strong> Watch how the Down/Up process draws out the client's real pain and motivation.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>Pacing:</strong> Notice how the program presentation moves fast — selling on emotion, not detail.</div>
+        </div>
+        <div class="point tip">
+          <div class="point-text"><strong>The Close:</strong> Watch how confidently the ask is made — they've earnt the right by this stage.</div>
+        </div>
+        <div class="point warning">
+          <div class="point-text"><strong>After watching:</strong> Go back through Stages 1-12 and compare what you saw in the live example to the scripts and frameworks. Identify what was followed closely and where the expert adapted.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end tab-training -->
+
+<div class="footer">
+  <p>Dale Carnegie Queensland — Sales Training Portal</p>
+  <p style="margin-top: 8px;">Built with Claude Code | Last updated: 15 March 2026</p>
+</div>
+
+<script>
+  function toggleStage(header) {
+    const stage = header.parentElement;
+    stage.classList.toggle('open');
+    updateProgress();
+  }
+
+  function toggleCheck(el) {
+    el.classList.toggle('done');
+    updateProgress();
+    // Save to localStorage
+    const stageId = el.closest('.stage').id;
+    const completed = JSON.parse(localStorage.getItem('salesTrainingProgress') || '{}');
+    completed[stageId] = el.classList.contains('done');
+    localStorage.setItem('salesTrainingProgress', JSON.stringify(completed));
+  }
+
+  function updateProgress() {
+    const checks = document.querySelectorAll('.stage-check');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    checks.forEach((check, i) => {
+      if (progressSteps[i]) {
+        if (check.classList.contains('done')) {
+          progressSteps[i].className = 'progress-step completed';
+        } else {
+          progressSteps[i].className = 'progress-step';
+        }
+      }
+    });
+  }
+
+  // Load saved progress
+  function loadProgress() {
+    const completed = JSON.parse(localStorage.getItem('salesTrainingProgress') || '{}');
+    Object.keys(completed).forEach(stageId => {
+      if (completed[stageId]) {
+        const stage = document.getElementById(stageId);
+        if (stage) {
+          stage.querySelector('.stage-check').classList.add('done');
+        }
+      }
+    });
+    updateProgress();
+  }
+
+  loadProgress();
+
+  // Tab switching
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.remove('active');
+      if ((tab === 'training' && i === 0) || (tab === 'search' && i === 1) || (tab === 'quiz' && i === 2)) {
+        btn.classList.add('active');
+      }
+    });
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    if (tab === 'search') {
+      setTimeout(() => document.getElementById('searchInput').focus(), 100);
+    }
+  }
+
+  // Search functionality
+  function searchPortal() {
+    const query = document.getElementById('searchInput').value.toLowerCase().trim();
+    const resultsDiv = document.getElementById('searchResults');
+    if (!query) { resultsDiv.innerHTML = ''; return; }
+
+    const stages = document.querySelectorAll('#tab-training .stage');
+    const results = [];
+
+    stages.forEach(stage => {
+      const name = stage.querySelector('.stage-name').textContent;
+      const content = stage.querySelector('.stage-content');
+      if (!content) return;
+
+      const scripts = content.querySelectorAll('q');
+      scripts.forEach(script => {
+        const text = script.textContent;
+        if (text.toLowerCase().includes(query)) {
+          results.push({ stage: name, text: text, stageId: stage.id });
+        }
+      });
+
+      const points = content.querySelectorAll('.point-text');
+      points.forEach(point => {
+        const text = point.textContent;
+        if (text.toLowerCase().includes(query)) {
+          results.push({ stage: name, text: text, stageId: stage.id });
+        }
+      });
+    });
+
+    // Also search objection cards
+    const objections = document.querySelectorAll('.objection-card');
+    objections.forEach(card => {
+      const title = card.querySelector('h5').textContent;
+      const scripts = card.querySelectorAll('q');
+      scripts.forEach(script => {
+        const text = script.textContent;
+        if (text.toLowerCase().includes(query)) {
+          results.push({ stage: '12. Objection Handling — ' + title, text: text, stageId: 'stage-12' });
+        }
+      });
+    });
+
+    if (results.length === 0) {
+      resultsDiv.innerHTML = '<div class="search-no-results">No results found for "' + query + '". Try different keywords.</div>';
+      return;
+    }
+
+    resultsDiv.innerHTML = results.map(r => {
+      const highlighted = r.text.replace(new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark>$1</mark>');
+      return '<div class="search-result" onclick="jumpToStage(\'' + r.stageId + '\')">' +
+        '<div class="search-result-stage">' + r.stage + '</div>' +
+        '<div class="search-result-text">' + highlighted + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function jumpToStage(stageId) {
+    switchTab('training');
+    setTimeout(() => {
+      const stage = document.getElementById(stageId);
+      if (stage) {
+        stage.classList.add('open');
+        stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        stage.style.borderColor = '#ffc708';
+        setTimeout(() => { stage.style.borderColor = ''; }, 2000);
+      }
+    }, 100);
+  }
+
+  // Quiz functionality
+  let quizCorrect = 0;
+  let quizAnswered = 0;
+  const quizTotal = 15;
+
+  function answerQuiz(el, isCorrect) {
+    const card = el.closest('.quiz-card');
+    const options = card.querySelectorAll('.quiz-option');
+    const explanation = card.querySelector('.quiz-explanation');
+
+    // Disable all options
+    options.forEach(opt => {
+      opt.classList.add('disabled');
+      if (opt === el) {
+        opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+      }
+    });
+
+    // Highlight correct answer if wrong was chosen
+    if (!isCorrect) {
+      options.forEach(opt => {
+        if (opt.getAttribute('onclick').includes('true')) {
+          opt.classList.add('correct');
+        }
+      });
+    }
+
+    // Show explanation
+    explanation.style.display = 'block';
+
+    // Update score
+    quizAnswered++;
+    if (isCorrect) quizCorrect++;
+
+    const scoreDiv = document.getElementById('quizScore');
+    scoreDiv.style.display = 'block';
+    document.getElementById('scoreDisplay').textContent = quizCorrect + '/' + quizAnswered;
+  }
+
+  function resetQuiz() {
+    quizCorrect = 0;
+    quizAnswered = 0;
+    document.getElementById('quizScore').style.display = 'none';
+    document.querySelectorAll('.quiz-card').forEach(card => {
+      card.querySelectorAll('.quiz-option').forEach(opt => {
+        opt.classList.remove('correct', 'incorrect', 'disabled');
+      });
+      card.querySelector('.quiz-explanation').style.display = 'none';
+    });
+  }
+</script>
+
+</body>
+</html>

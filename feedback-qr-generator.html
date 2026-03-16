@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD - Feedback Form & QR Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    min-height: 100vh;
+  }
+
+  header {
+    background: #000;
+    padding: 24px 40px;
+    border-bottom: 3px solid #ffc708;
+  }
+  header h1 { font-size: 22px; font-weight: 600; }
+  header h1 span { color: #ffc708; }
+  header .subtitle { color: #999; font-size: 13px; margin-top: 2px; }
+  header .back { color: #ffc708; text-decoration: none; font-size: 13px; }
+  header .back:hover { text-decoration: underline; }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: flex;
+    gap: 40px;
+  }
+
+  /* Left panel: form */
+  .form-panel {
+    flex: 0 0 380px;
+  }
+  .form-panel h2 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #ccc;
+  }
+
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 6px;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%;
+    padding: 10px 14px;
+    background: #2a2a2a;
+    border: 1px solid #444;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none;
+    border-color: #ffc708;
+  }
+  .field textarea { resize: vertical; min-height: 60px; }
+  .field .hint { font-size: 11px; color: #666; margin-top: 4px; }
+
+  .btn-generate {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: #ffc708;
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+  .btn-generate:hover { opacity: 0.85; }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: #333;
+    color: #ccc;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    margin-left: 8px;
+  }
+  .btn-secondary:hover { background: #444; }
+
+  /* Right panel: preview */
+  .preview-panel {
+    flex: 1;
+    min-width: 0;
+  }
+  .preview-panel h2 {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #ccc;
+  }
+
+  .preview-frame {
+    background: #f5f0e8;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  }
+
+  /* ---- Feedback card styles (from original) ---- */
+  .fb-header {
+    background: #1a1410;
+    color: #f5f0e8;
+    padding: 36px 44px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fb-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 200px; height: 200px;
+    background: #b5451b;
+    opacity: 0.15;
+    border-radius: 50%;
+    transform: translate(60px, 60px);
+  }
+  .fb-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c8922a;
+    margin-bottom: 12px;
+  }
+  .fb-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .fb-subtitle {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    color: #c8bfb4;
+  }
+
+  .fb-card {
+    background: white;
+    border-left: 4px solid #b5451b;
+    padding: 44px;
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  .fb-qr-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+  .fb-qr-frame {
+    padding: 16px;
+    background: #f5f0e8;
+    border: 1px solid #e0d9cf;
+    position: relative;
+  }
+  .fb-qr-frame::before, .fb-qr-frame::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 14px;
+    border-color: #b5451b;
+    border-style: solid;
+  }
+  .fb-qr-frame::before { top: -4px; left: -4px; border-width: 3px 0 0 3px; }
+  .fb-qr-frame::after  { bottom: -4px; right: -4px; border-width: 0 3px 3px 0; }
+
+  .fb-scan-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #7a6f65;
+  }
+
+  .fb-info { flex: 1; min-width: 0; }
+  .fb-info-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #b5451b;
+    margin-bottom: 6px;
+  }
+  .fb-info-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #1a1410;
+    line-height: 1.3;
+    margin-bottom: 24px;
+  }
+
+  .fb-divider {
+    width: 40px;
+    height: 2px;
+    background: #c8922a;
+    margin: 24px 0;
+    opacity: 0.5;
+  }
+
+  .fb-incentive {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #7a6f65;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .fb-cta {
+    display: inline-block;
+    background: #b5451b;
+    color: white;
+    text-decoration: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+  }
+
+  .fb-footer {
+    background: #f5f0e8;
+    border-top: 1px solid #e0d9cf;
+    padding: 18px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .fb-footer-note {
+    font-size: 12px;
+    color: #7a6f65;
+    font-style: italic;
+  }
+  .fb-dot-row { display: flex; gap: 6px; }
+  .fb-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #c8922a;
+    opacity: 0.4;
+  }
+  .fb-dot:first-child { opacity: 1; background: #b5451b; }
+
+  /* Empty state */
+  .empty-preview {
+    padding: 80px 40px;
+    text-align: center;
+    color: #7a6f65;
+    font-size: 14px;
+  }
+
+  /* Saved list */
+  .saved-section { margin-top: 32px; }
+  .saved-section h3 { font-size: 14px; color: #888; margin-bottom: 12px; }
+  .saved-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .saved-item .name { font-size: 14px; }
+  .saved-item .date { font-size: 12px; color: #666; }
+  .saved-item button {
+    background: none;
+    border: 1px solid #444;
+    color: #999;
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    margin-left: 8px;
+  }
+  .saved-item button:hover { border-color: #ffc708; color: #ffc708; }
+  .saved-item button.delete:hover { border-color: #e55; color: #e55; }
+
+  @media (max-width: 800px) {
+    .container { flex-direction: column; }
+    .form-panel { flex: none; width: 100%; }
+    .fb-card { flex-direction: column; align-items: center; padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="dashboard.html" class="back">&larr; Back to Dashboard</a>
+  <h1>Feedback Form & <span>QR Generator</span></h1>
+  <div class="subtitle">Create branded feedback pages with QR codes for any workshop</div>
+</header>
+
+<div class="container">
+  <!-- Form Panel -->
+  <div class="form-panel">
+    <h2>Workshop Details</h2>
+
+    <div class="field">
+      <label>Workshop Name</label>
+      <input type="text" id="workshopName" placeholder="e.g. Difficult Conversations" value="">
+    </div>
+
+    <div class="field">
+      <label>Date</label>
+      <input type="date" id="workshopDate" value="">
+    </div>
+
+    <div class="field">
+      <label>Google Form URL</label>
+      <input type="url" id="formUrl" placeholder="https://docs.google.com/forms/d/e/...">
+      <div class="hint">Paste the link to your Google Form for feedback collection</div>
+    </div>
+
+    <div class="field">
+      <label>Incentive Text (optional)</label>
+      <textarea id="incentiveText" placeholder="e.g. Fill in your details to go into the draw to win a $1,000 credit towards any public Dale Carnegie Program!">Fill in your details to go into the draw to win a $1,000 credit towards any public Dale Carnegie Program! *Conditions Apply</textarea>
+    </div>
+
+    <div class="field">
+      <label>Duration Estimate</label>
+      <input type="text" id="duration" value="~3 minutes" placeholder="~3 minutes">
+    </div>
+
+    <button class="btn-generate" onclick="generatePreview()">Generate Preview</button>
+    <button class="btn-secondary" onclick="downloadPage()">Download HTML</button>
+    <button class="btn-secondary" onclick="saveToHistory()">Save</button>
+
+    <!-- Saved history -->
+    <div class="saved-section">
+      <h3>Saved Forms</h3>
+      <div id="savedList"></div>
+    </div>
+  </div>
+
+  <!-- Preview Panel -->
+  <div class="preview-panel">
+    <h2>Preview</h2>
+    <div class="preview-frame" id="previewFrame">
+      <div class="empty-preview">
+        Fill in the details and click <strong>Generate Preview</strong> to see your feedback page.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Format date nicely
+  function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+  }
+
+  // Split workshop name for title styling
+  function formatTitle(name) {
+    const words = name.trim().split(/\s+/);
+    if (words.length <= 1) return name;
+    const mid = Math.ceil(words.length / 2);
+    const line1 = words.slice(0, mid).join(' ');
+    const line2 = words.slice(mid).join(' ');
+    return line1 + '<br><em>' + line2 + '</em>';
+  }
+
+  function generatePreview() {
+    const name = document.getElementById('workshopName').value.trim();
+    const dateVal = document.getElementById('workshopDate').value;
+    const formUrl = document.getElementById('formUrl').value.trim();
+    const incentive = document.getElementById('incentiveText').value.trim();
+    const duration = document.getElementById('duration').value.trim();
+
+    if (!name) { alert('Please enter a workshop name.'); return; }
+
+    const dateFormatted = formatDate(dateVal);
+    const qrUrl = formUrl || 'https://forms.google.com';
+
+    const frame = document.getElementById('previewFrame');
+    frame.innerHTML = `
+      <div class="fb-header">
+        <div class="fb-eyebrow">Dale Carnegie Workshop Feedback</div>
+        <div class="fb-title">${formatTitle(name)}</div>
+        <div class="fb-subtitle">${dateFormatted ? dateFormatted + ' &nbsp;&middot;&nbsp; ' : ''}Share your experience</div>
+      </div>
+      <div class="fb-card">
+        <div class="fb-qr-wrap">
+          <div class="fb-qr-frame">
+            <div id="previewQr"></div>
+          </div>
+          <div class="fb-scan-label">Scan to give feedback</div>
+        </div>
+        <div class="fb-info">
+          <div class="fb-info-label">Workshop</div>
+          <div class="fb-info-value">${name}</div>
+          ${dateFormatted ? `<div class="fb-info-label">Date</div><div class="fb-info-value">${dateFormatted}</div>` : ''}
+          <div class="fb-divider"></div>
+          ${incentive ? `<p class="fb-incentive">${incentive}</p>` : ''}
+          <a href="${qrUrl}" class="fb-cta" target="_blank">Open Feedback Form &rarr;</a>
+        </div>
+      </div>
+      <div class="fb-footer">
+        <div class="fb-footer-note">Anonymous &middot; Takes ${duration || '~3 minutes'}</div>
+        <div class="fb-dot-row">
+          <div class="fb-dot"></div>
+          <div class="fb-dot"></div>
+          <div class="fb-dot"></div>
+        </div>
+      </div>
+    `;
+
+    new QRCode(document.getElementById("previewQr"), {
+      text: qrUrl,
+      width: 160,
+      height: 160,
+      colorDark: "#1a1410",
+      colorLight: "#f5f0e8",
+      correctLevel: QRCode.CorrectLevel.H
+    });
+  }
+
+  function downloadPage() {
+    const name = document.getElementById('workshopName').value.trim();
+    const dateVal = document.getElementById('workshopDate').value;
+    const formUrl = document.getElementById('formUrl').value.trim() || 'https://forms.google.com';
+    const incentive = document.getElementById('incentiveText').value.trim();
+    const duration = document.getElementById('duration').value.trim();
+    const dateFormatted = formatDate(dateVal);
+
+    if (!name) { alert('Please enter a workshop name.'); return; }
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${name} — Workshop Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"><\/script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --ink: #1a1410; --cream: #f5f0e8; --rust: #b5451b; --gold: #c8922a; --muted: #7a6f65; --paper: #faf7f2; }
+  body { background: var(--paper); font-family: 'DM Sans', sans-serif; color: var(--ink); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E"); pointer-events: none; z-index: 0; }
+  .page { position: relative; z-index: 1; width: 100%; max-width: 680px; }
+  .header { background: var(--ink); color: var(--cream); padding: 36px 44px; position: relative; overflow: hidden; }
+  .header::after { content: ''; position: absolute; bottom: 0; right: 0; width: 200px; height: 200px; background: var(--rust); opacity: 0.15; border-radius: 50%; transform: translate(60px, 60px); }
+  .eyebrow { font-weight: 500; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 5vw, 42px); font-weight: 700; line-height: 1.1; margin-bottom: 8px; }
+  .subtitle { font-size: 14px; font-weight: 300; color: #c8bfb4; }
+  .card { background: white; border-left: 4px solid var(--rust); padding: 44px; display: flex; gap: 40px; align-items: flex-start; }
+  .qr-wrap { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .qr-frame { padding: 16px; background: var(--cream); border: 1px solid #e0d9cf; position: relative; }
+  .qr-frame::before, .qr-frame::after { content: ''; position: absolute; width: 14px; height: 14px; border-color: var(--rust); border-style: solid; }
+  .qr-frame::before { top: -4px; left: -4px; border-width: 3px 0 0 3px; }
+  .qr-frame::after { bottom: -4px; right: -4px; border-width: 0 3px 3px 0; }
+  #qrcode canvas, #qrcode img { display: block; }
+  .scan-label { font-size: 11px; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .info { flex: 1; min-width: 0; }
+  .info-label { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--rust); margin-bottom: 6px; }
+  .info-value { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--ink); line-height: 1.3; margin-bottom: 24px; }
+  .divider { width: 40px; height: 2px; background: var(--gold); margin: 24px 0; opacity: 0.5; }
+  .incentive { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
+  .cta { display: inline-block; background: var(--rust); color: white; text-decoration: none; font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding: 12px 24px; }
+  .cta:hover { background: #8f3614; }
+  .footer { background: var(--cream); border-top: 1px solid #e0d9cf; padding: 18px 44px; display: flex; align-items: center; justify-content: space-between; }
+  .footer-note { font-size: 12px; color: var(--muted); font-style: italic; }
+  .dot-row { display: flex; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.4; }
+  .dot:first-child { opacity: 1; background: var(--rust); }
+  @media (max-width: 520px) { .card { flex-direction: column; align-items: center; padding: 28px 24px; } .header, .footer { padding-left: 24px; padding-right: 24px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <div class="eyebrow">Dale Carnegie Workshop Feedback</div>
+    <h1>${formatTitle(name)}</h1>
+    <div class="subtitle">${dateFormatted ? dateFormatted + ' &nbsp;&middot;&nbsp; ' : ''}Share your experience</div>
+  </div>
+  <div class="card">
+    <div class="qr-wrap">
+      <div class="qr-frame"><div id="qrcode"></div></div>
+      <div class="scan-label">Scan to give feedback</div>
+    </div>
+    <div class="info">
+      <div class="info-label">Workshop</div>
+      <div class="info-value">${name}</div>
+      ${dateFormatted ? `<div class="info-label">Date</div><div class="info-value">${dateFormatted}</div>` : ''}
+      <div class="divider"></div>
+      ${incentive ? `<p class="incentive">${incentive}</p>` : ''}
+      <a id="formLink" href="${formUrl}" class="cta" target="_blank">Open Feedback Form &rarr;</a>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="footer-note">Anonymous &middot; Takes ${duration || '~3 minutes'}</div>
+    <div class="dot-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+</div>
+<script>
+  new QRCode(document.getElementById("qrcode"), {
+    text: "${formUrl}",
+    width: 180, height: 180,
+    colorDark: "#1a1410", colorLight: "#f5f0e8",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+<\/script>
+</body>
+</html>`;
+
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    a.download = slug + '-feedback-qr.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // --- Local storage for saved forms ---
+  const STORAGE_KEY = 'dc-feedback-forms';
+
+  function getSaved() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+  }
+
+  function saveToHistory() {
+    const name = document.getElementById('workshopName').value.trim();
+    if (!name) { alert('Enter a workshop name first.'); return; }
+
+    const entry = {
+      id: Date.now(),
+      name,
+      date: document.getElementById('workshopDate').value,
+      formUrl: document.getElementById('formUrl').value.trim(),
+      incentive: document.getElementById('incentiveText').value.trim(),
+      duration: document.getElementById('duration').value.trim()
+    };
+
+    const saved = getSaved();
+    saved.unshift(entry);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved.slice(0, 20)));
+    renderSaved();
+  }
+
+  function loadSaved(id) {
+    const entry = getSaved().find(e => e.id === id);
+    if (!entry) return;
+    document.getElementById('workshopName').value = entry.name;
+    document.getElementById('workshopDate').value = entry.date || '';
+    document.getElementById('formUrl').value = entry.formUrl || '';
+    document.getElementById('incentiveText').value = entry.incentive || '';
+    document.getElementById('duration').value = entry.duration || '~3 minutes';
+    generatePreview();
+  }
+
+  function deleteSaved(id) {
+    const saved = getSaved().filter(e => e.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+    renderSaved();
+  }
+
+  function renderSaved() {
+    const list = document.getElementById('savedList');
+    const saved = getSaved();
+    if (!saved.length) {
+      list.innerHTML = '<div style="color:#555; font-size:13px;">No saved forms yet.</div>';
+      return;
+    }
+    list.innerHTML = saved.map(e => `
+      <div class="saved-item">
+        <div>
+          <div class="name">${e.name}</div>
+          <div class="date">${e.date ? formatDate(e.date) : 'No date'}</div>
+        </div>
+        <div>
+          <button onclick="loadSaved(${e.id})">Load</button>
+          <button class="delete" onclick="deleteSaved(${e.id})">Delete</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // Init
+  renderSaved();
+</script>
+</body>
+</html>
