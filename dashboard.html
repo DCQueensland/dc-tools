@@ -18,7 +18,7 @@
     padding: 24px 40px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    justify-content: space-between;
     border-bottom: 3px solid #ffc708;
   }
   header h1 {
@@ -32,6 +32,16 @@
     font-size: 13px;
     margin-top: 2px;
   }
+  .env-badge {
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .env-badge.online { background: #84c44c22; color: #84c44c; border: 1px solid #84c44c44; }
+  .env-badge.local { background: #ffc70822; color: #ffc708; border: 1px solid #ffc70844; }
 
   .dashboard {
     max-width: 1100px;
@@ -45,6 +55,16 @@
     letter-spacing: 2px;
     color: #666;
     margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label .count {
+    background: #333;
+    color: #999;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
   }
 
   .tools-grid {
@@ -97,6 +117,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-wrap: wrap;
   }
 
   .btn {
@@ -156,11 +177,17 @@
     margin-bottom: 12px;
     width: fit-content;
   }
+  .tag.tag-online { background: #84c44c22; color: #84c44c; }
+  .tag.tag-local { background: #ff634722; color: #ff6347; }
 
-  /* Icon colors per tool */
+  /* Icon colors */
+  .icon-sales { background: #0090cf22; color: #0090cf; }
+  .icon-telemarketer { background: #84c44c22; color: #84c44c; }
   .icon-proposal { background: #0090cf22; color: #0090cf; }
-  .icon-banner  { background: #84c44c22; color: #84c44c; }
-  .icon-placeholder { background: #ffc70822; color: #ffc708; }
+  .icon-banner { background: #84c44c22; color: #84c44c; }
+  .icon-feedback { background: #ffc70822; color: #ffc708; }
+  .icon-finder { background: #ffc70822; color: #ffc708; }
+  .icon-weekly { background: #9b59b622; color: #9b59b6; }
 
   footer {
     text-align: center;
@@ -169,7 +196,6 @@
     font-size: 12px;
   }
 
-  /* Add-tool card */
   .tool-card.add-new {
     border-style: dashed;
     border-color: #444;
@@ -205,20 +231,90 @@
     <h1>Dale Carnegie <span>QLD</span> Tools</h1>
     <div class="subtitle">Internal tools dashboard</div>
   </div>
+  <span class="env-badge" id="env-badge">Detecting...</span>
 </header>
 
 <div class="dashboard">
-  <div class="section-label">Your Tools</div>
+
+  <!-- TRAINING PORTALS — work everywhere -->
+  <div class="section-label">Training Portals <span class="count">2</span></div>
+  <div class="tools-grid">
+
+    <!-- Sales Training Portal -->
+    <div class="tool-card">
+      <div class="tool-icon icon-sales">&#127919;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Sales Training Portal</h3>
+      <p>Complete 4-phase sales process training. Covers Meeting 1 (Awareness), Meeting 2 (Proposal), Closing &amp; Pricing, plus a live example and 15-question quiz.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="sales-training-portal.html" target="_blank">Open</a>
+      </div>
+    </div>
+
+    <!-- Telemarketer Training Portal -->
+    <div class="tool-card">
+      <div class="tool-icon icon-telemarketer">&#128222;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Telemarketer Training Portal</h3>
+      <p>6-phase outbound call training. New relationship calls, post-workshop follow-up, special call types, 15 objection scripts with responses, and a knowledge quiz.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="telemarketer-training-portal.html" target="_blank">Open</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ONLINE TOOLS — static HTML, work everywhere -->
+  <div class="section-label">Online Tools <span class="count">3</span></div>
+  <div class="tools-grid">
+
+    <!-- Feedback QR Generator (static HTML) -->
+    <div class="tool-card">
+      <div class="tool-icon icon-feedback">&#9998;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Feedback QR Generator</h3>
+      <p>Generate QR codes for workshop feedback forms. Enter the workshop name and date to create a scannable QR code ready for your slides and handouts.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="feedback-qr-generator.html" target="_blank">Open</a>
+      </div>
+    </div>
+
+    <!-- Program Finder (static HTML) -->
+    <div class="tool-card">
+      <div class="tool-icon icon-finder">&#128269;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Program Finder</h3>
+      <p>Look up Dale Carnegie programs, descriptions, outcomes, and pricing. Quick reference for the full program catalogue.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="program-finder.html" target="_blank">Open</a>
+      </div>
+    </div>
+
+    <!-- Weekly Dashboard (static HTML) -->
+    <div class="tool-card">
+      <div class="tool-icon icon-weekly">&#128200;</div>
+      <div class="tag tag-online">Available Online</div>
+      <h3>Weekly Dashboard</h3>
+      <p>Weekly status overview showing key metrics, upcoming events, and action items at a glance.</p>
+      <div class="tool-actions">
+        <a class="btn btn-primary" href="weekly-dashboard.html" target="_blank">Open</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ON-DEVICE TOOLS — need main machine -->
+  <div class="section-label">On-Device Tools <span class="count">3</span></div>
   <div class="tools-grid">
 
     <!-- Proposal Generator -->
     <div class="tool-card" id="card-proposal">
       <div class="tool-icon icon-proposal">&#9997;</div>
-      <div class="tag">Node.js &middot; Port 3000</div>
+      <div class="tag tag-local">Requires Main Machine</div>
       <h3>Proposal Generator</h3>
       <p>Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send.</p>
       <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:3000" target="_blank" onclick="launchTool('proposal')">Open</a>
+        <a class="btn btn-primary" href="http://localhost:3000" target="_blank">Open</a>
         <button class="btn btn-secondary" onclick="startServer('proposal')">Start Server</button>
         <span class="status-dot checking" id="status-proposal"></span>
         <span class="status-text" id="status-text-proposal">Checking...</span>
@@ -228,54 +324,43 @@
     <!-- Banner Generator -->
     <div class="tool-card" id="card-banner">
       <div class="tool-icon icon-banner">&#9881;</div>
-      <div class="tag">Python &middot; Port 8765</div>
+      <div class="tag tag-local">Requires Main Machine</div>
       <h3>Eventbrite Banner Generator</h3>
       <p>Generate Eventbrite event banners with correct Dale Carnegie branding, colours, and layout. Works with Claude Code to create designs via Canva.</p>
       <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:8765" target="_blank" onclick="launchTool('banner')">Open</a>
+        <a class="btn btn-primary" href="http://localhost:8765" target="_blank">Open</a>
         <button class="btn btn-secondary" onclick="startServer('banner')">Start Server</button>
         <span class="status-dot checking" id="status-banner"></span>
         <span class="status-text" id="status-text-banner">Checking...</span>
       </div>
     </div>
 
-    <!-- Feedback Form & QR Generator -->
-    <div class="tool-card" id="card-feedback">
-      <div class="tool-icon icon-placeholder">&#9998;</div>
-      <div class="tag">Python &middot; Port 8766</div>
-      <h3>Feedback Form & QR Generator</h3>
-      <p>Enter a workshop name and date — automatically creates a Google Form and saves a QR code PNG to your Desktop, ready to paste into visuals.</p>
+    <!-- Feedback Form Generator (server version) -->
+    <div class="tool-card" id="card-feedback-server">
+      <div class="tool-icon icon-feedback">&#9998;</div>
+      <div class="tag tag-local">Requires Main Machine</div>
+      <h3>Feedback Form Generator</h3>
+      <p>Enter a workshop name and date &mdash; automatically creates a Google Form and saves a QR code PNG to your Desktop, ready to paste into visuals.</p>
       <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:8766" target="_blank" onclick="launchTool('feedback')">Open</a>
+        <a class="btn btn-primary" href="http://localhost:8766" target="_blank">Open</a>
         <button class="btn btn-secondary" onclick="startServer('feedback')">Start Server</button>
         <span class="status-dot checking" id="status-feedback"></span>
         <span class="status-text" id="status-text-feedback">Checking...</span>
       </div>
     </div>
 
-    <!-- Program Material Finder -->
-    <div class="tool-card" id="card-finder">
-      <div class="tool-icon icon-placeholder">&#128269;</div>
-      <div class="tag">Python &middot; Port 8767</div>
-      <h3>Program Material Finder</h3>
-      <p>Paste a project brief or describe outcomes &mdash; searches all of Dropbox to find relevant visuals, participant manuals, trainer guides, and past materials you can mix and match.</p>
-      <div class="tool-actions">
-        <a class="btn btn-primary" href="http://localhost:8767" target="_blank" onclick="launchTool('finder')">Open</a>
-        <button class="btn btn-secondary" onclick="startServer('finder')">Start Server</button>
-        <span class="status-dot checking" id="status-finder"></span>
-        <span class="status-text" id="status-text-finder">Checking...</span>
-      </div>
-    </div>
+  </div>
 
-    <!-- Placeholder for future tools -->
+  <!-- Placeholder -->
+  <div class="tools-grid">
     <div class="tool-card add-new">
       <div class="add-new-inner">
         <div class="plus">+</div>
         <p>More tools coming soon</p>
       </div>
     </div>
-
   </div>
+
 </div>
 
 <footer>
@@ -283,23 +368,41 @@
 </footer>
 
 <script>
-  // Health-check each tool server
-  const tools = {
+  // Detect if running locally or online
+  const isLocal = window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const badge = document.getElementById('env-badge');
+  if (isLocal) {
+    badge.textContent = 'Local';
+    badge.className = 'env-badge local';
+  } else {
+    badge.textContent = 'Online';
+    badge.className = 'env-badge online';
+  }
+
+  // Health-check server-dependent tools (only meaningful when local)
+  const serverTools = {
     proposal: { port: 3000, url: 'http://localhost:3000' },
     banner:   { port: 8765, url: 'http://localhost:8765' },
-    feedback: { port: 8766, url: 'http://localhost:8766' },
-    finder:   { port: 8767, url: 'http://localhost:8767' }
+    feedback: { port: 8766, url: 'http://localhost:8766' }
   };
 
   async function checkStatus(name) {
     const dot = document.getElementById('status-' + name);
     const text = document.getElementById('status-text-' + name);
+    if (!dot || !text) return;
+
+    if (!isLocal) {
+      dot.className = 'status-dot offline';
+      text.textContent = 'Use main machine';
+      return;
+    }
+
     dot.className = 'status-dot checking';
     text.textContent = 'Checking...';
     try {
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 2000);
-      await fetch(tools[name].url, { mode: 'no-cors', signal: controller.signal });
+      await fetch(serverTools[name].url, { mode: 'no-cors', signal: controller.signal });
       clearTimeout(timeout);
       dot.className = 'status-dot online';
       text.textContent = 'Running';
@@ -309,54 +412,28 @@
     }
   }
 
-  function launchTool(name) {
-    // Just let the link work naturally
-  }
-
   function startServer(name) {
+    if (!isLocal) {
+      alert('This tool requires the main machine.\n\nPlease remote control into the main device to use this tool.');
+      return;
+    }
     const text = document.getElementById('status-text-' + name);
     text.textContent = 'Starting...';
-    // We can't start servers from a file:// page directly,
-    // but we show instructions
     if (name === 'proposal') {
-      alert(
-        'To start the Proposal Generator:\n\n' +
-        '1. Open Terminal\n' +
-        '2. Run: ~/proposal-generator/start.sh\n\n' +
-        'Or double-click "DC Proposal Generator" on your Desktop if available.'
-      );
+      alert('To start the Proposal Generator:\n\n1. Open Terminal\n2. Run: ~/proposal-generator/start.sh\n\nOr double-click "DC Proposal Generator" on your Desktop if available.');
     } else if (name === 'banner') {
-      alert(
-        'To start the Banner Generator:\n\n' +
-        '1. Double-click "DC Banner Generator.command" on your Desktop\n\n' +
-        'Or open Terminal and run:\n' +
-        'python3 ~/.dc-tools/banner-generator.py'
-      );
+      alert('To start the Banner Generator:\n\n1. Double-click "DC Banner Generator.command" on your Desktop\n\nOr open Terminal and run:\npython3 ~/.dc-tools/banner-generator.py');
     } else if (name === 'feedback') {
-      alert(
-        'To start the Feedback Form Generator:\n\n' +
-        '1. Double-click "DC Feedback Generator.command" on your Desktop\n\n' +
-        'Or open Terminal and run:\n' +
-        'python3 ~/.dc-tools/feedback-generator.py'
-      );
-    } else if (name === 'finder') {
-      alert(
-        'To start the Program Material Finder:\n\n' +
-        '1. Double-click "DC Program Finder.command" on your Desktop\n\n' +
-        'Or open Terminal and run:\n' +
-        'python3 ~/.dc-tools/program-finder.py'
-      );
+      alert('To start the Feedback Form Generator:\n\n1. Double-click "DC Feedback Generator.command" on your Desktop\n\nOr open Terminal and run:\npython3 ~/.dc-tools/feedback-generator.py');
     }
-    // Re-check status after a moment
     setTimeout(() => checkStatus(name), 3000);
   }
 
-  // Check all on load
-  Object.keys(tools).forEach(name => checkStatus(name));
-
+  // Check server tools on load
+  Object.keys(serverTools).forEach(name => checkStatus(name));
   // Re-check every 10 seconds
   setInterval(() => {
-    Object.keys(tools).forEach(name => checkStatus(name));
+    Object.keys(serverTools).forEach(name => checkStatus(name));
   }, 10000);
 </script>
 
