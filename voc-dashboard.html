@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie Queensland — Voice of the Customer Dashboard</title>
+<style>
+  :root {
+    --dc-yellow: #ffc708;
+    --dc-green: #84c44c;
+    --dc-blue: #0090cf;
+    --dc-dark: #1a1a2e;
+    --dc-card: #ffffff;
+    --dc-bg: #f4f6f9;
+    --dc-border: #e2e6ea;
+    --dc-text: #2d3436;
+    --dc-muted: #636e72;
+    --nps-world: #27ae60;
+    --nps-excellent: #2ecc71;
+    --nps-good: #f39c12;
+    --nps-needs: #e74c3c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+    background: var(--dc-bg);
+    color: var(--dc-text);
+    line-height: 1.5;
+  }
+
+  .header {
+    background: linear-gradient(135deg, var(--dc-dark) 0%, #16213e 100%);
+    color: #fff;
+    padding: 32px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .header h1 span { color: var(--dc-yellow); }
+
+  .header .subtitle {
+    font-size: 14px;
+    opacity: 0.7;
+    margin-top: 4px;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .header-stat {
+    text-align: center;
+  }
+
+  .header-stat .val {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--dc-yellow);
+  }
+
+  .header-stat .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+  /* Tabs */
+  .tab-bar {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    border-bottom: 2px solid var(--dc-border);
+    padding-bottom: 0;
+  }
+
+  .tab-btn {
+    padding: 10px 18px;
+    border: none;
+    background: transparent;
+    color: var(--dc-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--dc-text); }
+  .tab-btn.active {
+    color: var(--dc-blue);
+    border-bottom-color: var(--dc-blue);
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Cards */
+  .card {
+    background: var(--dc-card);
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    padding: 24px;
+    margin-bottom: 20px;
+    border: 1px solid var(--dc-border);
+  }
+
+  .card h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card h2 .badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  /* Summary cards row */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .summary-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid var(--dc-border);
+    text-align: center;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .summary-card .sc-val {
+    font-size: 32px;
+    font-weight: 700;
+  }
+
+  .summary-card .sc-lbl {
+    font-size: 12px;
+    color: var(--dc-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+  }
+
+  .sc-val.green { color: var(--nps-world); }
+  .sc-val.blue { color: var(--dc-blue); }
+  .sc-val.yellow { color: #e67e22; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  thead th {
+    background: #f8f9fa;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--dc-muted);
+    border-bottom: 2px solid var(--dc-border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+
+  thead th:hover { color: var(--dc-text); }
+  thead th.sort-asc::after { content: ' \u25B2'; font-size: 9px; }
+  thead th.sort-desc::after { content: ' \u25BC'; font-size: 9px; }
+
+  tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+  }
+
+  tbody tr:hover { background: #f8fafd; }
+
+  .nps-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    color: #fff;
+    min-width: 52px;
+    text-align: center;
+  }
+
+  .nps-world { background: var(--nps-world); }
+  .nps-excellent { background: var(--nps-excellent); }
+  .nps-good { background: var(--nps-good); }
+  .nps-needs { background: var(--nps-needs); }
+
+  .voc-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .voc-bar-fill {
+    height: 8px;
+    border-radius: 4px;
+    background: var(--dc-blue);
+    min-width: 4px;
+  }
+
+  .voc-bar-track {
+    flex: 1;
+    height: 8px;
+    border-radius: 4px;
+    background: #eee;
+    max-width: 100px;
+    overflow: hidden;
+  }
+
+  /* Trainer cards */
+  .trainer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 20px;
+  }
+
+  .trainer-card {
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid var(--dc-border);
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  }
+
+  .trainer-card-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--dc-border);
+  }
+
+  .trainer-card-header.rank1 { background: linear-gradient(135deg, #ffeaa7 0%, #fff 100%); }
+  .trainer-card-header.rank2 { background: linear-gradient(135deg, #dfe6e9 0%, #fff 100%); }
+
+  .trainer-name {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .trainer-rank {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--dc-muted);
+    opacity: 0.3;
+  }
+
+  .trainer-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    text-align: center;
+    border-bottom: 1px solid var(--dc-border);
+  }
+
+  .trainer-stat {
+    padding: 14px 8px;
+    border-right: 1px solid var(--dc-border);
+  }
+
+  .trainer-stat:last-child { border-right: none; }
+
+  .trainer-stat .ts-val {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .trainer-stat .ts-lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    color: var(--dc-muted);
+    letter-spacing: 0.5px;
+  }
+
+  .trainer-card-body {
+    padding: 16px 24px;
+  }
+
+  .trainer-card-body h4 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--dc-muted);
+    margin-bottom: 8px;
+  }
+
+  .trainer-card-body ul {
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .trainer-card-body li {
+    padding: 4px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .trainer-card-body li .prog-name { flex: 1; }
+
+  /* Quotes */
+  .quote-card {
+    background: #fff;
+    border-left: 4px solid var(--dc-yellow);
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  .quote-text {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--dc-text);
+    line-height: 1.6;
+  }
+
+  .quote-source {
+    font-size: 11px;
+    color: var(--dc-muted);
+    margin-top: 6px;
+    font-style: normal;
+  }
+
+  .quote-theme-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    margin-right: 4px;
+    margin-bottom: 4px;
+  }
+
+  .theme-confidence { background: #dfe6e9; color: #2d3436; }
+  .theme-leadership { background: #e8daef; color: #6c3483; }
+  .theme-team { background: #d5f5e3; color: #1e8449; }
+  .theme-practical { background: #fdebd0; color: #ca6f1e; }
+  .theme-trainer { background: #d6eaf8; color: #2471a3; }
+  .theme-overall { background: #fadbd8; color: #c0392b; }
+
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .filter-btn {
+    padding: 6px 14px;
+    border: 1px solid var(--dc-border);
+    background: #fff;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover { border-color: var(--dc-blue); color: var(--dc-blue); }
+  .filter-btn.active { background: var(--dc-blue); color: #fff; border-color: var(--dc-blue); }
+
+  .search-box {
+    padding: 8px 16px;
+    border: 1px solid var(--dc-border);
+    border-radius: 8px;
+    font-size: 13px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 16px;
+  }
+
+  .search-box:focus { outline: none; border-color: var(--dc-blue); }
+
+  /* Year filter */
+  .year-filters {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .header h1 { font-size: 20px; }
+    .container { padding: 12px; }
+    .trainer-grid { grid-template-columns: 1fr; }
+    .summary-row { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 12px; }
+    thead th, tbody td { padding: 8px 6px; }
+  }
+
+  @media print {
+    .tab-bar, .filter-bar, .search-box, .year-filters { display: none; }
+    .tab-panel { display: block !important; page-break-inside: avoid; }
+    .header { background: #1a1a2e !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card { break-inside: avoid; }
+  }
+
+  .footnote {
+    font-size: 11px;
+    color: var(--dc-muted);
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--dc-border);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Dale Carnegie <span>Queensland</span></h1>
+    <div class="subtitle">Voice of the Customer Dashboard — 2023, 2024, 2025 & 2026</div>
+  </div>
+  <div class="header-stats" id="headerStats"></div>
+</div>
+
+<div class="container">
+  <!-- Tab Bar -->
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="dcc">DCC</button>
+    <button class="tab-btn" data-tab="uylp">UYLP</button>
+    <button class="tab-btn" data-tab="ltm">LTM</button>
+    <button class="tab-btn" data-tab="ltr">LTR</button>
+    <button class="tab-btn" data-tab="hip">HIP</button>
+    <button class="tab-btn" data-tab="hpt">HPT</button>
+    <button class="tab-btn" data-tab="wgyh">WGYH</button>
+    <button class="tab-btn" data-tab="wrs">WRS</button>
+    <button class="tab-btn" data-tab="takecommand">Take Command</button>
+    <button class="tab-btn" data-tab="trainers">Trainers</button>
+    <button class="tab-btn" data-tab="quotes">Quotes Bank</button>
+  </div>
+
+  <!-- Panels rendered by JS -->
+  <div id="panels"></div>
+
+  <div class="footnote">
+    Data compiled from Dale Carnegie VoC system (Qualtrics). Dashboard auto-updates when new entries are added to the data array.<br>
+    NPS Rating: World Class (70+) | Excellent (50–69) | Good (0–49) | Needs Improvement (&lt;0)<br>
+    Last updated: <span id="lastUpdated"></span>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA ARRAY — ADD NEW VOC ENTRIES HERE
+// Each entry = one VoC report. Just add a new object and save.
+// The dashboard recalculates everything automatically.
+// ============================================================
+const vocData = [
+  // ---- 2023 ----
+  { id:"2023-01", year:2023, date:"2023-02-22", client:"Public Class (Feb)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:[], surveys:24, nps:91.7, voc:97.4, promoters:22, passives:2, detractors:0, subScores:{useful:4.6,value:4.9,engaging:5.0,confident:4.8,coaching:4.9}, comments:[{score:10,text:"The tools are practical and the duration was long enough to actually put them into action. The trainer was exceptional and kept energy up through the whole 3 days."},{score:10,text:"Will was exceptional and one of the best and energised presenters I have came across!! Kept us all engaged and the numerous role playing was a great way to break ice and learn."},{score:10,text:"I had such an amazing time learning to public speak as that is something I struggled with so heavily. Thank you William."},{score:10,text:"I did things that I never thought I would be able to do. I spoke in front of people and said I disagreed with something and I was freaked out but I did it anyway. Like wow. Also Will is awesome!"},{score:10,text:"Amazing content, very relevant and on point for using across many areas of life. Will's training was outstanding, engaging and highly impactful."},{score:10,text:"William was exceptional as a coach. Friendly, on top of his game and provided a safe space to risk take and grow."},{score:10,text:"The entire experience has been eye-opening and extremely fun. Instead what I got was a realistic and doable set of skills that is immediately put into practice."}]},
+  { id:"2023-02", year:2023, date:"2023-04-23", client:"Public Class (Apr-May)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:27, nps:88.9, voc:96.4, promoters:24, passives:3, detractors:0, subScores:{useful:4.6,value:4.9,engaging:5.0,confident:4.9,coaching:4.9}, comments:[{score:10,text:"The course changed my life, I have a new way of thinking and a stronger belief in myself."},{score:10,text:"Absolutely amazing experience. The course pulled me out of my comfort zone so much that I feel I have drastically grown as a person."},{score:9,text:"Initially I was skeptic. After the first day I realised there was a method to the madness. Anne-Marie was an incredible instructor. I don't think I would have benefitted as much with anyone else taking the lead."},{score:10,text:"Anne Marie held the space for us all so magically. She was energetic, kind, compassionate and inspiring."},{score:10,text:"I have participated in many leadership programs. Dale Carnegie is by far the most effective. Anne Marie is an absolutely phenomenal coach. When I register for my next course I will be checking if she is the coach!"},{score:10,text:"Ann Marie, our presenter was the most enthusiastic, empathetic and genuine facilitator I have ever encountered."}]},
+  { id:"2023-03", year:2023, date:"2023-07-23", client:"Public Class (Jul-Aug)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:17, nps:88.2, voc:97.2, promoters:15, passives:2, detractors:0, subScores:{useful:4.8,value:4.8,engaging:4.9,confident:4.9,coaching:4.9}, comments:[{score:10,text:"Anne-Marie was an incredible coach. Her enthusiasm was infectious and she did a brilliant job of getting me out of my comfort zone without pushing me too far."},{score:10,text:"I had no idea what to expect when I enrolled. After doing this course I'm so grateful. Mrs Sage was such a professional."},{score:10,text:"My experience was one that I did not think would have such a drastic change in my mindset and attitude in only three days."}]},
+  { id:"2023-04", year:2023, date:"2023-10-01", client:"Public Class (Oct)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:23, nps:91.3, voc:97.6, promoters:22, passives:1, detractors:0, subScores:{useful:4.8,value:4.9,engaging:5.0,confident:4.8,coaching:4.9}, comments:[{score:10,text:"Anne-Marie is amazing, energetic, relatable, funny and passionate about changing people's mindset and approach. My confidence and communication have improved so much in just 3 days."},{score:10,text:"This was, without a doubt, the best professional development event I have ever attended."},{score:10,text:"This course has changed my life. I feel like a more confident and effective communicator."}]},
+  { id:"2023-05", year:2023, date:"2023-04-01", client:"Public Class (Apr)", program:"UYLP", programFull:"Unleash Your Leadership Potential", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:10, nps:70.0, voc:92.6, promoters:7, passives:3, detractors:0, subScores:{useful:4.6,value:4.7,engaging:4.7,confident:4.6,coaching:4.7}, comments:[{score:10,text:"Great presenter, full of energy and very relevant content and technique."},{score:10,text:"Throughout the 3 days the content was very informative, organised, hands-on. I have found it so valuable."},{score:9,text:"I found it extremely helpful in understanding where I need to improve as a leader and where I already have strengths."}]},
+  { id:"2023-06", year:2023, date:"2023-08-05", client:"Public Class (Aug-Sep)", program:"UYLP", programFull:"Unleash Your Leadership Potential", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:9, nps:88.9, voc:98.9, promoters:8, passives:1, detractors:0, subScores:{useful:5.0,value:5.0,engaging:5.0,confident:4.8}, comments:[{score:10,text:"Ann Marie was absolutely fantastic. Relatable, connected and made everyone in the room feel valued and appreciated."},{score:10,text:"I have learnt so much in 3 days thanks to Ann-Maree. The knowledge I have received is second to none."},{score:9,text:"Always such an enjoyable experience. Love the energy and depth of knowledge you bring. I always walk away being a better version of myself."}]},
+  { id:"2023-07", year:2023, date:"2023-07-09", client:"Public Class (Jul)", program:"LTM", programFull:"Leadership Training for Managers", trainer:"William Farmer", coTrainers:["Annemarie Sage Wood"], surveys:7, nps:100.0, voc:99.6, promoters:7, passives:0, detractors:0, subScores:{useful:5.0,value:5.0,engaging:5.0,confident:5.0,coaching:5.0}, comments:[{score:10,text:"Fantastic learning experience. I gained a great deal from the program."},{score:10,text:"The best professional development event in 10+ years. I feel like a new me in business. Thank you Annemarie and William."},{score:10,text:"The coaches have been fantastic in fine tuning my skills this week and have helped me to realise my greater potential."}]},
+  { id:"2023-08", year:2023, date:"2023-06-04", client:"Public Class (Jun)", program:"LTM", programFull:"Leadership Training for Managers", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:9, nps:66.7, voc:93.9, promoters:7, passives:1, detractors:1, subScores:{useful:4.4,value:4.9,engaging:4.9,confident:4.9,coaching:4.8}, comments:[{score:10,text:"This course was amazing. The interactive lessons and tasks are the most productive thing."},{score:10,text:"This course was so much more than I could have imagined, it really empowers you to think, act and do so much more."},{score:9,text:"Fantastic and knowledgeable presenter. Some of the content is a bit American and outdated."},{score:6,text:"I enjoyed the experience and I believe the trainer really cared about what she was teaching us."}]},
+  { id:"2023-09", year:2023, date:"2023-07-09", client:"Public Class (Jul)", program:"WRS", programFull:"Winning with Relationship Selling", trainer:"William Farmer", coTrainers:["Annemarie Sage Wood"], surveys:7, nps:100.0, voc:99.6, promoters:7, passives:0, detractors:0, subScores:{useful:5.0,value:5.0,engaging:5.0,confident:5.0,coaching:5.0}, comments:[{score:10,text:"This course was extremely helpful with gaining a new insight into how I sell and build relationships with clients."}]},
+  { id:"2023-10", year:2023, date:"2023-07-02", client:"Public Class (Jul - Short Course)", program:"DCC", programFull:"The Dale Carnegie Course (Short)", trainer:"William Farmer", coTrainers:["Dawn Lee"], surveys:5, nps:100.0, voc:97.8, promoters:5, passives:0, detractors:0, subScores:{useful:4.6,value:5.0,engaging:5.0,confident:4.8,coaching:5.0}, comments:[{score:10,text:"Loved what I learned and the way it was taught. Lots of fun and lots to implement every day."},{score:10,text:"Excellent coaches (Dawn Lee and William Farmer). Excellent, real and researched leadership concepts. The Dale Carnegie seriously resonates with me."},{score:9,text:"William engaged really well with the small group and experiences were relatable."}]},
+  { id:"2023-11", year:2023, date:"2023-03-05", client:"Public Class (Perth)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Tanya Konigsberger", coTrainers:[], surveys:13, nps:92.3, voc:97.2, promoters:12, passives:1, detractors:0, subScores:{useful:4.6,value:4.8,engaging:5.0,confident:4.9,coaching:4.8}, comments:[{score:10,text:"I genuinely appreciated the insight into all the skills available to me to better myself holistically."},{score:10,text:"Tanya made it easy to come out of my shell and she is an extremely good coach. I'm a better person for it."},{score:10,text:"My experience was really good. The energy from Tanya really helped bring points across."}]},
+  { id:"2023-12", year:2023, date:"2023-06-12", client:"Public Class (Adelaide)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Tanya Konigsberger", coTrainers:[], surveys:8, nps:62.5, voc:93.9, promoters:5, passives:3, detractors:0, subScores:{useful:4.6,value:5.0,engaging:5.0,confident:4.9,coaching:4.9}, comments:[{score:10,text:"Very good evidence based content, engaged and enthusiastic presenter."},{score:10,text:"Before I came to this course I had no self confidence. Now I have confidence in myself."},{score:10,text:"Wow. Amazing program. Tanya is such an incredible coach and had such an impact on the group."}]},
+  { id:"2023-13", year:2023, date:"2023-04-09", client:"Bartons (Group 1)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:[], surveys:24, nps:100.0, voc:99.2, promoters:24, passives:0, detractors:0, subScores:{useful:4.8,value:5.0,engaging:5.0,confident:5.0,coaching:5.0}, comments:[{score:10,text:"I had an absolute blast. Will did very well to ensure we retained the information whilst also making the course fun and memorable."},{score:10,text:"Best 3 days you can ever spend on improving yourself both personally and professionally. Thank you William Farmer."},{score:10,text:"One of the best courses I have taken in the last 10 to 15 years."}]},
+  { id:"2023-14", year:2023, date:"2023-06-11", client:"Bartons (Group 2)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:[], surveys:23, nps:100.0, voc:100.0, promoters:23, passives:0, detractors:0, subScores:{useful:5.0,value:5.0,engaging:5.0,confident:5.0,coaching:5.0}, comments:[{score:10,text:"Will has changed all my pre conceptions of what self improvement training is. Could not rate or recommend him more highly."},{score:10,text:"Will Farmer brought out so many different values and emotions in so many different kinds of people. I personally had breakthroughs I didn't think possible."},{score:10,text:"I experienced major breakthroughs in effective communication, public speaking and I feel truly more confident."}]},
+  { id:"2023-15", year:2023, date:"2023-02-26", client:"Bradnam's Windows & Doors (Group 2)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:["Dawn Lee","Will Hansen"], surveys:23, nps:82.6, voc:97.0, promoters:20, passives:2, detractors:1, subScores:{useful:4.7,value:4.9,engaging:5.0,confident:4.9,coaching:4.9}, comments:[{score:10,text:"Will Farmer, Dawn Lee and Will Hanson were great, helpful, supportive and attentive."},{score:9,text:"Over the last 3 days I have never felt more confident and comfortable in the way I speak, act and behave."}]},
+  { id:"2023-16", year:2023, date:"2023-03-12", client:"Bradnam's Windows & Doors", program:"LTM", programFull:"Leadership Training for Managers", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:8, nps:75.0, voc:95.8, promoters:6, passives:2, detractors:0, subScores:{useful:4.8,value:5.0,engaging:5.0,confident:4.9,coaching:4.9}, comments:[{score:10,text:"Fantastic trainer, energetic and engaging. She was so genuine and real."},{score:10,text:"Awesome experience. Trainer Anne Marie was awesome nothing but high praise for her."},{score:10,text:"Anne Maree Sage was so engaging, her energy and passion for the people and belief in course is inspiring."}]},
+  { id:"2023-17", year:2023, date:"2023-03-21", client:"Bradnam's Windows & Doors", program:"LTM", programFull:"Leadership Training for Managers", trainer:"William Farmer", coTrainers:[], surveys:9, nps:22.2, voc:83.3, promoters:3, passives:5, detractors:1, subScores:{useful:4.0,value:4.4,engaging:4.7,confident:4.1,coaching:4.6}, comments:[{score:10,text:"What got you here won't get you there has been the best course I've done so far."},{score:5,text:"I felt that this format has been around for 25 years. I don't have a solution but I think time has come for a new delivery format. Content is very basic and didn't resonate."},{score:10,text:"Will is an amazing coach who has a wealth of knowledge to share."}]},
+  { id:"2023-18", year:2023, date:"2023-04-10", client:"Ulton", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:23, nps:65.2, voc:92.1, promoters:16, passives:6, detractors:1, subScores:{useful:4.3,value:4.7,engaging:4.9,confident:4.7,coaching:4.7}, comments:[{score:10,text:"I have not ever experienced a training program that was truly life changing as this."},{score:10,text:"After 2 days I really didn't think I would have such a huge improvement in my confidence. This is something I have tried to deal with for years and just felt it was something broken that could never be fixed."},{score:9,text:"The 2 full day sessions were incredible, Anne-Marie was personable and energetic."}]},
+  { id:"2023-19", year:2023, date:"2023-04-19", client:"Viterra", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:14, nps:71.4, voc:93.6, promoters:10, passives:4, detractors:0, subScores:{useful:4.4,value:4.9,engaging:4.9,confident:4.9,coaching:4.8}, comments:[{score:10,text:"Was the best course I've ever done through work. Already adapted my learnings in both family and work life."},{score:10,text:"Challenging and extremely powerful. The positive change in my team is already obvious."},{score:10,text:"I have thoroughly enjoyed the course. The lessons will inevitably make me a better leader and a better husband and father. Anne Marie was exceptional."}]},
+  { id:"2023-20", year:2023, date:"2023-07-17", client:"Swoosh Finance (Group 1)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:14, nps:71.4, voc:94.1, promoters:10, passives:4, detractors:0, subScores:{useful:4.5,value:4.7,engaging:4.9,confident:4.9,coaching:4.8}, comments:[{score:10,text:"Most amazing experience. Anne-Marie Sage is a great trainer and this experience is life changing!"},{score:10,text:"My experience was mindblowing and eye opening on how what we say and body language affects those around us."}]},
+  { id:"2023-21", year:2023, date:"2023-07-12", client:"Swoosh Finance (Group 2)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:14, nps:85.7, voc:95.6, promoters:12, passives:2, detractors:0, subScores:{useful:4.7,value:4.9,engaging:5.0,confident:4.7,coaching:4.9}, comments:[{score:10,text:"Anne-Marie was very passionate and enthusiastic. Engaging and very supportive in ensuring participants could practice the values learned."}]},
+  { id:"2023-22", year:2023, date:"2023-09-01", client:"Shamrock Marketing", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:[], surveys:11, nps:72.7, voc:97.8, promoters:9, passives:1, detractors:1, subScores:{useful:4.8,value:5.0,engaging:4.9,confident:4.8,coaching:4.9}, comments:[{score:10,text:"This course has totally changed my mindset on how to treat and accept others, my attitude, tone, willingness to listen."},{score:10,text:"This experience gave me the opportunity to come out of my comfort zone in a safe environment and build more confidence."},{score:6,text:"It was a good course. I would recommend the book before the course."}]},
+  { id:"2023-23", year:2023, date:"2023-10-01", client:"Ulton", program:"LTM", programFull:"Leadership Training for Managers", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:27, nps:63.0, voc:92.4, promoters:17, passives:10, detractors:0, subScores:{useful:4.6,value:4.7,engaging:4.7,confident:4.5,coaching:4.6}, comments:[{score:10,text:"I think the program and delivery is really powerful, leaving an impression on individuals to want to improve themselves as people and leaders."},{score:10,text:"AnnMaree is so engaging and makes me feel comfortable jumping out my fishbowl."},{score:10,text:"Being new to management, I really valued this training. It has built my confidence as a manager and leader."},{score:10,text:"Best best training ever, blown away."}]},
+  { id:"2023-24", year:2023, date:"2023-03-05", client:"Bradnam's Windows & Doors", program:"UYLP", programFull:"Unleash Your Leadership Potential", trainer:"William Farmer", coTrainers:[], surveys:16, nps:50.0, voc:91.2, promoters:8, passives:8, detractors:0, subScores:{useful:4.8,value:4.8,engaging:4.9,confident:4.6,coaching:4.9}, comments:[{score:10,text:"This course was amazing. I learnt a lot of new skills that I will be applying to my day to day at work now."},{score:7,text:"William Farmer is amazing — after the first class I definitely had my doubts but in the second class seeing how much I had grown I was super impressed."}]},
+
+  // ---- 2024 ----
+  { id:"2024-01", year:2024, date:"2024-01-23", client:"Viterra (Jan)", program:"WGYH", programFull:"What Got You Here Won't Get You There", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:16, nps:50.0, voc:94.0, promoters:8, passives:8, detractors:0, subScores:{useful:4.5,value:4.9,engaging:4.9,confident:4.4,coaching:4.7}, comments:[{score:10,text:"Presenter is the best presenter — makes the course come to life."},{score:10,text:"Anne Marie was very energetic and was able to keep the room on track with some very strong personalities. Well done."},{score:10,text:"Very relevant info and a great mix of teaching techniques. Ann Marie is a really effective presenter. Our management team is stronger with thanks to her."},{score:10,text:"Really enjoyed the two day course. Anne-Marie was very engaging as always. Highly recommend."},{score:7,text:"I went in feeling time poor and not really wanting to be there. However the content is challenging in a really good way."}]},
+  { id:"2024-02", year:2024, date:"2024-02-20", client:"Viterra (Feb)", program:"WGYH", programFull:"What Got You Here Won't Get You There", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:9, nps:66.7, voc:94.7, promoters:6, passives:3, detractors:0, subScores:{useful:4.7,value:4.8,engaging:4.8,confident:4.8,coaching:4.7}, comments:[{score:10,text:"Anne Marie Sage was a brilliant presenter. Entertaining, real life examples. Genuine and relatable."},{score:10,text:"Anne Marie is skilled at engaging — she was able to adapt the course content by reading the room to ensure relevance. Very powerful."},{score:9,text:"Anne-Marie made people feel comfortable to open up and be vulnerable which made everyone get more involved."},{score:9,text:"Anne Marie was open, honest, funny, and passionate about what she was presenting."}]},
+  { id:"2024-03", year:2024, date:"2024-02-23", client:"Public Class (Feb)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:19, nps:78.9, voc:97.1, promoters:15, passives:4, detractors:0, subScores:{useful:4.8,value:4.9,engaging:5.0,confident:4.8,coaching:4.8}, comments:[{score:10,text:"I went into this course with almost zero confidence. At the end of the final day I am left feeling more self aware and comfortable in my own skin."},{score:10,text:"I saw the course definitely take people outside their comfort zone. I saw growth in confidence, and I learned to be a better person, not just a leader."},{score:10,text:"Anne-Marie is a very enthusiastic presenter which makes everyone in the room feel more comfortable to be uncomfortable. I have finished this course a much stronger leader."},{score:10,text:"Annmarie is a strong communicator and she is a total asset to Dale Carnegie. I am leaving the course being more self aware than the 22 previous leadership courses I've participated in."},{score:10,text:"Anne Marie held the space for us all so magically. She helped me understand and I now have the tools to break out of old habits."},{score:10,text:"I absolutely loved the course. Anne Marie is an amazing coach. I feel more confident in building, maintaining relationships and dealing with difficult situations."},{score:10,text:"Love love the training best ever!!! Annemarie is by far the most amazing trainer I have ever come across."}]},
+  { id:"2024-04", year:2024, date:"2024-05-28", client:"Ulton", program:"UYLP", programFull:"Unleash Your Leadership Potential", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:27, nps:74.1, voc:94.1, promoters:21, passives:5, detractors:1, subScores:{useful:4.7,value:4.8,engaging:4.7,confident:4.6,coaching:4.7}, comments:[{score:10,text:"This session was even better than the last one — Ann Maree led the team through some incredible topics in a very professional way."},{score:10,text:"Anne-Marie is an extremely vivacious and compassionate presenter. Enjoyed every minute."},{score:10,text:"Fantastic presentation every time I do a DC course I learn more about myself and that directly impacts on how to be a better leader."},{score:10,text:"Anne Marie is a very engaging presenter. Her enthusiasm keeps the participants engaged and her coaching encourages positive self reflection in a safe environment."},{score:10,text:"Omg I can't believe the growth that I have had. Annemarie is as usual the most amazing trainer."},{score:10,text:"This forces a great deal of self reflection and awareness. Switches the focus and provides great tools to be a better leader. Not a manager, a leader."}]},
+  { id:"2024-05", year:2024, date:"2024-07-18", client:"Bartons", program:"LTM", programFull:"Leadership Training for Managers", trainer:"William Farmer", coTrainers:[], surveys:17, nps:88.2, voc:96.7, promoters:15, passives:2, detractors:0, subScores:{useful:4.9,value:4.9,engaging:4.8,confident:4.8,coaching:4.8}, comments:[{score:10,text:"I appreciate the way that all training is broken down and made into simple and relatable scenarios."},{score:10,text:"This program had much more practical application — feels like there are a lot more takeaways that can be used day to day."},{score:10,text:"I have done a lot of leadership and professional development programs over the last 15 years and none have the level of impact and cut through that the Carnegie courses do."},{score:10,text:"Great course, Will Farmer does a fantastic job in bringing out the best version of myself which allows me to be a better leader/Manager."},{score:10,text:"Learning and listening to Will is always enjoyable and I go away with new ways of thinking. The power of the Carnegie program is relevant to any organisation."}]},
+  { id:"2024-06", year:2024, date:"2024-08-09", client:"Public Class (Kenmore, Aug)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:[], surveys:19, nps:78.9, voc:96.2, promoters:16, passives:2, detractors:1, subScores:{useful:4.8,value:4.9,engaging:4.9,confident:4.7,coaching:4.7}, comments:[{score:10,text:"I thought the course was excellent. William is a very passionate trainer which came across throughout the three days."},{score:10,text:"Amazing, just the best I've done."},{score:10,text:"Although in every exercise I was out of my comfort zone, I learnt to adapt and find the inner confidence. It's been a wonderful, soul-bearing experience."},{score:10,text:"I found the course a life changing experience not only for my work environment, my personal life. A confidence builder I needed."},{score:10,text:"This experience has pushed me past where I would previously be comfortable to tread. I can't lead others until I can lead myself."},{score:5,text:""}]},
+  { id:"2024-07", year:2024, date:"2024-08-04", client:"Public Class (Jindalee, Aug)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:["Dawn Lee"], surveys:18, nps:77.8, voc:96.9, promoters:14, passives:4, detractors:0, subScores:{useful:4.7,value:4.9,engaging:4.9,confident:4.9,coaching:4.8}, comments:[{score:10,text:"Amazing. The energy from Dawn and Ann-Maree is insane!"},{score:10,text:"This course has given me the confidence to start conversations on difficult and awkward subjects."},{score:10,text:"The principles taught, demonstrated and clearly embraced by the group is inspiring and life changing."},{score:10,text:"Awesome three days of excitement, learning and growing. Fantastic trainers that really bring out the best!"},{score:10,text:"Commonsense reminder that we are individually powerful. Trainers Anne Marie and Dawn shared their wisdom, patience and heart."}]},
+  { id:"2024-08", year:2024, date:"2024-11-22", client:"Public Class (Nov)", program:"HIP", programFull:"High Impact Presentations", trainer:"Not recorded", coTrainers:[], surveys:9, nps:66.7, voc:97.8, promoters:6, passives:3, detractors:0, subScores:{useful:4.8,value:5.0,engaging:4.9,confident:4.9}, comments:[{score:10,text:"Real life experience course. Every detail will be able to be used in my real life role."},{score:10,text:"Great experience to push yourself out of your comfort zone. Achieved things I worried I wouldn't be able to."},{score:10,text:"It was just such a powerful emotional experience."},{score:9,text:"Safe and constructive space to be challenged and extended — it was uncomfortable and hard but what I needed."}]},
+  { id:"2024-09", year:2024, date:"2024-02-22", client:"Bradnam's Windows & Doors (Class 1)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"William Farmer", coTrainers:[], surveys:18, nps:72.2, voc:94.4, promoters:14, passives:3, detractors:1, subScores:{useful:4.5,value:4.9,engaging:5.0,confident:4.6,coaching:4.6}, comments:[{score:10,text:"The course was the most uncomfortable experience of my life but what else was going to get me out of my comfort zone. Our coach Will was super entertaining."},{score:10,text:"Thank you! Will was fantastic and really helped me feel comfortable in my own skin."},{score:10,text:"The 3 day course is incredible. The amount I learnt about increasing my self-confidence and changing how I approach conversations has been life changing."},{score:10,text:"This course has given me confidence. I really appreciate the efforts that William put in."},{score:6,text:"The role playing and speaking gets a little repetitive. I would have liked more depth in coping with stress."}]},
+  { id:"2024-10", year:2024, date:"2024-02-22", client:"Bradnam's Windows & Doors (Class 2)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Dawn Lee", coTrainers:[], surveys:13, nps:46.2, voc:92.0, promoters:7, passives:5, detractors:1, subScores:{useful:4.3,value:4.8,engaging:4.8,confident:4.5,coaching:4.5}, comments:[{score:10,text:"I was very stressed about doing this course but the teacher was amazing and really made you feel confident!"},{score:10,text:"I came into the course after hearing so many stories. I have done other similar courses but nothing compares to this one."},{score:10,text:"I have had good experience. Dawn is a fabulous teacher, very enthusiastic and inspirational."},{score:6,text:"Not for everyone. Got a bit out of it."}]},
+  { id:"2024-11", year:2024, date:"2024-02-29", client:"Bradnam's Windows & Doors (Class 3)", program:"DCC", programFull:"The Dale Carnegie Course", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:22, nps:59.1, voc:93.3, promoters:13, passives:9, detractors:0, subScores:{useful:4.5,value:4.9,engaging:4.9,confident:4.5,coaching:4.6}, comments:[{score:10,text:"Very good. Such a positive experience, this really gets you out of your comfort zone. I think every company should do this course."},{score:10,text:"I really enjoyed the energy and enthusiasm Anne-Marie brought to each session."},{score:10,text:"Confronting and immersive, it promotes versatility and robustness in each avenue of life."},{score:8,text:"Anne-Marie was amazing. Her energy was infectious and she managed to make it fun while keeping the core message serious."}]},
+  { id:"2024-12", year:2024, date:"2024-03-07", client:"Bradnam's Windows & Doors", program:"UYLP", programFull:"Unleash Your Leadership Potential", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:26, nps:61.5, voc:93.2, promoters:17, passives:8, detractors:1, subScores:{useful:4.5,value:4.8,engaging:4.7,confident:4.7,coaching:4.7}, comments:[{score:10,text:"My experience has helped me build my confidence, help my team be better."},{score:10,text:"Anne Marie was great, very engaging. She really helped you overcome boundaries set within yourself."},{score:10,text:"This is the second course I've done and each course I grow more and more confident."},{score:10,text:"Wow just wow she is the best trainer and I absolutely loved this course. My confidence has sky rocketed!"}]},
+  { id:"2024-13", year:2024, date:"2024-03-14", client:"Bradnam's Windows & Doors", program:"LTR", programFull:"Leadership Training for Results", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:16, nps:68.8, voc:93.3, promoters:12, passives:3, detractors:1, subScores:{useful:4.5,value:4.8,engaging:4.8,confident:4.8,coaching:4.5}, comments:[{score:10,text:"I found the course to be very engaging and relatable. Ann Marie was fun and her energy was infectious."},{score:10,text:"This was a very eye opening experience about growth in myself. The black dot theory will stay with me."},{score:9,text:"Ann-Marie is a phenomenal trainer. Helps dig into what is holding you back. 10/10 recommend!"},{score:10,text:"The program was very informative and interactive. Lot of life changing learning."}]},
+  { id:"2024-14", year:2024, date:"2024-08-23", client:"Public Class (Aug)", program:"UYLP", programFull:"Unleash Your Leadership Potential", trainer:"Annemarie Sage Wood", coTrainers:[], surveys:7, nps:85.7, voc:98.0, promoters:6, passives:1, detractors:0, subScores:{useful:4.8,value:5.0,engaging:5.0,confident:4.8,coaching:4.8}, comments:[{score:10,text:"Being self aware is a powerful tool. This course has helped me become more self aware. I will recommend to all my colleagues."},{score:10,text:"It was very engaging, challenging and enlightening. Pushed me in ways I didn't know I had."},{score:10,text:"Ann Marie is a kind compassionate powerful trainer and I always come away from her training with so much enthusiasm and feel powerful."},{score:10,text:"Ann Marie did a brilliant job on the course, relating experiences and putting high enthusiasm."}]},
+
+  // ---- 2025 ----
+  {
+    id: "2025-02",
+    year: 2025,
+    date: "2025-02-20",
+    client: "Bradnam's Windows & Doors (Class 1)",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course",
+    trainer: "William Farmer",
+    coTrainers: ["Daniel Chapman"],
+    surveys: 21,
+    nps: 81.0,
+    voc: 95.5,
+    promoters: 17, passives: 4, detractors: 0,
+    subScores: { useful: 4.6, value: 5.0, engaging: 4.9, confident: 4.6 },
+    comments: [
+      { score: 10, text: "Just the way everything got explained and how easy they made it for you to come out of your shell. I feel a whole lot more confident coming out of this course." },
+      { score: 10, text: "It's a phenomenal course. I wish it was something I could have done when I was in my early 20's. The team were amazing, open and welcoming and intensely passionate. I look forward to doing more courses in the future." },
+      { score: 10, text: "I really enjoyed the whole process. I learnt an enormous amount about relations with others as well as what I am capable of. The knowledge is extremely empowering." },
+      { score: 10, text: "Facilitator is very knowledgeable and breaks things down to easily understand. Energetic. Obviously enjoy what they do so it flows to the rest of the people involved." },
+      { score: 10, text: "I came into this shy and with anxiety but straight away I was put to ease and made to feel comfortable in a normally uncomfortable situation." },
+      { score: 10, text: "To be able to have William & Dan as teachers has been the best thing for me, they made me feel confident in situations I don't often feel comfortable in." },
+      { score: 8, text: "I'm not a 'hype' type of person, so I was a little dubious about doing this course. I felt I possessed many of the qualities that were being taught, however there is always more you can improve and fine tune." },
+      { score: 8, text: "Willy was incredibly engaging and hard not to follow along with." }
+    ]
+  },
+  {
+    id: "2025-03",
+    year: 2025,
+    date: "2025-02-27",
+    client: "Bradnam's Windows & Doors (Class 2)",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 24,
+    nps: 66.7,
+    voc: 94.8,
+    promoters: 18, passives: 4, detractors: 2,
+    subScores: { useful: 4.6, value: 4.9, engaging: 4.8, confident: 4.6 },
+    comments: [
+      { score: 10, text: "Amazing course, learned so much. Thanks Anne Marie Sage!" },
+      { score: 10, text: "She made it very fun, after the first day I was actually very excited to come in. I would recommend the course and Anne to everyone that needs a little push." },
+      { score: 10, text: "This was great. Compliments to Anne-Marie, this was an amazing teacher and watching her rip people out of their shells was a whole heap of fun." },
+      { score: 10, text: "Anne Marie was a fantastic trainer full of energy and always keeping content interesting. I have learnt many skills that I will be able to carry forward." },
+      { score: 10, text: "Best retraining I've ever done thank you so much Annemarie you have changed my life for the better!" },
+      { score: 10, text: "Well presented great interaction, much easier to retain and learn the training and information with this style of teaching." },
+      { score: 6, text: "I found the course content outdated and difficult to follow along. At times it felt pointless and had very little room to discuss different opinions. Anne Marie was a genuine delight, but I would prefer not to do this course again." }
+    ]
+  },
+  {
+    id: "2025-04",
+    year: 2025,
+    date: "2025-03-21",
+    client: "Bartons",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course",
+    trainer: "William Farmer",
+    coTrainers: ["Daniel Chapman"],
+    surveys: 10,
+    nps: 100.0,
+    voc: 99.5,
+    promoters: 10, passives: 0, detractors: 0,
+    subScores: { useful: 4.9, value: 5.0, engaging: 5.0, confident: 5.0 },
+    comments: [
+      { score: 10, text: "Getting me out of my comfort zone. Lots of activities that involved getting us out of our seats and interacting with people we wouldn't normally interact with." },
+      { score: 10, text: "The engagement of the course and how it is delivered by both Will and Dan is a tremendous tool to assist and invite participation to achieve a successful course." },
+      { score: 10, text: "It has opened my eyes to what I can achieve in both business and personal life, instilling confidence to progress and take risks where necessary." },
+      { score: 10, text: "Fantastic course, William and Dan were able to engage the group and have everyone involved, their enthusiasm was fantastic and the skills I have taken away will last a lifetime." },
+      { score: 10, text: "The gradual and natural way the course was presented made it enjoyable and easier to follow. The trust within the group was given time to cultivate and it didn't feel forced." },
+      { score: 10, text: "Will was able to engage with the class and be relevant with information. The best part for me personally, was the ability for Will to display how to break down scenarios and continue with a process." }
+    ]
+  },
+  {
+    id: "2025-05",
+    year: 2025,
+    date: "2025-02-21",
+    client: "Public Class (February)",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 11,
+    nps: 54.5,
+    voc: 96.8,
+    promoters: 6, passives: 5, detractors: 0,
+    subScores: { useful: 4.7, value: 4.9, engaging: 4.8, confident: 4.9 },
+    comments: [
+      { score: 10, text: "Ann Marie was a fantastic Dale Carnegie host because she brought energy, warmth, and genuine enthusiasm to every session. She made everyone feel welcomed and valued." },
+      { score: 10, text: "This was possibly one of the best professional experiences I have had. It pushed me out of my comfort zone, challenged my beliefs and values, and allowed me to see myself and my ability as a leader in a completely new light." },
+      { score: 8, text: "Anne Maree as a trainer was amazing, her energy was infectious and she pushed you outside your comfort zone." },
+      { score: 8, text: "Delivery was excellent, everyone got involved within a safe space, the role playing was fantastic and extremely supportive." },
+      { score: 8, text: "High level of involvement and opportunity to practice. Good exposure to other leaders from different businesses." }
+    ]
+  },
+  {
+    id: "2025-06",
+    year: 2025,
+    date: "2025-03-06",
+    client: "Bradnam's Windows & Doors",
+    program: "UYLP",
+    programFull: "Unleash Your Leadership Potential",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 12,
+    nps: 91.7,
+    voc: 95.8,
+    promoters: 11, passives: 1, detractors: 0,
+    subScores: { useful: 4.7, value: 4.9, engaging: 4.8, confident: 4.8 },
+    comments: [
+      { score: 10, text: "This has been my favourite course out of everything I've ever done, Annmarie is SO bloody amazing loved it all it will make me a better leader and less stressed." },
+      { score: 10, text: "Anne-Marie came over in such an approachable and open manner, it made it so much easier to listen and engage and embrace the changes that can come from the work we are willing to put into ourselves." },
+      { score: 10, text: "I found it very inspiring on how to bring the best out of me to help my team to bring it out in them." },
+      { score: 10, text: "I enjoyed both this and the last course, this course helped me gain self awareness which was something I lacked." },
+      { score: 8, text: "Training was unreal. I feel as if we sped through a few exercises and some information was whipped out." }
+    ]
+  },
+  {
+    id: "2025-07",
+    year: 2025,
+    date: "2025-05-28",
+    client: "Moranbah SHS",
+    program: "UYLP",
+    programFull: "Unleash Your Leadership Potential",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 14,
+    nps: 64.3,
+    voc: 96.3,
+    promoters: 9, passives: 5, detractors: 0,
+    subScores: { useful: 4.6, value: 5.0, engaging: 4.9, confident: 4.7, coaching: 4.8 },
+    comments: [
+      { score: 10, text: "Best training I've ever experienced thank you so much! I feel so blessed. Annemarie is incredible, so kind and supportive." },
+      { score: 10, text: "Our presenter Anne-Marie was wonderful and extremely engaging. The content supported people developing as individuals while also helping us build and understand each other as a team." },
+      { score: 10, text: "Inspiring me to become not only a better leader but also a better person." },
+      { score: 8, text: "Appreciated the self reflectiveness of the course. It made me think about some of my habits and places I can make changes." },
+      { score: 8, text: "Presenter was enthusiastic and warm. She was very knowledgeable and humanised things well." }
+    ]
+  },
+  {
+    id: "2025-08",
+    year: 2025,
+    date: "2025-05-02",
+    client: "Rockhampton North Special School",
+    program: "UYLP",
+    programFull: "Unleash Your Leadership Potential",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 3,
+    nps: 100.0,
+    voc: 100.0,
+    promoters: 3, passives: 0, detractors: 0,
+    subScores: { useful: 5.0, value: 5.0, engaging: 5.0, confident: 5.0, coaching: 5.0 },
+    comments: [
+      { score: 10, text: "Anne-Marie does a fantastic job of getting 'buy in'! I was out of my comfort zone but really appreciated the time spent to make sure I was as comfortable I could be with the hard stuff!" },
+      { score: 10, text: "Thank you Annemarie you are a great story teller. Thank you for all the qualities you made me see in me." }
+    ]
+  },
+  {
+    id: "2025-09",
+    year: 2025,
+    date: "2025-04-04",
+    client: "Bartons",
+    program: "LTM",
+    programFull: "Leadership Training for Managers",
+    trainer: "William Farmer",
+    coTrainers: [],
+    surveys: 12,
+    nps: 100.0,
+    voc: 99.3,
+    promoters: 12, passives: 0, detractors: 0,
+    subScores: { useful: 4.9, value: 5.0, engaging: 5.0, confident: 5.0, coaching: 4.9 },
+    comments: [
+      { score: 10, text: "Content is immediately applicable to every day. I am going to take this and elevate my team and I've got the tools to do so now. Thanks Will!" },
+      { score: 10, text: "This is without a doubt the most helpful training I have received in years. Will was engaging and personal throughout the whole training and helped me realise my potential." },
+      { score: 10, text: "Will Farmer was fantastic as always very grateful to have him lead this course. Very easy to understand and take on and use in every aspect of life." },
+      { score: 10, text: "Could not recommend the course more highly. I came into it anxious about the content but have come away a better more confident leader." },
+      { score: 10, text: "Implementation of ideas and how Will directly engages you to understand and retain them is as impressive as always." },
+      { score: 10, text: "The collaborative, interactive approach had me connected and engaged. Practical examples that can be implemented." }
+    ]
+  },
+  {
+    id: "2025-10",
+    year: 2025,
+    date: "2025-04-08",
+    client: "Bradnam's Windows & Doors",
+    program: "LTR",
+    programFull: "Leadership Training for Results",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 8,
+    nps: 50.0,
+    voc: 94.0,
+    promoters: 4, passives: 4, detractors: 0,
+    subScores: { useful: 4.6, value: 4.8, engaging: 4.9, confident: 4.6, coaching: 4.6 },
+    comments: [
+      { score: 10, text: "Awesome trainer Ann Marie, took me right out of my comfort zone and challenged me over the 3 days." },
+      { score: 10, text: "It was incredibly engaging and enlightening — full group buy-in seemed evident and everyone seemed to be included throughout the entire course." },
+      { score: 10, text: "This course has given me framework around having inter-team discussions on delegation, how to have conversations and being more self aware." },
+      { score: 8, text: "I feel more empowered after these courses. I would encourage all coworkers to attend." }
+    ]
+  },
+  {
+    id: "2025-11",
+    year: 2025,
+    date: "2025-09-19",
+    client: "St Peters",
+    program: "HIP",
+    programFull: "High Impact Presentations",
+    trainer: "William Farmer",
+    coTrainers: [],
+    surveys: 5,
+    nps: 80.0,
+    voc: 100.0,
+    promoters: 4, passives: 1, detractors: 0,
+    subScores: { useful: 5.0, value: 5.0, engaging: 5.0, confident: 5.0, coaching: 5.0 },
+    comments: [
+      { score: 10, text: "Loved the practical nature of the course. Taking the opportunity to review videos of yourself presenting was incredible and allows for measured growth." },
+      { score: 10, text: "Arriving at the PD I was terrified. Fast forward after the two days I am so much more confident and ready to tackle presentations. I learnt eye contact, voice tonality, placement of hands and so much more." },
+      { score: 10, text: "Great training materials and practice. Great feedback." },
+      { score: 8, text: "Probably due to my personality type however I did not enjoy the action and movement activities." }
+    ]
+  },
+  {
+    id: "2025-12",
+    year: 2025,
+    date: "2025-04-29",
+    client: "Ulton",
+    program: "WGYH",
+    programFull: "What Gets You Hired / World Class",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 19,
+    nps: 84.2,
+    voc: 94.7,
+    promoters: 16, passives: 3, detractors: 0,
+    subScores: { useful: 4.8, value: 4.7, engaging: 4.8, confident: 4.6, coaching: 4.7 },
+    comments: [
+      { score: 10, text: "Absolute amazing, yet another 10/10 event. Anne-Marie is outstanding and incredible — she is not just a 'trainer' from the outside, she is a huge part of our company." },
+      { score: 10, text: "Annemarie has the unique ability to inspire deep self-reflection in an encouraging way." },
+      { score: 10, text: "It is getting easier to be out of my comfort zone. I'm building a great toolbox. Having such a supportive coach in Anne-Marie is instrumental in creating a safe space." },
+      { score: 10, text: "The leadership group learned valuable techniques in feedback and reflection. Anne-Marie makes these sessions fun and engaging and I would recommend her without hesitation." },
+      { score: 10, text: "Anne-Marie is an awesome presenter and the Ulton group have really enjoyed the sessions." },
+      { score: 10, text: "Excellent examples and real world training that I can use immediately." },
+      { score: 10, text: "The examples were real and really allowed me to focus on improvements that will make a difference." },
+      { score: 8, text: "I think the process, interaction and facilitation is valuable insightful and enjoyable." }
+    ]
+  },
+  // ---- 2026 ----
+  {
+    id: "2026-01",
+    year: 2026,
+    date: "2026-02-19",
+    client: "Bradnam's Windows & Doors (Class 1)",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course",
+    trainer: "William Farmer",
+    coTrainers: ["Michaela Farmer", "Matthew Page-Hanify"],
+    surveys: 30,
+    nps: 93.3,
+    voc: 98.5,
+    promoters: 28, passives: 2, detractors: 0,
+    subScores: { useful: 4.9, value: 4.9, engaging: 5.0, confident: 4.9, coaching: 5.0 },
+    comments: [
+      { score: 10, text: "This course has really solidified my path to better mental health and always striving for more. It has given me more confidence than I have ever had and for that, I am so grateful. Will, Mikayla and Matthew were outstanding presenters bringing high energy at all times." },
+      { score: 10, text: "I had no expectation coming into this course and I can gladly say it was the best learning experience I have ever had. I am leaving with a completely different mindset about myself, my life and thoughts about the future." },
+      { score: 10, text: "This course was absolutely huge for myself, I grew so much as a person and feel like I helped others grow also. The teachers were absolute top tier." },
+      { score: 10, text: "This course really had me revisit how I viewed myself. I realised I am more capable than I sometimes give myself credit for." },
+      { score: 10, text: "I can't thank this program enough in the lessons I have gained professionally and personally. I now have the ability to communicate clearly and concisely all while being in control of my emotions!" },
+      { score: 10, text: "Mikaela, Will and Matthew all did an amazing job to provide me with thorough examples of what everything meant in the course. I grew so much in leadership and loved watching my team grow." },
+      { score: 10, text: "Wonderful trainers full of energy and a genuine care and passion in what they do. Made me feel very comfortable." }
+    ]
+  },
+  {
+    id: "2026-02",
+    year: 2026,
+    date: "2026-02-26",
+    client: "Bradnam's Windows & Doors (Class 2)",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course",
+    trainer: "William Farmer",
+    coTrainers: ["Michaela Farmer", "Matthew Page-Hanify"],
+    surveys: 21,
+    nps: 57.1,
+    voc: 92.6,
+    promoters: 15, passives: 3, detractors: 3,
+    subScores: { useful: 4.6, value: 4.7, engaging: 4.8, confident: 4.6, coaching: 4.5 },
+    comments: [
+      { score: 10, text: "Mikayla and Matthew were both extremely engaging. It pushed me to make new connections with people. I was given amazing tools to use in my workplace going forward." },
+      { score: 10, text: "I came in with an expectation that I wouldn't feel much change but after being forced out of my comfort zone I genuinely feel a change in my own confidence." },
+      { score: 10, text: "The course hosts Matthew and Mikayla were amazing, supportive and very detailed in the delivery of the course content." },
+      { score: 4, text: "I found the noise and yelling to be extremely excessive. You can come out of your comfort zone without spending hours screaming. I couldn't take in all the information provided because I had a constant headache." },
+      { score: 6, text: "I believe some of the ways that the messages were worded may create a space where people could become paranoid about others acts of kindness." }
+    ]
+  },
+  {
+    id: "2026-03",
+    year: 2026,
+    date: "2026-02-26",
+    client: "Bradnam's Windows & Doors (Advanced)",
+    program: "DCC",
+    programFull: "The Dale Carnegie Course — Advanced",
+    trainer: "William Farmer",
+    coTrainers: [],
+    surveys: 12,
+    nps: 83.3,
+    voc: 96.7,
+    promoters: 10, passives: 2, detractors: 0,
+    subScores: { useful: 4.7, value: 4.9, engaging: 5.0, confident: 4.8, coaching: 4.8 },
+    comments: [
+      { score: 10, text: "Every time I do a Dale Carnegie course I leave with a new insight, deeper knowledge about myself and a new perspective of something I already knew." },
+      { score: 10, text: "The advanced course takes you on a journey of self reflection and discovery. Will and his team have really done well to present the information in ways that relate." },
+      { score: 10, text: "My experience in the Dale Carnegie course has taught me that we all have the power to change our mindset and grow to places we never thought possible." },
+      { score: 10, text: "I found the course really helpful in understanding why I'm triggered and how to understand and cope with these. Our trainer was amazing." },
+      { score: 8, text: "The content and trainer William made the space feel safe to explore and learn these styles of leadership." }
+    ]
+  },
+  {
+    id: "2026-04",
+    year: 2026,
+    date: "2026-03-05",
+    client: "Bradnam's Windows & Doors",
+    program: "UYLP",
+    programFull: "Unleash Your Leadership Potential",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 17,
+    nps: 47.1,
+    voc: 94.8,
+    promoters: 9, passives: 7, detractors: 1,
+    subScores: { useful: 4.6, value: 4.9, engaging: 4.8, confident: 4.7, coaching: 4.7 },
+    comments: [
+      { score: 10, text: "This course has taught me more in 3 days than I could imagine. It's taught me things I can apply to more than just the work aspect of my life." },
+      { score: 10, text: "I absolutely loved how it really brings out the confidence in you. Ann Marie does that for us!!!" },
+      { score: 10, text: "Anne-Marie is captivating, knowledgeable and uplifted the entire room the whole time. I would definitely come back for another session." },
+      { score: 10, text: "After a scary first day, I came out of my shell on day 2 and learnt so much. Anne Marie is such an asset to your company." },
+      { score: 9, text: "Very good teacher. Ann-Marie commands your attention and keeps you listening to every word." },
+      { score: 8, text: "Anne-Marie helped me discover strengths within myself that I didn't realise I had." }
+    ]
+  },
+  {
+    id: "2026-05",
+    year: 2026,
+    date: "2026-03-04",
+    client: "Kilcoy SHS",
+    program: "UYLP",
+    programFull: "Unleash Your Leadership Potential",
+    trainer: "Not recorded",
+    coTrainers: [],
+    surveys: 16,
+    nps: 37.5,
+    voc: 83.5,
+    promoters: 9, passives: 4, detractors: 3,
+    subScores: { useful: 4.1, value: 4.2, engaging: 4.2, confident: 4.2, coaching: 4.2 },
+    comments: [
+      { score: 10, text: "It was a very clear and informative training experience. The trainer knew their content, engaged well and kept momentum going." },
+      { score: 10, text: "The way the course was delivered was very specific and well aligned with our specific settings in education." },
+      { score: 10, text: "Love the variety of interactive activities and personal reflections with advice from peers." },
+      { score: 4, text: "I felt the program is well suited more for students or early career professionals. I lacked some teaching and confirmation moments." },
+      { score: 6, text: "Day one felt like it jumped around too much — linking it back to the booklet and practical application would have been useful for me." }
+    ]
+  },
+  {
+    id: "2026-06",
+    year: 2026,
+    date: "2026-03-05",
+    client: "Bradnam's Windows & Doors",
+    program: "LTM",
+    programFull: "Leadership Training for Managers",
+    trainer: "William Farmer",
+    coTrainers: [],
+    surveys: 10,
+    nps: 90.0,
+    voc: 94.8,
+    promoters: 9, passives: 1, detractors: 0,
+    subScores: { useful: 4.7, value: 4.8, engaging: 4.7, confident: 4.8, coaching: 4.7 },
+    comments: [
+      { score: 10, text: "Will is phenomenal and approaches the training process in such a calm and effective way. To be successful, you need to want your people to be successful." },
+      { score: 10, text: "10 out of 10 for content and Will's delivery of the content." },
+      { score: 10, text: "I feel I finally have the tools and processes at my disposal to positively lead my team." },
+      { score: 10, text: "Will Farmer is a great presenter and keeps the course moving and always on topic." },
+      { score: 9, text: "Great instructor that made the class enjoyable. Made learning fun whilst retainable." }
+    ]
+  },
+  {
+    id: "2026-07",
+    year: 2026,
+    date: "2026-03-11",
+    client: "Bradnam's Windows & Doors",
+    program: "Take Command",
+    programFull: "Take Command",
+    trainer: "William Farmer",
+    coTrainers: [],
+    surveys: 10,
+    nps: 80.0,
+    voc: 94.4,
+    promoters: 8, passives: 2, detractors: 0,
+    subScores: { useful: 4.8, value: 4.8, engaging: 4.8, confident: 4.5, coaching: 4.7 },
+    comments: [
+      { score: 10, text: "Will Farmer is very engaging in his delivery and knows the content backwards. This course has given me more structure around habits that I need to work on." },
+      { score: 10, text: "Will and his team have helped train and inspired our staff for over 10 years." },
+      { score: 10, text: "I have always believed in the Dale Carnegie courses. I have always walked away with a skill that I have implemented into my day." },
+      { score: 10, text: "It was engaging and challenging. I got the most out of the self analysis and realised the power of my feedback and feed forward." },
+      { score: 9, text: "This is the second course I have completed and can honestly say it has been great. Will has been ultra engaging." }
+    ]
+  },
+  {
+    id: "2026-08",
+    year: 2026,
+    date: "2026-02-24",
+    client: "Chinchilla SHS",
+    program: "HPT",
+    programFull: "High Performance Teams",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 11,
+    nps: 72.7,
+    voc: 97.1,
+    promoters: 8, passives: 3, detractors: 0,
+    subScores: { useful: 4.7, value: 5.0, engaging: 5.0, confident: 4.7, coaching: 4.8 },
+    comments: [
+      { score: 10, text: "The content was perfect for my team and very timely in our journey together." },
+      { score: 10, text: "Enjoyed the interaction and getting to understand my work colleagues on a deeper level." },
+      { score: 10, text: "I found the program extremely helpful and informative. I found several practices that will help me in my leadership journey." },
+      { score: 9, text: "Loved our presenter, Ann-Marie. Loved her energy, on-point comments, coaching sessions." },
+      { score: 8, text: "I enjoyed Annemarie's energy — she made me feel comfortable and eager to learn." },
+      { score: 8, text: "Before this training I didn't consider us to be a team — now we are more likely to collaborate and share ideas." }
+    ]
+  },
+  {
+    id: "2026-09",
+    year: 2026,
+    date: "2026-02-10",
+    client: "Ulton (Senior Leaders)",
+    program: "HPT",
+    programFull: "High Performance Teams",
+    trainer: "Annemarie Sage Wood",
+    coTrainers: [],
+    surveys: 22,
+    nps: 77.3,
+    voc: 92.8,
+    promoters: 17, passives: 5, detractors: 0,
+    subScores: { useful: 4.6, value: 4.7, engaging: 4.7, confident: 4.6, coaching: 4.5 },
+    comments: [
+      { score: 10, text: "Anne Marie is an amazing facilitator — really gets the best out of everyone." },
+      { score: 10, text: "Anne Marie is engaging presenter. Content was tailored to our business needs. Interactive content made concepts practical and memorable." },
+      { score: 10, text: "This was so amazing — I feel more a part of the team as a whole and I have a far greater understanding and appreciation for everyone. Annemarie you did it again 10/10 you are a star." },
+      { score: 10, text: "Anne Marie makes the sessions very enjoyable and engaging. The course outline pushes me outside my comfort zone and builds my confidence." },
+      { score: 9, text: "Anne Marie is an excellent trainer who uses storytelling to explain new ideas and to ensure they stick." },
+      { score: 9, text: "The strength of all the sessions is building an environment that is uncomfortable but in a good way. A way that feels safe to contribute your thoughts, ideas and vulnerability in building a better workplace." },
+      { score: 7, text: "After multiple sessions over a few years I feel the individual presentations take up too much time on the day versus the activities as a team." }
+    ]
+  }
+];
+
+// ============================================================
+// PROGRAM DEFINITIONS — add new programs here as needed
+// ============================================================
+const programDefs = {
+  "DCC": { full: "The Dale Carnegie Course", color: "#0090cf" },
+  "UYLP": { full: "Unleash Your Leadership Potential", color: "#84c44c" },
+  "LTM": { full: "Leadership Training for Managers", color: "#6c5ce7" },
+  "LTR": { full: "Leadership Training for Results", color: "#a29bfe" },
+  "HIP": { full: "High Impact Presentations", color: "#e17055" },
+  "HPT": { full: "High Performance Teams", color: "#00b894" },
+  "WGYH": { full: "What Gets You Hired / World Class", color: "#fdcb6e" },
+  "WRS": { full: "Winning with Relationship Selling", color: "#e84393" },
+  "Take Command": { full: "Take Command", color: "#636e72" }
+};
+
+// ============================================================
+// ENGINE — everything below auto-calculates from the data above
+// ============================================================
+
+function npsClass(nps) {
+  if (nps >= 70) return "nps-world";
+  if (nps >= 50) return "nps-excellent";
+  if (nps >= 0) return "nps-good";
+  return "nps-needs";
+}
+
+function npsLabel(nps) {
+  if (nps >= 70) return "World Class";
+  if (nps >= 50) return "Excellent";
+  if (nps >= 0) return "Good";
+  return "Needs Improvement";
+}
+
+function avg(arr) {
+  if (!arr.length) return 0;
+  return arr.reduce((a, b) => a + b, 0) / arr.length;
+}
+
+function fmtDate(d) {
+  const dt = new Date(d);
+  return dt.toLocaleDateString('en-AU', { month: 'short', year: 'numeric' });
+}
+
+function getYears() {
+  return [...new Set(vocData.map(d => d.year))].sort();
+}
+
+function getPrograms() {
+  return [...new Set(vocData.map(d => d.program))].sort();
+}
+
+function getTrainers() {
+  const t = {};
+  vocData.forEach(d => {
+    const name = d.trainer;
+    if (name === "Not recorded") return;
+    if (!t[name]) t[name] = { programs: [], totalSurveys: 0, npsArr: [], vocArr: [], zeroDetractor: 0, bestNps: 0, comments: [] };
+    t[name].programs.push(d);
+    t[name].totalSurveys += d.surveys;
+    t[name].npsArr.push(d.nps);
+    t[name].vocArr.push(d.voc);
+    if (d.detractors === 0) t[name].zeroDetractor++;
+    if (d.nps > t[name].bestNps) t[name].bestNps = d.nps;
+    d.comments.forEach(c => {
+      if (c.text) t[name].comments.push({ ...c, client: d.client, program: d.program, year: d.year });
+    });
+  });
+  return t;
+}
+
+function getAllComments() {
+  const comments = [];
+  vocData.forEach(d => {
+    d.comments.forEach(c => {
+      if (c.text && c.text.trim()) {
+        comments.push({
+          text: c.text,
+          score: c.score,
+          client: d.client,
+          program: d.program,
+          programFull: d.programFull,
+          trainer: d.trainer,
+          year: d.year,
+          nps: d.nps
+        });
+      }
+    });
+  });
+  return comments.sort((a, b) => b.score - a.score);
+}
+
+function renderHeader() {
+  const totalSurveys = vocData.reduce((s, d) => s + d.surveys, 0);
+  const avgNps = avg(vocData.map(d => d.nps));
+  const avgVoc = avg(vocData.map(d => d.voc));
+  const programs = vocData.length;
+
+  document.getElementById('headerStats').innerHTML = `
+    <div class="header-stat"><div class="val">${programs}</div><div class="lbl">Programs</div></div>
+    <div class="header-stat"><div class="val">${totalSurveys}</div><div class="lbl">Responses</div></div>
+    <div class="header-stat"><div class="val">${avgNps.toFixed(1)}</div><div class="lbl">Avg NPS</div></div>
+    <div class="header-stat"><div class="val">${avgVoc.toFixed(1)}</div><div class="lbl">Avg VoC</div></div>
+  `;
+  document.getElementById('lastUpdated').textContent = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function buildMasterTable(data, containerId) {
+  const sorted = [...data].sort((a, b) => b.nps - a.nps);
+  let html = `<table id="table-${containerId}">
+    <thead><tr>
+      <th data-col="rank">#</th>
+      <th data-col="nps">NPS</th>
+      <th data-col="voc">VoC</th>
+      <th data-col="program">Program</th>
+      <th data-col="client">Client</th>
+      <th data-col="year">Year</th>
+      <th data-col="trainer">Trainer</th>
+      <th data-col="surveys">Surveys</th>
+      <th data-col="promoters">P</th>
+      <th data-col="passives">Pa</th>
+      <th data-col="detractors">D</th>
+    </tr></thead><tbody>`;
+
+  sorted.forEach((d, i) => {
+    const coT = d.coTrainers.length ? ` + ${d.coTrainers.join(', ')}` : '';
+    html += `<tr>
+      <td>${i + 1}</td>
+      <td><span class="nps-badge ${npsClass(d.nps)}">${d.nps.toFixed(1)}</span></td>
+      <td>
+        <div class="voc-bar">
+          <div class="voc-bar-track"><div class="voc-bar-fill" style="width:${d.voc}%"></div></div>
+          <span>${d.voc.toFixed(1)}</span>
+        </div>
+      </td>
+      <td><strong>${d.program}</strong></td>
+      <td>${d.client}</td>
+      <td>${d.year}</td>
+      <td>${d.trainer}${coT}</td>
+      <td>${d.surveys}</td>
+      <td>${d.promoters}</td>
+      <td>${d.passives}</td>
+      <td>${d.detractors}</td>
+    </tr>`;
+  });
+  html += '</tbody></table>';
+  return html;
+}
+
+function buildProgramSummaryCards(data) {
+  const programs = {};
+  data.forEach(d => {
+    if (!programs[d.program]) programs[d.program] = [];
+    programs[d.program].push(d);
+  });
+
+  let html = '<div class="summary-row">';
+  Object.entries(programs)
+    .sort((a, b) => avg(b[1].map(x => x.nps)) - avg(a[1].map(x => x.nps)))
+    .forEach(([prog, entries]) => {
+      const a = avg(entries.map(e => e.nps));
+      const cls = a >= 70 ? 'green' : a >= 50 ? 'yellow' : 'blue';
+      const def = programDefs[prog] || { full: prog, color: '#999' };
+      html += `<div class="summary-card">
+        <div class="sc-val ${cls}">${a.toFixed(1)}</div>
+        <div class="sc-lbl">${prog} Avg NPS</div>
+        <div style="font-size:11px;color:#999;margin-top:4px">${entries.length} program${entries.length > 1 ? 's' : ''} | ${entries.reduce((s, e) => s + e.surveys, 0)} responses</div>
+      </div>`;
+    });
+  html += '</div>';
+  return html;
+}
+
+function renderOverview() {
+  let html = '';
+  html += buildProgramSummaryCards(vocData);
+  html += '<div class="card"><h2>All Programs — Ranked by NPS</h2>';
+  html += buildMasterTable(vocData, 'overview');
+  html += '</div>';
+  return html;
+}
+
+function renderProgramTab(programCode) {
+  const data = vocData.filter(d => d.program === programCode);
+  if (!data.length) return '<div class="card"><p>No data for this program yet.</p></div>';
+
+  const def = programDefs[programCode] || { full: programCode, color: '#999' };
+  const avgNps = avg(data.map(d => d.nps));
+  const avgVoc = avg(data.map(d => d.voc));
+  const totalSurveys = data.reduce((s, d) => s + d.surveys, 0);
+
+  let html = `
+    <div class="summary-row">
+      <div class="summary-card"><div class="sc-val ${avgNps >= 70 ? 'green' : avgNps >= 50 ? 'yellow' : 'blue'}">${avgNps.toFixed(1)}</div><div class="sc-lbl">Average NPS</div></div>
+      <div class="summary-card"><div class="sc-val blue">${avgVoc.toFixed(1)}</div><div class="sc-lbl">Average VoC</div></div>
+      <div class="summary-card"><div class="sc-val blue">${data.length}</div><div class="sc-lbl">Programs</div></div>
+      <div class="summary-card"><div class="sc-val blue">${totalSurveys}</div><div class="sc-lbl">Total Responses</div></div>
+    </div>
+  `;
+
+  html += `<div class="card"><h2>${def.full} — Ranked by NPS</h2>`;
+  html += buildMasterTable(data, programCode);
+  html += '</div>';
+
+  // Top comments for this program
+  const allComments = [];
+  data.forEach(d => {
+    d.comments.forEach(c => {
+      if (c.text && c.text.trim()) allComments.push({ ...c, client: d.client, year: d.year, trainer: d.trainer });
+    });
+  });
+  allComments.sort((a, b) => b.score - a.score);
+
+  if (allComments.length) {
+    html += `<div class="card"><h2>Top Comments — ${programCode}</h2>`;
+    allComments.slice(0, 15).forEach(c => {
+      html += `<div class="quote-card">
+        <div class="quote-text">"${c.text}"</div>
+        <div class="quote-source">Score: ${c.score}/10 — ${c.client} (${c.year}) — Trainer: ${c.trainer}</div>
+      </div>`;
+    });
+    if (allComments.length > 15) {
+      html += `<p style="color:#999;font-size:12px;margin-top:8px;">Showing top 15 of ${allComments.length} comments.</p>`;
+    }
+    html += '</div>';
+  }
+
+  // Constructive feedback
+  const negComments = allComments.filter(c => c.score <= 6);
+  if (negComments.length) {
+    html += `<div class="card"><h2>Constructive Feedback (Score \u2264 6)</h2>`;
+    negComments.forEach(c => {
+      html += `<div class="quote-card" style="border-left-color: var(--nps-needs);">
+        <div class="quote-text">"${c.text}"</div>
+        <div class="quote-source">Score: ${c.score}/10 — ${c.client} (${c.year}) — Trainer: ${c.trainer}</div>
+      </div>`;
+    });
+    html += '</div>';
+  }
+
+  return html;
+}
+
+function renderTrainers() {
+  const trainers = getTrainers();
+  const sorted = Object.entries(trainers).sort((a, b) => avg(b[1].npsArr) - avg(a[1].npsArr));
+
+  let html = '<div class="trainer-grid">';
+  sorted.forEach(([name, t], i) => {
+    const avgNps = avg(t.npsArr);
+    const avgVoc = avg(t.vocArr);
+    const rankClass = i === 0 ? 'rank1' : i === 1 ? 'rank2' : '';
+
+    html += `<div class="trainer-card">
+      <div class="trainer-card-header ${rankClass}">
+        <div>
+          <div class="trainer-name">${name}</div>
+          <div style="font-size:12px;color:var(--dc-muted);">${npsLabel(avgNps)}</div>
+        </div>
+        <div class="trainer-rank">#${i + 1}</div>
+      </div>
+      <div class="trainer-stats">
+        <div class="trainer-stat"><div class="ts-val" style="color:${avgNps >= 70 ? 'var(--nps-world)' : 'var(--nps-good)'}">${avgNps.toFixed(1)}</div><div class="ts-lbl">Avg NPS</div></div>
+        <div class="trainer-stat"><div class="ts-val">${avgVoc.toFixed(1)}</div><div class="ts-lbl">Avg VoC</div></div>
+        <div class="trainer-stat"><div class="ts-val">${t.programs.length}</div><div class="ts-lbl">Programs</div></div>
+        <div class="trainer-stat"><div class="ts-val">${t.totalSurveys}</div><div class="ts-lbl">Responses</div></div>
+      </div>
+      <div class="trainer-card-body">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--dc-muted);">Zero detractor programs: <strong>${t.zeroDetractor}/${t.programs.length}</strong></span>
+          <span style="font-size:12px;color:var(--dc-muted);">Best NPS: <strong>${t.bestNps.toFixed(1)}</strong></span>
+        </div>
+        <h4>Programs (by NPS)</h4>
+        <ul>`;
+
+    t.programs.sort((a, b) => b.nps - a.nps).forEach(p => {
+      html += `<li>
+        <span class="prog-name">${p.program} — ${p.client} (${p.year})</span>
+        <span class="nps-badge ${npsClass(p.nps)}" style="font-size:11px;padding:2px 8px;">${p.nps.toFixed(1)}</span>
+      </li>`;
+    });
+
+    html += `</ul></div>
+      <div class="trainer-card-body" style="border-top:1px solid var(--dc-border);">
+        <h4>Best Quotes</h4>`;
+
+    const bestComments = t.comments.filter(c => c.score >= 9 && c.text.length > 40).slice(0, 3);
+    bestComments.forEach(c => {
+      html += `<div class="quote-card" style="margin-bottom:8px;">
+        <div class="quote-text" style="font-size:12px;">"${c.text}"</div>
+        <div class="quote-source">${c.client} — ${c.program} (${c.year})</div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderQuotes() {
+  const allComments = getAllComments();
+  const programs = getPrograms();
+
+  let html = `
+    <div class="card">
+      <h2>Quotable Comments Bank</h2>
+      <p style="font-size:13px;color:var(--dc-muted);margin-bottom:16px;">All comments ranked by score (10 to lowest). Filter by program or search keywords. Copy any quote for proposals, flyers, or emails.</p>
+      <input type="text" class="search-box" id="quoteSearch" placeholder="Search quotes... (e.g. 'confidence', 'leadership', 'comfort zone')">
+      <div class="filter-bar" id="quoteFilters">
+        <button class="filter-btn active" data-filter="all">All (${allComments.length})</button>`;
+
+  programs.forEach(p => {
+    const count = allComments.filter(c => c.program === p).length;
+    html += `<button class="filter-btn" data-filter="${p}">${p} (${count})</button>`;
+  });
+
+  html += `</div><div id="quotesContainer">`;
+
+  allComments.forEach(c => {
+    html += `<div class="quote-card quote-item" data-program="${c.program}" data-text="${c.text.toLowerCase()}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div class="quote-text" style="flex:1;">"${c.text}"</div>
+        <span class="nps-badge ${npsClass(c.score * 10)}" style="font-size:11px;padding:2px 8px;flex-shrink:0;">${c.score}/10</span>
+      </div>
+      <div class="quote-source">${c.client} — ${c.programFull} (${c.year}) — Trainer: ${c.trainer}</div>
+    </div>`;
+  });
+
+  html += '</div></div>';
+  return html;
+}
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+function render() {
+  renderHeader();
+
+  const panels = document.getElementById('panels');
+  const programs = getPrograms();
+
+  let html = `<div class="tab-panel active" id="panel-overview">${renderOverview()}</div>`;
+
+  programs.forEach(p => {
+    const tabId = p.toLowerCase().replace(/\s+/g, '');
+    html += `<div class="tab-panel" id="panel-${tabId}">${renderProgramTab(p)}</div>`;
+  });
+
+  html += `<div class="tab-panel" id="panel-trainers">${renderTrainers()}</div>`;
+  html += `<div class="tab-panel" id="panel-quotes">${renderQuotes()}</div>`;
+
+  panels.innerHTML = html;
+
+  // Tab switching
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const panel = document.getElementById('panel-' + btn.dataset.tab);
+      if (panel) panel.classList.add('active');
+    });
+  });
+
+  // Quote filtering
+  setTimeout(() => {
+    const filterBtns = document.querySelectorAll('#quoteFilters .filter-btn');
+    const searchBox = document.getElementById('quoteSearch');
+    const items = document.querySelectorAll('.quote-item');
+
+    function applyFilters() {
+      const activeFilter = document.querySelector('#quoteFilters .filter-btn.active')?.dataset.filter || 'all';
+      const search = (searchBox?.value || '').toLowerCase();
+
+      items.forEach(item => {
+        const matchProgram = activeFilter === 'all' || item.dataset.program === activeFilter;
+        const matchSearch = !search || item.dataset.text.includes(search);
+        item.style.display = matchProgram && matchSearch ? '' : 'none';
+      });
+    }
+
+    filterBtns?.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+      });
+    });
+
+    searchBox?.addEventListener('input', applyFilters);
+  }, 100);
+
+  // Table sorting
+  document.querySelectorAll('thead th').forEach(th => {
+    th.addEventListener('click', () => {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      const colIdx = Array.from(th.parentNode.children).indexOf(th);
+      const isAsc = th.classList.contains('sort-asc');
+
+      table.querySelectorAll('th').forEach(h => { h.classList.remove('sort-asc', 'sort-desc'); });
+      th.classList.add(isAsc ? 'sort-desc' : 'sort-asc');
+
+      rows.sort((a, b) => {
+        let aVal = a.children[colIdx]?.textContent.trim() || '';
+        let bVal = b.children[colIdx]?.textContent.trim() || '';
+        const aNum = parseFloat(aVal);
+        const bNum = parseFloat(bVal);
+        if (!isNaN(aNum) && !isNaN(bNum)) {
+          return isAsc ? aNum - bNum : bNum - aNum;
+        }
+        return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+      });
+
+      rows.forEach(r => tbody.appendChild(r));
+    });
+  });
+}
+
+render();
+</script>
+</body>
+</html>
