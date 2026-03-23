@@ -1,0 +1,9 @@
+{
+  "name": "Voice of the Customer Dashboard",
+  "description": "Interactive VoC analytics across all programs. NPS scores, trainer performance, client breakdowns, and participant feedback at a glance.",
+  "file": "voc-dashboard.html",
+  "icon": "💬",
+  "category": "online-tool",
+  "type": "online",
+  "order": 8
+}
