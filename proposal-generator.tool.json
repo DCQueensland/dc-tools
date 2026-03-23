@@ -1,6 +1,6 @@
 {
   "name": "Proposal Generator",
-  "description": "Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send. Accessible remotely via tunnel.",
+  "description": "Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files. Auto-saves to Dropbox customer folders. Shared via Dropbox — runs on any device.",
   "file": null,
   "icon": "✍",
   "category": "on-device",

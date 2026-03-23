@@ -181,12 +181,11 @@
 
     <div class="tool-card" id="card-on-device-100">
       <div class="tool-icon icon-proposal">✍</div>
-      <div class="tag tag-local">Runs on Main Machine</div>
+      <div class="tag tag-local">Shared via Dropbox &middot; Port 3000</div>
       <h3>Proposal Generator</h3>
-      <p>Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files ready to send. Accessible remotely via tunnel.</p>
+      <p>Create branded Dale Carnegie training proposals. Select programs, customise content, and generate professional PPTX files. Auto-saves to Dropbox customer folders. Works on any device with Dropbox synced.</p>
       <div class="tool-actions">
-        <a class="btn btn-primary" href="#" target="_blank" data-server="proposal-generator">Open</a>
-        <button class="btn btn-secondary" onclick="startServer('proposal-generator')">Start Server</button>
+        <a class="btn btn-primary" href="http://localhost:3000" target="_blank" data-server="proposal-generator" onclick="return handleProposalOpen(this)">Open</a>
         <span class="status-dot checking" id="status-proposal-generator"></span>
         <span class="status-text" id="status-text-proposal-generator">Checking...</span>
       </div>
@@ -250,6 +249,8 @@
     return tool.tunnelUrl || tool.localUrl;
   }
 
+  const serverOnline = {};
+
   async function checkStatus(name) {
     const dot = document.getElementById('status-' + name);
     const text = document.getElementById('status-text-' + name);
@@ -263,30 +264,49 @@
     text.textContent = 'Checking...';
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 4000);
-      await fetch(url, { mode: 'no-cors', signal: controller.signal });
+      const timeout = setTimeout(() => controller.abort(), 3000);
+      const resp = await fetch(url, { signal: controller.signal });
       clearTimeout(timeout);
       dot.className = 'status-dot online';
       text.textContent = 'Running';
+      serverOnline[name] = true;
     } catch (e) {
-      dot.className = 'status-dot offline';
-      if (!isLocal && !serverTools[name]?.tunnelUrl) {
-        text.textContent = 'Tunnel not configured';
-      } else {
-        text.textContent = 'Offline';
+      // no-cors fallback — try the API endpoint to confirm
+      try {
+        const controller2 = new AbortController();
+        const timeout2 = setTimeout(() => controller2.abort(), 3000);
+        await fetch(url + '/api/config', { signal: controller2.signal });
+        clearTimeout(timeout2);
+        dot.className = 'status-dot online';
+        text.textContent = 'Running';
+        serverOnline[name] = true;
+      } catch (e2) {
+        dot.className = 'status-dot offline';
+        text.textContent = 'Not running — click Open for setup';
+        serverOnline[name] = false;
       }
     }
   }
 
-  function startServer(name) {
-    if (!isLocal) {
-      alert('The server must be started from the main machine.\n\nRemote control into the Mac and run:\n~/proposal-generator/start-remote.sh');
-      return;
-    }
-    const text = document.getElementById('status-text-' + name);
-    if (text) text.textContent = 'Starting...';
-    alert('To start: open Terminal and run the appropriate start script.');
-    setTimeout(() => checkStatus(name), 3000);
+  function handleProposalOpen(el) {
+    if (serverOnline['proposal-generator']) return true;
+    showSetupInstructions();
+    return false;
+  }
+
+  function showSetupInstructions() {
+    const msg =
+      'Proposal Generator is not running on this device.\n\n' +
+      'To start it:\n\n' +
+      '1. Double-click "DC Proposal Generator.command" on your Desktop\n\n' +
+      'Or open Terminal and run:\n' +
+      'bash ~/Dropbox/2026/Tools/proposal-generator/start.sh\n\n' +
+      'First time on this device?\n' +
+      '• Make sure Dropbox is synced\n' +
+      '• Install Node.js from nodejs.org (LTS version)\n' +
+      '• The start script will install dependencies automatically';
+    alert(msg);
+    setTimeout(() => checkStatus('proposal-generator'), 3000);
   }
 
   loadTunnelConfig().then(() => {
