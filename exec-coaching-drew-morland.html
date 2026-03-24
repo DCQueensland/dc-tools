@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Executive Coaching Report — Drew Morland | Dale Carnegie QLD</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #1a1a1a;
+    color: #fff;
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+  header {
+    background: #000;
+    padding: 24px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 3px solid #ffc708;
+  }
+  header h1 { font-size: 22px; font-weight: 600; letter-spacing: 0.5px; }
+  header h1 span { color: #ffc708; }
+  header .subtitle { color: #999; font-size: 13px; margin-top: 2px; }
+  .back-link {
+    color: #ffc708; text-decoration: none; font-size: 13px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .back-link:hover { opacity: 0.8; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  /* Report Header */
+  .report-header { text-align: center; margin-bottom: 48px; padding-bottom: 32px; border-bottom: 1px solid #333; }
+  .report-header h2 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+  .report-header h2 span { color: #ffc708; }
+  .report-header .role { font-size: 18px; color: #ccc; margin-bottom: 4px; }
+  .report-header .prepared { font-size: 14px; color: #666; margin-top: 12px; }
+
+  /* Section styling */
+  .section { margin-bottom: 48px; }
+  .section-title {
+    font-size: 13px; text-transform: uppercase; letter-spacing: 2px;
+    color: #ffc708; margin-bottom: 20px; padding-bottom: 8px;
+    border-bottom: 1px solid #333; display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .num {
+    background: #ffc708; color: #000; width: 24px; height: 24px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+
+  /* Card */
+  .card {
+    background: #242424; border: 1px solid #333; border-radius: 12px;
+    padding: 24px; margin-bottom: 16px;
+  }
+  .card h4 { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+
+  /* Horizontal bars */
+  .bar-chart { display: flex; flex-direction: column; gap: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-label { width: 180px; font-size: 13px; color: #ccc; flex-shrink: 0; text-align: right; }
+  .bar-track { flex: 1; height: 28px; background: #1a1a1a; border-radius: 6px; position: relative; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 12px; font-weight: 700; color: #000; transition: width 0.6s ease; }
+  .bar-fill.green { background: #84c44c; }
+  .bar-fill.yellow { background: #ffc708; }
+  .bar-fill.orange { background: #e8862a; }
+
+  /* Strength/gap items */
+  .feedback-item { padding: 10px 0; border-bottom: 1px solid #2a2a2a; }
+  .feedback-item:last-child { border-bottom: none; }
+  .feedback-item .text { font-size: 14px; color: #ddd; }
+  .feedback-item .score { font-size: 13px; color: #ffc708; font-weight: 600; margin-top: 4px; }
+  .feedback-item .gap-detail { font-size: 12px; color: #999; margin-top: 2px; }
+
+  .note-box {
+    background: #1a1a1a; border-left: 3px solid #ffc708; padding: 16px; margin-top: 16px;
+    border-radius: 0 8px 8px 0; font-size: 13px; color: #ccc; line-height: 1.6;
+  }
+
+  /* DISC */
+  .disc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .disc-box { background: #1a1a1a; border-radius: 8px; padding: 16px; text-align: center; }
+  .disc-box .label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; margin-bottom: 8px; }
+  .disc-scores { display: flex; justify-content: center; gap: 16px; }
+  .disc-score { text-align: center; }
+  .disc-score .letter { font-size: 20px; font-weight: 700; }
+  .disc-score .val { font-size: 13px; color: #999; }
+  .disc-score .letter.d-high { color: #e8862a; }
+  .disc-score .letter.i-high { color: #ffc708; }
+  .disc-score .letter.s-high { color: #84c44c; }
+  .disc-score .letter.c-high { color: #0090cf; }
+
+  /* Bullet lists */
+  .bullet-list { list-style: none; padding: 0; }
+  .bullet-list li { padding: 6px 0; padding-left: 20px; position: relative; font-size: 14px; color: #ccc; }
+  .bullet-list li::before { content: "\2022"; color: #ffc708; position: absolute; left: 0; font-weight: 700; }
+
+  /* Journey sections */
+  .journey-subsection h4 { color: #84c44c; font-size: 15px; margin-bottom: 12px; }
+  .journey-subsection.challenges h4 { color: #e8862a; }
+  .journey-subsection.frameworks h4 { color: #0090cf; }
+  .journey-subsection { margin-bottom: 20px; }
+
+  /* Quarterly plan table */
+  .quarter-card { margin-bottom: 16px; }
+  .quarter-card .q-header {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+  }
+  .quarter-card .q-badge {
+    background: #ffc708; color: #000; font-size: 12px; font-weight: 700;
+    padding: 4px 12px; border-radius: 20px; flex-shrink: 0;
+  }
+  .quarter-card .q-theme { font-size: 15px; font-weight: 600; color: #fff; }
+
+  /* Quote cards */
+  .quote-card {
+    background: #242424; border: 1px solid #333; border-left: 3px solid #ffc708;
+    border-radius: 0 12px 12px 0; padding: 20px 24px; margin-bottom: 12px;
+    font-size: 14px; color: #ddd; font-style: italic; line-height: 1.7;
+  }
+
+  /* Footer */
+  .report-footer {
+    text-align: center; padding: 32px; border-top: 1px solid #333;
+    color: #666; font-size: 12px; margin-top: 48px;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .bar-label { width: 120px; font-size: 11px; }
+    .disc-grid { grid-template-columns: 1fr; }
+    header { padding: 16px 20px; flex-direction: column; gap: 8px; }
+    .report-header h2 { font-size: 24px; }
+  }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; color: #000; font-size: 11pt; }
+    header { background: #fff; border-bottom: 2px solid #000; }
+    header h1, header h1 span { color: #000; }
+    header .subtitle { color: #666; }
+    .back-link { display: none; }
+    .container { padding: 20px 0; }
+    .card, .quote-card { background: #f9f9f9; border-color: #ccc; box-shadow: none; }
+    .section-title { color: #000; border-bottom-color: #ccc; }
+    .section-title .num { background: #000; color: #fff; }
+    .bar-track { background: #eee; }
+    .bar-fill.green { background: #4a9; }
+    .bar-fill.yellow { background: #c90; }
+    .bar-fill.orange { background: #c60; }
+    .bar-fill { color: #fff; }
+    .report-header h2 span { color: #000; }
+    .bullet-list li, .feedback-item .text, .note-box, .quote-card { color: #222; }
+    .feedback-item .score { color: #000; }
+    .disc-box { background: #f5f5f5; }
+    .report-footer { color: #666; }
+    .section { page-break-inside: avoid; }
+    .quarter-card { page-break-inside: avoid; }
+    .quote-card { page-break-inside: avoid; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Dale Carnegie <span>Queensland</span></h1>
+    <div class="subtitle">Executive Coaching Report</div>
+  </div>
+  <a href="dashboard.html?v=2" class="back-link">&larr; Back to Dashboard</a>
+</header>
+
+<div class="container">
+
+  <!-- REPORT HEADER -->
+  <div class="report-header">
+    <h2>Executive Coaching Report &mdash; <span>Drew Morland</span></h2>
+    <div class="role">CEO, IOR &nbsp;|&nbsp; Coaching Session &mdash; March 2026</div>
+    <div class="prepared">Prepared by William Farmer, Dale Carnegie Queensland</div>
+  </div>
+
+  <!-- 1. 360 FEEDBACK SNAPSHOT -->
+  <div class="section">
+    <div class="section-title"><span class="num">1</span> 360 Feedback Snapshot</div>
+
+    <div class="card">
+      <h4>Leadership Skills for Success &mdash; Category Scores (out of 5.0)</h4>
+      <div class="bar-chart" style="margin-top: 16px;">
+        <div class="bar-row">
+          <div class="bar-label">Leadership Skills</div>
+          <div class="bar-track"><div class="bar-fill green" style="width: 91.2%;">4.56</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">People Skills</div>
+          <div class="bar-track"><div class="bar-fill green" style="width: 91%;">4.55</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Self-Confidence</div>
+          <div class="bar-track"><div class="bar-fill green" style="width: 89.6%;">4.48</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Accountability</div>
+          <div class="bar-track"><div class="bar-fill yellow" style="width: 88.8%;">4.44</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Self-Direction</div>
+          <div class="bar-track"><div class="bar-fill yellow" style="width: 88.2%;">4.41</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Communication Skills</div>
+          <div class="bar-track"><div class="bar-fill yellow" style="width: 83.6%;">4.18</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Controls Stress</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width: 80%;">4.00</div></div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Process Skills</div>
+          <div class="bar-track"><div class="bar-fill orange" style="width: 76.8%;">3.84</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Strengths -->
+    <div class="card">
+      <h4>Top Strengths (from team feedback)</h4>
+      <div class="feedback-item">
+        <div class="text">"Demonstrates a positive attitude; focuses on 'I can do it' way of thinking"</div>
+        <div class="score">5.00 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Expresses genuine interest in other people"</div>
+        <div class="score">5.00 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Contributes to an atmosphere of trust"</div>
+        <div class="score">4.90 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Leads by example"</div>
+        <div class="score">4.90 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Shows respect for other people's opinions and ideas"</div>
+        <div class="score">4.90 / 5.00</div>
+      </div>
+    </div>
+
+    <!-- Key Gaps -->
+    <div class="card">
+      <h4>Key Gaps &mdash; Self vs Team Discrepancies</h4>
+      <p style="font-size: 13px; color: #999; margin-bottom: 16px;">Items where Drew rated himself LOW but his team rated him HIGH:</p>
+
+      <div class="feedback-item">
+        <div class="text">"Effectively manages the performance of others"</div>
+        <div class="gap-detail">Self: 2.0 &nbsp;|&nbsp; Team: 4.20 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +2.20</strong></div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Uses evidence to support ideas"</div>
+        <div class="gap-detail">Self: 2.0 &nbsp;|&nbsp; Team: 3.90 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +1.90</strong></div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Leads by example"</div>
+        <div class="gap-detail">Self: 3.0 &nbsp;|&nbsp; Team: 4.90 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +1.90</strong></div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Utilizes time effectively"</div>
+        <div class="gap-detail">Self: 2.0 &nbsp;|&nbsp; Team: 3.67 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +1.67</strong></div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Separates the person from the problem"</div>
+        <div class="gap-detail">Self: 3.0 &nbsp;|&nbsp; Team: 4.40 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +1.40</strong></div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Uses an effective planning process"</div>
+        <div class="gap-detail">Self: 2.0 &nbsp;|&nbsp; Team: 3.33 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +1.33</strong></div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Effectively delegates"</div>
+        <div class="gap-detail">Self: 3.0 &nbsp;|&nbsp; Team: 4.11 &nbsp;|&nbsp; <strong style="color: #84c44c;">Gap: +1.11</strong></div>
+      </div>
+
+      <div class="note-box">
+        These positive gaps show Drew consistently underrates himself. His team sees significantly more capability than he self-perceives &mdash; a pattern consistent with his IS/Is DISC style.
+      </div>
+    </div>
+
+    <!-- Areas Needing Attention -->
+    <div class="card">
+      <h4>Areas Needing Attention (lowest team scores)</h4>
+      <div class="feedback-item">
+        <div class="text">"Effectively prepares and delivers presentations"</div>
+        <div class="score" style="color: #e8862a;">3.20 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Maintains work/life balance"</div>
+        <div class="score" style="color: #e8862a;">3.22 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Uses a process to define performance expectations"</div>
+        <div class="score" style="color: #e8862a;">3.30 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Uses an effective planning process"</div>
+        <div class="score" style="color: #e8862a;">3.33 / 5.00</div>
+      </div>
+      <div class="feedback-item">
+        <div class="text">"Effectively organises resources to achieve work objectives"</div>
+        <div class="score" style="color: #e8862a;">3.56 / 5.00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. DISC PROFILE SUMMARY -->
+  <div class="section">
+    <div class="section-title"><span class="num">2</span> DISC Profile Summary</div>
+
+    <div class="card">
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+        <div style="font-size: 28px; font-weight: 700; color: #ffc708;">IS/Is</div>
+        <div style="font-size: 16px; color: #ccc;">Behavioural Style: <strong style="color: #fff;">"Coach"</strong></div>
+      </div>
+
+      <div class="disc-grid">
+        <div class="disc-box">
+          <div class="label">Adapted Style (Work)</div>
+          <div class="disc-scores">
+            <div class="disc-score"><div class="letter d-high">D</div><div class="val">34</div></div>
+            <div class="disc-score"><div class="letter i-high">I</div><div class="val">85</div></div>
+            <div class="disc-score"><div class="letter s-high">S</div><div class="val">66</div></div>
+            <div class="disc-score"><div class="letter c-high">C</div><div class="val">27</div></div>
+          </div>
+        </div>
+        <div class="disc-box">
+          <div class="label">Natural Style</div>
+          <div class="disc-scores">
+            <div class="disc-score"><div class="letter d-high">D</div><div class="val">45</div></div>
+            <div class="disc-score"><div class="letter i-high">I</div><div class="val">98</div></div>
+            <div class="disc-score"><div class="letter s-high">S</div><div class="val">58</div></div>
+            <div class="disc-score"><div class="letter c-high">C</div><div class="val">20</div></div>
+          </div>
+        </div>
+      </div>
+
+      <h4 style="margin-top: 8px;">Key Characteristics</h4>
+      <ul class="bullet-list" style="margin-top: 8px;">
+        <li>Unselfish, sensitive to others' needs, genuine</li>
+        <li>Long fuse, empathetic listener, builds trust naturally</li>
+        <li>Projects confidence without arrogance</li>
+        <li>High persistence on complex projects</li>
+        <li>Prefers long-term relationships over superficial ones</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>DISC-Based Focus Areas for 2026</h4>
+      <ul class="bullet-list" style="margin-top: 8px;">
+        <li>Learning to say "no" to avoid spreading too thin</li>
+        <li>More direction toward work tasks, less chatting/socialising during critical periods</li>
+        <li>Setting more ambitious deadlines</li>
+        <li>Increased urgency in decision-making</li>
+        <li>Detailed delegation to reduce ambiguity</li>
+        <li>May hesitate to correct/discipline for fear of offending &mdash; needs to lean into "good guy not just nice guy"</li>
+        <li>Under stress: may become non-committal, vague, or overly tolerant of non-performers</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 3. COACHING JOURNEY — 2025 IN REVIEW -->
+  <div class="section">
+    <div class="section-title"><span class="num">3</span> Coaching Journey &mdash; 2025 in Review</div>
+
+    <div class="card journey-subsection">
+      <h4 style="color: #84c44c;">Victories</h4>
+      <ul class="bullet-list">
+        <li>Completed triathlon with brothers (March) &mdash; huge milestone</li>
+        <li>Built one of the most formidable senior teams in Australian business (Drew, Nick, Linda)</li>
+        <li>Broke free from poor behaviours &mdash; committed to daily morning training</li>
+        <li>Achieved 28% growth &mdash; outpaces most companies</li>
+        <li>Board relationships redesigned and strengthened</li>
+        <li>Consistent morning journaling and Stoic reading practice established</li>
+        <li>Holiday scored "15 out of 10" for family connection</li>
+        <li>Embracing vulnerability and authentic leadership style</li>
+        <li>Unlocking talent across the organisation &mdash; attracting more talent as a result</li>
+        <li>X2U project now ahead of traditional pipeline</li>
+        <li>Broke into Victorian market in back-to-base services</li>
+        <li>Working a productive 50 hours/week focused on high-value relationships</li>
+        <li>Partner relationship (Jodie) strong and balanced</li>
+      </ul>
+    </div>
+
+    <div class="card journey-subsection challenges">
+      <h4 style="color: #e8862a;">Challenges Worked Through</h4>
+      <ul class="bullet-list">
+        <li>Board pressure &mdash; meetings felt "just about the numbers" not vision/purpose</li>
+        <li>Imposter syndrome around finance/board papers &mdash; feeling "uneducated"</li>
+        <li>Feeling stretched &mdash; having to push to "turn up as Drew" for the team</li>
+        <li>Balancing empathy with accountability (nice guy vs good guy)</li>
+        <li>Work/life balance &mdash; lowest scored area on 360</li>
+        <li>Weekend dynamics with Jodie &mdash; collaborative planning vs. perceived indifference</li>
+        <li>Process and planning skills remain the weakest area (3.84/5)</li>
+        <li>Communication clarity &mdash; expressing ideas concisely (3.60 on team feedback)</li>
+        <li>Self-medication with alcohol &mdash; shifted to celebration-only approach</li>
+      </ul>
+    </div>
+
+    <div class="card journey-subsection frameworks">
+      <h4 style="color: #0090cf;">Key Frameworks Introduced</h4>
+      <ul class="bullet-list">
+        <li>Cognitive Reframing (red/blue-green journaling)</li>
+        <li>"Facilitator of Talent" identity &mdash; not needing to know everything</li>
+        <li>"Protector" mindset &mdash; shielding the team while leveraging their strengths</li>
+        <li>"Blue Slide" concept from Diary of a CEO &mdash; IOR's version still to be created</li>
+        <li>Nice Guy vs Good Guy distinction</li>
+        <li>Power of saying less in meetings</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 4. 2026 COACHING PLAN -->
+  <div class="section">
+    <div class="section-title"><span class="num">4</span> 2026 Coaching Plan</div>
+
+    <div class="card quarter-card">
+      <div class="q-header">
+        <span class="q-badge">Q1 Jan&ndash;Mar</span>
+        <span class="q-theme">"Foundations"</span>
+      </div>
+      <ul class="bullet-list">
+        <li>Continue morning routine (exercise, journal, Stoic reading)</li>
+        <li>Build IOR's "Blue Slide" &mdash; the company's clear why/vision/purpose one-pager</li>
+        <li>Set 3 personal stretch goals and share with William for accountability</li>
+        <li>Review board communication approach &mdash; present in ROI terms they value</li>
+      </ul>
+    </div>
+
+    <div class="card quarter-card">
+      <div class="q-header">
+        <span class="q-badge">Q2 Apr&ndash;Jun</span>
+        <span class="q-theme">"Process &amp; Structure"</span>
+      </div>
+      <ul class="bullet-list">
+        <li>Address weakest 360 area: Process Skills (planning, delegation, time management)</li>
+        <li>Implement weekly 30-min planning block &mdash; priorities for the week</li>
+        <li>Delegate with detailed scope: what, why, by when, then "I'll leave it in your capable hands"</li>
+        <li>Practice "evidence-based" communication &mdash; supporting ideas with data</li>
+      </ul>
+    </div>
+
+    <div class="card quarter-card">
+      <div class="q-header">
+        <span class="q-badge">Q3 Jul&ndash;Sep</span>
+        <span class="q-theme">"Positive Discomfort"</span>
+      </div>
+      <ul class="bullet-list">
+        <li>Seek moments of discomfort that drive growth</li>
+        <li>Practice having harder accountability conversations (good guy, not just nice guy)</li>
+        <li>Address presentation skills &mdash; prepare structured board presentations</li>
+        <li>Push decision-making speed &mdash; set daily goals that test focus</li>
+      </ul>
+    </div>
+
+    <div class="card quarter-card">
+      <div class="q-header">
+        <span class="q-badge">Q4 Oct&ndash;Dec</span>
+        <span class="q-theme">"Legacy &amp; Scale"</span>
+      </div>
+      <ul class="bullet-list">
+        <li>Build second-tier leadership capability &mdash; who leads when Drew isn't in the room?</li>
+        <li>Define clear roles and responsibilities (lowest 360 item: 4.00)</li>
+        <li>Create Drew's personal leadership "playbook" &mdash; codify what works</li>
+        <li>Year-end reflection and 360 re-assessment</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 5. DIRECT REPORT COMMENTS -->
+  <div class="section">
+    <div class="section-title"><span class="num">5</span> Direct Report Comments (from 360)</div>
+
+    <div class="quote-card">
+      "Drew is an inspiring leader that knows how to work to people's strengths and weaknesses..."
+    </div>
+    <div class="quote-card">
+      "Drew is the best manager that I have worked for. I admire Drew's determination and direction, all done in a very friendly and personable style with very high EQ..."
+    </div>
+    <div class="quote-card">
+      "Drew is either by nature, or by a disciplined approach, a very curious leader. He is a fantastic listener and genuinely cares about his people."
+    </div>
+    <div class="quote-card">
+      "Drew has been an incredible colleague and manager to work with. He has elevated the business to a new level..."
+    </div>
+    <div class="quote-card">
+      "I genuinely rate Drew very highly in areas like interpersonal communication, leadership, emotional intelligence, and his positive attitude. His growth mindset is impressive..."
+    </div>
+    <div class="quote-card">
+      "Drew is an inspirational leader who values and fosters genuine collaboration and connection across his teams..."
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="report-footer">
+    Confidential &mdash; prepared for Drew Morland executive coaching session. Dale Carnegie Queensland.
+  </div>
+
+</div>
+
+</body>
+</html>
