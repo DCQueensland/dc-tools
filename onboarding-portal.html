@@ -244,58 +244,49 @@
 
   // ===== TOOL DATA =====
   // UPDATE CREDENTIALS HERE — replace 'UPDATE' values with real logins
-  const toolSections = [
+  // ===== FRANCHISE TOOLS =====
+  const franchiseTools = [
     {
-      label: 'CRM & Sales',
+      label: 'CRM',
       tools: [
-        { name: 'Salesforce', icon: '&#9881;', iconClass: 'icon-crm', url: 'https://login.salesforce.com', urlLabel: 'login.salesforce.com', note: 'Head office CRM — read-only unless instructed', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'HubSpot', icon: '&#128200;', iconClass: 'icon-crm', url: 'https://app.hubspot.com', urlLabel: 'app.hubspot.com', note: 'Pipeline management and deal tracking', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'Apollo.io', icon: '&#128222;', iconClass: 'icon-calls', url: 'https://app.apollo.io', urlLabel: 'app.apollo.io', note: 'Lead prospecting and enrichment', email: 'UPDATE', password: 'UPDATE' },
+        { name: 'Salesforce', icon: '&#9881;', iconClass: 'icon-crm', url: 'https://login.salesforce.com', urlLabel: 'login.salesforce.com', note: 'Head office CRM — read-only unless instructed', email: 'William.farmer@dalecarnegie.com', password: 'Dale3038#' },
       ]
     },
     {
       label: 'Operations & Data',
       tools: [
-        { name: 'Airtable', icon: '&#128202;', iconClass: 'icon-data', url: 'https://airtable.com', urlLabel: 'airtable.com', note: 'Operations database — programs, participants, schedules', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'Operation Central', icon: '&#128188;', iconClass: 'icon-data', url: 'https://operationcentral.dalecarnegie.com', urlLabel: 'operationcentral.dalecarnegie.com', note: 'Dale Carnegie global operations portal', email: 'UPDATE', password: 'UPDATE' },
-      ]
-    },
-    {
-      label: 'Communication',
-      tools: [
-        { name: 'Slack', icon: '&#128172;', iconClass: 'icon-comms', url: 'https://slack.com', urlLabel: 'slack.com', note: "Team messaging — you'll be invited to the workspace", email: 'UPDATE', password: 'UPDATE' },
-        { name: 'Microsoft 365 (Outlook)', icon: '&#9993;', iconClass: 'icon-email', url: 'https://outlook.office.com', urlLabel: 'outlook.office.com', note: 'Email, calendar, PowerPoint, Teams', email: 'UPDATE', password: 'UPDATE' },
+        { name: 'Airtable', icon: '&#128202;', iconClass: 'icon-data', url: 'https://airtable.com', urlLabel: 'airtable.com', note: 'Operations database — programs, participants, schedules', email: 'William.farmer@dalecarnegie.com', password: 'e$v&IJLZxikMxS*r499D' },
       ]
     },
     {
       label: 'Files & Storage',
       tools: [
-        { name: 'Dropbox', icon: '&#128193;', iconClass: 'icon-files', url: 'https://www.dropbox.com', urlLabel: 'dropbox.com', note: 'Primary file storage — proposals, templates, marketing assets', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'Google Drive', icon: '&#128194;', iconClass: 'icon-files', url: 'https://drive.google.com', urlLabel: 'drive.google.com', note: 'Large files and shared documents', email: 'UPDATE', password: 'UPDATE' },
-      ]
-    },
-    {
-      label: 'Marketing & Events',
-      tools: [
-        { name: 'Exact Target (Email Marketing)', icon: '&#128231;', iconClass: 'icon-email', url: 'https://mc.exacttarget.com', urlLabel: 'mc.exacttarget.com', note: 'Email campaigns — linked to Salesforce', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'Eventbrite', icon: '&#127915;', iconClass: 'icon-events', url: 'https://www.eventbrite.com.au', urlLabel: 'eventbrite.com.au', note: 'Free public workshops and event registrations', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'Canva', icon: '&#127912;', iconClass: 'icon-design', url: 'https://www.canva.com', urlLabel: 'canva.com', note: 'Design — use DC brand kit only', email: 'UPDATE', password: 'UPDATE' },
-        { name: 'LinkedIn / Facebook / Instagram', icon: '&#128240;', iconClass: 'icon-social', url: 'https://www.linkedin.com', urlLabel: 'linkedin.com', note: 'Social media accounts — see Crisel for access', email: 'Ask Crisel or William', password: null },
+        { name: 'Dropbox', icon: '&#128193;', iconClass: 'icon-files', url: 'https://www.dropbox.com', urlLabel: 'dropbox.com', note: 'Primary file storage — proposals, templates, marketing assets', email: 'William.farmer@dalecarnegie.com', password: 'Dale3038$' },
       ]
     },
     {
       label: 'Calendar',
       tools: [
-        { name: 'Google Calendar', icon: '&#128197;', iconClass: 'icon-calendar', url: 'https://calendar.google.com', urlLabel: 'calendar.google.com', note: 'Shared team calendars — "William BOOKED Appt" for meetings, "Training" for programs', email: 'UPDATE', password: 'UPDATE' },
+        { name: 'Google Calendar', icon: '&#128197;', iconClass: 'icon-calendar', url: 'https://calendar.google.com', urlLabel: 'calendar.google.com', note: 'Shared team calendars — "William BOOKED Appt" for meetings, "Training" for programs', email: 'dalecarnegie.queensland@gmail.com', password: '28sNE8R@oVklu5g8QhOM' },
+      ]
+    }
+  ];
+
+  // ===== PARTNERSHIPS TOOLS (to be filled in) =====
+  const partnershipsTools = [
+    {
+      label: 'Coming Soon',
+      tools: [
+        { name: 'Credentials will be added here', icon: '&#128274;', iconClass: 'icon-comms', url: '#', urlLabel: '', note: 'Contact Emma or Anna for current access details', email: 'TBC', password: null },
       ]
     }
   ];
 
   // ===== RENDER =====
-  function renderTools(containerId) {
+  function renderTools(containerId, sections) {
     const container = document.getElementById(containerId);
     let html = '';
-    toolSections.forEach(section => {
+    sections.forEach(section => {
       html += '<div class="section-label">' + section.label + ' <span class="count">' + section.tools.length + '</span></div>';
       html += '<div class="tool-list">';
       section.tools.forEach(tool => {
@@ -326,8 +317,8 @@
     container.innerHTML = html;
   }
 
-  renderTools('tools-franchise');
-  renderTools('tools-partnerships');
+  renderTools('tools-franchise', franchiseTools);
+  renderTools('tools-partnerships', partnershipsTools);
 </script>
 
 </body>
