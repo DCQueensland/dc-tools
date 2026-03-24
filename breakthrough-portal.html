@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD - Breakthrough Assessment Portal</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; background: #1a1a1a; color: #fff; min-height: 100vh; }
+  header { background: #000; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #ffc708; }
+  header h1 { font-size: 20px; font-weight: 600; }
+  header h1 span { color: #ffc708; }
+  header .subtitle { color: #999; font-size: 12px; margin-top: 2px; }
+  .back-link { color: #ffc708; text-decoration: none; font-size: 13px; font-weight: 600; }
+  .back-link:hover { opacity: 0.8; }
+
+  .app { display: flex; min-height: calc(100vh - 70px); }
+  .sidebar { width: 280px; background: #111; border-right: 1px solid #333; padding: 20px; flex-shrink: 0; overflow-y: auto; }
+  .main { flex: 1; padding: 32px; overflow-y: auto; max-height: calc(100vh - 70px); }
+
+  .sidebar h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #666; margin-bottom: 12px; }
+  .class-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; }
+  .class-item { padding: 10px 14px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.15s; }
+  .class-item:hover { border-color: #ffc708; }
+  .class-item.active { border-color: #ffc708; background: #ffc70811; }
+  .class-item .ci-company { font-weight: 600; }
+  .class-item .ci-meta { color: #888; font-size: 11px; margin-top: 2px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: #ffc708; color: #000; }
+  .btn-secondary { background: #333; color: #ccc; }
+  .btn-danger { background: #ff634733; color: #ff6347; }
+  .btn-sm { padding: 6px 12px; font-size: 12px; }
+
+  /* Report */
+  .report-header { margin-bottom: 32px; }
+  .report-header h2 { font-size: 24px; margin-bottom: 4px; }
+  .report-header .rh-meta { color: #888; font-size: 14px; }
+  .report-header .rh-meta span { color: #ffc708; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; text-align: center; }
+  .stat-card .stat-value { font-size: 32px; font-weight: 700; }
+  .stat-card .stat-label { font-size: 12px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-card .stat-change { font-size: 14px; color: #84c44c; margin-top: 4px; font-weight: 600; }
+
+  .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #666; margin: 32px 0 16px; display: flex; align-items: center; gap: 10px; }
+
+  /* Driver bars */
+  .drivers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .driver-card { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; }
+  .driver-card h4 { font-size: 14px; margin-bottom: 12px; }
+  .driver-bar-wrap { margin-bottom: 8px; }
+  .driver-bar-label { font-size: 11px; color: #888; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .driver-bar { height: 24px; background: #333; border-radius: 6px; position: relative; overflow: hidden; }
+  .driver-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; }
+  .driver-bar-fill.before { background: #666; color: #ccc; }
+  .driver-bar-fill.after { background: #ffc708; color: #000; }
+  .driver-change { text-align: center; font-size: 20px; font-weight: 700; color: #84c44c; margin-top: 8px; }
+
+  /* Overall score */
+  .overall-card { background: #242424; border: 1px solid #ffc70844; border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 32px; }
+  .overall-scores { display: flex; justify-content: center; align-items: center; gap: 48px; margin-top: 16px; }
+  .overall-score { text-align: center; }
+  .overall-score .os-value { font-size: 48px; font-weight: 700; }
+  .overall-score .os-label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .overall-score.before .os-value { color: #888; }
+  .overall-score.after .os-value { color: #ffc708; }
+  .overall-arrow { font-size: 32px; color: #84c44c; }
+  .overall-movement { font-size: 24px; font-weight: 700; color: #84c44c; margin-top: 16px; }
+
+  /* Individual table */
+  .participant-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+  .participant-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; padding: 8px 12px; border-bottom: 1px solid #333; }
+  .participant-table td { padding: 10px 12px; border-bottom: 1px solid #222; font-size: 13px; }
+  .participant-table tr:hover { background: #ffffff08; }
+  .score-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+  .score-badge.before { background: #333; color: #999; }
+  .score-badge.after { background: #ffc70822; color: #ffc708; }
+  .score-badge.change { background: #84c44c22; color: #84c44c; }
+
+  /* Comments */
+  .comments-section { margin-bottom: 32px; }
+  .comment-group { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  .comment-group h4 { font-size: 14px; margin-bottom: 12px; color: #ffc708; }
+  .comment-item { padding: 10px 0; border-bottom: 1px solid #2a2a2a; font-size: 13px; line-height: 1.5; color: #ccc; }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-item .ci-name { font-weight: 600; color: #fff; font-size: 12px; margin-bottom: 4px; }
+
+  /* Form / Modal */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: #000c; z-index: 100; align-items: center; justify-content: center; }
+  .modal-overlay.show { display: flex; }
+  .modal { background: #1a1a1a; border: 1px solid #333; border-radius: 16px; padding: 32px; max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto; }
+  .modal h2 { font-size: 18px; margin-bottom: 20px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { display: block; font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px solid #444; background: #242424; color: #fff; font-size: 14px; outline: none; }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #ffc708; }
+  .form-group textarea { min-height: 60px; resize: vertical; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .form-actions { display: flex; gap: 10px; margin-top: 20px; }
+
+  .driver-inputs { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+  .driver-inputs h4 { font-size: 13px; margin-bottom: 12px; }
+  .driver-input-row { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; align-items: center; margin-bottom: 8px; font-size: 13px; }
+  .driver-input-row input { width: 100%; padding: 6px 10px; border-radius: 6px; border: 1px solid #444; background: #1a1a1a; color: #fff; font-size: 13px; text-align: center; }
+
+  .empty-state { text-align: center; padding: 80px 20px; color: #555; }
+  .empty-state .es-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 14px; margin-bottom: 20px; }
+
+  @media (max-width: 900px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #333; }
+    .drivers-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: 1fr; }
+    .main { max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Breakthrough <span>Assessment</span> Portal</h1>
+    <div class="subtitle">In-House Programme Results</div>
+  </div>
+  <a href="dashboard.html?v=2" class="back-link">&larr; Back to Dashboard</a>
+</header>
+
+<div class="app">
+  <div class="sidebar">
+    <h3>Classes</h3>
+    <div id="class-list" class="class-list"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="showAddClassModal()">+ Add Class</button>
+  </div>
+  <div class="main" id="main-content">
+    <div class="empty-state">
+      <div class="es-icon">&#128202;</div>
+      <p>Select a class from the sidebar to view the breakthrough report</p>
+    </div>
+  </div>
+</div>
+
+<!-- Add Class Modal -->
+<div class="modal-overlay" id="modal-class">
+  <div class="modal">
+    <h2>Add New Class</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Company Name</label>
+        <input type="text" id="fc-company" placeholder="e.g. Bartons Motors">
+      </div>
+      <div class="form-group">
+        <label>Programme</label>
+        <select id="fc-programme">
+          <option value="DCC">The Dale Carnegie Course</option>
+          <option value="UYLP">Unleash Your Leadership Potential</option>
+          <option value="LTM">Leadership Training for Managers</option>
+          <option value="HIP">High Impact Presentations</option>
+          <option value="WRS">Winning with Relationship Selling</option>
+          <option value="WGYH">What Got You Here Won't Get You There</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Class Date</label>
+        <input type="date" id="fc-date">
+      </div>
+      <div class="form-group">
+        <label>Trainer</label>
+        <input type="text" id="fc-trainer" placeholder="e.g. William Farmer">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addClass()">Create Class</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-class')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Participant Modal -->
+<div class="modal-overlay" id="modal-participant">
+  <div class="modal">
+    <h2>Add Participant</h2>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" id="fp-name" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label>Position</label>
+        <input type="text" id="fp-position" placeholder="e.g. Sales Manager">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Organisation</label>
+        <input type="text" id="fp-org" placeholder="e.g. Bartons">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="fp-email" placeholder="email@example.com">
+      </div>
+    </div>
+
+    <div class="driver-inputs" id="driver-inputs">
+      <!-- Populated by JS based on programme -->
+    </div>
+
+    <div class="form-group">
+      <label>What has been a major benefit of this course for you personally and professionally?</label>
+      <textarea id="fp-q2" placeholder="Enter response..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>What's one action you intend to take as a result of this program?</label>
+      <textarea id="fp-q3" placeholder="Enter response..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>What's one way my direct manager can support my newfound skills and professional development over the next 12 months?</label>
+      <textarea id="fp-q4" placeholder="Enter response..."></textarea>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" onclick="addParticipant()">Add Participant</button>
+      <button class="btn btn-secondary" onclick="closeModal('modal-participant')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== PROGRAMME DRIVERS =====
+const PROGRAMME_DRIVERS = {
+  DCC: ['Confidence', 'Communication', 'People Skills', 'Leadership Skills', 'Reduce Stress and Worry'],
+  UYLP: ['Leading with Integrity', 'Communicating with Authenticity', 'Inspiring Confidence in your Leadership', 'Supporting Peer Development and Performance', 'Engaging Others'],
+  LTM: ['Strategic Thinking', 'Building Trust', 'Coaching for Performance', 'Driving Results', 'Leading Change'],
+  HIP: ['Confidence in Presenting', 'Structure and Organisation', 'Engaging the Audience', 'Handling Questions', 'Visual Aid Effectiveness'],
+  WRS: ['Building Rapport', 'Understanding Client Needs', 'Presenting Solutions', 'Handling Objections', 'Closing and Follow-up'],
+  WGYH: ['Self-Awareness', 'Interpersonal Habits', 'Listening Skills', 'Emotional Intelligence', 'Goal Setting']
+};
+
+const PROGRAMME_NAMES = {
+  DCC: 'The Dale Carnegie Course',
+  UYLP: 'Unleash Your Leadership Potential',
+  LTM: 'Leadership Training for Managers',
+  HIP: 'High Impact Presentations',
+  WRS: 'Winning with Relationship Selling',
+  WGYH: "What Got You Here Won't Get You There"
+};
+
+// ===== DATA STORAGE =====
+let data = JSON.parse(localStorage.getItem('breakthrough-data') || '{"classes":[]}');
+let activeClassId = null;
+
+function saveData() {
+  localStorage.setItem('breakthrough-data', JSON.stringify(data));
+}
+
+// ===== PRE-LOADED DATA (Bartons DCC March 2026) =====
+function loadSampleData() {
+  if (data.classes.length > 0) return;
+  data.classes.push({
+    id: 'bartons-dcc-mar2026',
+    company: 'Bartons Motors',
+    programme: 'DCC',
+    date: '2026-03-18',
+    trainer: 'William Farmer',
+    participants: [
+      { name:'Arianne Watson', position:'Assistant Manager', org:'The Arsonist', email:'awatson19@icloud.com', before:[5,5,5,4,4], after:[8,8,8,7,7], q2:'A big benefit for me has been to have more confidence in myself as a leader of others in the workplace.', q3:'How to positively encourage a person to change their way of thinking about something.', q4:'Debriefs and regular check-ins to talk about past progress.' },
+      { name:'Allison Webb', position:'Admin Manager', org:'Bartons', email:'allisonw@bartons.net.au', before:[5,4,6,3,5], after:[7,5,7,5,6], q2:'Personally - learning how to be a better listener & getting someone to open up more. Professionally - taking ownership of my mistakes & learning how to coach people in daily tasks.', q3:'Listening & coaching team for results so they are growing, not just being given the answers.', q4:'Listening & supporting ideas to help our team grow & take on more responsibility.' },
+      { name:'Brode Kaahu', position:'Sales Manager', org:'Bartons', email:'brodek@bartons.net.au', before:[5,7,6,3,4], after:[7,8,8,6,6], q2:'Hearing and learning from not just the trainers but from other attendees\' stories and experiences.', q3:'Be more confident, coming from a competitive environment, criticism which has really hit my confidence through the year.', q4:'Scheduled weekly meeting, not just an email or chat but a scheduled sit down to go over matters, areas of change and building blocks to success.' },
+      { name:'Broghan Mello', position:'Pre-delivery Manager', org:'Brisbane Camperland', email:'BroghanMello@brisbanecamperland.com.au', before:[4,5,5,6,8], after:[5,6,6,8,8], q2:'I think the tools around the lions formula are something that I can really apply at work and home.', q3:'I want to try and let people talk more to understand where they are coming from before offering a fix, encourage them to solve issues themselves.', q4:'Be patient as I revise and attempt to apply these skills.' },
+      { name:'Darian Spence', position:'Senior Sales Consultant', org:'Bartons Wynnum', email:'darians@bartons.net.au', before:[7,6,7,7,5], after:[9.5,9,9,9.5,9], q2:'Reinforced things I know. I walk away with not only better tools in the tool box but the knowledge & confidence to put them to use.', q3:'Foster enthusiastic cooperation.', q4:'To use these skills in mentoring me and provide opportunities for me to intentionally exercise them into second nature.' },
+      { name:'Daniel Adams', position:'Workshop Controller', org:'Bartons', email:'DMadams615@gmail.com', before:[4,5,6,5,5], after:[7.5,8,8,7.5,9], q2:'A major benefit was learning to efficiently communicate while uncomfortable. And use that to my advantage.', q3:'Listen more and more effectively communicate.', q4:'Just working together to reach common goals more effectively.' },
+      { name:'Deb Ward', position:'Warehouse Supervisor', org:'Bartons', email:'deborah.ward@outlook.com.au', before:[4,5,5,5,4], after:[8,8,8,8,8], q2:'It has helped me to grow and have more confidence in myself. And taught me great leadership skills, also helped me with communication.', q3:'I have grown more confident than I ever was before.', q4:'Support me in my role and to help me to go further.' },
+      { name:'Debbie Kree', position:'Property Manager', org:'Metropole', email:'debbiekree@gmail.com', before:[1,3,3,4,5], after:[4,7,6,6,7], q2:'It has built my confidence up by realising others struggle with the same thing I do.', q3:'Be more talkative & not afraid to look silly.', q4:'Give me more opportunities to show I can take control & do it well.' },
+      { name:'Emma Pascoe', position:'Sales Manager', org:'Bartons', email:'emmapas@bartons.net.au', before:[7,7,6,7,5], after:[9,8,9,8,8], q2:'People seeing that I am confident & I do what I do because I care & that being vulnerable is okay.', q3:'3 C\'s & making this a solid part of my work & personal life.', q4:'Hold me accountable, challenge me to why I\'m falling into the 3 C\'s.' },
+      { name:'Kate Holmes', position:'Sales', org:'Barton Motors', email:'katew@bartons.net.au', before:[4,4.5,5,4,3], after:[8,9,8,8,8], q2:'Coming out of my comfort zone to speaking open and honest. Building my confidence and communication & people skills.', q3:'Confidence, compose back myself 100% of the time.', q4:'Hold me accountable with my communication & confidence & people skills.' },
+      { name:'Kasey Coleborn', position:'Events, Capability & Culture Coordinator', org:'Metropole', email:'kasey@metropole.com.au', before:[6,6,7,6,5], after:[9,8,9,8,9], q2:'Major benefit is hearing how others view you. Really helps to build your confidence quickly alongside the training. Role playing the ABC conversations and hearing how conflict could start quickly.', q3:'A big one for stress — 90% of what I worry about won\'t happen and the other 10% I handle.', q4:'Reminders of the 3 C\'s and to look back on the golden book.' },
+      { name:'Erin Campbell', position:'Exec Assistant', org:'Bartons', email:'erin.campbell@bartons.net.au', before:[6,6,6,5,5], after:[8,8,8,8,9], q2:'Learning better ways to connect with those around me. Understanding that sometimes taking a risk is worth the reward.', q3:'To step back & listen to other people\'s ideas & encourage collaboration by making them feel important.', q4:'Challenge me if I slip backwards & remind me of the principles I\'ve learnt here.' },
+      { name:'Kobus Naude', position:'Service Manager', org:'Bartons Wynnum', email:'kobus-naude@outlook.com', before:[4,4,4,5,3], after:[6,7,6,6,6], q2:'To smile and become a better story teller, using words & body language & tone. Giving me the tools to change and allow me to see what I need to change.', q3:'Be more present in the present.', q4:'Catch up and have a meaningful conversation.' },
+      { name:'Steph Zeilinga', position:'Sales', org:'Bartons', email:'stephaniel@bartons.net.au', before:[6,6,6,6,7], after:[8,7,8,8,9], q2:'Learn techniques to put into practice for communication, people skills & leadership skills professionally.', q3:'Listening & genuine appreciation.', q4:'Communication with my manager will help me grow & develop, then I will get more support from her.' },
+      { name:'Matthew Crowden', position:'ASM', org:'East Coast Commercials', email:'mcrowden@eastcc.com.au', before:[6,6,6,6,5], after:[9,9,9,9,7], q2:'I\'ve really enjoyed being challenged on thinking outwardly & bringing others on the journey through buy-in. Also challenging me to take more risks.', q3:'Take risks, take each day as it comes, show a genuine interest in others.', q4:'I would like to 1. Do more professional development 2. Take on more responsibility.' }
+    ]
+  });
+  saveData();
+}
+
+loadSampleData();
+
+// ===== RENDER SIDEBAR =====
+function renderSidebar() {
+  const list = document.getElementById('class-list');
+  list.innerHTML = '';
+  data.classes.forEach(c => {
+    const div = document.createElement('div');
+    div.className = 'class-item' + (activeClassId === c.id ? ' active' : '');
+    div.innerHTML = '<div class="ci-company">' + c.company + '</div><div class="ci-meta">' + PROGRAMME_NAMES[c.programme] + ' &middot; ' + c.participants.length + ' participants</div>';
+    div.onclick = () => { activeClassId = c.id; renderSidebar(); renderReport(c); };
+    list.appendChild(div);
+  });
+}
+
+// ===== RENDER REPORT =====
+function renderReport(cls) {
+  const main = document.getElementById('main-content');
+  const drivers = PROGRAMME_DRIVERS[cls.programme];
+  const n = cls.participants.length;
+  if (n === 0) {
+    main.innerHTML = '<div class="empty-state"><div class="es-icon">&#128100;</div><p>No participants yet. Add participants to generate the report.</p><button class="btn btn-primary" onclick="showAddParticipantModal()">+ Add Participant</button></div>';
+    return;
+  }
+
+  // Calculate averages
+  const avgBefore = drivers.map((_, i) => cls.participants.reduce((s, p) => s + p.before[i], 0) / n);
+  const avgAfter = drivers.map((_, i) => cls.participants.reduce((s, p) => s + p.after[i], 0) / n);
+  const overallBefore = avgBefore.reduce((s, v) => s + v, 0) / drivers.length;
+  const overallAfter = avgAfter.reduce((s, v) => s + v, 0) / drivers.length;
+  const overallChange = overallAfter - overallBefore;
+  const pctChange = ((overallChange / overallBefore) * 100).toFixed(0);
+
+  let html = '';
+
+  // Header
+  html += '<div class="report-header">';
+  html += '<h2>' + cls.company + '</h2>';
+  html += '<div class="rh-meta"><span>' + PROGRAMME_NAMES[cls.programme] + '</span> &middot; ' + cls.date + ' &middot; ' + n + ' participants &middot; Trainer: ' + cls.trainer + '</div>';
+  html += '</div>';
+
+  // Overall Score Card
+  html += '<div class="overall-card">';
+  html += '<h3 style="font-size:14px;color:#888;text-transform:uppercase;letter-spacing:2px">Overall Group Score</h3>';
+  html += '<div class="overall-scores">';
+  html += '<div class="overall-score before"><div class="os-value">' + overallBefore.toFixed(1) + '</div><div class="os-label">Before Training</div></div>';
+  html += '<div class="overall-arrow">&#10140;</div>';
+  html += '<div class="overall-score after"><div class="os-value">' + overallAfter.toFixed(1) + '</div><div class="os-label">After Training</div></div>';
+  html += '</div>';
+  html += '<div class="overall-movement">+' + overallChange.toFixed(1) + ' improvement (+' + pctChange + '%)</div>';
+  html += '</div>';
+
+  // Stats row
+  html += '<div class="stats-row">';
+  html += '<div class="stat-card"><div class="stat-value">' + n + '</div><div class="stat-label">Participants</div></div>';
+  const biggestGainIdx = avgAfter.map((v, i) => v - avgBefore[i]).reduce((best, v, i, arr) => v > arr[best] ? i : best, 0);
+  html += '<div class="stat-card"><div class="stat-value" style="font-size:18px">' + drivers[biggestGainIdx] + '</div><div class="stat-label">Biggest Improvement</div><div class="stat-change">+' + (avgAfter[biggestGainIdx] - avgBefore[biggestGainIdx]).toFixed(1) + '</div></div>';
+  const avgGain = (cls.participants.reduce((s, p) => { const pb = p.before.reduce((a,b)=>a+b,0)/5; const pa = p.after.reduce((a,b)=>a+b,0)/5; return s + (pa-pb); }, 0) / n).toFixed(1);
+  html += '<div class="stat-card"><div class="stat-value" style="color:#84c44c">+' + avgGain + '</div><div class="stat-label">Avg Individual Growth</div></div>';
+  html += '</div>';
+
+  // Driver breakdown
+  html += '<div class="section-title">Driver Breakdown (Group Average)</div>';
+  html += '<div class="drivers-grid">';
+  drivers.forEach((d, i) => {
+    const b = avgBefore[i];
+    const a = avgAfter[i];
+    const change = a - b;
+    html += '<div class="driver-card">';
+    html += '<h4>' + d + '</h4>';
+    html += '<div class="driver-bar-wrap"><div class="driver-bar-label"><span>Before</span><span>' + b.toFixed(1) + ' / 10</span></div><div class="driver-bar"><div class="driver-bar-fill before" style="width:' + (b * 10) + '%">' + b.toFixed(1) + '</div></div></div>';
+    html += '<div class="driver-bar-wrap"><div class="driver-bar-label"><span>After</span><span>' + a.toFixed(1) + ' / 10</span></div><div class="driver-bar"><div class="driver-bar-fill after" style="width:' + (a * 10) + '%">' + a.toFixed(1) + '</div></div></div>';
+    html += '<div class="driver-change">+' + change.toFixed(1) + '</div>';
+    html += '</div>';
+  });
+  // Add overall driver card
+  html += '<div class="driver-card" style="border-color:#ffc70844">';
+  html += '<h4 style="color:#ffc708">Overall Average</h4>';
+  html += '<div class="driver-bar-wrap"><div class="driver-bar-label"><span>Before</span><span>' + overallBefore.toFixed(1) + ' / 10</span></div><div class="driver-bar"><div class="driver-bar-fill before" style="width:' + (overallBefore * 10) + '%">' + overallBefore.toFixed(1) + '</div></div></div>';
+  html += '<div class="driver-bar-wrap"><div class="driver-bar-label"><span>After</span><span>' + overallAfter.toFixed(1) + ' / 10</span></div><div class="driver-bar"><div class="driver-bar-fill after" style="width:' + (overallAfter * 10) + '%">' + overallAfter.toFixed(1) + '</div></div></div>';
+  html += '<div class="driver-change">+' + overallChange.toFixed(1) + '</div>';
+  html += '</div>';
+  html += '</div>';
+
+  // Individual Participants Table
+  html += '<div class="section-title">Individual Results</div>';
+  html += '<div style="overflow-x:auto"><table class="participant-table"><thead><tr><th>Name</th><th>Position</th><th>Organisation</th>';
+  html += '<th>Before</th><th>After</th><th>Change</th></tr></thead><tbody>';
+  cls.participants.forEach(p => {
+    const pb = (p.before.reduce((a,b)=>a+b,0)/5).toFixed(1);
+    const pa = (p.after.reduce((a,b)=>a+b,0)/5).toFixed(1);
+    const pc = (pa - pb).toFixed(1);
+    html += '<tr><td>' + p.name + '</td><td>' + p.position + '</td><td>' + p.org + '</td>';
+    html += '<td><span class="score-badge before">' + pb + '</span></td>';
+    html += '<td><span class="score-badge after">' + pa + '</span></td>';
+    html += '<td><span class="score-badge change">+' + pc + '</span></td></tr>';
+  });
+  html += '</tbody></table></div>';
+
+  // Comments
+  html += '<div class="section-title">Participant Comments</div>';
+  html += '<div class="comments-section">';
+
+  html += '<div class="comment-group"><h4>What has been a major benefit of this course?</h4>';
+  cls.participants.forEach(p => {
+    if (p.q2) html += '<div class="comment-item"><div class="ci-name">' + p.name + ' — ' + p.position + '</div>' + p.q2 + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="comment-group"><h4>What\'s one action you intend to take?</h4>';
+  cls.participants.forEach(p => {
+    if (p.q3) html += '<div class="comment-item"><div class="ci-name">' + p.name + ' — ' + p.position + '</div>' + p.q3 + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="comment-group"><h4>How can your manager support your development?</h4>';
+  cls.participants.forEach(p => {
+    if (p.q4) html += '<div class="comment-item"><div class="ci-name">' + p.name + ' — ' + p.position + '</div>' + p.q4 + '</div>';
+  });
+  html += '</div></div>';
+
+  // Actions
+  html += '<div style="display:flex;gap:10px;margin-top:32px">';
+  html += '<button class="btn btn-primary" onclick="showAddParticipantModal()">+ Add Participant</button>';
+  html += '<button class="btn btn-secondary" onclick="printReport()">Print Report</button>';
+  html += '<button class="btn btn-danger btn-sm" onclick="deleteClass(\'' + cls.id + '\')">Delete Class</button>';
+  html += '</div>';
+
+  main.innerHTML = html;
+}
+
+// ===== MODALS =====
+function showAddClassModal() {
+  document.getElementById('modal-class').classList.add('show');
+  document.getElementById('fc-company').focus();
+}
+
+function showAddParticipantModal() {
+  const cls = data.classes.find(c => c.id === activeClassId);
+  if (!cls) return;
+  const drivers = PROGRAMME_DRIVERS[cls.programme];
+  let html = '<h4>Scores (1-10)</h4>';
+  html += '<div class="driver-input-row"><span></span><span style="font-size:11px;color:#888;text-align:center">Before</span><span style="font-size:11px;color:#888;text-align:center">After</span></div>';
+  drivers.forEach((d, i) => {
+    html += '<div class="driver-input-row"><span>' + d + '</span><input type="number" min="1" max="10" step="0.5" id="fp-before-' + i + '" placeholder="-"><input type="number" min="1" max="10" step="0.5" id="fp-after-' + i + '" placeholder="-"></div>';
+  });
+  document.getElementById('driver-inputs').innerHTML = html;
+  document.getElementById('modal-participant').classList.add('show');
+  document.getElementById('fp-name').focus();
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
+// ===== ADD CLASS =====
+function addClass() {
+  const company = document.getElementById('fc-company').value.trim();
+  const programme = document.getElementById('fc-programme').value;
+  const date = document.getElementById('fc-date').value;
+  const trainer = document.getElementById('fc-trainer').value.trim();
+  if (!company) { alert('Enter a company name'); return; }
+  const id = company.toLowerCase().replace(/\s+/g,'-') + '-' + programme.toLowerCase() + '-' + Date.now();
+  data.classes.push({ id, company, programme, date, trainer, participants: [] });
+  saveData();
+  activeClassId = id;
+  renderSidebar();
+  renderReport(data.classes.find(c => c.id === id));
+  closeModal('modal-class');
+  document.getElementById('fc-company').value = '';
+  document.getElementById('fc-date').value = '';
+  document.getElementById('fc-trainer').value = '';
+}
+
+// ===== ADD PARTICIPANT =====
+function addParticipant() {
+  const cls = data.classes.find(c => c.id === activeClassId);
+  if (!cls) return;
+  const name = document.getElementById('fp-name').value.trim();
+  if (!name) { alert('Enter a name'); return; }
+  const drivers = PROGRAMME_DRIVERS[cls.programme];
+  const before = drivers.map((_, i) => parseFloat(document.getElementById('fp-before-' + i).value) || 0);
+  const after = drivers.map((_, i) => parseFloat(document.getElementById('fp-after-' + i).value) || 0);
+  cls.participants.push({
+    name,
+    position: document.getElementById('fp-position').value.trim(),
+    org: document.getElementById('fp-org').value.trim(),
+    email: document.getElementById('fp-email').value.trim(),
+    before, after,
+    q2: document.getElementById('fp-q2').value.trim(),
+    q3: document.getElementById('fp-q3').value.trim(),
+    q4: document.getElementById('fp-q4').value.trim()
+  });
+  saveData();
+  renderSidebar();
+  renderReport(cls);
+  closeModal('modal-participant');
+  ['fp-name','fp-position','fp-org','fp-email','fp-q2','fp-q3','fp-q4'].forEach(id => document.getElementById(id).value = '');
+}
+
+// ===== DELETE CLASS =====
+function deleteClass(id) {
+  if (!confirm('Delete this class and all participant data?')) return;
+  data.classes = data.classes.filter(c => c.id !== id);
+  saveData();
+  activeClassId = null;
+  renderSidebar();
+  document.getElementById('main-content').innerHTML = '<div class="empty-state"><div class="es-icon">&#128202;</div><p>Select a class from the sidebar to view the breakthrough report</p></div>';
+}
+
+// ===== PRINT =====
+function printReport() {
+  window.print();
+}
+
+// ===== INIT =====
+renderSidebar();
+
+// Auto-select first class
+if (data.classes.length > 0 && !activeClassId) {
+  activeClassId = data.classes[0].id;
+  renderSidebar();
+  renderReport(data.classes[0]);
+}
+</script>
+
+</body>
+</html>
