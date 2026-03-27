@@ -172,6 +172,7 @@
           <option value="HIP">High Impact Presentations</option>
           <option value="WRS">Winning with Relationship Selling</option>
           <option value="WGYH">What Got You Here Won't Get You There</option>
+          <option value="ECHR">Effective Communications & Human Relations (8-Week)</option>
         </select>
       </div>
     </div>
@@ -249,7 +250,8 @@ const PROGRAMME_DRIVERS = {
   LTM: ['Self Direction', 'People Skills', 'Process Skills', 'Communication', 'Accountability'],
   HIP: ['Organising Professional Presentations', 'Creating Positive Impressions', 'Becoming More Natural and Relaxed', 'Communicating Ideas with Clarity and Force', 'Delivering Presentations that Sell Ideas'],
   WRS: ['Relationship-Oriented Sales Strategies', 'Gain Access and Establish Trust', 'Construct Collaborative Solutions', 'Eliminate Objections', 'Maintain Customer Relationships'],
-  WGYH: ['Adjusting to Change', 'Changing Habits', 'Giving & Receiving Feedback/Feedforward', 'Personal Energy & Enthusiasm', 'Accountability & Influence as a Leader']
+  WGYH: ['Adjusting to Change', 'Changing Habits', 'Giving & Receiving Feedback/Feedforward', 'Personal Energy & Enthusiasm', 'Accountability & Influence as a Leader'],
+  ECHR: ['Confidence', 'Communication', 'People Skills', 'Leadership Skills', 'Reduce Stress and Worry']
 };
 
 const PROGRAMME_NAMES = {
@@ -258,7 +260,8 @@ const PROGRAMME_NAMES = {
   LTM: 'Leadership Training for Managers',
   HIP: 'High Impact Presentations',
   WRS: 'Winning with Relationship Selling',
-  WGYH: "What Got You Here Won't Get You There"
+  WGYH: "What Got You Here Won't Get You There",
+  ECHR: 'Effective Communications & Human Relations (8-Week)'
 };
 
 // ===== DATA STORAGE =====
@@ -800,6 +803,165 @@ function loadPublicData() {
         { name:'Scott Allison', position:'Cosmetic Physician', org:'Ascension Cosmetic Medicine', email:'', before:[8,8,8,8,8], after:[9,9,9,9,9], q2:'Becoming a better leader. Inspiring my staff.', q3:'Create a positive culture. Foster leadership qualities.', q4:'' },
         { name:'Kylie Kirby', position:'Operations Manager', org:'Ascension Cosmetic Medicine', email:'', before:[9,8,7,7,7], after:[10,9,9,9,9], q2:'Upskilling, growing and developing skill set.', q3:'Confident and competent in my role.', q4:'' },
         { name:'Ian Maddocks', position:'Sales Director Asia Pacific', org:'EJ', email:'', before:[6,7,6,6,7], after:[8,9,8,8,8], q2:'', q3:'', q4:'' }
+      ]
+    }
+    ,
+    {
+      id: 'public-22dccqld01', company: '2022 Public DCC — 22QLDDCC01', programme: 'DCC', date: '2022', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Jamie Clark', position:'', org:'', email:'', before:[6,6,5,6,4], after:[8,8,7,8,7], q2:'', q3:'', q4:'' },
+        { name:'Anthony', position:'', org:'', email:'', before:[6,5,7,5,7], after:[7,8,8,7,8], q2:'', q3:'', q4:'' },
+        { name:'Fabiano Gondim', position:'', org:'', email:'', before:[7,6,7,6,5], after:[9,8,8,8,8], q2:'A better comprehension about leadership, respect, confidence, trust and put your fears away.', q3:'Express myself to others', q4:'' },
+        { name:'Jason Bibby', position:'', org:'Suns Financial', email:'', before:[9,8,8,7.5,6], after:[9.5,9,9,8.5,8], q2:'Understanding of the areas I can improve on regarding communication, leadership, and stress management', q3:'', q4:'' },
+        { name:'Josie Machell', position:'', org:'', email:'', before:[7,8,9,7,5], after:[7,8,9,9,5], q2:'I enjoyed learning from Anne-Marie. She is very engaging and clearly passionate.', q3:'', q4:'' },
+        { name:'Suzanne Gogolin', position:'', org:'', email:'', before:[6,6,6,5,6], after:[8,7,7,6,8], q2:'Change in attitude, take action', q3:'Give genuine gratitude', q4:'' },
+        { name:'Craig Stuart', position:'', org:'Crisp Power & Control', email:'', before:[3,3,3,6,8], after:[6,5,5,7,9], q2:'Confidence. Social tools.', q3:'Public speaking', q4:'' },
+        { name:'Scott Niven', position:'', org:'', email:'', before:[7,7,7,7,7], after:[8,9,8,8,8.5], q2:'I gained much more confidence and great tools for leading a team.', q3:'The most challenging thing was talking on the spot in front of a group', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22dccqld02', company: '2022 Public DCC — 22QLDDCC02', programme: 'DCC', date: '2022', trainer: '', type: 'public',
+      participants: [
+        { name:'Ed Hillmann', position:'', org:'Caterpillar', email:'', before:[5,5,5,6,6], after:[7,7,7,8,8], q2:'Easy strategies for approaching different leadership scenarios', q3:'Recalling the peg words/actions', q4:'' },
+        { name:'Daniel Spencer', position:'', org:'Spencer Civil', email:'', before:[7,5,5,8,5], after:[8,7,8,8,8], q2:'', q3:'', q4:'' },
+        { name:'Susan Lee', position:'', org:'', email:'', before:[4,5,6,5,5], after:[7,8,8,7,8], q2:'Learning ways to communicate better to get a positive outcome.', q3:'Talking about myself.', q4:'' },
+        { name:'Rakesh Patel', position:'', org:'Airwork Holdings', email:'', before:[6,6,5,6,7], after:[9,8,8,7,9], q2:'I have recognised I possess another ability to be more free with people.', q3:'To remember the 1-20 principles by acronyms.', q4:'' },
+        { name:'John Harris', position:'', org:'Harro Group', email:'', before:[4,5.5,6,8,7], after:[7.5,8.5,8,8,8.5], q2:'Self-confidence and a stronger understanding of how my communication is interpreted.', q3:'Putting myself out there.', q4:'' },
+        { name:'Brett Hensler', position:'', org:'Bundaberg Port Marina', email:'', before:[5,4,4,6,6], after:[9,9,9,10,10], q2:'The art of starting conversation', q3:'Getting yourself out there', q4:'' },
+        { name:'Jason Condely', position:'', org:'', email:'', before:[6,7,8,6,5], after:[9,9,10,9,8], q2:'Skills in how to be more energetic and how to better present myself.', q3:'Opening up when it comes to dramatising my thoughts or ideas.', q4:'' },
+        { name:'Callum Campbell', position:'', org:'', email:'', before:[7,5,6,6,6], after:[8,7,8,8,8], q2:'Tools to influence outcomes as a leader', q3:'A lot of content to digest in a rather fast manner.', q4:'' },
+        { name:'Mayank Patel', position:'', org:'Fugen Masonry', email:'', before:[5,5,7,5,7], after:[8,9,9,9,9], q2:'More confidence, less worries, make more clear, concise communication.', q3:'', q4:'' },
+        { name:'Graeme Mathrick', position:'', org:'Brisbane Refinish', email:'', before:[5,4,5,5,4], after:[8,9,8,8,8], q2:'Interaction between people', q3:'Nothing really', q4:'' },
+        { name:'Robby Mounfield', position:'', org:'Brisbane Refinish Supplies', email:'', before:[4,3,4,3.5,3], after:[8,9,8,8,9], q2:'Ability to voice things in a better manner. Confidence in myself — this was a huge one for me.', q3:'At the start, possibly working around the steps.', q4:'' },
+        { name:'Reece Topping', position:'', org:'SRT Projects', email:'', before:[4,5,5,6,5], after:[7,8,8,8,9], q2:'Clear strategies to assist me in my leadership journey.', q3:'Found it challenging to let go on first day.', q4:'' },
+        { name:'Leighton', position:'', org:'Northside', email:'', before:[7,7,8,6,5], after:[9,10,9,9,9], q2:'', q3:'', q4:'' },
+        { name:'Travis Dukes', position:'', org:'', email:'', before:[7,6,7,7,8], after:[8,8,8,8,6], q2:'', q3:'', q4:'' },
+        { name:'Steve Hammond', position:'', org:'', email:'', before:[7,8,6,7,5], after:[9,9,8,8,8], q2:'', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22dccqld03', company: '2022 Public DCC — 22QLDDCC03', programme: 'DCC', date: '2022', trainer: 'William Farmer', type: 'public',
+      participants: [
+        { name:'Josh Lawson', position:'', org:'Silk Laser', email:'', before:[5,3,7,5,4], after:[8,5,8,6,6], q2:'', q3:'', q4:'' },
+        { name:'Matt Compton', position:'', org:'', email:'', before:[6,5,6,7,5], after:[7,7,6,8,7], q2:'', q3:'', q4:'' },
+        { name:'Aidan Scott', position:'', org:'', email:'', before:[7,4,6,6,7], after:[7,6,7,8,7], q2:'', q3:'', q4:'' },
+        { name:'Steve Copeland', position:'', org:'', email:'', before:[7,7,7,7,5], after:[8.5,7,7,7,7], q2:'', q3:'', q4:'' },
+        { name:'Nick Floyd', position:'', org:'DMA Engineers', email:'', before:[5,6,4,5,5], after:[7,8,8,7,8], q2:'I\'ve gained a wealth of knowledge to how to act/behave in times of conflict.', q3:'Public speaking. Being more comfortable when uncomfortable.', q4:'' },
+        { name:'Dhimendra Singh', position:'', org:'DMA Engineers', email:'', before:[7,7,6,7,8], after:[9,9,8,9,9], q2:'A very useful set of tools to apply in daily personal & professional life.', q3:'The more extroverted exercises. However, I do see their payoff.', q4:'' },
+        { name:'Ibrahim Manasfi', position:'', org:'DMA Engineers', email:'', before:[7,7,6,7,3], after:[10,9,9,8,8], q2:'How to be friendlier. Self expression. Disagreeing in agreeable way.', q3:'', q4:'' },
+        { name:'Matthew Canavan', position:'', org:'North Harbour', email:'', before:[4,5,5,6,5], after:[7,7,7,7,6], q2:'More confidence', q3:'Talking in front of people', q4:'' },
+        { name:'Michelle Moramoro', position:'', org:'', email:'', before:[5,4,4,4,5], after:[7,7,8,7,8], q2:'Opening up to people, building people skills. Building enthusiasm through how to deliver.', q3:'Presenting in front of a crowd I don\'t know too well.', q4:'' },
+        { name:'Sam Jones', position:'', org:'', email:'', before:[3,2,2,2,2], after:[9,8,9,9,9], q2:'Self confidence & public speaking.', q3:'From where I have come it was all a challenge and I am thankful for where I have come.', q4:'' },
+        { name:'Jennifer Speer', position:'', org:'DMA Engineers', email:'', before:[2,5,5,3,2], after:[8,7,7,7,8], q2:'The ability to approach intimidating situations more confidently. It\'s ok to be vulnerable.', q3:'Coming out of my shell and voicing my own opinion.', q4:'' },
+        { name:'Bradley Krueger', position:'', org:'DMA Engineers', email:'', before:[3,5,4,5,7], after:[6,8,7,7,8], q2:'Confidence to not worry what others think.', q3:'Remembering the pictures and not saying But/However.', q4:'' },
+        { name:'Mehak Khanna', position:'', org:'', email:'', before:[7,8,7,7,6], after:[8,9,8,8,8], q2:'How to build genuine connection with people. How to handle stress. Leaders are great story tellers.', q3:'It brings you out of your comfort zone but that is good.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22dccqld04', company: '2022 Public DCC — 22QLDDCC04', programme: 'DCC', date: 'November 2022', trainer: 'William Farmer', type: 'public',
+      participants: [
+        { name:'William Hansen', position:'', org:'', email:'', before:[4,6,4,3,5], after:[8,9,8,8,8], q2:'To develop my interpersonal skills, confidence and public speaking abilities.', q3:'This training really brought me out of my comfort zone.', q4:'' },
+        { name:'Andrew Bik', position:'Internal Sales', org:'Vetus-Maxwell', email:'', before:[4,5,4,5,5], after:[9,10,10,10,10], q2:'I was able to open up and come out of my shell. I back myself and have a sense of worth.', q3:'I will enable more critical thinking.', q4:'' },
+        { name:'Catalina Pena Bermudez', position:'', org:'DMA Engineers', email:'', before:[6,4,6,6,9], after:[9,9,9,8,9], q2:'Excellent tools to communicate my ideas and make others feel good.', q3:'Having difficult conversations and remembering the tools.', q4:'' },
+        { name:'Lachlan Bethune', position:'Sales', org:'Centenary Landscaping Supplies', email:'', before:[6,7,4,6,2], after:[8,10,9,7,8], q2:'The more open/enthusiastic version will help you stand out, be remembered and make friends.', q3:'Be happier at work.', q4:'' },
+        { name:'Scott Platt', position:'', org:'Vetus-Maxwell', email:'', before:[6,6,8,6,9], after:[8,8,8,8,9], q2:'To deal with coworkers more. To step up with my new skills.', q3:'', q4:'' },
+        { name:'Brenton Wight', position:'Director / Owner', org:'Solomons Flooring', email:'', before:[7,8,7,7,7], after:[9,9,9,9,9], q2:'Self awareness — having flashes of the way I currently operate and how I can alter that to empower others.', q3:'Delegation and sharing of responsibility throughout the team.', q4:'' },
+        { name:'Tom Hulcombe', position:'Sales', org:'Centenary Landscaping Supplies', email:'', before:[6,5,6,7,7], after:[8.5,9,8.5,9,10], q2:'Learning that most obstacles are internal rather than external. Learned to love myself.', q3:'Gaining the tools to manage stress, conflict and gaining the confidence to take risks.', q4:'' },
+        { name:'Lanneo Nagel', position:'Mechanical Engineer', org:'DMA Engineers', email:'', before:[8,8,5,6,7], after:[10,9,9,9,10], q2:'Gave me tools that I can use in almost everyday life. People aspire to be in positive environments.', q3:'I am more confident and can communicate better.', q4:'' },
+        { name:'Joshua Lang', position:'Digital Assets Manager', org:'Ainslie', email:'', before:[8,7,5,4,4], after:[9,8,8,8,9], q2:'As a leader it\'s important for me to inspire my team. My confidence in communication is much better.', q3:'Being able to lead a team which is happier and higher performing.', q4:'' },
+        { name:'Gordon Chong', position:'Sales Consultant', org:'Ainslie', email:'', before:[7,7,5,7,5], after:[9,10,10,10,9], q2:'Communicate better with team, influence others with more confidence.', q3:'Better manager of people or tasks. More recurring sales.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22dccqld05', company: '2022 Public DCC — 22QLDDCC05', programme: 'DCC', date: 'November 2022', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Nicholas Coote', position:'Software Delivery Manager', org:'Caterpillar', email:'', before:[6,5,6,5,8], after:[8,8,8,7,8], q2:'Being real in my leadership style.', q3:'Cultivating culture and influencing performance and satisfaction.', q4:'' },
+        { name:'Mark Camilleri', position:'Workers Comp & Safety Compliance', org:'Costa Group', email:'', before:[8,6,6,6,7], after:[9,8,8,8,9], q2:'Being able to better myself to be my best person I can be.', q3:'A more positive team environment.', q4:'' },
+        { name:'Matthew Fuller-Mackail', position:'', org:'Wiley & Co', email:'', before:[5,5,5,5,7], after:[8,9,9,8,10], q2:'Learning to listen. Letting things go.', q3:'', q4:'' },
+        { name:'Katrina Tomkins', position:'Project Manager', org:'Paynters', email:'', before:[6.5,6.5,5,5.5,6.5], after:[9,9,9,8,9], q2:'', q3:'Better outcomes for projects. Inspiring the team.', q4:'' },
+        { name:'Paul Goldsack', position:'Project Manager', org:'Paynters', email:'', before:[6,5,5,6,6], after:[9,9,9,9,9], q2:'Increasing confidence. Better leadership skills.', q3:'Better performance. Better job satisfaction.', q4:'' },
+        { name:'Mitch Kruk', position:'Project Manager', org:'Paynters', email:'', before:[7,8,5.5,6,5.5], after:[8,9,8,8,8], q2:'Develop/improve communication style. Control body language better. Deal with stress better.', q3:'Better leadership/communication in role.', q4:'' },
+        { name:'Daniel Burns', position:'Construction Manager', org:'Paynters', email:'', before:[7,7,6,6,7], after:[8,9,8,8,8], q2:'Gaining confidence in own ability. Communicating clearly and effectively.', q3:'Being able to lead a team effectively.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22dccscdcc01', company: '2022 Public DCC — Sunshine Coast 1', programme: 'DCC', date: '2022', trainer: '', type: 'public',
+      participants: [
+        { name:'Joseph Sciberras', position:'', org:'', email:'', before:[3,3,6,5,4], after:[8,8,9,8,9], q2:'A great trust for myself in belief and confidence. Learnt to listen respectfully.', q3:'Everything was so much fun', q4:'' },
+        { name:'Cherie Store-Watson', position:'', org:'', email:'', before:[6,8,8,8,7], after:[8,8,8,8,9], q2:'It is okay to jump in and not always be so reserved.', q3:'Moving out of my comfort zone.', q4:'' },
+        { name:'Carey Webber', position:'', org:'', email:'', before:[7,8,8,8,6], after:[9,9,9.5,9,8], q2:'To back myself — I have the skills, knowledge and life experience.', q3:'Going deep within myself — to stop living around the edges.', q4:'' },
+        { name:'Drew Leishman', position:'', org:'IOR', email:'', before:[6,5,6,7,4], after:[8,8,8,8,6], q2:'To be present, show up genuinely. Learn always, love and be loved.', q3:'Moving outside comfort zone, body language.', q4:'' },
+        { name:'Jess Mercer', position:'', org:'', email:'', before:[4,6,7,4,5], after:[7,7,9,7,8], q2:'Stepping out of my comfort zone, managing situations more effectively.', q3:'Public speaking.', q4:'' },
+        { name:'Rhianon Taylor', position:'', org:'', email:'', before:[6,7,7,7.5,6], after:[8,9,9,8.5,8.5], q2:'I have learnt so much about myself & leadership style.', q3:'', q4:'' },
+        { name:'Taylor Kinsela', position:'', org:'', email:'', before:[3,6,7,6,4], after:[9,9,8,9,8], q2:'Gained the confidence to speak up, connect with others on a deeper level.', q3:'Going out of my comfort zone.', q4:'' },
+        { name:'Donna Pressler', position:'', org:'', email:'', before:[4,4,3,4,9], after:[9,10,9,8,8], q2:'Appreciation for being a better person. Have the ability & power through the principles.', q3:'Opening up & public speaking.', q4:'' },
+        { name:'Rohan Clark', position:'', org:'', email:'', before:[6,8,9,7,6], after:[7,10,10,8,7], q2:'The ability to analyse how I talk and listen to others.', q3:'Public speaking — I found on day 2 I had a really good time breaking down barriers.', q4:'' },
+        { name:'Eddy Gobby', position:'', org:'', email:'', before:[10,10,8,8,8], after:[10,10,8,9,8], q2:'People can improve with coaching', q3:'Not challenged, reminded yes', q4:'' },
+        { name:'Michael Soliman', position:'', org:'Key Engineering', email:'', before:[7,5,5,5,7], after:[10,9,9,8,10], q2:'How to deal with different situations to solve them. Good communication and self confidence.', q3:'', q4:'' },
+        { name:'Fabio Ribeiro', position:'', org:'', email:'', before:[6,5,5,6,6], after:[9,8,9,8,9], q2:'Structured approach when dealing with people and public speaking.', q3:'Getting out of my fish tank.', q4:'' },
+        { name:'Johnny Mc Conn', position:'', org:'', email:'', before:[5,5,5,6,5], after:[7,8,8,8,7], q2:'Confidence to step out of my comfort zone, create and build relationships.', q3:'The steps to achieve the above.', q4:'' },
+        { name:'Chris Hallett', position:'', org:'', email:'', before:[6,6,5,6,6], after:[8,8,8,8,8], q2:'Confidence to go outside the box and communicate. Learn to reduce stress.', q3:'Has been a challenge to break outside of the box.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22wadcc01', company: '2022 Public DCC — Western Australia', programme: 'DCC', date: '2022', trainer: '', type: 'public',
+      participants: [
+        { name:'David Selby-Keenihan', position:'', org:'', email:'', before:[5,6,6,5,5], after:[7,7,7,7,7.5], q2:'A lot of our constraints are to do with ourselves.', q3:'Breaking out of character', q4:'' },
+        { name:'Marciano Felisilda', position:'', org:'', email:'', before:[4,3,4,3,5], after:[7,6,6,7,7], q2:'Gained knowledge how giving the team in a positive way.', q3:'Every topic was challenging for me.', q4:'' },
+        { name:'David Scheffer', position:'', org:'Worthy Group', email:'', before:[7,6,6,6,2], after:[8,8,8,8,8], q2:'Tools to lead people by interacting and engaging with them.', q3:'Stepping outside the comfort zone.', q4:'' },
+        { name:'Cory Sumoro', position:'', org:'', email:'', before:[7,7,7,6,6], after:[9,8,9,8,8], q2:'Be more confident in dealing with people from different background. Learn how to reduce stress.', q3:'The pace as there are a lot of information', q4:'' },
+        { name:'Matt Visnojily', position:'', org:'', email:'', before:[7,7,8,7,6], after:[8,9,9,9,8], q2:'It\'s more complicated than just communication. But that\'s what it boils down to for me.', q3:'The acting part and thinking about communicating in different situations.', q4:'' },
+        { name:'Hayley Rigney', position:'', org:'', email:'', before:[6,5,6,4,4], after:[8,8.5,7,7,8], q2:'Structures to use in situations where I don\'t know what to say. Confidence to step out.', q3:'Getting up in front of everyone & acting things out.', q4:'' },
+        { name:'Chad Kelly', position:'', org:'', email:'', before:[3,4,4,5,4], after:[9,8,8,8,8], q2:'I have gained more confidence & people skills.', q3:'Coming out of my comfort zone.', q4:'' },
+        { name:'Joanne Ambrose', position:'', org:'', email:'', before:[3,3,4,2,2], after:[5,8,7,4,6], q2:'To be the best I can be & to see things from others\' point of view.', q3:'Being outside my comfort zone.', q4:'' },
+        { name:'Matthew Fisher', position:'', org:'', email:'', before:[7,7,8,7,5], after:[8,8,8,8,7], q2:'The ability to connect with other individuals. Tools to agree with something you don\'t.', q3:'Being a bit more out there.', q4:'' },
+        { name:'Gary Cimagala', position:'', org:'', email:'', before:[5,6,6,6,5], after:[8,8,8,8,9], q2:'How to communicate properly, do not condemn and criticise. Quick decisions.', q3:'The way I communicate in front maybe of my bad English.', q4:'' },
+        { name:'Megan Trezona', position:'', org:'', email:'', before:[4,4,5,5,4], after:[7,7,7,7,6], q2:'Tools to build confidence & improve the areas listed above.', q3:'Being comfortable with having the attention of the room.', q4:'' },
+        { name:'Paola Avendano', position:'', org:'Key Engineering', email:'', before:[7,6,8,7,8], after:[8,8,9,8,9], q2:'Confidence on myself. Recognise the importance of others. Not what you say, is how to say it.', q3:'Being outside of the comfort zone, trust in others.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22echrqld01', company: '2022 Public ECHR — 22QLDECHR01', programme: 'ECHR', date: '2022', trainer: 'Tanya Konigsberger', type: 'public',
+      participants: [
+        { name:'Ray Matchett', position:'', org:'CC Investment Group', email:'', before:[8,7,8,7,5], after:[8,8,8,8,7], q2:'Reminder that there are many principles we can use everyday.', q3:'Being moved out of comfort zone.', q4:'' },
+        { name:'Emma McFarlane-Smales', position:'', org:'CC Investment Group', email:'', before:[3,4,7,7,7], after:[5,6,8,8,8], q2:'Better communication/understanding. To stop and think before situations happen.', q3:'Having the confidence to stand up in front of a room full of people.', q4:'' },
+        { name:'Jesse Ryan', position:'', org:'CC Investment Group', email:'', before:[5,5,4,5,4], after:[8,8,9,9,7], q2:'The ability to utilise principles that I wouldn\'t normally use.', q3:'Leaving my comfort zone.', q4:'' },
+        { name:'Julie Snell', position:'', org:'CC Investment Group', email:'', before:[8,7,7,7,3], after:[9,9,8,8,6], q2:'The ability to listen and look at my actions in detail, growing and opening myself to change.', q3:'Pushing past fear of sharing and making myself vulnerable.', q4:'' },
+        { name:'Paul Harris', position:'', org:'Paul D Harris Chartered Accountants', email:'', before:[6,5,6,7,4], after:[8,9,8,8,7], q2:'Far more patience with people. Ability to see things from the other person\'s perspective.', q3:'Breaking free from old habits.', q4:'' },
+        { name:'Michael Saunders', position:'', org:'CC Investment Group', email:'', before:[7,7,6,5,5], after:[9,9,8,8,7.5], q2:'Better understanding of my own skills and how I can always improve.', q3:'Breaking out of my shell. Taking notice of where I needed improvement.', q4:'' },
+        { name:'Beau Leadbetter', position:'', org:'CC Investment Group', email:'', before:[7,7,7,7,5], after:[8,9,8,9,8], q2:'A great reminder of easy basics to being a successful leader.', q3:'Reminding myself to take the principles home.', q4:'' },
+        { name:'Krystal Lo', position:'', org:'PMI Queensland', email:'', before:[6,7,6,7,6], after:[8,8,9,10,7], q2:'Learning communication strategies. I\'ve become more aware of stress and learned how to pause better.', q3:'Implementing the principles in real life context.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22ltmqld02', company: '2022 Public LTM — 22QLDLTM02', programme: 'LTM', date: 'October 2022', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Kenneth Ashley Wang', position:'SOT Team Leader', org:'Gold Coast City Marina', email:'', before:[7,7,7,7,7], after:[9,9,9,9,10], q2:'Making me feel like a real leader.', q3:'Unleashing a potential I never knew I had.', q4:'' },
+        { name:'Sacha Millar', position:'General Manager / Owner', org:'WBP Group', email:'', before:[7,7,7,7,6], after:[8,8,8,6,8], q2:'', q3:'', q4:'' },
+        { name:'Nick Voorhoeve', position:'Dock Master', org:'Gold Coast City Marina', email:'', before:[6,6,4,6,4], after:[9,9,8,9,9], q2:'Working with other managers. The inspiration from AnnMarie. Building confidence.', q3:'Skills upgrade. Better understanding of staff.', q4:'' },
+        { name:'Joshua Reid', position:'Engineering Manager', org:'Mineral Technologies', email:'', before:[8,7,7,7,7], after:[9,8,8,8,8], q2:'Broader skills clarity.', q3:'People focus — Development.', q4:'' },
+        { name:'Stephanie Trance', position:'WHS, Property & Compliance Manager', org:'Gold Coast City Marina', email:'', before:[8,8,7,7,7], after:[9,10,9,10,10], q2:'Give me tools to be a better leader and help articulate areas where I am challenged.', q3:'Develop better processes.', q4:'' },
+        { name:'Guy Ranger', position:'Territory Manager QLD/PNG', org:'Safety Mate', email:'', before:[7,8,7,7,9], after:[9,9,8,9,9], q2:'Love going through the different processes of dealing with various scenarios. The skills learnt are invaluable.', q3:'It has made me more willing to speak up, take initiative and accountability.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22uylpqld02', company: '2022 Public UYLP — 22QLDUYLP02', programme: 'UYLP', date: 'September 2022', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Kenneth Ledger', position:'Director', org:'Savanna Energy', email:'', before:[9,6,9,7,6], after:[10,9,9,9,8], q2:'Opportunity to break from day-to-day and recommit to self improvement.', q3:'Better and higher quality engagements with people.', q4:'' },
+        { name:'Ken Xiao', position:'Pharmacist', org:'Priceline Pharmacy', email:'', before:[5,1,1,1,1], after:[10,10,10,10,10], q2:'Become a more understanding, engaging, passionate leader.', q3:'Only a great leader will allow the organisation to grow people.', q4:'' },
+        { name:'Robby Mounfield', position:'Sales Manager', org:'Brisbane Refinish Supplies', email:'', before:[6,7,8,6,8], after:[10,10,10,9,9], q2:'Focusing on factors not only relating to me but also those around me.', q3:'Team strength.', q4:'' },
+        { name:'Brett Hensler', position:'General Manager', org:'Bundaberg Port Marina', email:'', before:[8,8,7,6,7], after:[9,9,9,9,9], q2:'Skills to fulfil my vision.', q3:'Vision will increase revenue for the business.', q4:'' },
+        { name:'Harry Butler', position:'', org:'Dale Carnegie', email:'', before:[6,7,6,6,6], after:[10,10,9,9,9], q2:'', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-22wrsqld02', company: '2022 Public WRS — 22QLDWRS02', programme: 'WRS', date: 'September 2022', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Michael McGuinness', position:'Software Development Manager', org:'QTAC', email:'', before:[3,4,6,4,6], after:[7,8,8,9,8], q2:'Understanding sales process. Overcoming objections.', q3:'Ability to sell things that benefit my team to management.', q4:'' },
+        { name:'Reece Topping', position:'Director', org:'SRT Projects', email:'', before:[2,2,4,2,4], after:[8,8,8,8,8], q2:'Giving structure and techniques I can use.', q3:'Confidence to start the sales conversation.', q4:'' },
+        { name:'Dawn Lee', position:'Business Owner / Coach', org:'', email:'', before:[6,8,9,6,7], after:[10,10,10,10,10], q2:'Master sales techniques to eliminate objections.', q3:'', q4:'' },
+        { name:'Robert Arnold', position:'Internal Sales', org:'Bolt Masters', email:'', before:[6,7,5,6,7], after:[8,8,8,8,9], q2:'Building relationships and learning sales skills. Really helpful, thank you.', q3:'Building better relationships with customers.', q4:'' },
+        { name:'William Lukey', position:'Sales Representative', org:'Boltmasters', email:'', before:[5,5,6,4,6], after:[9,7,7,6,8], q2:'Confidence in closing sales, how to create the connection with new customers.', q3:'', q4:'' }
       ]
     }
   ];
