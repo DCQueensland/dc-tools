@@ -301,7 +301,25 @@ function loadSampleData() {
   saveData();
 }
 
+// Pre-load Swoosh LTM (In-House)
+function loadSwooshData() {
+  if (data.classes.find(c => c.id === 'swoosh-ltm-jun2023')) return;
+  data.classes.push({
+    id: 'swoosh-ltm-jun2023', company: 'Swoosh Finance', programme: 'LTM', date: '2023-06-07', trainer: 'Annemarie Sage Wood',
+    participants: [
+      { name:'Bradley Lewis', position:'Lending Manager', org:'Swoosh Finance', email:'', before:[7,7,6,6,7], after:[6,6,5,6,7], q2:'So much more aware of skills I do have but also need to do my job effectively, but also in life as well.', q3:'Skills learned by our leaders will translate to a shift in happier staff, better retention and achieving consistent results.', q4:'' },
+      { name:'Dorie McMahon', position:'Head of Operations — New Zealand', org:'Swoosh Finance', email:'', before:[8,7,7,7,9], after:[9,8,8.5,9,9], q2:'Learning new techniques to make the job more enjoyable.', q3:'Because we had 5 people on the course, I think we can take loads of ideas back to the company.', q4:'' },
+      { name:'Michelle Ottery', position:'Team Leader', org:'Swoosh', email:'', before:[4,3,4,4,5], after:[7,7,8,6,7], q2:'Communication', q3:'I can use the right tools to manage most situations now', q4:'' },
+      { name:'Harley Anderson', position:'Secured Retention Manager', org:'Swoosh Finance', email:'', before:[5,6,6,4,6], after:[9,9,8,9,9], q2:'Realising that I need to do more as a leader to grow personal + professional development with my teams.', q3:'They will have multiple staff in the office with a new way of thinking.', q4:'' },
+      { name:'Hannah Brereton', position:'Team Leader of Applications Support', org:'Swoosh Finance', email:'', before:[5,6,3,6,6], after:[7,7,5,7,7], q2:'Taught me how to communicate better and allow myself time to process', q3:'Allow people to learn how to communicate effectively and how to encourage people in the correct way', q4:'' },
+      { name:'Sabrina', position:'', org:'Swoosh Finance', email:'', before:[2,4,3,4,5], after:[6,7,4,7,7], q2:'Taking what I need if I was to move into a leadership role.', q3:'Having motivated team leaders', q4:'' }
+    ]
+  });
+  saveData();
+}
+
 loadSampleData();
+loadSwooshData();
 loadPublicData();
 
 // ===== TAB SWITCHING =====
@@ -650,6 +668,138 @@ function loadPublicData() {
         { name:'Peter Kleinig', position:'Manager', org:'GCWA', email:'', before:[6,6,6,6,6], after:[9,9,9,9,9], q2:'Delving more deeply into better management principles — loved exploring Absolutes / Desirables!', q3:'Delegating! Feed-forward discussions.', q4:'Listening & considering the innovation project.' },
         { name:'Kelly Marsh', position:'Chief Operations Officer', org:'Swoosh Finance', email:'', before:[7,7,9,7,9], after:[9,9,9,8,9], q2:'No issue is too big once broken down.', q3:'Start an innovation circle within the business.', q4:'Encourage / back up innovation and adapt change.' },
         { name:'Mark Dingley', position:'Manager', org:'RQYS', email:'', before:[6,5,6,8,8], after:[9,9,10,10,10], q2:'The course has given me structure to help with various aspects of leading my team.', q3:'The art of delegation.', q4:'She can support the decisions that I make, based on the training I have received.' }
+      ]
+    }
+    ,
+    {
+      id: 'public-23dccqld01', company: '2023 Public DCC — 23QLDDCC01', programme: 'DCC', date: '2023', trainer: '', type: 'public',
+      participants: [
+        { name:'Andy Tompkins', position:'', org:'IOR', email:'', before:[7,6,6,7,8], after:[9,8,8,9,9], q2:'Found confidence in myself I didn\'t think I had. Given me some structure and tools to be friendly and influence more.', q3:'Had to break out of my comfort zone initially but easier now.', q4:'' },
+        { name:'Shaun Morrissey', position:'', org:'', email:'', before:[5,6,7,6,7], after:[8,8,7,8,8], q2:'To start a conversation, be more confident, people skill.', q3:'Proper communication still needs work.', q4:'' },
+        { name:'Irfan Iswananda', position:'', org:'', email:'', before:[3,5,4,4,1], after:[9,8,8,7,7], q2:'Abilities and knowledge to cope with the responsibility of being a leader, self-confidence, approaching a stranger to talk.', q3:'Approaching strangers, leaving behind my anxieties.', q4:'' },
+        { name:'Gregory Nagel', position:'', org:'Colas', email:'', before:[6,3,3,3,5], after:[8,6,7,6,7], q2:'Learnt how to approach conversations that are not always positive and how to listen to others.', q3:'Being put into uncomfortable situations and having to deal with it.', q4:'' },
+        { name:'Annelies Long', position:'', org:'IOR', email:'', before:[5,6,8,7,5], after:[8,8,9,9,8], q2:'I have gained processes and insights into how I interact and lead people. It\'s been transformational.', q3:'Moving beyond my comfort zone.', q4:'' },
+        { name:'Jodie Dalglish', position:'', org:'', email:'', before:[5,5,5,6,5], after:[8,8,8,9,9], q2:'Confidence in my ability to communicate and have meaningful conversations.', q3:'The culture built from the beginning creates a safe space to face fears.', q4:'' },
+        { name:'Colin Quinn', position:'', org:'IOR', email:'', before:[6,6,5,6,5], after:[9,9,9,9,8], q2:'Reducing stress and worry. Leadership — I have really learned some theory around what I already do.', q3:'It\'s good to get out of my comfort zone again.', q4:'' },
+        { name:'Matt Rutherford', position:'', org:'', email:'', before:[5,4,3,4,6], after:[7,6,6,6,7], q2:'More confidence in how to speak, working ways to work with others.', q3:'Getting out of my shell, communicating my thoughts.', q4:'' },
+        { name:'Georgina Hansen', position:'', org:'', email:'', before:[3,6,7,2,5], after:[6,7,7,3,6], q2:'New skills in communication. Ability to stand in front of people and talk. Belief in myself has increased.', q3:'Finding and recalling interesting stories. Being concise.', q4:'' },
+        { name:'Ethan Robertson', position:'', org:'', email:'', before:[6,6,7,5,7], after:[10,10,10,7,8], q2:'I feel a lot more confident in front of new people, I\'ve been able to see a side of me that can open up.', q3:'Although I feel more confident, there\'s still the anxiety of looking stupid though I know I don\'t.', q4:'' },
+        { name:'Leeanne Pollard', position:'', org:'', email:'', before:[7,7,6,5,4], after:[9,9,9,7,9], q2:'Lots of strategies and ideas to make me a better human both at work and at home.', q3:'Keeping up with all the new strategies.', q4:'' },
+        { name:'Isabella Farmer', position:'', org:'', email:'', before:[5,5,7,4,8], after:[9,8,8,9,10], q2:'I can now ask people questions in a more genuine way, hold a conversation and not be afraid of using my humour!', q3:'I can now public speak without a scared thought at all. Amazing experience.', q4:'' },
+        { name:'Anna-Maria Rajic', position:'', org:'', email:'', before:[5,5,5.5,4,2], after:[7,7,8,6,5], q2:'Confidence in who I am and what I want. Everyone is nervous, you\'re not the only one.', q3:'Getting out of our comfort zone.', q4:'' },
+        { name:'Dawn Lee', position:'', org:'', email:'', before:[7,7,7,6,8], after:[9,9,10,9,9], q2:'More confidence in front of people, more confidence to present my ideas, be more vulnerable with people.', q3:'Breaking things down into bites, pushed out of comfort zone.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23dccqld02', company: '2023 Public DCC — 23QLDDCC02', programme: 'DCC', date: '2023', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'James Durand', position:'Project Manager', org:'IOR', email:'', before:[4,5,5,5,4], after:[8,9,9,9,9], q2:'Not to take things so seriously. Ask for help, don\'t take it on alone.', q3:'A change in my attitude and body language in the workplace.', q4:'' },
+        { name:'Ross Coleman', position:'General Manager Transport', org:'IOR', email:'', before:[6,7,7,7,4], after:[8,8,8,9,6], q2:'Three C\'s — Don\'t condemn, complain, criticise.', q3:'Stress management techniques.', q4:'' },
+        { name:'Craig Benadie', position:'Chief Commercial Officer', org:'IOR', email:'', before:[7,7,7,6,7], after:[8,8,8,8,8], q2:'Public speaking and people skills — confidence to be more impromptu.', q3:'Appreciation, No CCC, Make the other person comfortable. Listen.', q4:'' },
+        { name:'Reece Tippett', position:'Fleet Manager', org:'JR Stephens', email:'', before:[7,7,7,7,6], after:[8,8,8,8,8], q2:'Coming out of my comfort zone.', q3:'Rule number 1.', q4:'' },
+        { name:'Sam Cook', position:'Owner', org:'Samrod Services', email:'', before:[4,6,5,5,7], after:[7.5,8,8,8,9], q2:'The immense self-awareness required to grow.', q3:'All principles, especially 1-9. I complain too much.', q4:'' },
+        { name:'Adam White', position:'Allocator', org:'JR Stephens', email:'', before:[4,4,4,4,4], after:[9,8,8,8,8], q2:'Learning more about myself and gaining confidence.', q3:'Keep an open mind, not rush decision making.', q4:'' },
+        { name:'Nicholas Litster', position:'Manager', org:'Logistics North Queensland', email:'', before:[4,5,5,5,3], after:[10,10,10,10,10], q2:'My confidence in myself to trust my decisions and answers.', q3:'The principles 1-9 have already started to positively effect my life.', q4:'' },
+        { name:'Dean Johnson', position:'Manager', org:'Ulton', email:'', before:[5,5,6,6,4], after:[8,8,8,8,9], q2:'Self confidence from being made uncomfortable from role playing.', q3:'See things from other people\'s perspective. Communication skills.', q4:'' },
+        { name:'Jaco Swart', position:'', org:'FarmMark', email:'', before:[7,7,7,7,6], after:[8,7,8,8,6], q2:'Communication — understanding conflict better.', q3:'Listen better.', q4:'' },
+        { name:'Helder Oliveira', position:'Operations Manager', org:'Fugen / RWS', email:'', before:[6,5,6,6,6], after:[9,9,9,9,8], q2:'Confidence in and around unfamiliar groups and learning better communication tools.', q3:'Communication skills and people with arguments and managing.', q4:'' },
+        { name:'Liz Fenaughty', position:'Group Finance Manager', org:'IOR', email:'', before:[5,5,7,6,7], after:[8,9,8,7,10], q2:'Gaining the confidence to adapt to different situations, people and cultures.', q3:'The 3 C\'s.', q4:'' },
+        { name:'Tony Samut', position:'Head of Property', org:'IOR', email:'', before:[6,6,6,6,7], after:[9,9,10,9,9], q2:'Improved self-confidence when public speaking.', q3:'Look for more opportunities to engage in public speaking. Practice makes permanent.', q4:'' },
+        { name:'Will Johnston', position:'', org:'Ryno Insurance Brokers', email:'', before:[4,4,4,1,6], after:[7,6,7,6,8], q2:'This program really put me out of my comfort zone.', q3:'Demonstrate more confidence, communication and not sweat the small stuff.', q4:'' },
+        { name:'Mark Dingley', position:'Sailing Manager', org:'RQYS', email:'', before:[6,6,5,6,5], after:[9,8,8,9,8], q2:'Developed techniques to deal with day to day challenges.', q3:'Listen before speaking. Understand others\' perspective.', q4:'' },
+        { name:'Elvis Rajic', position:'Director', org:'DE Accountants', email:'', before:[7,5,5,5,6], after:[8,7,7,8,7], q2:'Public speaking that I am terrified of.', q3:'Reduce work chores by 5% immediately.', q4:'' },
+        { name:'Smiljana O\'Brien', position:'Director', org:'CPO Architects', email:'', before:[5,7,5,7,3], after:[8,9,8,8.5,8], q2:'Stepping out of my comfort zone and being ok with not caring about how other people see me.', q3:'Control what you can control and not worry about the rest.', q4:'' },
+        { name:'Michael McGuinness', position:'Software Development Manager', org:'QTAC', email:'', before:[8,7,7,7,5], after:[10,10,10,10,10], q2:'Getting insight into why the course is run and why I am choosing to become a trainer.', q3:'Let team talk more. Move away from computer when people are over my desk.', q4:'' },
+        { name:'Boris Manojlovic', position:'Senior Accountant', org:'DE Accountants', email:'', before:[5,5,6,6,5], after:[6,7,8,8,4], q2:'I believe that I have come out more confident in my abilities.', q3:'I will try and put on positive attitude to my team.', q4:'' },
+        { name:'Karen Davies', position:'Store Manager', org:'Cash Converters', email:'', before:[2,4,5,5,7], after:[8,8,8,8,8], q2:'It was me realising that I am the one who was holding me back. My confidence has soared.', q3:'Communication skills, active listening and motivating.', q4:'' },
+        { name:'Brooke Windbuchler', position:'Project Manager', org:'', email:'', before:[4,3,7,7,9], after:[7,6,9,9,9], q2:'The confidence to stand in front of people and not overthink.', q3:'1-9 and all principles.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23dccqld03', company: '2023 Public DCC — 23QLDDCC03', programme: 'DCC', date: '2023', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Allen Christensen', position:'', org:'ATC Engineers', email:'', before:[9,8,8,8,5], after:[9,9,8,9,7], q2:'Understanding the importance of Principles 1-9 and how they affect those around me.', q3:'Doing the extrovert activities — mainly before I start, but once in I am fine.', q4:'' },
+        { name:'Alicia Soszynski', position:'Membership Manager', org:'RQYS', email:'', before:[3,3,7,4,1], after:[7,7,8,7,8], q2:'Public speaking. I\'m absolutely terrified of it but I felt incredibly safe and supported.', q3:'All 30 principles for sure. I need to reconnect with my teams.', q4:'' },
+        { name:'Lauren Cavasin', position:'Depot Operations', org:'IOR', email:'', before:[5,5,7,8,5], after:[10,10,10,10,10], q2:'Confidence and people skills.', q3:'People skills.', q4:'' },
+        { name:'Manu Khoury', position:'Production Manager', org:'Riviana', email:'', before:[2,4,5,6,5], after:[8,7,9,8,8], q2:'Speaking in public has been my major fear. This course has helped me challenge myself.', q3:'Listen to my employee, be gentle and understand their point of view.', q4:'' },
+        { name:'Patrick Cran', position:'Technical Advisor', org:'Crane Industry Council of Australia', email:'', before:[4.5,4.5,4.5,4.5,3.5], after:[7.5,8.5,7.5,7,6], q2:'Believe in me, don\'t worry what others think. Breathe and listen to others.', q3:'Listening to others, and stopping thinking then talking.', q4:'' },
+        { name:'Hao Chen', position:'Research Director', org:'Caden Office Leasing', email:'', before:[5,6,7,6,7], after:[9,9,9,9,10], q2:'Techniques that allowed me to build my self-confidence, stepping out to a different environment.', q3:'All aspects — biggest would be the techniques to remember names.', q4:'' },
+        { name:'Glen Scott', position:'Marina Manager', org:'RQYS', email:'', before:[8,7,8,8,9], after:[9,8,9,9,9], q2:'Speaking with confidence to others. To listen to people before making decisions.', q3:'Meet with each staff for feedback on my relationship and how I can provide better management.', q4:'' },
+        { name:'Jasmyn McGuigan', position:'Store Manager', org:'Cash Converters', email:'', before:[2,4,4,4,3], after:[6.5,7,6,6,7], q2:'Confidence. The course has allowed me to be and feel more confident.', q3:'1-9 Principles. I can see a lot of areas where if those are applied there would be a lot of change.', q4:'' },
+        { name:'Bryce Aitken', position:'Plumber', org:'AC Plumbing', email:'', before:[6,6,6,6,6], after:[8,7,8,9,8], q2:'Having the confidence to talk in front of a large group. Learning ways to become a better and more approachable leader.', q3:'Take on the first 9 steps and apply them in every interaction.', q4:'' },
+        { name:'Phil Hishon', position:'Manager', org:'IRS', email:'', before:[4,4,5,4,2], after:[9,9,10,9,9], q2:'How to deal with staff and help them grow.', q3:'People skills. How to deal with team members and stress.', q4:'' },
+        { name:'Jake Williams', position:'Manager / Salesperson', org:'Releaf', email:'', before:[3,4,5,4,2], after:[9,9,10,10,10], q2:'I feel less afraid in public speaking. I have built a lot of confidence and have a huge drive to get out there.', q3:'Talk with confidence, give things a go even though you may fail, listen more.', q4:'' },
+        { name:'Clinton Blake', position:'Supervisor', org:'Bindaree Beef', email:'', before:[6,6,7,5,4], after:[8,9,9,8,7], q2:'Taking the time to ask questions, genuinely interested in other people.', q3:'Principles 1-9.', q4:'' },
+        { name:'Sam Bitossi', position:'Dangerous Goods Team Leader', org:'CASA', email:'', before:[6,6,8,6,3], after:[9,9,9,9,9], q2:'Learning how to build relationships and listen effectively. Help with managing stress was very beneficial.', q3:'I will not condemn, criticize and complain. I will listen more.', q4:'' },
+        { name:'Nathan Thomas', position:'Manager', org:'JR Stephens', email:'', before:[7,6,6,7,7], after:[9.5,9.5,9.5,9.5,9.5], q2:'Being more positive, better results from using the training tools.', q3:'The CCC and avoid conflict.', q4:'' },
+        { name:'Cristine Kajewski', position:'', org:'Ulton', email:'', before:[7,7,5,7,5], after:[9,9,9,9,9], q2:'Learn to address issues in the present. Do not dwell on the negative.', q3:'Ask my team how I can assist.', q4:'' },
+        { name:'David Dudley', position:'Manager', org:'Logistics North Queensland', email:'', before:[5,5,5,6,2], after:[10,10,10,10,10], q2:'Listening — having the ability to remain silent and allow others to talk. From this course I have learned how much you can gain from active listening.', q3:'All of the steps presented. I want to master them all.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23dccsc01', company: '2023 Public DCC — Sunshine Coast', programme: 'DCC', date: '2023', trainer: 'Dawn Lee & William Farmer', type: 'public',
+      participants: [
+        { name:'Lyn Gilny', position:'Gymnastics Coordinator', org:'', email:'', before:[3,5,5,5,4], after:[5,7,5,5,5], q2:'Reinforced the need for action to manage/make change happen.', q3:'Define my vision. Activate on a stepped action plan.', q4:'' },
+        { name:'Kartik Purohit', position:'Head of HSE', org:'IOR', email:'', before:[8,8.5,9,8,6], after:[8.5,9,9,9,8.5], q2:'9 Principles 1-9, Be a Leader 22-30, Principle 15, Principle 17', q3:'All of the above.', q4:'Excellent, insightful & meaningful 3 days' },
+        { name:'Jason Powell', position:'Director - Audit', org:'BDO', email:'', before:[7,7,6,7,6], after:[8,8,8,8,8], q2:'Understanding for influencing action.', q3:'Active listening. Take calculated risks & accept change.', q4:'Magic program — 100% engagement.' },
+        { name:'Andrea Pennisi', position:'', org:'Andreas Weddings', email:'', before:[7,5,7,5,5], after:[9,8,9,8,9], q2:'Self confidence to take risk. Be transparent with kindness. Listen more, talk less.', q3:'Outsource what I am not good at.', q4:'' },
+        { name:'Adam James', position:'Owner', org:'My Lifescool', email:'', before:[8,8,8,7,6], after:[9,9,9,8,8], q2:'That I am capable, that I must always step into my greatness.', q3:'Professional — be enthusiastic and back myself. Personal — listen and respond.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23sadcc01', company: '2023 Public DCC — South Australia', programme: 'DCC', date: '2023', trainer: 'Tanya', type: 'public',
+      participants: [
+        { name:'Jennie Wright', position:'Dr', org:'Bayside Family Medical', email:'', before:[7,8,7,7,7], after:[7,8,7,7,7], q2:'Good to have a structure for making a conversation with care.', q3:'More care — allow a dedicated opportunity/time to talk with staff members.', q4:'' },
+        { name:'Andrew Fairbairn', position:'', org:'Same Day Trades', email:'', before:[7,6,7,6,6], after:[9,9,9,8,8], q2:'My confidence to go into any situation is next level.', q3:'Listen without talking.', q4:'Tell Tanya is one in a million.' },
+        { name:'Matthew Croce', position:'', org:'Amadio Vineyards', email:'', before:[3,3,3,3,2], after:[7,6,7,6,9], q2:'To be able to get out of my comfort zone and talk to people with confidence.', q3:'Better communication with my team members. Show more appreciation.', q4:'' },
+        { name:'Sebastien Amadio', position:'', org:'Amadio Vineyards', email:'', before:[5,6,6,4,5], after:[9,8,9,7,8], q2:'My communication skills between my peers and ability to show the five legs we learned.', q3:'All the principles we learned.', q4:'' },
+        { name:'Greg McCauley', position:'', org:'Same Day Trades', email:'', before:[7,6,7,6,7], after:[9,9,9,9,10], q2:'Taking the 1-30 steps and making them front of mind.', q3:'Be a better active listener.', q4:'' },
+        { name:'Ben Ernst', position:'', org:'Optimatics', email:'', before:[8,8,7,8,7], after:[9,9,8,9,8], q2:'Applying simple rules to interpersonal interactions to build stronger working relationships.', q3:'Focus on how more positive relationships leads to better productivity.', q4:'' },
+        { name:'Evan Schultz', position:'Consultant', org:'Oak Solutions Group', email:'', before:[4,5,5,6,2], after:[8,8,8,8,6], q2:'Building confidence. Learn to handle conflict better. Deal with stress.', q3:'LIONS aspect of presentations. Become a friendlier person.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23wadcc01', company: '2023 Public DCC — Western Australia', programme: 'DCC', date: '2023', trainer: 'Tanya', type: 'public',
+      participants: [
+        { name:'Jeremy Wearn', position:'', org:'Key Engineering', email:'', before:[4,6,5,5,5], after:[7,8,8,8,7], q2:'How to win people to your way of thinking and giving & providing feedback really helped.', q3:'The people & leadership skills with giving/receiving feedback.', q4:'' },
+        { name:'Aleisha Olden', position:'', org:'Key Engineering', email:'', before:[7,8,8,5,5], after:[7,8,8,7,7], q2:'Improving my leadership skills has been my major breakthrough.', q3:'Applying the 30 principals to my every day professional & personal life.', q4:'' },
+        { name:'Samantha Neil', position:'', org:'', email:'', before:[4,5,6,5,6], after:[6,7,7,6,7], q2:'Not feeling so shy and being a better listener.', q3:'Don\'t take things too seriously. Share my experiences.', q4:'' },
+        { name:'John Swarts', position:'', org:'Alita Constructions', email:'', before:[7,6,6,6,6], after:[8,7,8,7,8], q2:'Confidence to speak in front of a group of people.', q3:'Present my ideas with confidence, be more willing to fail forward.', q4:'' },
+        { name:'Mark Bruning', position:'', org:'Alita Constructions', email:'', before:[6,5,5,6,6], after:[9,8,8,8,9], q2:'How to hold engaging conversations and be confident in speaking to an audience.', q3:'Strategies for remembering people\'s names. Structures for conversations.', q4:'' },
+        { name:'Jake Edwards', position:'', org:'Infront Labs', email:'', before:[7,7,7,6,7], after:[8,8,8,7,8], q2:'Feeling more comfortable with public speaking.', q3:'Appreciate others more often.', q4:'' },
+        { name:'Holly Cutts', position:'', org:'Infront Labs', email:'', before:[8,7,8,5,8], after:[9,9,10,8,10], q2:'Just remembering to not take myself too seriously and to have fun.', q3:'Make a conscious effort to apply the 30 principles.', q4:'' },
+        { name:'Samantha Ellis', position:'', org:'CASA', email:'', before:[6,7,7,6,3], after:[8,9,8,8,6], q2:'Confidence in being able to think quickly + respond quickly in a considered manner.', q3:'More flexible thinking + ability to disagree agreeably.', q4:'' },
+        { name:'Renae Monica Isaac', position:'', org:'', email:'', before:[5,5,5,6,5], after:[9,8,8,9,9], q2:'Learning via LION technique. Technique to agree / disagree with a situation.', q3:'Principles of how to influence people + win people to your way of thinking.', q4:'' },
+        { name:'Natalie Payne', position:'', org:'Henderlee', email:'', before:[3,2,3,2,3], after:[3,4,3,3,4], q2:'Strategies to break barriers / overcoming shyness when meeting new people.', q3:'Be more confident in communication with people.', q4:'' },
+        { name:'Josip Vuletich', position:'', org:'Henderlee', email:'', before:[6.5,7,8,7,5], after:[8,9,9,8,8], q2:'Highlighting how many simple tools are at my disposal to achieve better outcomes.', q3:'The 1-9 and 10-22 are the things I will consistently use.', q4:'' },
+        { name:'Adam Northcott', position:'', org:'', email:'', before:[6,7,7,6,4], after:[8,8,8,8,6], q2:'The program really put me outside my comfort zone. Made me realise the things I needed to work on.', q3:'I will apply most of the things I have learnt.', q4:'' },
+        { name:'Samuel Bernhardt', position:'', org:'Worthy Parts', email:'', before:[4,3,6,2,1], after:[10,6,8,5,8], q2:'I\'m able to take that first step a lot easier. I\'ve gained my confidence back.', q3:'Win people to your way of thinking.', q4:'' },
+        { name:'Michael West', position:'', org:'Bayeseqs', email:'', before:[7,4,3,5,5], after:[10,9,9,9,10], q2:'Learning I have the confidence. I just needed to unlock it.', q3:'Leadership skills, make guys more involved & communicate more with them.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23wrsqld01', company: '2023 Public WRS — 23QLDWRS01', programme: 'WRS', date: 'July 2023', trainer: 'William Farmer & Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Keith Crundwell', position:'Territory Manager QLD', org:'Safety Mate', email:'', before:[7,7,7,5.5,7], after:[9,9,9,8,9], q2:'Somebody to help me with my blind spots was great for me.', q3:'Revenue growth. Strong rapport building. Repeat sales.', q4:'' },
+        { name:'Smiljana O\'Brien', position:'Director / Architect', org:'CPO Architects', email:'', before:[5,5,5,5,6], after:[9,9,9,9,9], q2:'Learning tool to have ready to use', q3:'Better client relationships and increased revenue.', q4:'' },
+        { name:'Andrea Pennisi', position:'Authorised Celebrant', org:'Andreas Weddings', email:'', before:[5,6,4,8,7], after:[8,9,9,9,9], q2:'My self confidence in myself. Attitude and mindset.', q3:'Support many more to celebrate love with loved ones.', q4:'' },
+        { name:'Trent Betz', position:'Sales Consultant', org:'Barton Motors', email:'', before:[6,6,6,5,5], after:[8,8,8,7,6], q2:'Great training in breaking down the process.', q3:'This course will really benefit to zone in on the key points.', q4:'' },
+        { name:'Brendon Rogers', position:'Territory Manager', org:'Safety Mate', email:'', before:[8,7,8,7,9], after:[10,9,10,10,10], q2:'A new blueprint for me moving forward with all aspects of life.', q3:'Increased conversations — Blueprint for approach and closing.', q4:'' },
+        { name:'David Pond', position:'', org:'CPO Architects', email:'', before:[6,6,6,5,6], after:[9,9,9,9,9], q2:'Confidence in sales/marketing.', q3:'Win more work / increase sale. Get stronger connections with clients.', q4:'' },
+        { name:'Harry Butler', position:'', org:'Dale Carnegie', email:'', before:[6,5,5,7,5], after:[10,9,10,10,9], q2:'Listening skills', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-23uylpqld01', company: '2023 Public UYLP — 23QLDUYLP01', programme: 'UYLP', date: 'April 2023', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Jacob Pakai', position:'', org:'', email:'', before:[5,4,6,5,6], after:[7,5,8,6,7], q2:'Leading my roots', q3:'', q4:'' },
+        { name:'Linda Keon', position:'Sales Representative', org:'Alkar Refrigeration', email:'', before:[6,8,7,7,7], after:[9,9,9,9,9], q2:'Bringing new skillset to myself for my own business conduct and also to my team.', q3:'Team leadership that is effective, inspiring + motivating.', q4:'' },
+        { name:'Natasha Jackson', position:'', org:'', email:'', before:[5,4,5,5,9], after:[8,6,8,7,9], q2:'', q3:'', q4:'' },
+        { name:'David Pond', position:'Director', org:'CPO Architects', email:'', before:[7,7,6,7,7], after:[6,9,9,9,9], q2:'More effective leader.', q3:'Higher performance.', q4:'' },
+        { name:'Shaun Morrissey', position:'', org:'', email:'', before:[6,5,5,5,5], after:[7,8,8,8,8], q2:'Feel like a team better', q3:'Will produce a team better.', q4:'' },
+        { name:'Scott Allison', position:'Cosmetic Physician', org:'Ascension Cosmetic Medicine', email:'', before:[8,8,8,8,8], after:[9,9,9,9,9], q2:'Becoming a better leader. Inspiring my staff.', q3:'Create a positive culture. Foster leadership qualities.', q4:'' },
+        { name:'Kylie Kirby', position:'Operations Manager', org:'Ascension Cosmetic Medicine', email:'', before:[9,8,7,7,7], after:[10,9,9,9,9], q2:'Upskilling, growing and developing skill set.', q3:'Confident and competent in my role.', q4:'' },
+        { name:'Ian Maddocks', position:'Sales Director Asia Pacific', org:'EJ', email:'', before:[6,7,6,6,7], after:[8,9,8,8,8], q2:'', q3:'', q4:'' }
       ]
     }
   ];
