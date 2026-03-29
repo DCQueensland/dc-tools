@@ -127,12 +127,82 @@
   .company-classes { display: none; padding-left: 20px; flex-direction: column; gap: 4px; margin-top: 4px; }
   .company-classes.open { display: flex; }
 
+  /* Overview Tab */
+  .overview-dashboard { padding: 0; }
+  .overview-dashboard h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+  .overview-dashboard .ov-subtitle { color: #888; font-size: 14px; margin-bottom: 32px; }
+
+  .hero-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 40px; }
+  .hero-card { background: linear-gradient(135deg, #242424, #2a2a2a); border: 1px solid #333; border-radius: 16px; padding: 28px 20px; text-align: center; position: relative; overflow: hidden; }
+  .hero-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #ffc708; }
+  .hero-card .hero-value { font-size: 42px; font-weight: 800; color: #ffc708; line-height: 1.1; }
+  .hero-card .hero-label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 8px; }
+  .hero-card .hero-sub { font-size: 12px; color: #666; margin-top: 4px; }
+
+  .ov-section { margin-bottom: 40px; }
+  .ov-section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #666; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid #333; }
+
+  .prog-row { display: grid; grid-template-columns: 180px 1fr 80px 80px 80px; gap: 12px; align-items: center; padding: 14px 16px; background: #242424; border: 1px solid #333; border-radius: 10px; margin-bottom: 8px; }
+  .prog-row .prog-name { font-size: 13px; font-weight: 600; }
+  .prog-row .prog-bar-wrap { position: relative; height: 28px; background: #333; border-radius: 6px; overflow: hidden; }
+  .prog-row .prog-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; font-size: 11px; font-weight: 700; color: #000; transition: width 0.8s ease; }
+  .prog-row .prog-stat { text-align: center; font-size: 13px; font-weight: 600; }
+  .prog-row .prog-stat small { display: block; font-size: 10px; color: #666; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .comparison-card { background: #242424; border: 1px solid #333; border-radius: 14px; padding: 24px; }
+  .comparison-card h4 { font-size: 16px; margin-bottom: 16px; }
+  .comparison-card .cc-stat-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2a2a2a; font-size: 14px; }
+  .comparison-card .cc-stat-row:last-child { border-bottom: none; }
+  .comparison-card .cc-stat-label { color: #999; }
+  .comparison-card .cc-stat-value { font-weight: 700; }
+
+  .driver-impact-row { display: grid; grid-template-columns: 200px 1fr 60px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid #2a2a2a; font-size: 13px; }
+  .driver-impact-row:last-child { border-bottom: none; }
+  .driver-impact-bars { display: flex; flex-direction: column; gap: 4px; }
+  .driver-impact-bar { height: 16px; border-radius: 4px; display: flex; align-items: center; padding-left: 8px; font-size: 10px; font-weight: 700; }
+  .driver-impact-bar.before { background: #555; color: #ccc; }
+  .driver-impact-bar.after { background: #ffc708; color: #000; }
+  .driver-impact-change { font-weight: 700; color: #84c44c; text-align: center; font-size: 14px; }
+  .driver-impact-label { font-weight: 600; }
+  .driver-impact-best { background: #84c44c22; border-radius: 4px; padding: 2px 6px; }
+
+  .quote-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .quote-card { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; position: relative; }
+  .quote-card::before { content: '\201C'; position: absolute; top: 8px; left: 14px; font-size: 36px; color: #ffc70833; font-family: Georgia, serif; line-height: 1; }
+  .quote-card .qc-text { font-size: 13px; line-height: 1.6; color: #ccc; padding-top: 16px; font-style: italic; }
+  .quote-card .qc-attr { margin-top: 12px; font-size: 11px; color: #888; }
+  .quote-card .qc-attr strong { color: #fff; font-weight: 600; }
+  .quote-card .qc-attr .qc-prog { color: #ffc708; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; display: block; }
+
+  .timeline-row { display: flex; align-items: center; gap: 16px; padding: 12px 0; border-bottom: 1px solid #2a2a2a; }
+  .timeline-row:last-child { border-bottom: none; }
+  .timeline-year { font-size: 18px; font-weight: 700; color: #ffc708; min-width: 60px; }
+  .timeline-detail { flex: 1; }
+  .timeline-detail .td-prog { font-size: 13px; font-weight: 600; }
+  .timeline-detail .td-meta { font-size: 11px; color: #888; margin-top: 2px; }
+  .timeline-dot { width: 12px; height: 12px; background: #ffc708; border-radius: 50%; flex-shrink: 0; }
+
+  .bradnams-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+  .bradnams-summary .stat-card { border-color: #ffc70844; }
+
+  @media (max-width: 1200px) {
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .quote-grid { grid-template-columns: repeat(2, 1fr); }
+    .prog-row { grid-template-columns: 140px 1fr 60px 60px 60px; }
+  }
+
   @media (max-width: 900px) {
     .app { flex-direction: column; }
     .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #333; }
     .drivers-grid { grid-template-columns: 1fr; }
     .stats-row { grid-template-columns: 1fr; }
     .main { max-height: none; }
+    .hero-stats { grid-template-columns: 1fr; }
+    .comparison-grid { grid-template-columns: 1fr; }
+    .quote-grid { grid-template-columns: 1fr; }
+    .prog-row { grid-template-columns: 1fr; }
+    .bradnams-summary { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -141,17 +211,19 @@
 <header>
   <div>
     <h1>Breakthrough <span>Assessment</span> Portal</h1>
-    <div class="subtitle">In-House Programme Results</div>
+    <div class="subtitle" id="header-subtitle">In-House Programme Results</div>
   </div>
   <a href="dashboard.html?v=2" class="back-link">&larr; Back to Dashboard</a>
 </header>
 
+<div class="tab-bar" id="main-tab-bar" style="max-width:500px;margin:12px auto 0;padding:4px;">
+  <button class="tab-btn active" id="tab-inhouse" onclick="switchTab('inhouse')">In-House</button>
+  <button class="tab-btn" id="tab-public" onclick="switchTab('public')">Public Classes</button>
+  <button class="tab-btn" id="tab-overview" onclick="switchTab('overview')">Overview</button>
+</div>
+
 <div class="app">
-  <div class="sidebar">
-    <div class="tab-bar">
-      <button class="tab-btn active" id="tab-inhouse" onclick="switchTab('inhouse')">In-House</button>
-      <button class="tab-btn" id="tab-public" onclick="switchTab('public')">Public Classes</button>
-    </div>
+  <div class="sidebar" id="sidebar">
     <h3>Classes</h3>
     <div id="class-list" class="class-list"></div>
     <button class="btn btn-primary" style="width:100%" id="btn-add-class" onclick="showAddClassModal()">+ Add Class</button>
@@ -909,9 +981,23 @@ function switchTab(tab) {
   activeClassId = null;
   document.getElementById('tab-inhouse').className = 'tab-btn' + (tab === 'inhouse' ? ' active' : '');
   document.getElementById('tab-public').className = 'tab-btn' + (tab === 'public' ? ' active' : '');
-  document.getElementById('btn-add-class').style.display = tab === 'inhouse' ? '' : 'none';
-  renderSidebar();
-  document.getElementById('main-content').innerHTML = '<div class="empty-state"><div class="es-icon">&#128202;</div><p>Select a class from the sidebar to view the breakthrough report</p></div>';
+  document.getElementById('tab-overview').className = 'tab-btn' + (tab === 'overview' ? ' active' : '');
+
+  const sidebar = document.getElementById('sidebar');
+  const addBtn = document.getElementById('btn-add-class');
+  const subtitle = document.getElementById('header-subtitle');
+
+  if (tab === 'overview') {
+    sidebar.style.display = 'none';
+    subtitle.textContent = 'Aggregate Impact Report';
+    renderOverview();
+  } else {
+    sidebar.style.display = '';
+    addBtn.style.display = tab === 'inhouse' ? '' : 'none';
+    subtitle.textContent = tab === 'public' ? 'Public Class Results' : 'In-House Programme Results';
+    renderSidebar();
+    document.getElementById('main-content').innerHTML = '<div class="empty-state"><div class="es-icon">&#128202;</div><p>Select a class from the sidebar to view the breakthrough report</p></div>';
+  }
 }
 
 // ===== PUBLIC CLASS DATA =====
@@ -1958,6 +2044,296 @@ function deleteClass(id) {
 // ===== PRINT =====
 function printReport() {
   window.print();
+}
+
+// ===== OVERVIEW =====
+function renderOverview() {
+  const main = document.getElementById('main-content');
+  const allClasses = [...data.classes, ...publicData.classes];
+  const allParticipants = [];
+  allClasses.forEach(cls => {
+    cls.participants.forEach(p => {
+      allParticipants.push({ ...p, programme: cls.programme, company: cls.company, date: cls.date, classType: cls.type === 'public' ? 'public' : 'inhouse' });
+    });
+  });
+
+  const totalParticipants = allParticipants.length;
+  const totalClasses = allClasses.length;
+
+  // Average improvement %: for each participant, avg(after) - avg(before), as % of avg(before)
+  let totalPctSum = 0;
+  let validPctCount = 0;
+  allParticipants.forEach(p => {
+    const driverCount = p.before.length;
+    if (driverCount === 0) return;
+    const avgB = p.before.reduce((s, v) => s + v, 0) / driverCount;
+    const avgA = p.after.reduce((s, v) => s + v, 0) / driverCount;
+    if (avgB > 0) {
+      totalPctSum += ((avgA - avgB) / avgB) * 100;
+      validPctCount++;
+    }
+  });
+  const avgImprovementPct = validPctCount > 0 ? (totalPctSum / validPctCount).toFixed(0) : 0;
+
+  // Years of data
+  function parseYear(dateStr) {
+    if (!dateStr) return null;
+    const m4 = dateStr.match(/(\d{4})/);
+    return m4 ? parseInt(m4[1]) : null;
+  }
+  let minYear = 9999, maxYear = 0;
+  allClasses.forEach(cls => {
+    const y = parseYear(cls.date);
+    if (y && y < minYear) minYear = y;
+    if (y && y > maxYear) maxYear = y;
+  });
+  const yearsOfData = (minYear <= maxYear) ? (maxYear - minYear + 1) : 1;
+
+  let html = '<div class="overview-dashboard">';
+
+  // Header
+  html += '<h2>Aggregate Impact <span style="color:#ffc708">Report</span></h2>';
+  html += '<div class="ov-subtitle">Breakthrough Assessment data across all in-house and public programmes</div>';
+
+  // Hero stats
+  html += '<div class="hero-stats">';
+  html += '<div class="hero-card"><div class="hero-value">' + totalParticipants + '</div><div class="hero-label">Participants Trained</div></div>';
+  html += '<div class="hero-card"><div class="hero-value">' + totalClasses + '</div><div class="hero-label">Classes Delivered</div></div>';
+  html += '<div class="hero-card"><div class="hero-value" style="color:#84c44c">+' + avgImprovementPct + '%</div><div class="hero-label">Average Improvement</div></div>';
+  html += '<div class="hero-card"><div class="hero-value">' + yearsOfData + '</div><div class="hero-label">Years of Data</div><div class="hero-sub">' + minYear + ' - ' + maxYear + '</div></div>';
+  html += '</div>';
+
+  // Programme Comparison
+  html += '<div class="ov-section">';
+  html += '<div class="ov-section-title">Programme Comparison</div>';
+
+  const progStats = {};
+  allClasses.forEach(cls => {
+    const code = cls.programme;
+    if (!progStats[code]) progStats[code] = { classes: 0, participants: 0, pctSum: 0, pctCount: 0 };
+    progStats[code].classes++;
+    cls.participants.forEach(p => {
+      progStats[code].participants++;
+      const dc = p.before.length;
+      if (dc === 0) return;
+      const avgB = p.before.reduce((s, v) => s + v, 0) / dc;
+      const avgA = p.after.reduce((s, v) => s + v, 0) / dc;
+      if (avgB > 0) {
+        progStats[code].pctSum += ((avgA - avgB) / avgB) * 100;
+        progStats[code].pctCount++;
+      }
+    });
+  });
+
+  // Sort by avg improvement descending
+  const progList = Object.keys(progStats).map(code => ({
+    code,
+    name: PROGRAMME_NAMES[code] || code,
+    classes: progStats[code].classes,
+    participants: progStats[code].participants,
+    avgPct: progStats[code].pctCount > 0 ? progStats[code].pctSum / progStats[code].pctCount : 0
+  })).sort((a, b) => b.avgPct - a.avgPct);
+
+  const maxPct = Math.max(...progList.map(p => p.avgPct), 1);
+
+  // Header row
+  html += '<div class="prog-row" style="background:transparent;border:none;padding:4px 16px;margin-bottom:4px">';
+  html += '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px">Programme</div>';
+  html += '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px">Average Improvement</div>';
+  html += '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;text-align:center">Classes</div>';
+  html += '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;text-align:center">People</div>';
+  html += '<div style="font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;text-align:center">Avg %</div>';
+  html += '</div>';
+
+  progList.forEach(p => {
+    const barWidth = Math.max((p.avgPct / maxPct) * 100, 2);
+    const barColor = p.avgPct >= 40 ? '#84c44c' : p.avgPct >= 25 ? '#ffc708' : '#0090cf';
+    html += '<div class="prog-row">';
+    html += '<div class="prog-name">' + p.code + '</div>';
+    html += '<div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:' + barWidth + '%;background:' + barColor + '">' + (barWidth > 15 ? '+' + p.avgPct.toFixed(0) + '%' : '') + '</div></div>';
+    html += '<div class="prog-stat">' + p.classes + '<small>classes</small></div>';
+    html += '<div class="prog-stat">' + p.participants + '<small>people</small></div>';
+    html += '<div class="prog-stat" style="color:#84c44c">+' + p.avgPct.toFixed(0) + '%<small>improvement</small></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+
+  // In-House vs Public Comparison
+  html += '<div class="ov-section">';
+  html += '<div class="ov-section-title">In-House vs Public Comparison</div>';
+  html += '<div class="comparison-grid">';
+
+  function calcGroupStats(classes, label) {
+    let totalP = 0, sumB = 0, sumA = 0, pctSum = 0, pctCount = 0;
+    classes.forEach(cls => {
+      cls.participants.forEach(p => {
+        totalP++;
+        const dc = p.before.length;
+        if (dc === 0) return;
+        const avgB = p.before.reduce((s, v) => s + v, 0) / dc;
+        const avgA = p.after.reduce((s, v) => s + v, 0) / dc;
+        sumB += avgB;
+        sumA += avgA;
+        if (avgB > 0) {
+          pctSum += ((avgA - avgB) / avgB) * 100;
+          pctCount++;
+        }
+      });
+    });
+    const avgB = totalP > 0 ? (sumB / totalP).toFixed(1) : '0.0';
+    const avgA = totalP > 0 ? (sumA / totalP).toFixed(1) : '0.0';
+    const avgPct = pctCount > 0 ? (pctSum / pctCount).toFixed(0) : '0';
+    return { label, totalP, avgB, avgA, avgPct };
+  }
+
+  const inhouseStats = calcGroupStats(data.classes, 'In-House Programmes');
+  const publicStats = calcGroupStats(publicData.classes, 'Public Classes');
+
+  [inhouseStats, publicStats].forEach(gs => {
+    html += '<div class="comparison-card">';
+    html += '<h4>' + gs.label + '</h4>';
+    html += '<div class="cc-stat-row"><span class="cc-stat-label">Total Participants</span><span class="cc-stat-value">' + gs.totalP + '</span></div>';
+    html += '<div class="cc-stat-row"><span class="cc-stat-label">Average Before Score</span><span class="cc-stat-value">' + gs.avgB + ' / 10</span></div>';
+    html += '<div class="cc-stat-row"><span class="cc-stat-label">Average After Score</span><span class="cc-stat-value" style="color:#ffc708">' + gs.avgA + ' / 10</span></div>';
+    html += '<div class="cc-stat-row"><span class="cc-stat-label">Average Improvement</span><span class="cc-stat-value" style="color:#84c44c">+' + gs.avgPct + '%</span></div>';
+    html += '</div>';
+  });
+
+  html += '</div></div>';
+
+  // Driver Impact Analysis (DCC only)
+  html += '<div class="ov-section">';
+  html += '<div class="ov-section-title">DCC Driver Impact Analysis</div>';
+  html += '<div class="comparison-card" style="margin-bottom:0">';
+  html += '<h4 style="margin-bottom:4px">The Dale Carnegie Course</h4>';
+  html += '<div style="font-size:12px;color:#888;margin-bottom:16px">Average driver scores across all DCC classes (most popular programme)</div>';
+
+  const dccClasses = allClasses.filter(c => c.programme === 'DCC');
+  const dccDrivers = PROGRAMME_DRIVERS.DCC;
+  const driverSums = { before: new Array(5).fill(0), after: new Array(5).fill(0), count: 0 };
+  dccClasses.forEach(cls => {
+    cls.participants.forEach(p => {
+      if (p.before.length === 5 && p.after.length === 5) {
+        for (let i = 0; i < 5; i++) {
+          driverSums.before[i] += p.before[i];
+          driverSums.after[i] += p.after[i];
+        }
+        driverSums.count++;
+      }
+    });
+  });
+
+  let bestDriverIdx = 0, bestDriverMove = 0;
+  if (driverSums.count > 0) {
+    const driverAvgBefore = driverSums.before.map(s => s / driverSums.count);
+    const driverAvgAfter = driverSums.after.map(s => s / driverSums.count);
+
+    dccDrivers.forEach((d, i) => {
+      const move = driverAvgAfter[i] - driverAvgBefore[i];
+      if (move > bestDriverMove) { bestDriverMove = move; bestDriverIdx = i; }
+    });
+
+    dccDrivers.forEach((d, i) => {
+      const bVal = driverAvgBefore[i];
+      const aVal = driverAvgAfter[i];
+      const move = aVal - bVal;
+      const isBest = (i === bestDriverIdx);
+      html += '<div class="driver-impact-row">';
+      html += '<div class="driver-impact-label' + (isBest ? ' driver-impact-best' : '') + '">' + d + (isBest ? ' &#9733;' : '') + '</div>';
+      html += '<div class="driver-impact-bars">';
+      html += '<div class="driver-impact-bar before" style="width:' + (bVal * 10) + '%">' + bVal.toFixed(1) + '</div>';
+      html += '<div class="driver-impact-bar after" style="width:' + (aVal * 10) + '%">' + aVal.toFixed(1) + '</div>';
+      html += '</div>';
+      html += '<div class="driver-impact-change">+' + move.toFixed(1) + '</div>';
+      html += '</div>';
+    });
+  }
+  html += '</div></div>';
+
+  // Top Quotes Wall
+  html += '<div class="ov-section">';
+  html += '<div class="ov-section-title">What Participants Say</div>';
+  html += '<div class="quote-grid">';
+
+  const allQuotes = [];
+  allClasses.forEach(cls => {
+    cls.participants.forEach(p => {
+      if (p.q2 && p.q2.length > 50) {
+        allQuotes.push({ text: p.q2, name: p.name, org: p.org, programme: cls.programme });
+      }
+    });
+  });
+
+  // Shuffle and pick top 12
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  // Sort by length descending, take top 30, then shuffle and pick 12 for variety
+  const topQuotes = shuffle(allQuotes.sort((a, b) => b.text.length - a.text.length).slice(0, 30)).slice(0, 12);
+
+  topQuotes.forEach(q => {
+    const displayText = q.text.length > 200 ? q.text.substring(0, 200) + '...' : q.text;
+    html += '<div class="quote-card">';
+    html += '<div class="qc-text">' + displayText + '</div>';
+    html += '<div class="qc-attr"><strong>' + q.name + '</strong>' + (q.org ? ' &mdash; ' + q.org : '') + '<span class="qc-prog">' + (PROGRAMME_NAMES[q.programme] || q.programme) + '</span></div>';
+    html += '</div>';
+  });
+
+  html += '</div></div>';
+
+  // Bradnam's Client Journey
+  html += '<div class="ov-section">';
+  html += '<div class="ov-section-title">Bradnam\'s Client Journey</div>';
+  html += '<div class="comparison-card" style="margin-bottom:0">';
+  html += '<h4 style="margin-bottom:16px">Bradnam\'s Windows & Doors &mdash; Multi-Year Partnership</h4>';
+
+  const bradnamsClasses = allClasses.filter(c => {
+    const name = (c.company || '').toLowerCase();
+    return name.includes('bradnam') || name.includes("bradnam's");
+  });
+
+  // Build timeline grouped by year
+  const bradnamsTimeline = {};
+  let bradTotalParticipants = 0;
+  bradnamsClasses.forEach(cls => {
+    const year = parseYear(cls.date) || 'Unknown';
+    if (!bradnamsTimeline[year]) bradnamsTimeline[year] = [];
+    bradnamsTimeline[year].push(cls);
+    bradTotalParticipants += cls.participants.length;
+  });
+
+  const bradYears = Object.keys(bradnamsTimeline).sort();
+
+  bradYears.forEach(year => {
+    const classes = bradnamsTimeline[year];
+    classes.forEach(cls => {
+      html += '<div class="timeline-row">';
+      html += '<div class="timeline-year">' + year + '</div>';
+      html += '<div class="timeline-dot"></div>';
+      html += '<div class="timeline-detail">';
+      html += '<div class="td-prog">' + (PROGRAMME_NAMES[cls.programme] || cls.programme) + '</div>';
+      html += '<div class="td-meta">' + cls.company + ' &middot; ' + cls.participants.length + ' participants</div>';
+      html += '</div>';
+      html += '</div>';
+    });
+  });
+
+  html += '<div class="bradnams-summary">';
+  html += '<div class="stat-card"><div class="stat-value" style="color:#ffc708">' + bradTotalParticipants + '</div><div class="stat-label">Total Participants</div></div>';
+  html += '<div class="stat-card"><div class="stat-value" style="color:#ffc708">' + bradnamsClasses.length + '</div><div class="stat-label">Total Classes</div></div>';
+  html += '<div class="stat-card"><div class="stat-value" style="color:#ffc708">' + bradYears.length + '</div><div class="stat-label">Years as Client</div></div>';
+  html += '</div>';
+
+  html += '</div></div>';
+
+  html += '</div>'; // close overview-dashboard
+
+  main.innerHTML = html;
 }
 
 // ===== INIT =====
