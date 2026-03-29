@@ -117,6 +117,16 @@
   .tab-btn.active { background: #ffc708; color: #000; }
   .tab-btn:hover:not(.active) { color: #fff; }
 
+  /* Company groups */
+  .company-group { margin-bottom: 8px; }
+  .company-header { display: flex; align-items: center; gap: 8px; padding: 8px 10px; cursor: pointer; border-radius: 6px; font-size: 13px; font-weight: 600; color: #ccc; transition: all 0.15s; user-select: none; }
+  .company-header:hover { background: #1a1a1a; color: #fff; }
+  .company-header .ch-arrow { font-size: 10px; color: #666; transition: transform 0.2s; width: 12px; }
+  .company-header .ch-arrow.open { transform: rotate(90deg); }
+  .company-header .ch-count { color: #666; font-size: 11px; font-weight: 400; margin-left: auto; }
+  .company-classes { display: none; padding-left: 20px; flex-direction: column; gap: 4px; margin-top: 4px; }
+  .company-classes.open { display: flex; }
+
   @media (max-width: 900px) {
     .app { flex-direction: column; }
     .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #333; }
@@ -173,6 +183,10 @@
           <option value="WRS">Winning with Relationship Selling</option>
           <option value="WGYH">What Got You Here Won't Get You There</option>
           <option value="ECHR">Effective Communications & Human Relations (8-Week)</option>
+          <option value="WCCS">World Class Customer Service</option>
+          <option value="ADCC">Advanced Dale Carnegie Course</option>
+          <option value="TC">Take Command</option>
+          <option value="LTR">Leadership Training for Results</option>
         </select>
       </div>
     </div>
@@ -251,7 +265,11 @@ const PROGRAMME_DRIVERS = {
   HIP: ['Organising Professional Presentations', 'Creating Positive Impressions', 'Becoming More Natural and Relaxed', 'Communicating Ideas with Clarity and Force', 'Delivering Presentations that Sell Ideas'],
   WRS: ['Relationship-Oriented Sales Strategies', 'Gain Access and Establish Trust', 'Construct Collaborative Solutions', 'Eliminate Objections', 'Maintain Customer Relationships'],
   WGYH: ['Adjusting to Change', 'Changing Habits', 'Giving & Receiving Feedback/Feedforward', 'Personal Energy & Enthusiasm', 'Accountability & Influence as a Leader'],
-  ECHR: ['Confidence', 'Communication', 'People Skills', 'Leadership Skills', 'Reduce Stress and Worry']
+  ECHR: ['Confidence', 'Communication', 'People Skills', 'Leadership Skills', 'Reduce Stress and Worry'],
+  WCCS: ['Attitudes for Service', 'Telephone Skills: Inbound & Outbound', 'Manage Customer Expectations', 'Complaint Resolution'],
+  ADCC: ['Confidence', 'Communication', 'People Skills', 'Leadership Skills', 'Reduce Stress and Worry'],
+  TC: ['Self-Directed', 'Leadership', 'Adjusting to Change', 'Feedback', 'Accountability'],
+  LTR: ['Self-Awareness', 'Others-Focused', 'Leadership', 'Strategy', 'Accountability & Process']
 };
 
 const PROGRAMME_NAMES = {
@@ -261,7 +279,11 @@ const PROGRAMME_NAMES = {
   HIP: 'High Impact Presentations',
   WRS: 'Winning with Relationship Selling',
   WGYH: "What Got You Here Won't Get You There",
-  ECHR: 'Effective Communications & Human Relations (8-Week)'
+  ECHR: 'Effective Communications & Human Relations (8-Week)',
+  WCCS: 'World Class Customer Service',
+  ADCC: 'Advanced Dale Carnegie Course',
+  TC: 'Take Command',
+  LTR: 'Leadership Training for Results'
 };
 
 // ===== DATA STORAGE =====
@@ -321,8 +343,564 @@ function loadSwooshData() {
   saveData();
 }
 
+function loadAOLData() {
+  if (data.classes.find(c => c.id === 'aol-dcc-2020')) return;
+  data.classes.push({
+    id: 'aol-dcc-2020', company: 'Australian Outdoor Living', programme: 'DCC', date: '2020', trainer: 'William Farmer',
+    participants: [
+      { name:'Kate Hortelano', position:'Design Manager', org:'Australian Outdoor Living', email:'khortelano@aol-hq.com.au', before:[4,5,3,5,6], after:[7,7,6,7,8], q2:'For me I feel much more confident in being able to communicate with my team and have more tools in the toolkit for starting more meaningful conversations and conflict management.', q3:'I am a confident leader who can go into work, coach the team into becoming more excited and confident people themselves. This will help with productivity of each employee and the happiness of the team.', q4:'' },
+      { name:'John Craige', position:'Head of Digital', org:'Australian Outdoor Living', email:'johncraige79@gmail.com', before:[8,8,8,7,5.5], after:[8,8,8,8,7], q2:'Getting to know the other managers in the business and learning to think about what I am saying and not just talking.', q3:'I feel everyone has taken a lot and it will help to push the business forward.', q4:'' },
+      { name:'David Wegener', position:'General Manager', org:'Australian Outdoor Living', email:'dwegener@aol-sa.com.au', before:[5,8,5,8,7], after:[8,8,6,8,8], q2:'Self confidence, better communication with people by using the human relationship principles.', q3:'Team getting to know each other better, a greater awareness of where each team member can grow and improve. Team can better deal with stress.', q4:'' },
+      { name:'David Beech', position:'PVD Project Manager', org:'Australian Outdoor Living', email:'dbeech@aol-sa.com.au', before:[5,7,5,6,4], after:[8,8,7,8,8], q2:'Self confidence in public speaking and actions. Open to ways of improving communication.', q3:'Improve leadership skills, communication skills, lead by example, listen to others and staff.', q4:'' },
+      { name:'Oliver Byrne', position:'Production Manager', org:'Australian Outdoor Living', email:'obyrne@aol-sa.com.au', before:[6,5,7,6,7], after:[7,7,7,7,8], q2:'Feeling involved and in place/welcomed. Skills to take forward to deal with confrontation. Communication skills to relate to people with.', q3:'A manager and leader able to improve the team. To avoid and negate issues.', q4:'' },
+      { name:'Troy Biber', position:'Sales Manager', org:'Australian Outdoor Living', email:'troy.biber@bigpond.com', before:[10,8,6,8,6], after:[11,9,8,9,8], q2:'Learn from others on how to deal with stress. Improve my communication in both business and personal life.', q3:'If I can communicate better with staff I will have better relationships which equates to more success. If I can control stress I will be more productive.', q4:'' },
+      { name:'Claire Roesler', position:'SA Accountant', org:'Australian Outdoor Living', email:'croesler@aol-hq.com.au', before:[5,5,5,5,5], after:[5,5,5,5,5], q2:'Ability to now see where my areas of improvement lie. Practice makes perfect — conflict, compliment.', q3:'Better team work, less staff turnover, better productivity.', q4:'' },
+      { name:'Steve Osborne', position:'CEO', org:'Australian Outdoor Living', email:'sosborne@aol-hq.com.au', before:[7,7,7,7,9], after:[7,7,7,7,9], q2:'Understanding staff better.', q3:'Think using the principles and encouraging their use will help development. Especially when others recognise they are being used can therefore easily accept the process.', q4:'' },
+      { name:'Linnea Bryant', position:'Face to Face Manager', org:'Australian Outdoor Living', email:'linneabryant@gmail.com', before:[5,6,5,6,2], after:[8,8,9,8,8], q2:'I have learnt a lot about areas I need to focus on and improve. I will take away more knowledge in stressful situations.', q3:'Communication with my team. Understanding how others feel when we build rapport. Willingness to change.', q4:'' },
+      { name:'Michael Morris', position:'Production Manager', org:'Australian Outdoor Living', email:'halochieft.mm@gmail.com', before:[3,5,5,3,2], after:[9,9,9,9,8], q2:'Learning diversity to deal with situations and people.', q3:'It has made the AOL team closer than ever.', q4:'' },
+      { name:'Holly Crowther', position:'National Marketing Manager', org:'Australian Outdoor Living', email:'', before:[6,7,5,5,6], after:[8,8,8,7,8], q2:'The tools and techniques for communication and leadership — I feel much more confident.', q3:'Better communication across all departments.', q4:'' },
+      { name:'Jo Mander', position:'Production Manager', org:'Australian Outdoor Living', email:'', before:[6,6,5,6,8], after:[7,8,7,7,8], q2:'Understanding how to better communicate with different personality types.', q3:'A more cohesive team with better communication.', q4:'' },
+      { name:'James Bulfield', position:'Production Manager', org:'Australian Outdoor Living', email:'', before:[7,8,7,6,4], after:[8,8,8,6,5], q2:'Understanding different people and how to communicate with them.', q3:'Better team dynamics and communication.', q4:'' },
+      { name:'Alexandra Hand', position:'Brand Manager', org:'Australian Outdoor Living', email:'', before:[3,7,5,7,4], after:[6,8,7,8,7], q2:'Confidence in speaking and presenting. Better understanding of leadership.', q3:'More confident communication across the business.', q4:'' },
+      { name:'Sarah Gerrard', position:'Customer Relations Manager', org:'Australian Outdoor Living', email:'', before:[5,5,5,5,4], after:[7,5,7,7,5], q2:'Better understanding of how to deal with conflict and stress.', q3:'Improved customer relations and team communication.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadTillysData() {
+  if (data.classes.find(c => c.id === 'tillys-wgyh-oct2020')) return;
+  data.classes.push({
+    id: 'tillys-wgyh-oct2020', company: "Tilly's Crawler Parts", programme: 'WGYH', date: 'October 2020', trainer: 'William Farmer',
+    participants: [
+      { name:'Craig Dickinson', position:'', org:"Tilly's Crawler Parts", email:'', before:[6,2,4,4,3], after:[8,6,9,9,9], q2:'I learnt that areas I thought I had improved in that I actually had not.', q3:'Refreshing what we should be doing consistently.', q4:'' },
+      { name:'Andrew Tilly', position:'', org:"Tilly's Crawler Parts", email:'', before:[4,3,4,3,2], after:[8,8,9,8,8], q2:'Understanding the importance of feedback and feedforward.', q3:'Building a stronger team culture.', q4:'' },
+      { name:'Lance Henrichsen', position:'', org:"Tilly's Crawler Parts", email:'', before:[7,6,8,6,6], after:[9,9,9,8,10], q2:'Understanding where I need to improve and having tools to do it.', q3:'Better leadership and team communication.', q4:'' },
+      { name:'Andy Waldron', position:'Sales Manager', org:"Tilly's Crawler Parts", email:'', before:[4,5,2,2,1], after:[9,9,9,10,10], q2:'Understanding how to change habits and embrace feedback.', q3:'A more engaged and motivated sales team.', q4:'' },
+      { name:'David Tannock', position:'CFO', org:"Tilly's Crawler Parts Pty Ltd", email:'', before:[7,6,8,6,7], after:[9,9,9,9,9], q2:'Learning techniques to become better. Renewed confidence in my ability as a leader.', q3:'They will get the leadership in the role I hold so that I do not create a hostile environment with my fellow workers.', q4:'' },
+      { name:'Gerry Weir', position:'', org:"Tilly's Crawler Parts", email:'', before:[8,8,8,6,5], after:[9,5,9,8,8], q2:'Identifying areas for improvement and having accountability.', q3:'More effective team collaboration.', q4:'' },
+      { name:'Helen Tilly', position:'', org:"Tilly's Crawler Parts", email:'', before:[7,5,7,4,2], after:[8,7,8,7,7], q2:'Understanding different approaches to giving and receiving feedback.', q3:'Better workplace relationships and communication.', q4:'' },
+      { name:'Kevin', position:'', org:"Tilly's Crawler Parts", email:'', before:[8,5,7,5,3], after:[8,7,8,7,6], q2:'Learning to embrace change and new habits.', q3:'More adaptable team members.', q4:'' },
+      { name:'Naomi Wilson', position:'', org:"Tilly's Crawler Parts", email:'', before:[8,7,10,5,0], after:[8,6,10,7,5], q2:'Identifying habits that need changing and having a framework.', q3:'Better team dynamics.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDay1Data() {
+  if (data.classes.find(c => c.id === 'bradnams-wccs-day1-mar2020')) return;
+  data.classes.push({
+    id: 'bradnams-wccs-day1-mar2020', company: "Bradnam's Windows & Doors (Day 1)", programme: 'WCCS', date: '2020-03-03', trainer: 'William Farmer',
+    participants: [
+      { name:'Aaron Duggan', position:'Project Manager', org:"Bradnam's Windows & Doors", email:'aaron.duggan@bradnams.com.au', before:[7,6,7,6], after:[9,8,9,8], q2:'Learning different techniques for dealing with situations.', q3:'Better equipped to deal with customer service and complaint resolution.', q4:'' },
+      { name:'Tracy Rowe', position:'Service Administration', org:"Bradnam's Windows & Doors", email:'tracy.rowe@bradnams.com.au', before:[8,9,7,7], after:[9,9,9,9], q2:'Outlining ways to more effectively manage customer expectations and complaints.', q3:'Happy customers, increased business etc.', q4:'' },
+      { name:'Robert Lennon', position:'Sales Representative', org:"Bradnam's Windows & Doors", email:'robert.lennon@bradnams.com.au', before:[6,6,7,8], after:[8,8,9,9], q2:'Telephone skills.', q3:'Standardisation from all 4 branches in SEQ in regards to how our customers will be greeted when call a Bradnams branch.', q4:'' },
+      { name:'Jess Sinclair', position:'Sales Rep', org:"Bradnam's", email:'jess.sinclair@bradnams.com.au', before:[7,6,8,8], after:[9,8,9,9], q2:'Better client interaction and how to better understand their needs. Complaint resolution.', q3:'Better prepared for angry clients and having the correct things to counter act what they are saying.', q4:'' },
+      { name:'Louise Wheeler', position:'Internal Sales Support', org:"Bradnam's W&D", email:'', before:[10,8,7,9], after:[10,8,8,8], q2:'Complaint resolution.', q3:'Discussions about internal customers and their importance.', q4:'' },
+      { name:'Chris McDowell', position:'Sales Rep', org:"Bradnam's", email:'chris.mcdowell@bradnams.com.au', before:[9,8,9,9], after:[10,10,10,10], q2:'I really liked just getting an overall refresher and picked up a few new tools to help me.', q3:'Understanding how a customers brain works when angry.', q4:'' },
+      { name:'Eve-Cherae Jasper', position:'Internal Sales', org:"Bradnam's Windows and Doors", email:'eve.jasper@bradnams.com.au', before:[9,10,8,7], after:[10,10,9,8], q2:'This has reminded me not to take complaints personally and to still respect to client even after uncomfortable confrontation.', q3:'Building confidence in all areas of confrontation.', q4:'' },
+      { name:'Andrew Cosgrove', position:'Service and Installation Supervisor', org:"Bradnam's Windows and Doors", email:'andrew.cosgrove@bradnams.com.au', before:[5,5,5,5], after:[7,7,7,7], q2:'Complaint resolution process.', q3:'Change in mindset on complaint.', q4:'' },
+      { name:'Dean Newton', position:'External Sales Rep', org:"Bradnam's", email:'dean.newton@bradnams.com.au', before:[10,9,9,9], after:[10,9,9,9], q2:'Not to take issues personally.', q3:'Bonding with team.', q4:'' },
+      { name:'Laura Wilkins', position:'Internal Sales', org:"Bradnam's", email:'laura.wilkins@bradnams.com.au', before:[10,10,8,8], after:[10,10,10,10], q2:'Learning how to communicate to customers in a respectful helpful understanding way.', q3:'Learning we all have to be champions to succeed together.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDay2Data() {
+  if (data.classes.find(c => c.id === 'bradnams-wccs-day2-mar2020')) return;
+  data.classes.push({
+    id: 'bradnams-wccs-day2-mar2020', company: "Bradnam's Windows & Doors (Day 2)", programme: 'WCCS', date: '2020-03-05', trainer: 'William Farmer',
+    participants: [
+      { name:'Yelena McCormack', position:'Internal Sales Rep', org:"Bradnam's Windows & Doors", email:'yelena.mccormack@bradnams.com.au', before:[9,8,7,8], after:[10,10,10,10], q2:'Learning how to manage customers expectations and diffuse situations. Bonding with work team and realising we are all in the same boat.', q3:'Staff that know how to deliver higher quality service and help each other to do their job effectively and in a harmonious environment.', q4:'' },
+      { name:'Mick Vietheer', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'mick.vietheer@bradnams.com.au', before:[7,7,7,7], after:[9,9,9,9], q2:'Learning more on how to communicate with a customer when they have a problem and are frustrated.', q3:'Will be able to handle more pressure from complaints, from customers and feel more relaxed and empathetic.', q4:'' },
+      { name:'Steve Wildschut', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'steve.wildschut@bradnams.com.au', before:[8,8,7,7], after:[8,8,8,8], q2:'Confirmation of current practise and learning new ways.', q3:'Re focus for employees.', q4:'' },
+      { name:'Lisa Reinikea', position:'Internal Sales Rep', org:"Bradnam's Windows & Doors", email:'lisa.reinikea@gmail.com', before:[6,7,7,7], after:[8,9,8,8], q2:'Learning different skills. Hearing others strengths/weaknesses. Knowing we are all in the same boat.', q3:'Skills to manage phones better. Learning to work better in a team. Being understanding.', q4:'' },
+      { name:'Michael Pieterse', position:'Sales Representative', org:"Bradnam's Windows & Doors P/L", email:'mike.pieterse@bradnams.com.au', before:[7,7,7,8], after:[9,9,9,9], q2:'Refresh skills about customer relationships and methods for improvements.', q3:'Better trained to deal with and retain customers.', q4:'' },
+      { name:'Debbie Taylor', position:'Internal Support', org:"Bradnam's", email:'debbie.taylor@bradnams.com.au', before:[9,8,8,8], after:[9,9,9,8], q2:'Refocus on customer service. Remember to be genuinely interested when speaking to customers.', q3:'As above. Work as a team and be supportive of each other.', q4:'' },
+      { name:'Rohan B Ellis', position:'Project Manager', org:"Bradnam's Windows & Doors", email:'rohan.ellis@bradnams.com.au', before:[8,7,8,8], after:[9,9,9,9], q2:'Handling irate customer complaint. Tips on how to handle. Response to client email.', q3:'Keeping clients and communication between ourselves got stronger.', q4:'' },
+      { name:'Shane Herrick', position:'Service Scheduler', org:"Bradnam's", email:'shane.herrick@bradnams.com.au', before:[9,7,8,7], after:[10,9,9,10], q2:'Be more respectful to co-worker.', q3:'', q4:'' },
+      { name:'Bill Murray', position:'Sales Rep', org:"Bradnam's Windows and Doors", email:'bill.murray@bradnams.com.au', before:[9,7,9,10], after:[9,8,9,10], q2:'Re-enforcing skills needed to do the job.', q3:'Team view on customer service.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadMylanData() {
+  if (data.classes.find(c => c.id === 'mylan-wgyh-2020')) return;
+  data.classes.push({
+    id: 'mylan-wgyh-2020', company: 'Mylan', programme: 'WGYH', date: '2020', trainer: 'William Farmer',
+    participants: [
+      { name:'Theresa Fleming', position:'Supervisor', org:'Mylan', email:'theresa.fleming@mylan.com', before:[3,3,5,7,0], after:[6,7,8,8.5,5], q2:'Identifying areas to improve on and now having the tools to make this easier.', q3:'Being able to have a large group of people in the company who can embrace this journey together and hold each other accountable for their actions.', q4:'' },
+      { name:'Paul Aldridge', position:'Electrical Team Leader', org:'Mylan', email:'paul.aldridge@mylan.com', before:[7,6,7,4,2], after:[8,8,9,7,6], q2:'Identifying those behaviours that are problematic in a workplace and should be avoided.', q3:'Personal growth allows me to positively influence team members and coach effectively.', q4:'' },
+      { name:'Lana Clayton', position:'Microbiology Lab Supervisor', org:'Mylan', email:'lana.clayton@mylan.com', before:[8,6,8,6,4], after:[9,8,10,9,9], q2:'Learning techniques to help me become better. Finding answers to questions from a variety of sources. Renewed confidence in my ability as a leader.', q3:'They will get the leadership in the role I hold so that I do not create a hostile environment with my fellow workers.', q4:'' },
+      { name:'Simon Hemblyn', position:'Payroll Manager', org:'Mylan Australia', email:'simon.hemblyn@mylan.com', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'To focus on some areas I have been neglecting for quite some time.', q3:'Be more focused on performance and role.', q4:'' },
+      { name:'Amila Vandekota', position:'', org:'Mylan', email:'', before:[6,6,5,4,2], after:[8,8,9,7,6], q2:'To develop the ability to actively listen.', q3:'Developing coaches to develop colleagues.', q4:'' },
+      { name:'Glenn Chivers', position:'Export Shipping Coordinator', org:'Mylan', email:'glenn.chivers@mylan.com', before:[5,5,5,0,0], after:[7,7,8,6,5], q2:'Learning to listen more genuinely and help where I can.', q3:'Better communication within the department.', q4:'' },
+      { name:'Lauren Collingwood', position:'Review Chemist', org:'Mylan', email:'lauren.collingwood@mylan.com', before:[6,5,5,4,1], after:[7,7,8,8,8], q2:'More comfortable asking for feedforward and accepting feedback.', q3:'Increase engagement in the team by being more comfortable providing recognition and feedback.', q4:'' },
+      { name:'Ivan Boreham', position:'Group Lead, Operations Support', org:'Mylan', email:'ivan.boreham@mylan.com', before:[5,5,4,4,4], after:[8,7,8,7,8], q2:'Reflection, introspection about myself and about relationships at work.', q3:'Effectiveness in my role, and general enthusiasm.', q4:'' },
+      { name:'Jamie Daniel', position:'Senior Scientist', org:'Mylan Australia (Alphapharm Pty Ltd)', email:'jamie.daniel@mylan.com', before:[6,3,5,1,1], after:[7,6,7,5,6], q2:'Perspective on other peoples views and opinions. Understanding how to adapt and change.', q3:'Relationships.', q4:'' },
+      { name:'Phillip McKean', position:'OE Coordinator', org:'Mylan', email:'phil.mckean@mylan.com', before:[8,6,6,7,2], after:[9,9,9,9,8], q2:'Understanding my listening skills and where I need to improve.', q3:'More strategies to collaborate effectively through building relationships.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDCCGroup1Data() {
+  if (data.classes.find(c => c.id === 'bradnams-dcc-group1-feb2026')) return;
+  data.classes.push({
+    id: 'bradnams-dcc-group1-feb2026', company: "Bradnam's DCC Group 1", programme: 'DCC', date: 'February 2026', trainer: '',
+    participants: [
+      { name:'Yvonne', position:'Team Leader', org:"Bradnam's DC", email:'poraoyvonne15@gmail.com', before:[6,4,4,5,3], after:[10,10,10,10,10], q2:'This has changed my mindset to believe I can do better, also gaining confidence in people skills.', q3:'To practise what I have learned and implement that in my day to day at home and work.', q4:'To continue to support.' },
+      { name:'Caitlin McKinlay', position:'Team Leader', org:'National Glass', email:'caitlin.mckinlay@nationalglass.com.au', before:[9,9,9,8.5,3.5], after:[9,9,9,9,6], q2:'To help me reduce work related stress by using the principles.', q3:'Worry once, imagine what the worst looks like and fix it and move on.', q4:'Continue talking about performance.' },
+      { name:'Phillip Wilson', position:'Die Shop', org:'National Aluminium', email:'phillipwilson2006@hotmail.com', before:[6,4,5,7,3], after:[8,6,7,6,4], q2:'Openness, being able to work with strangers.', q3:'Find a way to remember names.', q4:'Motivate other people.' },
+      { name:'Martin Mitchell', position:'Team Leader', org:"Bradnam's", email:'mmhfrom.back.to.no@gmail.com', before:[5,5,5,5,4], after:[7,7,7,8,6], q2:'Learning better leadership skills and quality to apply in work and personal life.', q3:'Listen to people more and be more accepting of other people\'s opinions.', q4:'Give encouragement when I am implementing those actions.' },
+      { name:'Bosko Jestikoski', position:'Service Picker', org:"Bradnam's", email:'b.ss.ko@icloud.com', before:[3,4,5,7,1], after:[5,6,7,8,4], q2:'Getting me to do things I never would of on my own without a push.', q3:'Working on being a better me.', q4:'To stress and worry less to the point I can relax and not worry.' },
+      { name:'Nicole Giovannitti', position:'Sales Admin', org:"Bradnam's", email:'nicole.giovannitti@bradnams.com.au', before:[5,4,5,6,3], after:[7,7,7,7,6], q2:'Learning better ways to communicate.', q3:'Enhance relationships.', q4:'Take on more responsibility within the team.' },
+      { name:'Sonja Smith', position:'Service Scheduler', org:"Bradnam's", email:'sonjasmith136@gmail.com', before:[4,5,5,5,2], after:[8,8,8,7,7], q2:'To be out of my comfort zone and try new things. To be less emotional and use the training to assist.', q3:'Lessen the stress of my work day by using the strategies taught.', q4:'Letting me grow and assist others to assist them to grow.' },
+      { name:'Shilo Boyd', position:'Service Scheduler', org:"Bradnam's", email:'shilodelonaj23@gmail.com', before:[5,4,6,4,2], after:[8,8,9,7,7], q2:'Made me come out of my comfort zone and not worry as much about what others think.', q3:'Make others feel heard and ask for help when I need it. Not feel limited in my comfort zone.', q4:'Have a discussion with them about how to manage training for others and overcome stress at work.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsADCCData() {
+  if (data.classes.find(c => c.id === 'bradnams-adcc-feb2026')) return;
+  data.classes.push({
+    id: 'bradnams-adcc-feb2026', company: "Bradnam's Advanced DCC", programme: 'ADCC', date: 'February 2026', trainer: '',
+    participants: [
+      { name:'Jessi Rau', position:'Internal Sales', org:'Boondall Bradnams', email:'jessi.rau@bradnams.com.au', before:[8,9,7,6,2], after:[9,10,9,9,5], q2:'How to shift my mind to look at the leadership and how to use my skills to influence.', q3:'Be sure to address mistakes indirectly.', q4:'Allowing me the opportunities to use those effectively within the workplace by letting me lead more.' },
+      { name:'David Nibbs', position:'Operations Manager', org:'Clark Windows', email:'david@clarkwindows.com.au', before:[7,7,7,7,7], after:[7,7,7,7,7], q2:'Self awareness — I can do it, I can inspire and lead.', q3:'Be more receptive, listen, stay calm.', q4:'Open communication, honest conversations.' },
+      { name:'Tai Quinn', position:'Despatch Manager', org:"Bradnam's", email:'tai.quinn@bradnams.com.au', before:[5,6,7,6,7], after:[5,6,7,6,7], q2:'Having a positive productive environment for my team by using mental qualities. The team have a vision, open communication, lead by example.', q3:'Adopt influence change.', q4:'Embedding, foster these qualities — once grasped, drive performance, coach.' },
+      { name:'Krystal Collins', position:'Office Manager', org:'Queensland Plastics', email:'krys-collins@hotmail.com', before:[6.5,7,7,6,5], after:[8,8.5,8.5,8,5], q2:'Personally I feel it gave me an opportunity to connect with people and share stories where I would otherwise not. Professionally I feel more equipped with ideas and knowledge going forward.', q3:'Use the steps 22-30 in my daily life and workplace.', q4:'Give opportunities to show my new skill set.' },
+      { name:'Jordyn Thorpe', position:'Purchasing & DC Scheduling', org:"Bradnam's", email:'jordyn.thorpe@bradnams.com.au', before:[6,7,7,7,5], after:[9,9,9,9,8], q2:'Seeing things from a different perspective and reframing the way to approach things, in both work and personally.', q3:'Communicating my feelings in the workplace to try and find a solution that reduces my stress and improves my work life.', q4:'Continuing to encourage me and involve me in new opportunities to grow in Bradnams.' },
+      { name:'Antony Calver', position:'Service Manager', org:"Bradnam's", email:'', before:[7,7,8,6,3], after:[9,9,10,8,6], q2:'Communication and reduce stress/worry.', q3:'Keep building on people skills.', q4:'Help with direction in challenging times. Further skill development through courses.' },
+      { name:'Chris Day', position:'Senior Helpdesk Tech', org:"Bradnam's", email:'chris.day@bradnams.com.au', before:[5,8,7,6,5], after:[7,9,8,8,7], q2:'Understanding triggers and how to better communicate in my team to get better outcome.', q3:'Improve my coaching skills to help my team reach new goals faster and more efficient.', q4:'Allow me to look after issues with the staff in my team so I can improve my own coaching and training skills.' },
+      { name:'Ethan Dimee', position:'Supervisor', org:"Bradnam's", email:'ethandouglas9903@gmail.com', before:[6,5,6,5,4], after:[8,7,8,7,7], q2:'The ability to draw on the principles during hard conversations, learning my influence style and speaking assertively.', q3:'To uplift my team using the principles from 21-30.', q4:'Checkin with how I\'m going and ask how using these skills are coming along.' },
+      { name:'Jason Alossa', position:'Account Manager', org:"Bradnam's Point Cook", email:'jason.alossa@bradnams.com.au', before:[8,6,7,6,7], after:[9,7,8,7,8], q2:'Learning about things I was doing that I can do different.', q3:'More positive feedback and change.', q4:'Understand what my growth plan is.' },
+      { name:'Rob Lombardi', position:'Production Manager', org:"Bradnam's W/Doors", email:'', before:[8,8,8,8,7], after:[9.5,9.5,10,10,9], q2:'Realising how to talk to different people.', q3:'Use more emotions and be more understanding.', q4:'Keep giving me feedback. Let me make more decisions. Believe in me.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsLTMData() {
+  if (data.classes.find(c => c.id === 'bradnams-ltm-mar2026')) return;
+  data.classes.push({
+    id: 'bradnams-ltm-mar2026', company: "Bradnam's LTM", programme: 'LTM', date: 'March 2026', trainer: '',
+    participants: [
+      { name:'Michael Kahler', position:'Scheduling/Despatch Manager', org:"Bradnam's", email:'michael.kahler@bradnams.com.au', before:[6,6,6,6,6], after:[9,9,9,9,9], q2:'To help put processes in place more.', q3:'10 minute score card, to help review all my team and guide.', q4:'To help guide me on the right path for the company, to help more and motivate everyone around me.' },
+      { name:'Michael Smith', position:'Service & Maintenance Manager', org:"Bradnam's", email:'mic29n@hotmail.com', before:[7,8,7,6,10], after:[7,8,8,7,10], q2:'10min scorecard is something I can use immediately with my team.', q3:'It\'s making me think of some tasks I can delegate, or hold my supervisors accountable for.', q4:'' },
+      { name:'John Nguyen', position:'NSW Showroom Manager', org:"Bradnam's", email:'john.nguyen@bradnams.com.au', before:[8,7,8,7,8], after:[9,9,8,9,9], q2:'Learning how to break things down to steps. To communicate better.', q3:'To understand people better. To delegate.', q4:'To check in and provide feedback.' },
+      { name:'Michael Allkin', position:'Business Support Team Leader', org:"Bradnam's", email:'michael.allkin@bradnams.com.au', before:[8,7,8,6,8], after:[9,8,9,8,9], q2:'The process around delegation.', q3:'Putting a plan and process in place for upskill my support team.', q4:'Funding/education on tools that can improve my team.' },
+      { name:'Chris Southgate', position:'Production Manager', org:"Bradnam's", email:'chris.southgate@bradnams.com', before:[7,7,8,7,10], after:[9,8.5,9,8,10], q2:'Having a plan for the future, with the correct data and solutions in place.', q3:'More frequently reviews and meetings with areas of focus (10 minute plan).', q4:'Allow the time for these meetings and vision/innovation in the branch.' },
+      { name:'Richard Deacon', position:'Sales Rep', org:"Bradnam's", email:'richard.deacon@bradnams.com.au', before:[7,8,9,8,6], after:[8,8,9,8,8], q2:'Not to go right to the problem but to get the data.', q3:'Using the 10 second score card often.', q4:'Have more reviews other than the 12 month. A lot happens in 12 months and changes can be made earlier if every 3 months is done instead.' },
+      { name:'Tessa Metcalf', position:'Customer Service Supervisor', org:"Bradnam's", email:'tessa.metcalf@bradnams.com.au', before:[7,9,8,8,7], after:[9,10,9,10,9], q2:'Everything! Realising that I am the starting point for the attitude and effectiveness of my team. TEAM being the main word! In it together.', q3:'Delegation and innovation. Get more input from my team on what\'s going well and what\'s not.', q4:'Trust and support. Let me experiment with innovation. Coach me through decisions.' },
+      { name:'Brett Prothero', position:'Manager', org:"Bradnam's", email:'brett.prothero@bradnams.com.au', before:[7,8,6,7,7], after:[8,8,9,8,8], q2:'I came into this thinking I was already a great leader but this program has shown me I have a lot of work to do. There are things I couldn\'t see prior to this.', q3:'Create a clear vision and make it clear to the team.', q4:'Keep me accountable.' },
+      { name:'Joshua Bradley', position:'Multi Team Leader', org:"Bradnam's", email:'dozabayah@gmail.com', before:[8,7,7,5,7], after:[10,8.5,8.5,7,8.5], q2:'Learning to talk smartly in difficult conversations.', q3:'Innovation and planning.', q4:'By listening and working out a direct plan to use my new skills.' },
+      { name:'Travis Steley', position:'Team Leader', org:"Bradnam's Cherry Bay", email:'travisteley13@hotmail.com', before:[7,7,7,7,6], after:[8,6,8,8,8], q2:'All of it really, and to go back home and to work and use it.', q3:'Take into consideration of the individuals and how they work to determine how I talk to and deal with them.', q4:'By using these skills on me to remind/refresh and to keep it in practice.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsUYLPData() {
+  if (data.classes.find(c => c.id === 'bradnams-uylp-mar2026')) return;
+  data.classes.push({
+    id: 'bradnams-uylp-mar2026', company: "Bradnam's UYLP", programme: 'UYLP', date: 'March 2026', trainer: '',
+    participants: [
+      { name:'Kayla Germany', position:'Storeperson', org:"Bradnam's Toowoomba", email:'kayla.germany97@outlook.com', before:[6,7,4,4,3], after:[7,8,6,6,7], q2:'To become more confident, stop overthinking and improve my leadership skills.', q3:'How to improve my communication.', q4:'Helping, working together as a team to get tasks done.' },
+      { name:'Isaac Bennett', position:'Trainer', org:"TWB Bradnam's", email:'isabendrum20@gmail.com', before:[4,4,4,4,4], after:[5.5,6,6,6,5], q2:'For me small parts that I have actually remembered to be able to actually use them.', q3:'A higher percentage of interacting with some that I don\'t really spend much time with now.', q4:'Continuing to challenge me to new limits.' },
+      { name:'Kristie Boucher', position:'Internal Sales', org:"Bradnam's Toowoomba", email:'kristie.loz@hotmail.com', before:[3,2,3,4,4], after:[6,8,7,8,10], q2:'Meeting people knowing they have the same struggles as I do and I can do more and be more confident.', q3:'To try and not dwell on tasks that I have no control over.', q4:'My direct manager can help me with building my knowledge so I can help others and also strengthen my weaknesses.' },
+      { name:'Cuong Quoc Nguyen', position:'Inventory Supervisor', org:"Bradnam's", email:'cuong.nguyen@bradnams.com.au', before:[7,6,6,6,6], after:[9,7,9,8,8], q2:'Give me more power tools to use in my work or my life.', q3:'Be a good listener.', q4:'More cards on the way become enthusiastic person.' },
+      { name:'Glen Hurle', position:'Factory Manager', org:'National Glass', email:'glen.hurle@nationalglass.com.au', before:[8,5,5,6,6], after:[8,8,8,8,8], q2:'Public speaking confidence.', q3:'More interaction with employees on a personal level rather than a group.', q4:'Free me up to spend more time on the floor or on tasks relating to this course.' },
+      { name:'Levinia Clunn', position:'Team Leader', org:"Bradnam's QLD DC", email:'lclunn@outlook.com', before:[5,6,5,6,5], after:[7,7,7,7,7], q2:'It has taught me the importance of growing/developing my emotional awareness/intelligence as a leader.', q3:'I am going to listen and let others talk more. To understand where and how I can be helpful.', q4:'Hold me accountable and challenge me.' },
+      { name:'Seemona Wane', position:'Paintline Treatment Team Leader', org:"Bradnam's VIC DC", email:'seemona.wane@bradnams.com.au', before:[5,4,5,7,6], after:[9,8,8,10,10], q2:'A major benefit was realising all the things that I want to improve and it reminded me about my goals and what type of leader I want to be.', q3:'One action I will take is to be more assertive rather than passive.', q4:'Just by checking in as usual and keeping me updated.' },
+      { name:'Benjamin Frost', position:'Operations Manager', org:"Bradnam's Windows & Doors", email:'benjamin.frost@bradnams.com.au', before:[5,4,3.5,4,3.5], after:[7,8,7,7,8], q2:'Realising that everyone has to be trained and supported differently.', q3:'Understand each of my team\'s individual needs and then apply a support system around that.', q4:'Allow me to build a confident team around me.' },
+      { name:'Kurt Efimenko', position:'Team Leader', org:"Bradnam's Rockhampton", email:'kurtefimenko91@gmail.com', before:[3,3,4,6,6], after:[6,8,8,9,9], q2:'Has shown me that I can be a stronger leader. Helped me overcome my initial shyness and has motivated me to be a better leader.', q3:'Be more observative and inspirational, inspire my team more.', q4:'Just give me more advice on what I can improve on.' },
+      { name:'Cherez Platell', position:'Mill Team Leader', org:"Bradnam's", email:'cmartell81@hotmail.com', before:[8,7,7,8,7], after:[10,8.5,8,9,8.5], q2:'Putting things into perspective. I heartedly believe I\'ve taken a lot away from this course, allowing me to be a better version of myself in all aspects of my life.', q3:'Be more assertive when needed in the work place.', q4:'Possibly some intentional, designated training.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsTCData() {
+  if (data.classes.find(c => c.id === 'bradnams-tc-mar2026')) return;
+  data.classes.push({
+    id: 'bradnams-tc-mar2026', company: "Bradnam's Take Command", programme: 'TC', date: 'March 2026', trainer: '',
+    participants: [
+      { name:'Stephen Robb', position:'Sales Manager', org:"Bradnam's Toowoomba", email:'stephen.robb@bradnams.com.au', before:[8,7,6,6,7], after:[9,8,6,7,8], q2:'Personally — I do have a personal secretary that I do at times take for granted. Professionally — No doubt some of my team are going the extra mile, and I notice them, but they may not be aware that I notice.', q3:'To make people more aware of how grateful I am.', q4:'We plan on catching up (Larry, Dean and myself) to keep us accountable.' },
+      { name:'Dean Robinson', position:'Manager', org:"Bradnam's Tmba", email:'dean.robinson@bradnams.com.au', before:[8,8,7,8,8], after:[9,9,9,10,10], q2:'Taken away a plan of action to support my operations team with the same efforts I make with my sales team.', q3:'Daily presence in the factory. Ensure all factory know (new/old) that I am approachable.', q4:'' },
+      { name:'Adam Dale', position:'QLD DC Operations Manager', org:"Bradnam's", email:'adam.dale@bradnams.com.au', before:[6,6,7,7,7], after:[8,8,8,9,9], q2:'Feed forwarding — really great tool I intend to adapt into work and personal life. Good eye opener from different perspectives.', q3:'Listen deeply to others, really focus in on what the team is telling me and work with them to drive change.', q4:'Follow up on tasks that have been agreed upon. Keep the pressure on of team development.' },
+      { name:'Ben Lindberg', position:'OHS & Purchasing Manager', org:"Bradnam's Windows + Doors", email:'ben.lindberg@bradnams.com.au', before:[8,7,7,6,7], after:[9,8,9,8,9], q2:'To notice the habits that I am doing and to mark the ones that need improvement, then to show me a platform on how to improve.', q3:'Actively listen to my team and family.', q4:'Ask me on how I\'m going. Monthly catch up and progress report.' },
+      { name:'Rob Smith', position:'GM', org:'Aura Windows & Doors', email:'rob@aurawindows.com.au', before:[8,6,6,6,8], after:[8,7,7,7,8], q2:'Being self aware about how my managing actions/approach can impact others. Working on technique and other strategies on how to better manage my actions/emotions.', q3:'Listen actively and be measured in my response (not rush and become short).', q4:'Continue to trust my ability and approach in managing Aura.' },
+      { name:'Kellie Jenkins', position:'Vic Sales Manager', org:"Bradnam's Windows", email:'kellie.jenkins@bradnams.com.au', before:[7,7,6,7,8], after:[9,9,9,9,9], q2:'To value feedback just because I think it I need to remember to share it.', q3:'To have a 5 minute catch-up with my team each week away from my office. To listen, be proactive and give forward feedback.', q4:'Justin is amazing as a manager and supports and backs my choices once I explain the benefits to them.' },
+      { name:'Larry Harvey', position:'Operations Manager', org:"Hervey Bay Bradnam's", email:'', before:[8,3,8,8,9], after:[8,9,9,9,9], q2:'Feed forward a great tool to add to the chart.', q3:'The daily check in regarding the prior day.', q4:'Continued support and guidance in the next steps.' },
+      { name:'Brendan Pearson', position:'Office Manager', org:"Bradnam's", email:'brendan.pearson@bradnams.com.au', before:[8,7,8,5,8], after:[8,9,8,9,8], q2:'I like the feedback and feed forward sections and believe that these skills will benefit me both at work and home.', q3:'Be more proactive with feedback and spend time actively listening.', q4:'Follow up with progressive feedback and potentially some ideas from her perspective.' },
+      { name:'Guy Hornery', position:'Inventory Stock Controller', org:"Bradnam's TWO", email:'guy.hornery@bradnams.com.au', before:[5,6,6,5,7], after:[7,8,8,9,8], q2:'Giving timely feedback.', q3:'Adjusting to change.', q4:'Help encourage and maintain empowerment.' },
+      { name:'Vicki Hughes', position:'NSW Customer Service Manager', org:"Bradnam's", email:'vicki.hughes@bradnams.com.au', before:[7,7,7,6,8], after:[9,8,9,7,9], q2:'To work through feedback/feedforward loop. Offers different perspectives.', q3:'Feedforward is brilliant. Will help to take accountability for actions prior. Lets someone raise what they think they have an issue with in a safe forum.', q4:'Speak about my goals. Add updates to weekly 1on1 meeting. Add one of my growth goals to my weekly goals for him.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDCC1_2025Data() {
+  if (data.classes.find(c => c.id === 'bradnams-dcc-class1-feb2025')) return;
+  data.classes.push({
+    id: 'bradnams-dcc-class1-feb2025', company: "Bradnam's DCC Class 1 (2025)", programme: 'DCC', date: 'February 2025', trainer: 'William Farmer',
+    participants: [
+      { name:'Kurt Efimenko', position:'Team Leader/Process Worker', org:"Bradnam's Rockhampton", email:'kurtefimenko91@gmail.com', before:[3,3,5,3,5], after:[8,8,9,8,9], q2:'Finding self-confidence in myself, being able to communicate a lot better than I have in the past.', q3:'Being a more confident leader, having better connections/relationships with my team.', q4:'' },
+      { name:'Luke Dorrell', position:'NSW Customer Service', org:"Bradnam's Windows and Doors", email:'luke.dorrell@bradnams.com.au', before:[3,3,2,3,3], after:[8,7,7,7,8], q2:'Confidently communication with others.', q3:'Confidently be communicate with people.', q4:'' },
+      { name:'Coraleen Martin', position:'Sales Internal', org:"Bradnam's", email:'coram2966@hotmail.com', before:[6,7,7,5,2], after:[8,8,8,7,4], q2:'To be more observant and open to others opinions and views.', q3:'Using some of the process structures to initiate certain conversations.', q4:'These are extremely valuable lessons that I think our young adults could also hugely benefit from.' },
+      { name:'James Scott', position:'Supervisor', org:'National Glass', email:'james.scott@nationalglass.com.au', before:[6,6,7,6,7], after:[8,7,8,9,9], q2:'Developing my leadership skills to a higher level as a result of developing my other skills.', q3:'Communication as I can be quite at times.', q4:'Good outcomes.' },
+      { name:'Scott Harris', position:'NQ Manager', org:'National Glass', email:'scott.harris@nationalglass.com.au', before:[7,8,8,8,7], after:[9,9,9,9,9], q2:'Reinforcing good leadership traits and highlighting areas to improve on.', q3:'Being more personal with people and celebrating small successes more.', q4:'Thank you. It\'s honestly been a great experience.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDCC2_2025Data() {
+  if (data.classes.find(c => c.id === 'bradnams-dcc-class2-feb2025')) return;
+  data.classes.push({
+    id: 'bradnams-dcc-class2-feb2025', company: "Bradnam's DCC Class 2 (2025)", programme: 'DCC', date: 'February 2025', trainer: 'Annemarie Sage Wood',
+    participants: [
+      { name:'Vania do S. Fernandes', position:'Production/Installation Scheduler', org:'Cesana Showers Screens', email:'vanialeticia@hotmail.com', before:[3,4,5,6,2], after:[7,8,8,9,9], q2:'Gaining confidence and releasing stress.', q3:'How to be more sympathetic, do not be greedy and be more positive.', q4:'Love the training and the trainer\'s energy!' },
+      { name:'Dylan Singline-Cashion', position:'Production Supervisor (Launceston, TAS)', org:'Clark Windows', email:'productionnorth@clarkwindows.com.au', before:[4,5,5,7,5], after:[7,7,6.5,8.5,8], q2:'Confidence. By engaging with others and building friendly relationships it opens up a path forward from any situations.', q3:'Build relationships with co-workers.', q4:'Rate 10/10, Thank you.' },
+      { name:'Ben Revell', position:'Glass Factory Supervisor', org:'Clark Windows', email:'revellben93@outlook.com', before:[7,7,6,8,7], after:[9,8,8,9,9], q2:'Reduce stress and worry. Communicating positively with others.', q3:'Talk more to people, and actually listen to what they say.', q4:'' },
+      { name:'Raja Kota', position:'Application Support Analyst', org:"Bradnam's", email:'raja.kota@bradnams.com.au', before:[2,2,4,2,3], after:[5,6,6,5,7], q2:'Learning about CCCs, public speaking, disagree agreeably, listening in crucial when communicating.', q3:'Don\'t complain, condemn and criticise. Reducing stress, stay calm. Disagree agreeably. Smile more often. Do it now. Listen, think and respond.', q4:'' },
+      { name:'Glen Reed', position:'Service Site Supervisor', org:"Bradnam's Windows & Doors", email:'glen.reed@bradnams.com.au', before:[4,4,4,4,2], after:[6,6,7,7,7], q2:'Major breakthrough would be learning the ability to come out of my comfort zone and public speak.', q3:'Change my stress levels.', q4:'' },
+      { name:'Brian Willers', position:'Paint Line Manager', org:"Bradnam's", email:'brianrwillers@gmail.com', before:[7,7,7,7,7], after:[9,9,9,9,9], q2:'Interaction with others, seeing different personalities. Communicating and learning.', q3:'Improved communication — approach to people. Listen to people.', q4:'Great course — great provider.' },
+      { name:'Kristoffer Sitchon', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'kris.sitchon@bradnams.com.au', before:[4,5,7,6,4], after:[7,7,8,7,7], q2:'To be more confident in what ever I do in life. Do not overthink.', q3:'Do not apply the 3 C\'s.', q4:'' },
+      { name:'Christian Thompson', position:'Sales Representative', org:'National Glass', email:'christian.thompson1977@gmail.com', before:[5,7,7,7,5], after:[8,8,8,8,8], q2:'Learning not to CCC, listen.', q3:'', q4:'' },
+      { name:'Vicki Roberts', position:'CSO', org:'National Glass', email:'vicki.proberts@nationalglass.com.au', before:[2,4,6,3,1], after:[8,9,10,8,9], q2:'Different techniques to use both in professional and personal life. How to communicate positively and understand differences of opinion.', q3:'The 3 C\'s!!! Most important. Laugh more. Discuss more.', q4:'Thank you for helping to change the way I think, communication, effect on others, cohesion and confidence.' },
+      { name:'Jennifer Power', position:'Internal Sales Rep', org:"Bradnam's Windows & Doors", email:'jennifer.power@bradnams.com.au', before:[5,6,7,6,6], after:[7,8,8,7,8], q2:'Getting out of my comfort zone and opening myself up to others.', q3:'Appreciate people and support always.', q4:'Fantastic course!' },
+      { name:'Kenny Moore', position:'2IC/Production Supervisor', org:'National Glass', email:'kenneth.moore@nationalglass.com.au', before:[7,7,7,7,8], after:[8,8,8,8,8], q2:'Realising how detrimental the 3 C\'s can be.', q3:'Reducing/eliminating everybody\'s inclination to go to the 3 C\'s.', q4:'Be great to know who is DC trained in our branch. Networking opportunity with course participants.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsUYLP_2025Data() {
+  if (data.classes.find(c => c.id === 'bradnams-uylp-mar2025')) return;
+  data.classes.push({
+    id: 'bradnams-uylp-mar2025', company: "Bradnam's UYLP (2025)", programme: 'UYLP', date: 'March 2025', trainer: '',
+    participants: [
+      { name:'Joshua Place', position:'Maintenance Planner', org:'National Glass', email:'joshua.place@nationalglass.com.au', before:[7,7,6,5,8], after:[8,8,8,7,8], q2:'Understanding my leadership vision and style of leader I am.', q3:'Keep learning and refine my leadership skills.', q4:'Encourage to take the lead during projects and be apart of the process.' },
+      { name:'Cyrus', position:'Senior TL', org:"Bradnam's", email:'cyrusperevise@gmail.com', before:[4,4,4,4,5], after:[6,6,6,6,6], q2:'', q3:'', q4:'' },
+      { name:'Lee Waine', position:'Sales Rep', org:"Bradnam's", email:'lee.waine@bradnams.com.au', before:[8,8,7,7,7], after:[9,9,9,9,9], q2:'Self reflection.', q3:'', q4:'' },
+      { name:'Vincent Wong', position:'Engineer', org:"Bradnam's Windows & Doors", email:'vincent.wong@bradnams.com.au', before:[7,7,7,7,7], after:[7,8,8,8,8], q2:'The course has provided more insights on different communication style with people with different personality.', q3:'Understand how and what commercial style that would bring the best out of my team.', q4:'Be patience, as coaching people might not have a direct measure.' },
+      { name:'Simon Lemalu', position:'Truck Driver TL', org:"Bradnam's", email:'lemalusmon@gmail.com', before:[4,5,5,4,5], after:[6,6,6,6,6], q2:'', q3:'', q4:'' },
+      { name:'William Van', position:'Arvo Inventory Team Leader', org:"Bradnam's", email:'william.van@bradnams.com.au', before:[7,7,6,6,5], after:[8,8,7,7,7], q2:'Being aware of other people\'s personalities and not treating everyone the same.', q3:'Listen and be more available for the team.', q4:'Give more feedback.' },
+      { name:'Reilly Boyd', position:'Glazier/Fitter', org:"Bradnam's", email:'reillynick2010@gmail.com', before:[7,8,7,7,7], after:[8,9,9,9,9], q2:'It has bought me out of my shell and helped build the confidence I was lacking in front of larger groups.', q3:'A positive attitude to not only learning, but teaching. Having a good attitude to teaching others will create a good attitude for their learning which creates a domino effect.', q4:'Throw me in the deep end of group situations so I am not forgetting the skills I have learned.' },
+      { name:'Jake Ferrari', position:'Co-Ordinator', org:"Bradnam's", email:'jake.ferrari@bradnams.com.au', before:[6,7,6,5,6], after:[8,9,10,9,8], q2:'Personal gain would be confidence in my own abilities as well as leading a team. Creating better more appropriate communication techniques.', q3:'Be positive with feedback where you can. Coach your team to success is the greatest self reflection.', q4:'He already does it but I enjoy the regular check-ins on where I\'m at and what\'s further required and helping to complete those further requirements.' },
+      { name:'Jarrod Jacobson', position:'Sales Rep', org:"Bradnam's Toowoomba", email:'jarrod.jacobson@bradnams.com.au', before:[8,9,7,9,7], after:[9,9,8,10,8], q2:'Identifying that some of my perceived strengths may be hindering others, to so allow them to shine.', q3:'Be more present, let others shine.', q4:'Provide me opportunities to be pertinent and let others those around me. Patience and prescience.' },
+      { name:'Matt Lennon', position:'Senior Service', org:"Bradnam's", email:'matthew.lennon@bradnams.com', before:[6,6,6,6,6], after:[9,9,8,9,8], q2:'My major benefit I can take away is to set better boundaries e.g. stop answering emails/phone calls after hours.', q3:'Confident clear communication.', q4:'A plan of my position to work towards.' },
+      { name:'Michael Kahler', position:'Scheduling', org:"Bradnam's", email:'michael.kahler@bradnams.com.au', before:[5,5,5,5,5], after:[7,8,8,8,8], q2:'Leading by example.', q3:'5 levels of leader. Knowing where I am at so team can follow.', q4:'Be there for guidance.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsLTR_2025Data() {
+  if (data.classes.find(c => c.id === 'bradnams-ltr-apr2025')) return;
+  data.classes.push({
+    id: 'bradnams-ltr-apr2025', company: "National Glass LTR (2025)", programme: 'LTR', date: 'April 2025', trainer: '',
+    participants: [
+      { name:'Tim McCarthy', position:'Sales Rep', org:'National Glass', email:'tim.mccarthy@nationalglass.com.au', before:[6,7,8,8,8], after:[9,8,9,9,9], q2:'', q3:'', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDCC01_2024Data() {
+  if (data.classes.find(c => c.id === 'bradnams-dcc01-feb2024')) return;
+  data.classes.push({
+    id: 'bradnams-dcc01-feb2024', company: "Bradnam's DCC01 (2024)", programme: 'DCC', date: 'February 2024', trainer: 'William Farmer',
+    participants: [
+      { name:'Lee-Anne McLean', position:'', org:"Bradnam's", email:'cuthensby@yahoo.com.au', before:[5,8,7,5,7], after:[7,9,9,8,8], q2:'To learn to be more confident.', q3:'Believe in myself and my abilities.', q4:'' },
+      { name:'Kyle Schroeder', position:'', org:"Bradnam's", email:'schroedes99@gmail.com', before:[3,4,6,5,3], after:[3,4,6,5,3], q2:'', q3:'', q4:'' },
+      { name:'Jodie McLaren', position:'', org:"Bradnam's", email:'jodie.mclaren@bradnams.com.au', before:[7,7,7,3,4], after:[9,10,9,8,8], q2:'Realising my own potential.', q3:'Will not overthink situations. Be clear and in communication. Smile!!!', q4:'' },
+      { name:'Nikita Gupta', position:'', org:"Bradnam's", email:'nikita.gupta@bradnams.com.au', before:[4,3,4,6,7], after:[9,9,9.5,9.5,9.5], q2:'This course has given me direction and a lot of confidence. I was hesitant in approaching people which has changed. I was shy/afraid of talking in front of a group of audience which has shifted. It helped me to come out of my comfort zone. Amazing!', q3:'Be more appreciative. Be a good listener. Lead well.', q4:'' },
+      { name:'Sabine Klimisch', position:'', org:"Bradnam's", email:'skklimisch@gmail.com', before:[7,6,6,6,8], after:[9,8,8,7,9], q2:'To step out of my comfort zone and feel confident to talk in front of a group.', q3:'Learn and implement the principles in every day and day to day life, in all situations.', q4:'' },
+      { name:'Tori Watson', position:'', org:"Bradnam's", email:'tori.watson.94@outlook.com', before:[5,6,6,5,5], after:[8,8,9,7,8], q2:'Helped me step out of my comfort zone and really not worry about the thoughts of others as we are all in this together.', q3:'To take more risks and know that if I back myself I can achieve anything.', q4:'' },
+      { name:'Joshua Batey', position:'', org:"Bradnam's", email:'josh.batey@bradnams.com.au', before:[6,7,7,6,6], after:[8,8,8,8,8], q2:'This course has helped me for my future goals in management.', q3:'Be a better listener, be sympathetic and allow others to come up with solutions.', q4:'' },
+      { name:'Rachel Meyer', position:'', org:"Bradnam's", email:'rachel.meyer@bradnams.com.au', before:[7,7,5,6,1], after:[9,8,7,7,5], q2:'Putting things in perspective and giving me the tools to tackle new situations.', q3:'Being less negative by using the 3 Cs more regularly and appreciating my team as we all work hard.', q4:'' },
+      { name:'Sanjay Castro', position:'', org:"Bradnam's", email:'sanjay.adolphus24@gmail.com', before:[4,6,5,4.7,3], after:[9,8,9,8.7,9], q2:'Became a better version of myself and a better leader.', q3:'Communicate more effectively. Challenge my team.', q4:'' },
+      { name:'Jessica Rau', position:'', org:"Bradnam's", email:'jessi.rau@outlook.com', before:[6,7,8,6,8], after:[9,8,9,8,9], q2:'It\'s allowed me to see how my large personality can be adapted into leadership and how to manage my worries and stress to handle situations better.', q3:'Be more willing to take risks and just do it!', q4:'' },
+      { name:'Mahyar Melana', position:'', org:"Bradnam's", email:'mahyar75@yahoo.com', before:[4,5,5,3,3], after:[6,6,7,5,5], q2:'I will use the techniques to lower my stress level and enhance my relationships in both personal and professional life.', q3:'Try to see things from other people\'s perspective and not to criticise.', q4:'' },
+      { name:'Jacob Thrower', position:'', org:"Bradnam's", email:'jthrower95@hotmail.com', before:[4,6,6,7,4], after:[8,8,8.5,8,7], q2:'The major benefit of this course for me was to have more self belief and confidence. I still have a way to go but this was a great first step. Professionally this will help with communicating with colleagues and asserting myself.', q3:'To speak up more and not be so worried or stressed about speaking up.', q4:'' },
+      { name:'Nathan Chan', position:'', org:"Bradnam's", email:'nathan.chan@bradnams.com.au', before:[4,4,4,3,4], after:[6,7,6,5,8], q2:'A major benefit from this course was I learnt about how to deal with stress at work and at home and also how to be better at having more impactful communication.', q3:'One action I will take is to avoid an argument.', q4:'' },
+      { name:'Chad Foley', position:'', org:"Bradnam's", email:'foleys72@hotmail.com', before:[5.5,8,7,7,4], after:[8,8,8,8,8], q2:'Personally stress has been an issue. This course has really helped me gain some ways to reduce stress at work and at home. This will help me be a better leader at work.', q3:'Listen more effectively and really understand people\'s point of view. Make them feel like ideas are theirs.', q4:'' },
+      { name:'Ashley Nilson', position:'', org:"Bradnam's", email:'ashplague@me.com', before:[7,7,5,8,5], after:[9,8,8,10,8], q2:'Upgrade people skills. I believe in myself as a leader but I knew I could enhance those other traits. I had a wonderful group who acknowledge my growth in confidence.', q3:'Be less critical, offer help rather than wait for others to approach, be friendly and know my own worth rather than let others diminish who I am. A Leader! An example!', q4:'' },
+      { name:'Kerri Hourston', position:'', org:"Bradnam's", email:'allthingsoldi@icloud.com', before:[3,3,5,3,4], after:[6,6,8,3,8], q2:'This course has pushed me further out of my comfort zone than anything else I have ever done before so I have survived. I have learnt a lot, met amazing people, laughed (only shed a couple of tears) and with recommend it to others.', q3:'Using the stacks to improve communication.', q4:'' },
+      { name:'Wade Morrow', position:'', org:"Bradnam's", email:'morrow.wade@gmail.com', before:[4,6,6,5,5], after:[7,8,8,9,10], q2:'To manage work related stress and proper communication.', q3:'Don\'t criticise, condemn or complain.', q4:'' },
+      { name:'Shipra', position:'', org:"Bradnam's", email:'shipra.cairns@gmail.com', before:[5,5,4,4,3], after:[7,7,7,5,8], q2:'This course helps me a lot, now I feel more comfortable to speak out in front of others, feeling more confident.', q3:'Believe in yourself and you can do it.', q4:'' },
+      { name:'Rebecca O\'Hone', position:'', org:"Bradnam's", email:'rebeccanna5@outlook.com', before:[6,6,5,5,2], after:[9,8,7,8,7], q2:'To communicate better with my team and build professional relationships to foster cohesion and success. To reduce the shame spiral and stress with work.', q3:'Enact attitude changes in myself to foster positive influence in the workplace.', q4:'' },
+      { name:'Kade Fraser', position:'', org:"Bradnam's", email:'kade.fraser@gmail.com', before:[5,5,7,7,7], after:[8,9,9,9,10], q2:'Improved my confidence and showed me I can do it if I put my mind to it.', q3:'Looking at other people\'s ideas and make their idea feel valued.', q4:'' },
+      { name:'Vincent Wong', position:'Process Engineer', org:"Bradnam's", email:'wongyongsheng.vincent@gmail.com', before:[6,6,6,6,6], after:[7,7,8,7,7], q2:'One of the biggest benefits from this course is in concise communication. The emphasis of getting to the points will mostly improve our communication.', q3:'I intend to practise clear communication with the team to ensure their ideas will not be undermined.', q4:'One of the ways is allowing independence for...' },
+      { name:'Travis Steley', position:'Team Leader', org:"Bradnam's", email:'travisteley13@hotmail.com', before:[7,7,7,7,7], after:[9,9,9,9,9], q2:'Getting used to being out of your comfort zone.', q3:'Be more confident.', q4:'Communication and a grown relationship.' },
+      { name:'Reinaldo Antazo', position:'Team Leader', org:"Bradnam's", email:'rey-antazo81@yahoo.com', before:[7,7,7,7,7], after:[8,8,8,8,8], q2:'Gain more knowledge, experience, confidence.', q3:'Be more confident.', q4:'' },
+      { name:'Jacki Weatherstone', position:'Internal Sales', org:"Bradnam's Windows & Doors", email:'jacki.weatherstone@bradnams.com.au', before:[7,8,9,7,7], after:[8,9,9,8,10], q2:'', q3:'', q4:'' },
+      { name:'Belinda Kahler', position:'Sales Internal', org:"Bradnam's", email:'belkahler15@gmail.com', before:[2,3,3,3,2], after:[4,4,4,4,4], q2:'Self — growth of confidence. Not stress so much.', q3:'', q4:'Be more supportive.' },
+      { name:'Caitlin O\'Driscoll', position:'Internal Sales', org:"Bradnam's", email:'caitlin.odriscoll@bradnams.com.au', before:[7,8,8,7,5], after:[8,9,9,9,8], q2:'', q3:'', q4:'' },
+      { name:'Bernadette Ingalbandara', position:'Store Team Leader', org:"Bradnam's (Melb)", email:'bernadette.ingalbandara@outlook.com', before:[6,7,7,7,5], after:[8,8,9,8,9], q2:'', q3:'', q4:'' },
+      { name:'David Nibbs', position:'Operations Manager', org:'Clark Windows', email:'david@clarkwindows.com.au', before:[7,7,7,7,7], after:[9,9,9,9,8], q2:'Personal reflection, people skills. It will help grow leaders under me. Personal relationship growth.', q3:'Be more receptive to people\'s views and needs.', q4:'Listen.' },
+      { name:'Trent Saxelby', position:'Sales Representative', org:"Bradnam's", email:'trent.saxelby@bradnams.com.au', before:[7,6,7,8,5], after:[9,8,9,9,9], q2:'Getting more comfortable with having some conversations in a way that I didn\'t think about.', q3:'Being a better listener.', q4:'' },
+      { name:'Antony Calver', position:'Service Manager', org:"Bradnam's W&D", email:'antocalvert@gmail.com', before:[6,6,8,6,4], after:[8,8,9,8,6], q2:'Given me tools to cope with stress. Opened my eyes to clear communication. And giving people the time of day!', q3:'When people come into my office to talk, stop what I\'m doing and actually...', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsLTR_2024Data() {
+  if (data.classes.find(c => c.id === 'bradnams-ltr-mar2024')) return;
+  data.classes.push({
+    id: 'bradnams-ltr-mar2024', company: "Bradnam's LTR (2024)", programme: 'LTR', date: 'March 2024', trainer: '',
+    participants: [
+      { name:'Brendon Surb', position:'Transport Supervisor', org:"Bradnam's (Conran Downs)", email:'brendonsurb@live.com', before:[7,7,8,8,8], after:[9,9,9,9,9], q2:'Benefits me as it shapes me into a better leader for my team.', q3:'Always adapt to the situation before addressing the issue.', q4:'To build trust within our team and to address issues together.' },
+      { name:'Sushil Gupta', position:'Engineering Manager', org:'National Glass', email:'sushil.gupta@nationalglass.com.au', before:[6,6,6,6,7], after:[9,8,9,8,8], q2:'Self assessment and realisation. Assessing the team strength and build on to their skills by challenging and backing them.', q3:'Work more closely with the team and appreciate them more often genuinely.', q4:'By providing regular feedback on my journey to leadership and back me when I don\'t meet his expectations.' },
+      { name:'Parishwaram Vasci', position:'Maintenance Manager (National Aluminium)', org:"Bradnam's W&D", email:'pari@aluminiumprofiles.com.au', before:[6,4,5,5,7], after:[10,9,9,9,10], q2:'Understand the people.', q3:'Changing my behaviour to the team, appreciating more.', q4:'Delegating more of his job to me to show my skills.' },
+      { name:'Zhi-chao (Daniel) Guo', position:'Safety Advisor/RTW', org:"Bradnam's", email:'daniel.guo@bradnams.com.au', before:[7,8,7,6,7], after:[9,9,9,8,8], q2:'Learning about the topics covered in these last 3 days has helped me better myself as a leader through clarity.', q3:'Delegating more tasks to my team where possible.', q4:'Supporting me through my support team. Build a team of likeminded individuals.' },
+      { name:'Kalon House', position:'Managing Director', org:'Clark Windows', email:'kalon@clarkwindows.com.au', before:[6,8,7,7,8], after:[8,10,9,9,9], q2:'I\'ve learnt how to connect and communicate with my team members in a more positive manner.', q3:'I\'m planning to focus on things I can still delegate and how I go about doing this.', q4:'We can have open discussions about my development.' },
+      { name:'Adam Byrne', position:'Sales Manager', org:"Bradnam's", email:'adam.byrne@bradnams.com.au', before:[7,7,6,6,7], after:[9,9,9,8,9], q2:'Self awareness and identifying values of others.', q3:'Better time management, delegation and open communication within my team.', q4:'Back my ideas.' },
+      { name:'Daniel Quinn', position:'Service Manager', org:"Bradnam's", email:'daniel.quinn@bradnams.com.au', before:[6,6,5,5,5], after:[8,8,7,7,7], q2:'I\'ve collected some new tools and sharpened some old ones.', q3:'Stop black dotting people in and outside of work.', q4:'Put some of what I have learned into practice.' },
+      { name:'Jordyn Thorpe', position:'Scheduling & Purchasing', org:"Bradnam's", email:'jordyn.thorpe@bradnams.com.au', before:[7,7,7,7,7], after:[9,10,9,9,9], q2:'It has shown that I can be a confident leader who has a strong skill set to guide a team to success.', q3:'To not allow myself to have preconceived judgement about team members, as it may be hiding the talent that is in front of me.', q4:'By continuing to guide and support me, whilst continuing to give me further challenges and grow my knowledge about the Bradnam\'s business.' },
+      { name:'Matt Campbell', position:'Account Manager', org:"Bradnam's", email:'matt.campbell@bradnams.com.au', before:[6,6,8,7,7], after:[8,8,8,8,8], q2:'Recognising how my actions and attitude can have negative effect on work as well as home.', q3:'Delegate. Stress less. Control the controllable.', q4:'Assist with training and promote a stress free culture.' },
+      { name:'Alana Cox', position:'Service Coordinator (BNE)', org:"Bradnam's", email:'alana.cox@bradnams.com.au', before:[7,7,6,6,7], after:[9,9,8,9,9], q2:'Better understanding how to deal with stress and get more of work/life balance.', q3:'Delegation — not creating dumping ground but delegation to empower.', q4:'Support delegation ideas and help create our service hub in SEQ.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsUYLP_2024Data() {
+  if (data.classes.find(c => c.id === 'bradnams-uylp-mar2024')) return;
+  data.classes.push({
+    id: 'bradnams-uylp-mar2024', company: "Bradnam's UYLP (2024)", programme: 'UYLP', date: 'March 2024', trainer: '',
+    participants: [
+      { name:'Guy Hornery', position:'Purchasing/Stock Controller', org:"Bradnam's", email:'guy.hornery@bradnams.com.au', before:[6,5,6,7,6], after:[8,7,7,8,8], q2:'Learnt more about myself to improve.', q3:'Pass on as much as I can.', q4:'Give me more responsibility.' },
+      { name:'Brett Hatchman', position:'Project Manager', org:"Bradnam's", email:'brett.hatchman@bradnams.com.au', before:[6,6,6,6,7], after:[8,9,8,7,9], q2:'Imagining the happier version of myself that I project onto others.', q3:'Be positive. More positive.', q4:'Offer constructive criticism when he needs to.' },
+      { name:'Josh Batey', position:'', org:"Bradnam's", email:'josh.batey@bradnams.com.au', before:[9,8,7,7,6], after:[9,9,9,8,8], q2:'This course has helped me communicate better with people I need help from.', q3:'Communicate with my team members in a way to get jobs done correct and efficient.', q4:'My manager can help by giving me the time needed to communicate with others.' },
+      { name:'Kyle Rau', position:'Purchasing', org:"Bradnam's", email:'kyle.rau@bradnams.com.au', before:[3,5,4,5,4], after:[6,7,8,9,9], q2:'Confidence, open communication with others.', q3:'Open communication.', q4:'Working closer with my co-worker.' },
+      { name:'Paddy Kane', position:'Service', org:"Bradnam's", email:'paddy.kane@bradnams.com.au', before:[4,4,6,4,4], after:[7,8,8,7,8], q2:'Tools to use as a leader. How to work on triggers.', q3:'Pass on the knowledge.', q4:'Let me be a leader.' },
+      { name:'Richard Deacon', position:'Internal Sales Rep', org:"Bradnam's", email:'richard.deacon@bradnams.com.au', before:[8,7,6,7,7], after:[8,8,7,8,8], q2:'Finding out where I need to improve on that will help me improve and motivate the team.', q3:'Listen more.', q4:'Give me opportunity to show the new skills I have learnt.' },
+      { name:'Heather McCammont', position:'Sales', org:"Bradnam's", email:'heather.mccammont@bradnams.com.au', before:[3,3,3,3,3], after:[8,7,7,8,8], q2:'Confidence, understanding on people\'s different personality.', q3:'Be a good listener. Encourage others to talk about themselves.', q4:'Provide feedback.' },
+      { name:'Tamala Ryan', position:'Office Manager', org:"Bradnam's", email:'tamala.ryan@bradnams.com.au', before:[7,7,6,7,7], after:[9,9,8,9,10], q2:'We learnt new techniques to work with my staff. With every course I do I feel less nervous about what to expect.', q3:'Equally supporting my team and seeking feedback to improve.', q4:'Check in with me.' },
+      { name:'Tiarne Sinclair', position:'Sales', org:"Bradnam's", email:'tiarne.sinclair@gmail.com', before:[8,7,7,6,7], after:[9,9,8,8,9], q2:'Overall I have more confidence. I believe I can and will be able to successfully lead a team.', q3:'Trust and have more patience in myself. Try to not be over controlling and have trust.', q4:'Be thorough communication and feedback. And continue to offer career development.' },
+      { name:'Dale Jones', position:'', org:"Bradnam's", email:'dale.jones@bradnams.com.au', before:[5,6,5,5,5], after:[8,9,8,9,9], q2:'It has given me more self confidence. I have more tools to make me a better leader.', q3:'To become a confident, approachable leader.', q4:'Give me more responsibility.' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsDCC1_2023Data() {
+  if (data.classes.find(c => c.id === 'bradnams-dcc1-mar2023')) return;
+  data.classes.push({
+    id: 'bradnams-dcc1-mar2023', company: "Bradnam's DCC Class 1 (2023)", programme: 'DCC', date: 'March 2023', trainer: 'William Farmer',
+    participants: [
+      { name:'Moana Moana', position:'', org:"Bradnam's", email:'moana.moana@hotmail.com', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'Great insight how to lead with the greatest confidence.', q3:'Finding common ground with every individual.', q4:'' },
+      { name:'Kyle Rau', position:'', org:"Bradnam's", email:'kyle-rau@hotmail.com', before:[3,3,3,3,3], after:[6,6,7,6,7], q2:'Self confidence, being able to start a conversation with a stranger and not being nervous and shutting down.', q3:'Having to adapt fast to a situation but it has made me more comfortable.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsUYLP1_2023Data() {
+  if (data.classes.find(c => c.id === 'bradnams-uylp1-mar2023')) return;
+  data.classes.push({
+    id: 'bradnams-uylp1-mar2023', company: "Bradnam's UYLP Class 1 (2023)", programme: 'UYLP', date: 'March 2023', trainer: 'William Farmer',
+    participants: [
+      { name:'Rhys Coles', position:'Furnace Team Leader', org:'National Glass Brisbane', email:'rcole16@hotmail.com', before:[5,6,5,6,6], after:[8,7,7,7,8], q2:'Not to be afraid to get up and speak or be intimidated.', q3:'Use the Golden Book.', q4:'' },
+      { name:'Natalie Smith', position:'Customer Service', org:"Bradnam's Windows and Doors", email:'natalie.smith@bradnams.com.au', before:[5,5,5,5,5], after:[7,8,7,7,7], q2:'To have more self belief and awareness in myself.', q3:'More effective communication within my team. To inspire more team work and a cohesive team.', q4:'' },
+      { name:'Josh Walker', position:'Sales Rep', org:'Cesana', email:'josh.walker@cesana.com.au', before:[4,4,6,5,5], after:[7,8,7,7,8], q2:'Learning to be patient and considerate of others and understand where they may be at and how I can motivate them to improve.', q3:'Recognise my core values and apply key principles to motivate others.', q4:'' },
+      { name:'John (Minh) Nguyen', position:'Account Manager — Sales Rep', org:"Bradnam's Windows & Doors", email:'john.nguyen@bradnams.com.au', before:[8,8,7,7,7], after:[10,10,8,8,9], q2:'That I can be passive in certain things I do.', q3:'Becoming and applying the principles to be becoming more assertive.', q4:'' },
+      { name:'Sharlene Layland', position:'Safety & Reno Coordinator', org:"Bradnam's", email:'sharlene.layland@bradnams.com.au', before:[8,6,5,5,8], after:[8,8,7,7,8], q2:'Stepping outside my comfort zone talking to people. Starting conversations and listening. Become genuinely interested.', q3:'', q4:'' },
+      { name:'Scott Eldridge', position:'Day Shift Furnace Team Leader', org:'National Glass', email:'scotte@hotmail.com', before:[5,6,3,3,5], after:[8,8,7,5,7], q2:'To be a more stronger leader.', q3:'Lifting morale of the crew.', q4:'' },
+      { name:'Jordyn Thorpe', position:'Purchasing + Scheduling', org:"Bradnam's Windows + Doors", email:'jordynthorpe@hotmail.com', before:[8,7,5,6,6], after:[9,9,8,8,8], q2:'That my input is important. I need to back myself as those around me see the value in what I bring to the situation. I don\'t need to second guess if what I am doing is enough.', q3:'Being more confident with my decisions and going after opportunities without second guessing my abilities/worth.', q4:'' },
+      { name:'Richard McMaster', position:'Service Tech Supervisor', org:'Kings Park', email:'richard.mcmaster@bradnams.com.au', before:[5,6,5,8,5], after:[8,9,8,10,8], q2:'That I am good enough.', q3:'The Golden Book.', q4:'' },
+      { name:'Ben Lindberg', position:'OHS Coordinator', org:"Bradnam's Windows + Doors", email:'ben.lindberg@bradnams.com.au', before:[5,6,3,7,5], after:[7,8,6,8,8], q2:'Difference between a leader and a manager. The art of listening.', q3:'Delegate more. Ask more questions.', q4:'' },
+      { name:'Tanya Luxford', position:'Internal Rep', org:"Bradnam's", email:'tinnie-1992@hotmail.com', before:[7,6,5,4,6], after:[8,8,8,8,8], q2:'How much I take in and grow on all areas on leadership.', q3:'The Golden Book at work and life. I want to live and breathe the book.', q4:'' },
+      { name:'Erica Briggs', position:'Regional Supervisor', org:"Bradnam's Windows & Doors", email:'erica.briggs@bradnams.com.au', before:[8,7,6,7,7], after:[9,9,8,8,9], q2:'Building my own confidence and giving me the tools I need to be a better communicator and support for my team.', q3:'More cohesive team. All working towards the same goal.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsUYLP2_2023Data() {
+  if (data.classes.find(c => c.id === 'bradnams-uylp2-mar2023')) return;
+  data.classes.push({
+    id: 'bradnams-uylp2-mar2023', company: "Bradnam's UYLP Class 2 (2023)", programme: 'UYLP', date: 'March 2023', trainer: 'Annemarie Sage Wood',
+    participants: [
+      { name:'George Alsop', position:'Despatch Process Worker', org:'National Glass', email:'galsop2000@gmail.com', before:[5,5,5,5,5], after:[7.5,6,6,6,5], q2:'', q3:'', q4:'' },
+      { name:'Daemon Tanner', position:'Furnace Team Leader', org:'National Glass Brisbane', email:'daj161210@gmail.com', before:[2,2,2,4,4], after:[7,8,7,9,9], q2:'Public speaking, understanding how to communicate better.', q3:'Better team leader, more efficient work force.', q4:'' },
+      { name:'Fadi Eid', position:'Purchasing & Payroll Officer', org:"Bradnam's Windows & Doors", email:'fadieid88@gmail.com', before:[4,6,7,7,7], after:[7,8,9,9,10], q2:'After this training, now I have new powerful tools in my hands.', q3:'Now I am more able to do my work in better ways.', q4:'' },
+      { name:'Sampath Kumar', position:'Team Leader', org:"Bradnam's Windows and Doors", email:'apsampach@gmail.com', before:[6,5,6,7,5], after:[9,9,10,9,9], q2:'To communicate is other passion. How important it is to lead the people and productivity and to lead.', q3:'From attending it\'s very good leaders.', q4:'' },
+      { name:'Brendon Sula', position:'Transport Supervisor', org:"Bradnam's Windows & Doors", email:'brendon.sula@bradnams.com.au', before:[6,6,8,6,8], after:[8,8,9,8,9], q2:'Over coming stage fright, to be more understanding about issues — Communicate and be curious before jumping to conclusion.', q3:'Still cut will be to put what I learnt into action and to build high performing teams.', q4:'' },
+      { name:'Dennie Rodrigo', position:'Area Supervisor — Double Hung', org:"Bradnam's", email:'dennierodrigogoyahoo.com', before:[7,7,4,4,7], after:[10,10,10,10,10], q2:'Have built more confidence. Also self awareness. Know more about my strength and weakness.', q3:'More efficient. More productive. Better communicator. Be an inspiration to others.', q4:'' },
+      { name:'Gabriel Grieger', position:'', org:'National Glass Brisbane', email:'3-a_grieger777@hotmail.com', before:[7,7,6,8,8], after:[8,8,7,8,9], q2:'Confidence boosting. Confronting fears.', q3:'What willing to take the time to be genuine and positive.', q4:'' },
+      { name:'Joshua Bradley', position:'Team Leader', org:"Bradnam's", email:'dozabaylah@gmail.com', before:[5,5,5,5,5], after:[8,8,8,8,8], q2:'How to respond better, and push myself a bit more in awkward situation.', q3:'To better build my team and tackle problems as a unit than individuals.', q4:'' },
+      { name:'Jason Oxley', position:'Multi Team Leader', org:"Bradnam's", email:'jasonoxley@bigpond.com', before:[7,6,6,4,5], after:[8,8,8,9,9], q2:'Improve my weakness through truthful self identification of them.', q3:'A more aware leader.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsWGYH_2023Data() {
+  if (data.classes.find(c => c.id === 'bradnams-wgyh-2023')) return;
+  data.classes.push({
+    id: 'bradnams-wgyh-2023', company: "Bradnam's WGYH (2023)", programme: 'WGYH', date: '2023', trainer: '',
+    participants: [
+      { name:'Joshua Robinson', position:'', org:"Bradnam's", email:'grob@hotmail.com.au', before:[3,8,3,4,8], after:[7,9,7,9,9], q2:'Feedforward process after identifying areas or habits of mine that require attention.', q3:'Planning out my work effectively and setting smaller, more manageable goals.', q4:'' },
+      { name:'Daniel Quinn', position:'', org:"Bradnam's", email:'daniel.quinn@bradnams.com.au', before:[6,8,6,7,7], after:[8,10,8,8,8], q2:'Understanding that change is not that difficult and it starts with me.', q3:'Being more approachable under pressure by removing myself from current setting when dealing with peers. Take a commitment to breathe daily.', q4:'' },
+      { name:'Jonathan Robles', position:'', org:"Bradnam's", email:'jonathan251@gmail.com', before:[4,5,3,6,7], after:[6,8,5,7,9], q2:'To be able to see what I thought and what others see me as (others perspectives).', q3:'Be more aware of behaviour and take time to think before speaking.', q4:'' },
+      { name:'Glen Stewart', position:'', org:"Bradnam's", email:'glen.stewart@bradnams.com.au', before:[6,6,6,5,6], after:[8,9,8,9,9], q2:'The importance of giving proper genuine recognition.', q3:'Look for people doing things well, provide proper recognition in real time.', q4:'' },
+      { name:'Todd Charles', position:'', org:'National Glass', email:'todd.charles@nationalglass.com.au', before:[6,5,6,9,10], after:[9,9,8,9,10], q2:'Identifying things I am not doing verbally.', q3:'Not judging individual people.', q4:'' },
+      { name:'Tarryn Marshall', position:'', org:"Bradnam's", email:'tarrynmarshall@live.com.au', before:[7,6,5,7,8], after:[8,9,7,8,10], q2:'360 review outlined that I\'m not handling myself well when I\'m stressed (I thought I was!).', q3:'Daily questions, taking on feedback, striving to be better not perfect. Feed forward with boss.', q4:'' },
+      { name:'Russo Kostos', position:'', org:"Bradnam's", email:'schmo.kostos@bradnams.com.au', before:[4,5,2,5,5], after:[8,9,9,8,8], q2:'The ability of listening skills. Tools to use to become an effective leader.', q3:'Listening. Empathy. Forward thinking.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsWCCS1_2023Data() {
+  if (data.classes.find(c => c.id === 'bradnams-wccs-group1-aug2023')) return;
+  data.classes.push({
+    id: 'bradnams-wccs-group1-aug2023', company: "Bradnam's WCCS Group 1 (Aug 2023)", programme: 'WCCS', date: 'August 2023', trainer: 'William Farmer',
+    participants: [
+      { name:'Tiarne Sinclair', position:'Sales', org:"Bradnam's", email:'tiarne.sinclair@bradnams.com.au', before:[7,7,8,8], after:[9,8,8,8], q2:'Improved communication skills and confidence.', q3:'Better work ethic and relationships with customers which will help the business.', q4:'' },
+      { name:'Eli Rowe', position:'Sales Rep', org:"Bradnam's", email:'eli.rowe@bradnams.com.au', before:[7,6,6,8], after:[8,8,7,9], q2:'Confidence that I am on the right track for my sales career.', q3:'Having a more confident and competent employee.', q4:'' },
+      { name:'Adam Byrne', position:'', org:"Bradnam's", email:'adam.byrne@bradnams.com.au', before:[8,8,8,8], after:[9,9,9,10], q2:'This course has been a good refresher — mainly to be more attentive when listening to customers, taking the time to build rapport going forward.', q3:'Bringing to light the problems and possible training required for different departments.', q4:'' },
+      { name:'Dean Newton', position:'Sales', org:"Bradnam's", email:'dean.newton@bradnams.com.au', before:[9,9,9,9], after:[10,9,9,9], q2:'Just a reminder to treat customers with respect.', q3:'', q4:'' },
+      { name:'Bronwyne Fuller', position:'Showroom Sales', org:"Bradnam's", email:'', before:[6,6,6,6], after:[8,8,8,8], q2:'Refresher — recap.', q3:'All staff on the same page. Additional income. Staff satisfaction. Less staff turnover.', q4:'' },
+      { name:'Tamara Wood', position:'Customer Service Sales Support', org:"Bradnam's Warana", email:'tamara.wood@bradnams.com.au', before:[8,7,8,6], after:[9,8.5,9,8.5], q2:'Confidence in my ability to deal with difficult conversations.', q3:'Consistency across the branch having all had opportunity to come along and learn new techniques.', q4:'' },
+      { name:'Josh Batey', position:'Sales Rep', org:"Bradnam's", email:'josh.batey@bradnams.com.au', before:[7,8,8,8], after:[8,8,9,9], q2:'Complaint resolution and managing customer expectations.', q3:'Confidence when dealing with difficult situation with builders.', q4:'' },
+      { name:'Kurt Webb', position:'Installation Scheduler', org:"Bradnam's Toowoomba", email:'kurt.webb@bradnams.com.au', before:[8,9,8,8], after:[9,9,9,9], q2:'Using follow through with the customer.', q3:'The knowledge that will help customers come back and grow the business.', q4:'' },
+      { name:'Samantha Bickel', position:'Internal Sales Rep', org:"Bradnam's", email:'samantha.bickel@bradnams.com.au', before:[8,7,6,6], after:[9,8,7,7], q2:'Reminder to follow up, pay attention wording when talking to all customer.', q3:'Better management of our customer base. More confident staff.', q4:'' },
+      { name:'Ann Graves', position:'Internal Sales Rep', org:"Bradnam's W&D", email:'ann.graves@bradnams.com.au', before:[8,8,8,8], after:[9,9,9,9], q2:'Reminder and refresher course.', q3:'Professionalism across the board.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsWCCS2_2023Data() {
+  if (data.classes.find(c => c.id === 'bradnams-wccs-group2-aug2023')) return;
+  data.classes.push({
+    id: 'bradnams-wccs-group2-aug2023', company: "Bradnam's WCCS Group 2 (Aug 2023)", programme: 'WCCS', date: 'August 2023', trainer: 'William Farmer',
+    participants: [
+      { name:'Courtney Burgess', position:'Internal Sales', org:"Bradnam's", email:'courtney.burgess@bradnams.com.au', before:[8,8,8,7], after:[9,8,9,8], q2:'Customer\'s perspective. Importance of clarity.', q3:'What we can improve on — the customer understanding phone calls and how we can focus on positive.', q4:'' },
+      { name:'Tessa Metcalf', position:'Internal Sales Support', org:"Bradnam's Toowoomba", email:'tessa.metcalf@bradnams.com.au', before:[8,8,7,6], after:[9,9,8,8], q2:'Better understanding of how people think and how to respond to them. A little bit of extra effort can go a long way. Make the extra call, send the extra email etc.', q3:'A happy, loyal and satisfied customer base. Positive word of mouth. A company that enjoys their work.', q4:'' },
+      { name:'Bianca Burge', position:'Internal Sales', org:"Bradnam's Windows and Doors", email:'bianca.burge@hotmail.com', before:[8,7,8,7], after:[10,9,10,9], q2:'Learning how to handle conflict by using tools and skills that were mentioned in the training. Also from hearing how other people deal and react to conflict gave me an insight to what I could do differently.', q3:'This training / constant education. Team environment.', q4:'' },
+      { name:'Jesse Haupt', position:'Internal Sales', org:"Bradnam's", email:'jesse.haupt@bradnams.com.au', before:[8,9,6,7], after:[9,9,9,9], q2:'Revisiting customer service in general. Learning new ways to deal with conflict and resolving complaints.', q3:'Major benefit is my skills have improved and I can implement them everyday at work.', q4:'' },
+      { name:'Paul Taylor', position:'Sales Representative', org:"Bradnam's", email:'paul.taylor@bradnams.com.au', before:[5,5,6,6], after:[9,8,8,9], q2:'Attitudes to service. Inbound outbound.', q3:'More productive and profitable.', q4:'' },
+      { name:'Angela Sawtell', position:'Production Scheduler', org:"Bradnam's", email:'angela.sawtell@hotmail.com', before:[9,9,8,7], after:[9,8,9,8], q2:'Asking the question "is there anything else I can do for you?"', q3:'Going that extra mile for our customers.', q4:'' },
+      { name:'Paddy Kane', position:'Service', org:"Bradnam's (Warana)", email:'paddy.kane@bradnams.com.au', before:[8.5,8.5,8,7.5], after:[9.5,10,10,9.5], q2:'How to deal with the above issue in a positive manner.', q3:'My customer service ability.', q4:'' },
+      { name:'John McCall', position:'Brisbane Sales Manager', org:"Bradnam's Windows & Doors", email:'john.mcall@bradnams.com.au', before:[8,7,8,8], after:[10,9,9,10], q2:'Great to get a new energy to customer service.', q3:'So stronger customer relations.', q4:'' },
+      { name:'Chris McDowell', position:'Sales Rep', org:"Bradnam's", email:'chris.mcdowell@bradnams.com.au', before:[8,8,8,8], after:[10,10,10,10], q2:'Refreshing to hone skills.', q3:'I\'m a better version than at the start of the training.', q4:'' },
+      { name:'Alana Cox', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'alana.cox@bradnams.com.au', before:[7,8,7,7], after:[8,9,8,8], q2:'Refreshing knowledge about customer expectations so we\'re better able to service them/resolve conflict or issues.', q3:'This will improve my performance for the company\'s benefit.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+// ===== 2022 BRADNAM'S DATA =====
+function loadBradnamsDCC1_2022Data() {
+  if (data.classes.find(c => c.id === 'bradnams-dcc1-mar2022')) return;
+  data.classes.push({
+    id: 'bradnams-dcc1-mar2022', company: "Bradnam's DCC Class 1 (2022)", programme: 'DCC', date: '2022-03-08', trainer: 'William Farmer & Annemarie Sage Wood',
+    participants: [
+      { name:'James Curran', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'jimbob92@live.com.au', before:[5,5,5,6,5], after:[8,7,8,8,8], q2:'', q3:'', q4:'' },
+      { name:'Jack Stock', position:'Despatch Team Leader', org:"Bradnam's Windows & Doors", email:'jackstock-98@hotmail.com', before:[6,5,6,6,5], after:[9,9,10,9,8], q2:'To be a more confident public speaker who also has the confidence to back himself and lead my team to the very best of my ability.', q3:'Public speaking was one of my big issues but I now feel confident.', q4:'' },
+      { name:'Brenton Wilson', position:'Sales Representative', org:"Bradnam's Windows & Doors", email:'brenton.wilson@bradnams.com.au', before:[5,4,6,6,3], after:[8,8,8,8,9], q2:'Ability to not worry as much about things when I have done my best.', q3:'Remembering names. Being in front of a crowd speaking.', q4:'' },
+      { name:'Chris Southgate', position:'Sales Representative', org:"Bradnam's Windows & Doors", email:'chrissouthgate91@hotmail.com', before:[7,6,6,6,7], after:[8,7,9,8,9], q2:'Confidence and how to be the most powerful leader as possible.', q3:'Getting myself out of the comfort zone.', q4:'' },
+      { name:'Robert Prieto', position:'Supply and Installation Supervisor', org:"Bradnam's Windows & Doors", email:'robert.prieto@bradnams.com.au', before:[5,7,7,7,5], after:[8,9,9,9,8], q2:'I have learned to open up more. Be confident to voice my opinion in a positive way. I have learnt to reduce stress.', q3:'Public presenting was challenging, but did get easier through the course.', q4:'' },
+      { name:'Bryce Beaton', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'brycebeaton@gmail.com', before:[6,7,5,6,4], after:[9,9,9,9,8], q2:'', q3:'', q4:'' },
+      { name:'Khalil Eid', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'khalileid232@gmail.com', before:[5,5,6,5,5], after:[8,7,8,8,8], q2:'Build up my confidence. Open up to the people.', q3:'Pushing you out of your comfort zone.', q4:'' },
+      { name:'Mark Ryan', position:'Admin/Internal Sales', org:"Bradnam's Windows & Doors", email:'mark.ryan@bradnams.com.au', before:[6,6,5,5,6], after:[9,9,9,9,9.5], q2:'Different ways in looking at strategising and dealing with different personalities.', q3:'Stepping out of that comfort zone.', q4:'' },
+      { name:'Josh Walker', position:'Service Scheduler', org:'Cesana Shower Joint Venture', email:'josh.walker@cesana.com.au', before:[4,7,5,4,3], after:[8,9,8,7,7], q2:'Ways to reduce stress and communicate with others in a positive way.', q3:'Stepping in front of people and being vocal and open to change.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsUYLP_2022Data() {
+  if (data.classes.find(c => c.id === 'bradnams-uylp-mar2022')) return;
+  data.classes.push({
+    id: 'bradnams-uylp-mar2022', company: "Bradnam's UYLP (2022)", programme: 'UYLP', date: '2022-03-08', trainer: 'William Farmer & Annemarie Sage Wood',
+    participants: [
+      { name:'Trh Elmira Pon', position:'Team Leader', org:"Bradnam's Windows & Doors", email:'ttp76@hotmail.com', before:[5,5,5,5,5], after:[8,8,8,8,8], q2:'It made me realise that my team and I have just been doing our jobs just to get it done. Now, I have renewed passion for training and influencing.', q3:'The business will thrive.', q4:'' },
+      { name:'Joel Careless', position:'Area Co-ordinator', org:"Bradnam's Windows & Doors", email:'joel.careless@bradnams.com.au', before:[8,7,5,5,5], after:[9,9,7,8,8], q2:'Being more aware of myself so I can push through a task when I might be unsure.', q3:'Communication channels will be more open.', q4:'' },
+      { name:'Chris McDowell', position:'Sales Rep', org:"Bradnam's Windows & Doors", email:'chris.mcdowell@bradnams.com.au', before:[5,6,5,6,6], after:[9,9,9,9,10], q2:'Made me take a look at myself from a different way and made me see areas I could improve and gave me skill that I can use everyday at work and home.', q3:'I will be a better version of myself than I was before I came to the training. I hope that I can encourage others by my actions.', q4:'' },
+      { name:'Daniel Guo', position:'Customer Service', org:"Bradnam's Windows & Doors", email:'daniel.guo009@gmail.com', before:[5,6,5,5,5], after:[8,8,7,9,9], q2:'Throughout these last 3 days, it has shown me many crucial leadership qualities. There is not one way to lead everyone as everyone is different. As a great leader I need to be able to identify this and tailor my leading uniquely to every different person.', q3:'As the organisation will work better as one cohesive unit, all believing in each other and superbly encouraged through hard work.', q4:'' },
+      { name:'Sabeh Ullah', position:'Team Leader', org:"Bradnam's Doors & Windows", email:'sabehullah@hotmail.com', before:[6,6,6,6,7], after:[9,9,9,9,9], q2:'It guided me in different ways like handling stressful situations, control triggers and identify zone.', q3:'Very useful, to treat team in different way adding values in organisation environment and upskilling people.', q4:'' },
+      { name:'I. Arulselvan', position:'Team Leader', org:"Bradnam's Windows & Doors", email:'selvan.selvan78@gmail.com', before:[6,5,5,4,7], after:[8,9,9,8,10], q2:'I learned many things in this course.', q3:'I am going to tell my colleagues to my team. Then they will follow my way. We will finish job on time, all so safest way. Quality.', q4:'' },
+      { name:'Jordan Sausi', position:'Team Leader', org:'National Glass', email:'jt231997@gmail.com', before:[1,7,2,7,5], after:[8,10,9,10,10], q2:'Knowing how to act in different situations and how to deal with different personalities.', q3:'A leader that is going to strive to be a great leader.', q4:'' },
+      { name:'Darryl Hess', position:'Area Co-ordinator', org:"Bradnam's Windows & Doors", email:'darryl.hess@bradnams.com.au', before:[7,8,6,6,8], after:[8,8.5,8,8,9], q2:'Major change in mindset. Will be a better me. This will make a better leader and someone worthy of following.', q3:'Happy team. Great work environment. Better achievements.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsWGYH_2022Data() {
+  if (data.classes.find(c => c.id === 'bradnams-wgyh-mar2022')) return;
+  data.classes.push({
+    id: 'bradnams-wgyh-mar2022', company: "Bradnam's WGYH (2022)", programme: 'WGYH', date: '2022-03', trainer: '',
+    participants: [
+      { name:'Brad Zeller', position:'', org:"Bradnam's Windows & Doors", email:'brad.zeller@bradnams.com.au', before:[5,6,5,6,8], after:[8,9,7,8,10], q2:'A better understanding of self and the value of open and honest communication.', q3:'The program is great — the challenge to me is to stay open to new ideas and strengthening my weaknesses.', q4:'' },
+      { name:'Ashley Woods', position:'', org:"Bradnam's Windows & Doors", email:'ashley.woods@bradnams.com.au', before:[3,5,3,5,5], after:[8,9,8,9,9], q2:'Self reflection and ways to improve and learn more. Set goals to improve and become a better person/leader. Learnt new skills.', q3:'Nothing, other than being out of your comfort zone. Everything was extremely positive.', q4:'' },
+      { name:'Kylie Irvin', position:'', org:"Bradnam's Windows & Doors", email:'kylie.irvin@bradnams.com.au', before:[4,8,5,0,5], after:[8,10,9,10,10], q2:'More knowledge into myself. How to identify or work on the not so positive aspects of my personality. How to build on these moving forward.', q3:'Re-setting my mindset. Thinking about the things I didn\'t realise I was doing and how this can affect others.', q4:'' },
+      { name:'Daniel Turner', position:'', org:'National Glass', email:'daniel.turner@nationalglass.com.au', before:[3,5,5,4,7], after:[8,10,8,10,9], q2:'Recognition of putting yourself first and comfort zone. Giving gratitude and acceptance of it. Being more open in conversation and listening at a more intense level.', q3:'Learning how to recognise when appreciation is required. Stepping outside comfort zone.', q4:'' },
+      { name:'Dean Newton', position:'', org:"Bradnam's Windows & Doors", email:'dean.newton@bradnams.com.au', before:[8,8,5,3,7], after:[10,10,9,9,9], q2:'Recognition of things that may be holding me back.', q3:'Not a lot.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
+function loadBradnamsLTM_2022Data() {
+  if (data.classes.find(c => c.id === 'bradnams-ltm-mar2022')) return;
+  data.classes.push({
+    id: 'bradnams-ltm-mar2022', company: "Bradnam's LTM (2022)", programme: 'LTM', date: '2022-03-15', trainer: 'William Farmer & Annemarie Sage Wood',
+    participants: [
+      { name:'David Maguire', position:'NSW Sales Manager', org:"Bradnam's Windows & Doors", email:'david.maguire@bradnams.com.au', before:[7,8,7,8,8], after:[8,9,8,9,8], q2:'It\'s gotten me to look harder at myself as a leader and how I deal with not just my team but people in general.', q3:'It\'s going to allow myself to become a stronger leader and grow my team and other members of the industry to the next level.', q4:'' },
+      { name:'David Gear', position:'Warehouse/Inventory Co-ordinator', org:'National Glass Brisbane', email:'david.gear@nationalglass.com.au', before:[3,3,4,3,3], after:[4,4,5,4,4], q2:'Learning we are all in the same boat and that the skills that we have acquired will improve our company.', q3:'A more skilled and empowered leader.', q4:'' },
+      { name:'Steve Wildschut', position:'Warana Branch Manager', org:"Bradnam's Windows & Doors", email:'steve.wildschut@bradnams.com.au', before:[8,8,7,8,9], after:[9,9,9,9,9], q2:'Working through solutions with peers and learning different and successful ways to achieve outcomes.', q3:'A more upskilled staff member who will be able to engage with his team to better performance.', q4:'' },
+      { name:'Tracey Parker', position:'Assistant Manager (Internal)', org:"Bradnam's Windows & Doors", email:'tracey.parker@bradnams.com.au', before:[7,7,8,6,7], after:[8,9,9,8,8], q2:'Learning with other leaders and making through real examples — business related. Always room for improvement and to look at things differently.', q3:'I can have improved over the past 3 days and can apply these skills to my professional and personal development.', q4:'' },
+      { name:'Robert Wilton', position:'Supervisor', org:"Bradnam's Victorian DC", email:'robert.wilton@bradnams.com.au', before:[6,7,7,7,6], after:[8,7,8,8,7], q2:'Learning about delegation. Empowering my team leaders and workers. Letting go and having trust that the jobs will get done.', q3:'Growing as a leader. Giving me ideas to take back to the DC.', q4:'' },
+      { name:'Tim Jones', position:'SEQ Project Manager', org:"Bradnam's Windows & Doors", email:'tim.jones@bradnams.com.au', before:[8,8,7,7,8], after:[9,9,8,9,9], q2:'Having a clear defined direction of how to achieve my goals.', q3:'I\'m going to be able to lead a strong, confident and happy team.', q4:'' },
+      { name:'Sandy McVeigh', position:'SEQ Ashmore Office Manager', org:"Bradnam's Windows & Doors", email:'sandy.mcveigh@bradnams.com.au', before:[7,7,7,7,8], after:[9,9,8,8,9], q2:'To learn how to communicate better with my staff and learn how to get the best out of their journey with Bradnam\'s.', q3:'A more confident manager.', q4:'' },
+      { name:'Scott McMillan', position:'Production Supervisor', org:'National Glass', email:'scott.mcmillan@nationalglass.com.au', before:[8,8,7,8,8], after:[9,9,9,9,9], q2:'Hitting the reset button on how I approach issues.', q3:'A happier environment for staff to work in.', q4:'' }
+    ]
+  });
+  saveData();
+}
+
 loadSampleData();
 loadSwooshData();
+loadAOLData();
+loadTillysData();
+loadMylanData();
+loadBradnamsDay1Data();
+loadBradnamsDay2Data();
+loadBradnamsDCCGroup1Data();
+loadBradnamsADCCData();
+loadBradnamsLTMData();
+loadBradnamsUYLPData();
+loadBradnamsTCData();
+loadBradnamsDCC1_2025Data();
+loadBradnamsDCC2_2025Data();
+loadBradnamsUYLP_2025Data();
+loadBradnamsLTR_2025Data();
+loadBradnamsDCC01_2024Data();
+loadBradnamsLTR_2024Data();
+loadBradnamsUYLP_2024Data();
+loadBradnamsDCC1_2023Data();
+loadBradnamsUYLP1_2023Data();
+loadBradnamsUYLP2_2023Data();
+loadBradnamsWGYH_2023Data();
+loadBradnamsWCCS1_2023Data();
+loadBradnamsWCCS2_2023Data();
+loadBradnamsDCC1_2022Data();
+loadBradnamsUYLP_2022Data();
+loadBradnamsWGYH_2022Data();
+loadBradnamsLTM_2022Data();
 loadPublicData();
 
 // ===== TAB SWITCHING =====
@@ -331,7 +909,7 @@ function switchTab(tab) {
   activeClassId = null;
   document.getElementById('tab-inhouse').className = 'tab-btn' + (tab === 'inhouse' ? ' active' : '');
   document.getElementById('tab-public').className = 'tab-btn' + (tab === 'public' ? ' active' : '');
-  document.getElementById('btn-add-class').style.display = tab === 'public' ? 'none' : '';
+  document.getElementById('btn-add-class').style.display = tab === 'inhouse' ? '' : 'none';
   renderSidebar();
   document.getElementById('main-content').innerHTML = '<div class="empty-state"><div class="es-icon">&#128202;</div><p>Select a class from the sidebar to view the breakthrough report</p></div>';
 }
@@ -963,22 +1541,219 @@ function loadPublicData() {
         { name:'Robert Arnold', position:'Internal Sales', org:'Bolt Masters', email:'', before:[6,7,5,6,7], after:[8,8,8,8,9], q2:'Building relationships and learning sales skills. Really helpful, thank you.', q3:'Building better relationships with customers.', q4:'' },
         { name:'William Lukey', position:'Sales Representative', org:'Boltmasters', email:'', before:[5,5,6,4,6], after:[9,7,7,6,8], q2:'Confidence in closing sales, how to create the connection with new customers.', q3:'', q4:'' }
       ]
+    },
+    {
+      id: 'public-21dccqld02-am', company: 'Public DCC — 21QLDDCC02 (Annemarie)', programme: 'DCC', date: '2021', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Robert Arnold', position:'', org:'Boltmasters', email:'', before:[4,5,6,5,6], after:[7,8,8,8,9], q2:'I feel like I believe in myself a lot more. I have a lot more confidence in public speaking.', q3:'A better person and a better leader and understanding of people in my workplace.', q4:'' },
+        { name:'Russell O\'Keefe', position:'Account Manager', org:'Ashton Manufacturing', email:'russell@ashtonmanufacturing.com.au', before:[1,1,1,1,1], after:[3,3,3,2,3], q2:'Learning to deal with stress.', q3:'Hopefully to understand them in a different light.', q4:'' },
+        { name:'Trent Barclay', position:'Warehouse', org:'BRS', email:'', before:[6,5,5,6,5], after:[9,8,9,9,9], q2:'I\'ve been able to learn how to talk and deal with people better.', q3:'I will be able to communicate with more people involved with work.', q4:'' },
+        { name:'PJ Cullinan', position:'', org:'GBA Consulting Engineers', email:'PJCullinan@gbacengineers.com.au', before:[10,5,4,5,6], after:[10,5,4,5,6], q2:'', q3:'', q4:'' },
+        { name:'Karen Marlow', position:'Business Development Manager — NSW', org:'Ashton Manufacturing', email:'', before:[5,5,8,5,5], after:[8,8,8,8,8], q2:'Personal confidence, growing as a person, believing in myself.', q3:'More confidence to be able to carry myself in many situations without stressing myself.', q4:'' },
+        { name:'Alec Harvey', position:'Senior Software Developer', org:'Infoxchange', email:'', before:[6,6,6,6,4], after:[9,9,10,10,8], q2:'Developing leadership skills, knowing how to manage and motivate people better.', q3:'I think I will be a more effective leader and hopefully be able to get the most out of my team and be more productive.', q4:'' },
+        { name:'Aaron Grace', position:'', org:'Connect Truckers', email:'', before:[5,5,5,5,7], after:[5,6,6,7,7], q2:'It has forced me to question preconceived notions I had about myself.', q3:'Potentially opened me up to new methods of self appraisal, made me realise I am not alone in an organisation and that I can ask for help.', q4:'' },
+        { name:'Ethan Korolyov', position:'Senior Solution Analyst', org:'InfoXchange', email:'', before:[8.5,7.5,8,7,7.5], after:[9.5,9,9,9,8.5], q2:'Clear skills for leading others and obtaining action appropriately towards goals.', q3:'I will be able to better manage and lead my team as well as others, work with difficult situations and people and improve overall engagement, efficiency and quality outcome — turning people into engaged employees.', q4:'' },
+        { name:'Peter Wang', position:'', org:'Infoxchange', email:'', before:[8,6,6,6,8], after:[8,8,8,8,9], q2:'Learn the systematic principles that can be applied in our daily life to the people around us. We can influence the people around us to make wherever we are a better place.', q3:'As we are practising what we learning in the workplace, there will definitely be more positivity to be introduced to the teams and should benefit the culture of the company quite significantly.', q4:'' },
+        { name:'Thomas Hanlon', position:'', org:'Fugen Masonry Contractors', email:'', before:[6,5,7,6,5], after:[7,7,8,8,8], q2:'Just realising the key methods of holding conversations and getting the most out of situations.', q3:'That I\'ll be able to practise and demonstrate these techniques in the workplace.', q4:'' },
+        { name:'Tony Park', position:'', org:'', email:'park746@imon.com.au', before:[5,3,5,4,6], after:[6,4,5,5,6], q2:'Role playing. Creating awareness to be a better leader.', q3:'', q4:'' },
+        { name:'Alyce Baumbek', position:'Senior Communications Advisor', org:'Container Exchange', email:'alyce.baumbek@containerexchange.com.au', before:[6,8,7,6.5,2], after:[7,9,8,7,3], q2:'Taking on learnings I otherwise would not.', q3:'Invaluable learnings.', q4:'' },
+        { name:'Ben Knight', position:'Supervisor', org:'DBS', email:'benknight2@gmail.com', before:[4,5,5,6,4], after:[7,8,8,9,8], q2:'Gaining confidence talking to a crowd. How to hold a conversation and methods of speaking to people.', q3:'Can go back to work with a better mindset on how to deal with different situations.', q4:'' },
+        { name:'Dennis Garrett', position:'', org:'Container Exchange QLD', email:'dennis.garrett@containerexchange.com.au', before:[5,5,5,6,5], after:[8,8,8,8,8], q2:'Come out of my comfort zone in a safe space.', q3:'Develop future leaders.', q4:'' },
+        { name:'Madison Felman', position:'', org:'Container Exchange', email:'', before:[6,7,7,4,3], after:[8,8,8,7,6], q2:'', q3:'', q4:'' },
+        { name:'Dominique Kesler', position:'HR Manager', org:'Kal Tire Australia', email:'dominique.kesler@kaltire.com', before:[8,8,8,8,6], after:[8,8,9,8,7], q2:'Letting go, letting the other person do a great deal of the talking. Don\'t criticise, condemn or complain.', q3:'A better, steadier leader.', q4:'' },
+        { name:'Albertus Engelbrecht', position:'Regional Manager', org:'COEX', email:'albertus.engelbrecht@containerexchange.com.au', before:[8,6,7,7,5], after:[8,8,8,8,8], q2:'Communicate more effectively. Present yourself at your best. Enhance your memory recall.', q3:'Communicate effectively to reach goals.', q4:'' },
+        { name:'Michael Wilson', position:'', org:'Container Exchange', email:'michael.wilson@containerexchange.com.au', before:[6,5,5,5,6], after:[8,8,8,8,8], q2:'A forum to practise and participate in structured growth activities.', q3:'Leaders that know how to communicate and get the best out of team members.', q4:'' },
+        { name:'Chris Lenz', position:'', org:'', email:'', before:[7,8,5,8,5], after:[6,9,8,9,7], q2:'Uncovered a lack of self confidence.', q3:'Similarly engaged.', q4:'' },
+        { name:'Summer Miller', position:'Head of Sales', org:'Your Insurance', email:'summerm@yai.com', before:[6,7,8,8,6], after:[7,8,9,6,7], q2:'Reminder of certain behaviours and how different people feel valued.', q3:'Lower/entry leadership at YOAI could benefit from this course — program name — Ignition.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-21dccqld04', company: 'Public DCC — 21QLDDCC04', programme: 'DCC', date: '2021', trainer: '', type: 'public',
+      participants: [
+        { name:'Neil MacLeod', position:'', org:'DMA Engineers', email:'neil.macleod@dmaengineers.com.au', before:[6,5,4,4,7], after:[8,7,7,6,5], q2:'Eagerness to talk to people and a process to do so. Less worry about approving others.', q3:'Having to share fairly personal things in a large group was good to be brought out of my comfort zone.', q4:'' },
+        { name:'Storm Thompson', position:'', org:'', email:'stormthompson@rocketmail.com', before:[5,4,4,8,3], after:[7,6,7,8,5], q2:'', q3:'', q4:'' },
+        { name:'Harrison Parker', position:'', org:'Height Dynamics', email:'harrison@heightdynamics.com.au', before:[5,7,7,6,5], after:[8,8,8,8,7], q2:'More confidence in new social situations and in my ability as a leader.', q3:'Sharing my opinions and experiences with everyone.', q4:'' },
+        { name:'Farnie Swanepoel', position:'', org:'Crisp Power & Control', email:'farnies@crisppc.com.au', before:[6,6,7,6,6], after:[8,8,9,8,8], q2:'Knowledge to build trust.', q3:'Introspection required was challenging.', q4:'' },
+        { name:'Phillip Jones', position:'', org:'', email:'jones_phillip_ar@cat.com', before:[4,6,4,6,4], after:[7,7,6,7,7], q2:'Mechanisms to help with names, 30 principles made more sense.', q3:'Remembering names, remembering the visual steps and associating to principles.', q4:'' },
+        { name:'Tameeka Watson', position:'', org:'', email:'tameekaleewatson@hotmail.com', before:[5,5,5,4,3], after:[9,10,10,9,8], q2:'Self awareness of where my weaknesses lie. I have learned so many valuable lessons that I will take into both my home and work life.', q3:'I faced every challenge head on. Day 1 9am was the biggest challenge.', q4:'' },
+        { name:'Mark Bignell', position:'', org:'Bellissimo Coffee', email:'markbignell@bellissimocoffee.com.au', before:[6,8,7,7,7], after:[8,9,8,9,8], q2:'A greater awareness and insight into how to better relate and communicate and motivate others.', q3:'Stepping outside of my comfort zone, opening up and sharing vulnerabilities.', q4:'' },
+        { name:'Belinda Edhouse', position:'', org:'', email:'belinda.edhouse40@gmail.com', before:[9,5,7,5,5], after:[9,8,9,8,10], q2:'Principals to use in communicating.', q3:'At first applying to a specific situation at work. It made me realise the problem is not a single issue, different thing that needs to be addressed.', q4:'' },
+        { name:'Blake Foster', position:'', org:'DMA Engineers', email:'blake.foster@dmaengineers.com.au', before:[6,6,6,6,7], after:[8,8,8,8,8], q2:'', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-21wrsqld02', company: 'Public WRS — 21QLDWRS02', programme: 'WRS', date: 'November 2021', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Darlene Deacon', position:'Finance/Class Manager', org:'Dale Carnegie', email:'darlene.deacon@dalecarnegie.com', before:[5,6,5,5,7], after:[5,6,5,5,7], q2:'', q3:'', q4:'' },
+        { name:'Rebecca (Bec) Warland', position:'Business Development Manager', org:'Height Dynamics', email:'beccalw87@gmail.com', before:[2,7,2,2,8], after:[2,7,2,2,8], q2:'To develop and grow as a person. To learn as much as humanly possible.', q3:'To increase sales/business relationships. Also to grow.', q4:'' },
+        { name:'Grant Hohua', position:'Business Development Officer', org:'Harveys Towing Service', email:'granth@harveystowing.com.au', before:[3,7,8,3,5], after:[3,7,8,3,5], q2:'', q3:'', q4:'' },
+        { name:'Alicia Saville', position:'Sales Assistant', org:'Tilly\'s', email:'alicia.saville@tillys.com.au', before:[5,5,6,6,8], after:[5,5,6,6,8], q2:'To be better at my job and better for my customers.', q3:'Build better relationships = keep customers coming back.', q4:'' },
+        { name:'Marjolein (Marli) Bakker', position:'Agent', org:'Brisbane Real Estate', email:'marli@brisbanerealestate.com.au', before:[6,8,8,6,9], after:[6,8,8,6,9], q2:'Confidence to cold call, ask for the business, sell.', q3:'Double my sales.', q4:'' },
+        { name:'Gina Scott', position:'Despatch Supervisor', org:'Tilly\'s Crawler Parts', email:'ginaroberts34@gmail.com', before:[5,6,6.5,6.5,7], after:[0,9,8,6,8], q2:'Gain tools and knowledge to...', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-21wadcc01', company: 'Public DCC — 21WADCC01 (WA)', programme: 'DCC', date: '2021', trainer: 'Tanya Konigsberger', type: 'public',
+      participants: [
+        { name:'Ryan Eloro', position:'Supervisor', org:'CM-Farms', email:'ryan.eloro@yahoo.com', before:[7,7,8,8,9], after:[7,7,8,8,9], q2:'', q3:'', q4:'' },
+        { name:'Romeo Ibatan', position:'2IC', org:'Craig Mostyn Farms', email:'romy_ibatan@yahoo.com.ph', before:[4,4,4,6,5], after:[7,7,6,8,7], q2:'It will be benefits for my self and to the organisation where I belong.', q3:'Teaching and encouragement.', q4:'' },
+        { name:'Michael Cerado', position:'Senior Stockperson', org:'Craig Mostyn Farms', email:'cerado.michaeljohn@yahoo.com', before:[4,3,4,5,5], after:[9,9,9,9,9], q2:'The training gave me more confidence in talking to people.', q3:'Now that I became more confident, my organisation can expect me to be more proactive.', q4:'' },
+        { name:'Anthony Neil', position:'Director', org:'Vanguard Automation & Electrical', email:'anthony@vanguard-ae.com.au', before:[5,4,4,4,5], after:[8,8,8,8,8], q2:'People skill, confident.', q3:'Communication, productive, commitment.', q4:'' },
+        { name:'Allen Howe', position:'', org:'', email:'', before:[5,4,5,6,6], after:[8,8,8,9,9], q2:'Just remembering we are all right and make mistakes.', q3:'New attitude to look at problems differently.', q4:'' },
+        { name:'Jason Matthews', position:'', org:'', email:'', before:[6,6,7,5,5], after:[6,6,7,5,5], q2:'Take me out of my comfort zone and not be afraid to take risks.', q3:'Work smarter.', q4:'' },
+        { name:'Glenn Wilson', position:'Manager', org:'Industry Link Media', email:'', before:[5,6,6,6,4], after:[8,8,8,8,7], q2:'Actually training. I have been in a bubble previously and I have thoroughly enjoyed learning and looking at myself and what I can do and achieve.', q3:'A better leader and more wholesome invested individual who is motivated, has learnt new human relations skills and is driven to get the best results for the organisation.', q4:'' },
+        { name:'Jayson Hitchens', position:'', org:'', email:'', before:[4,6,6,5,4], after:[6,7,9,7,6], q2:'Reminding me of skills I either use infrequently or never had.', q3:'Less stressed, more confident manager.', q4:'' },
+        { name:'Devinah Kalianda', position:'', org:'', email:'', before:[6,5,6,4,6], after:[8,7,8,6,8], q2:'Using structure to build a base when meeting new clients. How to approach friction within the organisation.', q3:'My ability not to shy away from conflict.', q4:'' },
+        { name:'Gabriel Pardo', position:'Project Manager & Business Growth Specialist', org:'Key Engineering', email:'gpardo@keyengineering.com.au', before:[7,6,7,6,6], after:[9,8,8,8,8], q2:'Gained more skills to communicate, learnt new techniques to improve communication with others. Learnt leadership skills I didn\'t know I had.', q3:'More confident leader and understanding. Been able to help others achieve their goals.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-20ltmqld03', company: 'Public LTM — 20QLDLTM03', programme: 'LTM', date: '2020', trainer: '', type: 'public',
+      participants: [
+        { name:'Andrea Schaeffer', position:'Estimating Manager', org:'Han Con QLD', email:'andrea_schaeffer@hotmail.com', before:[7,5,8,3,4], after:[7,5,8,3,4], q2:'', q3:'', q4:'' },
+        { name:'Neil Berry', position:'Owner', org:'DBS', email:'neil@dbsqld.com.au', before:[6,6,5,4,7], after:[6,6,5,4,7], q2:'', q3:'', q4:'' },
+        { name:'Rafer Hart', position:'Managing Director', org:'Safe Financial', email:'rafer@safefinancial.com.au', before:[7,7,7,6,8], after:[7,7,7,6,8], q2:'', q3:'', q4:'' },
+        { name:'Chris Morris', position:'Partner', org:'Advivo', email:'chris.morris@advivo.com.au', before:[6,7,6,6,8], after:[6,7,6,6,8], q2:'', q3:'', q4:'' },
+        { name:'Leon Stephan', position:'Managing Partner', org:'Advivo Accountants & Advisors', email:'leon.stephan@advivo.com.au', before:[8,9,7,8,8], after:[8,9,7,8,8], q2:'', q3:'', q4:'' },
+        { name:'Fred Chang', position:'Manager', org:'Advivo', email:'fred.chang@advivo.com.au', before:[5,4,7,5,7], after:[5,4,7,5,7], q2:'', q3:'', q4:'' },
+        { name:'Dale Edwards', position:'Partner', org:'Advivo', email:'dale.edwards@advivo.com.au', before:[8,6,8,6,7], after:[8,6,8,6,7], q2:'', q3:'', q4:'' },
+        { name:'Anita Bellingham', position:'Senior Manager', org:'Advivo', email:'anita.bellingham@advivo.com.au', before:[7,5,6,5,7], after:[7,5,6,5,7], q2:'', q3:'', q4:'' },
+        { name:'Ben Wright', position:'Manager', org:'Advivo Accountants and Advisors', email:'ben.wright@advivo.com.au', before:[5,7,7,7,7], after:[5,7,7,7,7], q2:'', q3:'', q4:'' },
+        { name:'Tyler Barnes', position:'Sales', org:'DC', email:'tyler.barnes@dalecarnegie.com', before:[6,7,6,8,8], after:[6,7,6,8,8], q2:'', q3:'', q4:'' },
+        { name:'Nick Mayes', position:'General Manager', org:'Crisp P+C', email:'nickm@crisppc.com.au', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' },
+        { name:'Kevin Alterra', position:'GM Operations & Business Development', org:'GCCM', email:'kevin@gccm.com.au', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' },
+        { name:'Tay O\'Keefe', position:'Performance Consultant', org:'Dale Carnegie Aust.', email:'', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' },
+        { name:'Shaun Morissey', position:'Dispatch', org:'ColPak', email:'shaunm69@hotmail.com', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' },
+        { name:'Travis Slatter', position:'Operations Manager', org:'Gold Coast City Marina', email:'travis@gccm.com.au', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' },
+        { name:'Kylie Fox', position:'Administration Manager', org:'Brisbane Appliance Sales', email:'kyliefoxa@gmail.com', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-20wrsqld02', company: 'Public WRS — 20QLDWRS02', programme: 'WRS', date: 'September 2020', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Rachael Doson', position:'CSO Team Leader', org:'Safe Finance', email:'rachael@safefinancial.com.au', before:[5,6,6,6,8], after:[8,8,8,8,8], q2:'Has taught me to just do it. Take the time to understand other people and their needs and listen.', q3:'To be able to develop strategies to drive sales and implement and introduce new lead providers.', q4:'' },
+        { name:'Michelle Wallace', position:'National BDM', org:'Safety Mate', email:'michellew@safetymate.com.au', before:[7,7,6,7,8], after:[9,9,8,9,10], q2:'The importance of taking each step to achieving the ultimate goal = success.', q3:'$$, brand awareness!', q4:'' },
+        { name:'Tanya Konigsberger', position:'', org:'Dale', email:'', before:[5,7,5,5,5], after:[7,9,8,7,7], q2:'Solidify my learning. I do know what I\'m doing.', q3:'Better facilitator.', q4:'' },
+        { name:'Trent Jeude', position:'Design Office Manager, Fire and Safety Systems', org:'', email:'trent.jeude@f-ss.com.au', before:[6,7,6,7,6], after:[9,8,8,8,7], q2:'The structure for the sales, loved how it gives you an overall start to finish process.', q3:'Keep clients and gives a structure to get more.', q4:'' },
+        { name:'Guy Ranger', position:'Sales Manager QLD/Vic/Tas/Retail', org:'Safety Mate Pty Ltd', email:'guyr@safetymate.com.au', before:[7,7,6,6,7], after:[8,9,8,8,9], q2:'Being empowered with sales techniques and solutions to understand and handle different personalities and customers.', q3:'Understanding current processes and strategies in place at Safety Mate. More confident in dealing with all customers.', q4:'' },
+        { name:'Leah Breats', position:'Mrs', org:'Empowering Events', email:'', before:[5,8,5,5,7], after:[9,10,9,9,9], q2:'To break through limiting beliefs, push myself and learn some incredible sales strategies.', q3:'Fill the sales mastery course. Use these skills in all areas of client interaction and sales.', q4:'' },
+        { name:'Jamie McVeigh', position:'Business Development & Sales', org:'Empowering Events', email:'jamie@empoweringevents.com.au', before:[6,8,7,5,8], after:[9,9,9,9,9], q2:'Role plays, meeting and networking, connecting and growing. I feel so motivated!', q3:'I have the tools to handle objections and close the sale.', q4:'' }
+      ]
+    },
+    {
+      id: 'public-18dccqld01', company: 'Public DCC — 18QLDDCC01', programme: 'DCC', date: '2018', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Doug Watson', position:'Sales Rep', org:'Brisbane Refinish Supplies', email:'doug-watson@brisbanerefinish', before:[5,4,5,5,3], after:[5,4,5,5,3], q2:'', q3:'', q4:'' },
+        { name:'Gavin Blake', position:'Branch Manager', org:'Boltmasters', email:'gavin@boltmasters', before:[7.5,7,9,8,7.5], after:[9,8,9,8.5,8], q2:'Public speaking.', q3:'Being able to listen more.', q4:'' },
+        { name:'Danielle Dwyer', position:'Owner', org:'Wink Lash Studio', email:'danielle@winklashstudio.com.au', before:[5,6,6,5,7], after:[7,7,7,8,7], q2:'', q3:'', q4:'' },
+        { name:'Nathan Jones', position:'National Brand Manager', org:'Brisbane Refinish Supplies', email:'nathan.jones@brisbanerefinish.com.au', before:[7,8,7,6,3], after:[8,9,8,8,8], q2:'', q3:'', q4:'' },
+        { name:'Yusuf Onor', position:'General Manager', org:'Corporate House', email:'yusuf@corporatehouse.com.au', before:[6,7,7,6,6], after:[6,7,7,6,6], q2:'', q3:'', q4:'' },
+        { name:'Selina Bell', position:'Group Marketing Manager', org:'SteelX', email:'selina.bell@steelx.com.au', before:[7,6,5,5,6], after:[7,6,5,5,6], q2:'Taking myself less seriously.', q3:'', q4:'' },
+        { name:'Arthur Freudiger', position:'Manager', org:'Charles Kendall Australia', email:'arthur.freudiger@gmail.com', before:[7,6,7,6,6], after:[7,6,7,6,6], q2:'Self confidence and a new set of skills.', q3:'', q4:'' },
+        { name:'Sandi Reid', position:'Manager', org:'Boltmasters', email:'sandireid@boltmasters.com.au', before:[4,7,8,7,2], after:[4,7,8,7,2], q2:'', q3:'', q4:'' },
+        { name:'Matthew Tincknell', position:'Sales Consultant', org:'Ray White', email:'m.tincknell@gmail.com', before:[5,5,6,5,4], after:[5,5,6,5,4], q2:'', q3:'', q4:'' },
+        { name:'Sara Misaga', position:'QLD/WA Sales Rep', org:'Dermacore Vet', email:'jazzmissara@yahoo.co.uk', before:[7,8,7,7,6], after:[8,8,8,7,7], q2:'To present in front of a group.', q3:'Clear direction forward.', q4:'' },
+        { name:'Richard Tisdell', position:'Director', org:'Height Dynamics', email:'richard@heightdynamics.com.au', before:[7,7,7,7,6], after:[7,7,7,7,6], q2:'', q3:'', q4:'' },
+        { name:'Ken Lumley', position:'Sales Rep', org:'Boltmasters', email:'ken.lumley@boltmasters.com.au', before:[2,2,2,2,2], after:[2,2,2,2,2], q2:'', q3:'', q4:'' },
+        { name:'Sandra Bust', position:'Warehouse/Customer Service', org:'Boltmasters', email:'kina-n-blyss@hotmail.com', before:[8,7,7,7,5], after:[8,7,7,7,5], q2:'', q3:'', q4:'' },
+        { name:'Simon Bottomley', position:'General Manager', org:'EJ', email:'simon.bottomley@ejco.com', before:[5.5,5,4.5,4.5,6], after:[5.5,5,4.5,4.5,6], q2:'', q3:'', q4:'' },
+        { name:'Peter Schwartz', position:'State Manager WA', org:'EJ', email:'peter.schwartz@ejco.com', before:[6,7,7,6,6], after:[6,7,7,6,6], q2:'', q3:'', q4:'' },
+        { name:'Marty de-Wit', position:'QLD Sales Manager', org:'EJ', email:'marty.de-wit@ejco.com', before:[6,7,6,7,6], after:[6,7,6,7,6], q2:'', q3:'', q4:'' },
+        { name:'Ian Maddocks', position:'National Sales Manager', org:'EJ', email:'ian.maddocks@ejco.com', before:[7,8,8,9,6], after:[7,8,8,9,6], q2:'', q3:'', q4:'' },
+        { name:'Rachael Birks', position:'Information Services Manager', org:'UQ Business School', email:'r.birks@business.uq.edu.au', before:[6,7,7,7,7], after:[6,7,7,7,7], q2:'', q3:'', q4:'' },
+        { name:'John Verginis', position:'Victorian Manager', org:'EJ', email:'john.verginis@ejco.com', before:[4,3,2,5,5], after:[6,6,5,7,8], q2:'To take away the 30 points and my learnt. Them continuously — doing good course.', q3:'The new leadership skills I now have.', q4:'' },
+        { name:'Nick Mayes', position:'Contracting Manager', org:'Crisp Power + Control', email:'nickm@crisppc.com.au', before:[0,0,0,0,0], after:[0,0,0,0,0], q2:'', q3:'', q4:'' }
+      ]
+    },
+    {
+      id: 'public-17dccqld03', company: 'Public DCC — 17QLDDCC03', programme: 'DCC', date: 'September 2017', trainer: 'Annemarie Sage Wood', type: 'public',
+      participants: [
+        { name:'Alistair Ash', position:'Asset Manager — Quarries QLD', org:'Boral', email:'alistair.ash@boral.com.au', before:[5,5,6,6,7], after:[8,8,8,9,9], q2:'', q3:'', q4:'' },
+        { name:'Mike Stone', position:'Head of Professional Development', org:'DDLS', email:'mike.stone@ddls.edu.au', before:[8,7,8,8,6], after:[9,8,9,9,7], q2:'', q3:'', q4:'' },
+        { name:'Kathy Murphy', position:'Service Manager', org:'Height 4 Hire', email:'kathy.murphy@height4hire.com.au', before:[7,6,6,7,6], after:[10,10,10,10,10], q2:'The new found way of approaching situations from multiple angles in a positive manner.', q3:'The ability to communicate better with others.', q4:'' },
+        { name:'Scott Creighton', position:'Senior Tech', org:'Automatic Solutions', email:'scrx2@hotmail.com', before:[7,6,5,6,5], after:[7,6,6,7,6], q2:'', q3:'', q4:'' },
+        { name:'Luke Maxwell', position:'Estimator', org:'Higgins', email:'lmaxwell@higgins.com.au', before:[6,6,6,5,4], after:[6,6,6,5,4], q2:'', q3:'', q4:'' },
+        { name:'Bridget Smith', position:'Nurse Educator', org:'Starship Childrens Hospital', email:'bridget.smith@mail.com', before:[8,7,9,8,7], after:[9.5,9,9,9,9], q2:'Stepping out of comfort zone and doing things I wouldn\'t usually do to get a good outcome.', q3:'', q4:'' },
+        { name:'Jess Irving', position:'Customer Service & Marketing', org:'ALC Education & Consulting', email:'jes@alc-group.com', before:[8,10,9,8,7], after:[9,10,9,9,9], q2:'', q3:'', q4:'' },
+        { name:'Celina Jorgensen', position:'Owner', org:'Celina Jorgensen Design', email:'celina@celinajorgensendesign.com.au', before:[8,7,9,7,5], after:[10,9,10,10,9], q2:'', q3:'', q4:'' },
+        { name:'Karen McDonald', position:'Associate Director', org:'Arcon Boundary Insurance', email:'karen.d@acaronboundaryinsurance.com.au', before:[7,5,5,4,2], after:[9,8,8,8,7], q2:'', q3:'', q4:'' }
+      ]
     }
   ];
 }
 
 // ===== RENDER SIDEBAR =====
+// Map class IDs to company group names for in-house grouping
+function getCompanyGroup(cls) {
+  const id = cls.id.toLowerCase();
+  if (id.startsWith('bradnams')) return "Bradnam's";
+  // Single-class companies use the company name directly
+  return cls.company;
+}
+
+let expandedGroups = {};
+
 function renderSidebar() {
   const list = document.getElementById('class-list');
   list.innerHTML = '';
   const classes = activeTab === 'public' ? publicData.classes : data.classes;
-  classes.forEach(c => {
-    const div = document.createElement('div');
-    div.className = 'class-item' + (activeClassId === c.id ? ' active' : '');
-    div.innerHTML = '<div class="ci-company">' + c.company + '</div><div class="ci-meta">' + PROGRAMME_NAMES[c.programme] + ' &middot; ' + c.participants.length + ' participants</div>';
-    div.onclick = () => { activeClassId = c.id; renderSidebar(); renderReport(c); };
-    list.appendChild(div);
-  });
+
+  if (activeTab === 'inhouse') {
+    // Group classes by company
+    const groups = {};
+    classes.forEach(c => {
+      const group = getCompanyGroup(c);
+      if (!groups[group]) groups[group] = [];
+      groups[group].push(c);
+    });
+
+    Object.keys(groups).forEach(groupName => {
+      const groupClasses = groups[groupName];
+      const isExpanded = expandedGroups[groupName] || groupClasses.some(c => c.id === activeClassId);
+      const totalParticipants = groupClasses.reduce((s, c) => s + c.participants.length, 0);
+
+      if (groupClasses.length === 1) {
+        // Single class — render directly, no collapsible header
+        const c = groupClasses[0];
+        const div = document.createElement('div');
+        div.className = 'class-item' + (activeClassId === c.id ? ' active' : '');
+        div.innerHTML = '<div class="ci-company">' + c.company + '</div><div class="ci-meta">' + PROGRAMME_NAMES[c.programme] + ' &middot; ' + c.participants.length + ' participants</div>';
+        div.onclick = () => { activeClassId = c.id; renderSidebar(); renderReport(c); };
+        list.appendChild(div);
+      } else {
+        // Multiple classes — collapsible group
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'company-group';
+
+        const header = document.createElement('div');
+        header.className = 'company-header';
+        header.innerHTML = '<span class="ch-arrow' + (isExpanded ? ' open' : '') + '">&#9654;</span>' + groupName + '<span class="ch-count">' + groupClasses.length + ' classes &middot; ' + totalParticipants + '</span>';
+        header.onclick = () => { expandedGroups[groupName] = !expandedGroups[groupName]; renderSidebar(); };
+        groupDiv.appendChild(header);
+
+        const classesDiv = document.createElement('div');
+        classesDiv.className = 'company-classes' + (isExpanded ? ' open' : '');
+        groupClasses.forEach(c => {
+          const div = document.createElement('div');
+          div.className = 'class-item' + (activeClassId === c.id ? ' active' : '');
+          div.innerHTML = '<div class="ci-company">' + (PROGRAMME_NAMES[c.programme] || c.programme) + '</div><div class="ci-meta">' + c.date + ' &middot; ' + c.participants.length + ' participants</div>';
+          div.onclick = () => { activeClassId = c.id; expandedGroups[groupName] = true; renderSidebar(); renderReport(c); };
+          classesDiv.appendChild(div);
+        });
+        groupDiv.appendChild(classesDiv);
+        list.appendChild(groupDiv);
+      }
+    });
+  } else {
+    // Public classes — flat list as before
+    classes.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'class-item' + (activeClassId === c.id ? ' active' : '');
+      div.innerHTML = '<div class="ci-company">' + c.company + '</div><div class="ci-meta">' + PROGRAMME_NAMES[c.programme] + ' &middot; ' + c.participants.length + ' participants</div>';
+      div.onclick = () => { activeClassId = c.id; renderSidebar(); renderReport(c); };
+      list.appendChild(div);
+    });
+  }
 }
 
 // ===== RENDER REPORT =====

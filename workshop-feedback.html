@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD - Workshop Sheets Analysis</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, Helvetica, sans-serif; background: #1a1a1a; color: #fff; min-height: 100vh; }
+  header { background: #000; padding: 20px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #ffc708; }
+  header h1 { font-size: 20px; font-weight: 600; }
+  header h1 span { color: #ffc708; }
+  header .subtitle { color: #999; font-size: 12px; margin-top: 2px; }
+  .back-link { color: #ffc708; text-decoration: none; font-size: 13px; font-weight: 600; }
+  .back-link:hover { opacity: 0.8; }
+
+  .app { display: flex; min-height: calc(100vh - 70px); }
+  .sidebar { width: 300px; background: #111; border-right: 1px solid #333; padding: 20px; flex-shrink: 0; overflow-y: auto; max-height: calc(100vh - 70px); }
+  .main { flex: 1; padding: 32px; overflow-y: auto; max-height: calc(100vh - 70px); }
+
+  .sidebar h3 { font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #666; margin-bottom: 12px; }
+  .sidebar-section { margin-bottom: 20px; }
+  .org-header { padding: 10px 14px; background: #242424; border: 1px solid #333; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; }
+  .org-header:hover { border-color: #ffc708; }
+  .org-header.active { border-color: #ffc708; background: #ffc70811; }
+  .org-header .org-count { font-size: 11px; color: #888; font-weight: 400; }
+  .org-header .org-score { display: inline-block; background: #ffc70822; color: #ffc708; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-left: 6px; }
+  .org-children { display: none; margin: 4px 0 0 14px; flex-direction: column; gap: 4px; }
+  .org-children.open { display: flex; }
+  .workshop-item { padding: 10px 12px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 6px; cursor: pointer; font-size: 12px; transition: all 0.15s; }
+  .workshop-item:hover { border-color: #ffc708; }
+  .workshop-item.active { border-color: #ffc708; background: #ffc70811; }
+  .workshop-item .wi-name { font-weight: 600; line-height: 1.3; }
+  .workshop-item .wi-meta { color: #888; font-size: 10px; margin-top: 3px; }
+  .workshop-item .wi-score { display: inline-block; background: #ffc70822; color: #ffc708; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 700; margin-top: 3px; }
+
+  /* Standalone workshop (no org group) */
+  .standalone-item { padding: 12px 14px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; cursor: pointer; font-size: 13px; transition: all 0.15s; margin-bottom: 6px; }
+  .standalone-item:hover { border-color: #ffc708; }
+  .standalone-item.active { border-color: #ffc708; background: #ffc70811; }
+  .standalone-item .wi-name { font-weight: 600; line-height: 1.3; }
+  .standalone-item .wi-meta { color: #888; font-size: 11px; margin-top: 4px; }
+  .standalone-item .wi-score { display: inline-block; background: #ffc70822; color: #ffc708; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; margin-top: 4px; }
+
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: opacity 0.15s; }
+  .btn:hover { opacity: 0.85; }
+  .btn-primary { background: #ffc708; color: #000; }
+  .btn-secondary { background: #333; color: #ccc; }
+
+  .report-header { margin-bottom: 32px; }
+  .report-header h2 { font-size: 24px; margin-bottom: 4px; }
+  .report-header .rh-meta { color: #888; font-size: 14px; }
+  .report-header .rh-meta span { color: #ffc708; }
+
+  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 32px; }
+  .stat-card { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; text-align: center; }
+  .stat-card .stat-value { font-size: 32px; font-weight: 700; }
+  .stat-card .stat-value.gold { color: #ffc708; }
+  .stat-card .stat-value.green { color: #84c44c; }
+  .stat-card .stat-label { font-size: 12px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .section-title { font-size: 12px; text-transform: uppercase; letter-spacing: 2px; color: #666; margin: 32px 0 16px; display: flex; align-items: center; gap: 10px; }
+
+  .scores-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .score-card { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; }
+  .score-card h4 { font-size: 14px; margin-bottom: 12px; }
+  .score-bar-wrap { margin-bottom: 8px; }
+  .score-bar-label { font-size: 11px; color: #888; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .score-bar { height: 24px; background: #333; border-radius: 6px; position: relative; overflow: hidden; }
+  .score-bar-fill { height: 100%; border-radius: 6px; transition: width 0.6s ease; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; }
+  .score-bar-fill.gold { background: #ffc708; color: #000; }
+  .score-bar-fill.good { background: #84c44c; color: #000; }
+  .score-bar-fill.mid { background: #f0a030; color: #000; }
+  .score-bar-fill.low { background: #ff6347; color: #fff; }
+
+  .overall-card { background: #242424; border: 1px solid #ffc70844; border-radius: 16px; padding: 32px; text-align: center; margin-bottom: 32px; }
+  .overall-score-display { font-size: 64px; font-weight: 700; color: #ffc708; }
+  .overall-score-display small { font-size: 28px; color: #888; }
+  .overall-pct { font-size: 24px; font-weight: 700; color: #84c44c; margin-top: 8px; }
+  .overall-label { font-size: 14px; color: #888; margin-top: 8px; }
+
+  .participant-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+  .participant-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #666; padding: 8px 12px; border-bottom: 1px solid #333; white-space: nowrap; }
+  .participant-table td { padding: 10px 12px; border-bottom: 1px solid #222; font-size: 13px; }
+  .participant-table tr:hover { background: #ffffff08; }
+  .score-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+  .score-badge.high { background: #84c44c22; color: #84c44c; }
+  .score-badge.med { background: #ffc70822; color: #ffc708; }
+  .score-badge.low { background: #ff634722; color: #ff6347; }
+  .interest-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; background: #84c44c22; color: #84c44c; }
+  .interest-badge.no { background: #33333388; color: #666; }
+  .interest-badge.team { background: #0090cf22; color: #0090cf; }
+  .interest-badge.both { background: #84c44c22; color: #84c44c; }
+
+  .comments-section { margin-bottom: 32px; }
+  .comment-group { background: #242424; border: 1px solid #333; border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+  .comment-group h4 { font-size: 14px; margin-bottom: 12px; color: #ffc708; }
+  .comment-item { padding: 10px 0; border-bottom: 1px solid #2a2a2a; font-size: 13px; line-height: 1.5; color: #ccc; }
+  .comment-item:last-child { border-bottom: none; }
+  .comment-item .ci-name { font-weight: 600; color: #fff; font-size: 12px; margin-bottom: 4px; }
+  .comment-item .ci-position { color: #888; font-size: 11px; }
+  .comment-item .ci-interest { display: inline-block; margin-left: 8px; padding: 1px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; background: #84c44c22; color: #84c44c; }
+
+  .empty-state { text-align: center; padding: 80px 20px; color: #555; }
+  .empty-state .es-icon { font-size: 48px; margin-bottom: 16px; }
+  .empty-state p { font-size: 14px; margin-bottom: 20px; }
+
+  /* Overall Report Tab */
+  .overall-tab { padding: 10px 14px; background: #ffc70815; border: 1px solid #ffc70844; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.15s; display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; color: #ffc708; }
+  .overall-tab:hover { border-color: #ffc708; background: #ffc70822; }
+  .overall-tab.active { border-color: #ffc708; background: #ffc70833; }
+  .overall-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .overall-grid .stat-card { padding: 16px; }
+  .year-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #2a2a2a; }
+  .year-row:last-child { border-bottom: none; }
+  .year-label { font-weight: 700; font-size: 14px; width: 50px; }
+  .year-bar-wrap { flex: 1; }
+  .year-bar { height: 28px; background: #333; border-radius: 6px; position: relative; overflow: hidden; }
+  .year-bar-fill { height: 100%; border-radius: 6px; display: flex; align-items: center; padding-left: 10px; font-size: 12px; font-weight: 700; color: #000; }
+  .year-meta { font-size: 11px; color: #888; width: 130px; text-align: right; }
+  .org-rank-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #2a2a2a; }
+  .org-rank-row:last-child { border-bottom: none; }
+  .org-rank-pos { font-size: 18px; font-weight: 700; color: #ffc708; width: 28px; text-align: center; }
+  .org-rank-name { font-weight: 600; font-size: 14px; flex: 1; }
+  .org-rank-score { font-size: 14px; font-weight: 700; color: #ffc708; }
+  .org-rank-meta { font-size: 11px; color: #888; }
+  .top-ws-row { padding: 10px 0; border-bottom: 1px solid #2a2a2a; display: flex; align-items: center; gap: 12px; }
+  .top-ws-row:last-child { border-bottom: none; }
+  .top-ws-score { font-size: 16px; font-weight: 700; color: #ffc708; width: 55px; }
+  .top-ws-info { flex: 1; }
+  .top-ws-name { font-weight: 600; font-size: 13px; }
+  .top-ws-meta { font-size: 11px; color: #888; margin-top: 2px; }
+  .quote-card { background: #1a1a1a; border-left: 3px solid #ffc708; padding: 16px 20px; margin-bottom: 10px; border-radius: 0 8px 8px 0; }
+  .quote-text { font-size: 14px; line-height: 1.6; color: #ddd; font-style: italic; }
+  .quote-attr { font-size: 11px; color: #888; margin-top: 8px; }
+
+  .trainer-tag { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 12px; background: #0090cf22; color: #0090cf; font-weight: 600; margin-left: 8px; }
+
+  .chevron { font-size: 10px; transition: transform 0.2s; display: inline-block; }
+  .chevron.open { transform: rotate(90deg); }
+
+  @media (max-width: 900px) {
+    .app { flex-direction: column; }
+    .sidebar { width: 100%; border-right: none; border-bottom: 1px solid #333; max-height: 300px; }
+    .scores-grid { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .main { max-height: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Workshop <span>Sheets</span> Analysis</h1>
+    <div class="subtitle">Workshop Feedback &amp; Satisfaction</div>
+  </div>
+  <a href="dashboard.html?v=2" class="back-link">&larr; Back to Dashboard</a>
+</header>
+
+<div class="app">
+  <div class="sidebar">
+    <h3>Organisations</h3>
+    <div id="sidebar-content"></div>
+  </div>
+  <div class="main" id="main-content">
+    <div class="empty-state">
+      <div class="es-icon">&#128203;</div>
+      <p>Select a workshop from the sidebar to view feedback analysis</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// ===== DYNAMIC DATA LOADING =====
+// type: 'rated5' = 1-5 scale with 4 rating columns
+// type: 'rated10' = 1-10 single rating
+// type: 'unrated' = no numeric rating (comments only)
+
+let ORGS = [];
+
+function buildOrgsFromData() {
+  const allWorkshops = window.WORKSHOP_DATA || [];
+  const orgMap = new Map();
+  allWorkshops.forEach(w => {
+    const orgKey = w.org === null ? '__null__' : w.org;
+    if (!orgMap.has(orgKey)) {
+      orgMap.set(orgKey, { org: w.org, workshops: [] });
+    }
+    const workshop = Object.assign({}, w);
+    delete workshop.org;
+    orgMap.get(orgKey).workshops.push(workshop);
+  });
+
+  ORGS = [];
+  orgMap.forEach((val, key) => {
+    if (key !== '__null__') ORGS.push(val);
+  });
+  if (orgMap.has('__null__')) {
+    ORGS.push(orgMap.get('__null__'));
+  }
+
+  init();
+}
+
+// ===== RENDERING =====
+let activeWorkshopId = null;
+let openOrgs = {};
+
+function init() {
+  renderSidebar();
+  if (ORGS[0] && ORGS[0].workshops[0]) {
+    openOrgs[ORGS[0].org || '__standalone'] = true;
+    selectWorkshop(ORGS[0].workshops[0].id);
+  }
+}
+
+function getWorkshopScore10(w) {
+  if (w.type === 'unrated') return null;
+  let total = 0, count = 0;
+  w.participants.forEach(p => {
+    p.ratings.forEach(r => { total += r; count++; });
+  });
+  if (count === 0) return null;
+  const avg = total / count;
+  return w.type === 'rated5' ? ((avg / 5) * 10) : avg;
+}
+
+function getOrgAvgScore(org) {
+  let total = 0, count = 0;
+  org.workshops.forEach(w => {
+    const s = getWorkshopScore10(w);
+    if (s !== null) { total += s; count++; }
+  });
+  return count > 0 ? (total / count) : null;
+}
+
+function renderSidebar() {
+  const container = document.getElementById('sidebar-content');
+  let html = '';
+
+  // Overall Report tab
+  html += `<div class="overall-tab ${activeWorkshopId === '__overall__' ? 'active' : ''}" onclick="selectWorkshop('__overall__')">
+    <span>Overall Data Report</span>
+    <span style="font-size:11px;opacity:0.7">All Years</span>
+  </div>`;
+
+  ORGS.forEach(orgGroup => {
+    if (orgGroup.org) {
+      // Grouped org
+      const orgKey = orgGroup.org;
+      const isOpen = openOrgs[orgKey];
+      const orgScore = getOrgAvgScore(orgGroup);
+      const hasActive = orgGroup.workshops.some(w => w.id === activeWorkshopId);
+      html += `<div class="sidebar-section">
+        <div class="org-header ${hasActive ? 'active' : ''}" onclick="toggleOrg('${orgKey}')">
+          <span><span class="chevron ${isOpen ? 'open' : ''}">\u25B6</span> ${orgKey} (${orgGroup.workshops.length})</span>
+          ${orgScore !== null ? `<span class="org-score">${orgScore.toFixed(1)}/10</span>` : ''}
+        </div>
+        <div class="org-children ${isOpen ? 'open' : ''}">`;
+
+      orgGroup.workshops.forEach(w => {
+        const s = getWorkshopScore10(w);
+        html += `<div class="workshop-item ${w.id === activeWorkshopId ? 'active' : ''}" onclick="selectWorkshop('${w.id}')">
+          <div class="wi-name">${w.name}</div>
+          <div class="wi-meta">${w.client ? w.client + ' \u2022 ' : ''}${w.participants.length} responses</div>
+          ${s !== null ? `<span class="wi-score">${s.toFixed(1)}/10</span>` : ''}
+        </div>`;
+      });
+
+      html += `</div></div>`;
+    } else {
+      // Standalone workshops
+      orgGroup.workshops.forEach(w => {
+        const s = getWorkshopScore10(w);
+        html += `<div class="standalone-item ${w.id === activeWorkshopId ? 'active' : ''}" onclick="selectWorkshop('${w.id}')">
+          <div class="wi-name">${w.name}</div>
+          <div class="wi-meta">${w.client || ''} \u2022 ${w.participants.length} responses</div>
+          ${s !== null ? `<span class="wi-score">${s.toFixed(1)}/10</span>` : ''}
+        </div>`;
+      });
+    }
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleOrg(orgKey) {
+  openOrgs[orgKey] = !openOrgs[orgKey];
+  renderSidebar();
+}
+
+function selectWorkshop(id) {
+  activeWorkshopId = id;
+  // Auto-open parent org
+  ORGS.forEach(og => {
+    if (og.org && og.workshops.some(w => w.id === id)) {
+      openOrgs[og.org] = true;
+    }
+  });
+  renderSidebar();
+  if (id === '__overall__') { renderOverallReport(); return; }
+  const w = findWorkshop(id);
+  if (w) renderReport(w);
+}
+
+function findWorkshop(id) {
+  for (const og of ORGS) {
+    for (const w of og.workshops) {
+      if (w.id === id) return w;
+    }
+  }
+  return null;
+}
+
+function calcRatingAvg(w, idx) {
+  let total = 0;
+  w.participants.forEach(p => { total += (p.ratings[idx] || 0); });
+  return w.participants.length > 0 ? total / w.participants.length : 0;
+}
+
+function getBarClass(pct) {
+  if (pct >= 80) return 'gold';
+  if (pct >= 60) return 'good';
+  if (pct >= 40) return 'mid';
+  return 'low';
+}
+
+function getBadgeClass(pct) {
+  if (pct >= 80) return 'high';
+  if (pct >= 60) return 'med';
+  return 'low';
+}
+
+function interestLabel(val) {
+  if (!val || val === 'No') return '<span class="interest-badge no">\u2014</span>';
+  if (val === 'Yes' || val === 'Self') return '<span class="interest-badge">Keen (Self)</span>';
+  if (val === 'Team') return '<span class="interest-badge team">Keen (Team)</span>';
+  if (val === 'Both') return '<span class="interest-badge both">Keen (Both)</span>';
+  return '<span class="interest-badge">' + val + '</span>';
+}
+
+function isInterested(val) {
+  return val && val !== 'No';
+}
+
+function isNA(str) {
+  if (!str) return true;
+  const lower = str.trim().toLowerCase();
+  return ['n/a','na','none','none.','no','no.','nope','nope.','-','','not applicable','none to note','not really','n/a.'].includes(lower);
+}
+
+function renderReport(w) {
+  const main = document.getElementById('main-content');
+  const scaleMax = w.type === 'rated5' ? 5 : 10;
+  const score10 = getWorkshopScore10(w);
+  const pct = score10 !== null ? ((score10 / 10) * 100).toFixed(0) : null;
+  const interestedCount = w.participants.filter(p => isInterested(p.interest)).length;
+  const clientLabel = w.client || '';
+
+  // Sort: interested first, then by score desc
+  const sorted = [...w.participants].sort((a, b) => {
+    const aI = isInterested(a.interest) ? 1 : 0;
+    const bI = isInterested(b.interest) ? 1 : 0;
+    if (aI !== bI) return bI - aI;
+    const aAvg = a.ratings.length > 0 ? a.ratings.reduce((s,v) => s+v, 0) / a.ratings.length : 0;
+    const bAvg = b.ratings.length > 0 ? b.ratings.reduce((s,v) => s+v, 0) / b.ratings.length : 0;
+    return bAvg - aAvg;
+  });
+
+  // Find parent org
+  let orgName = clientLabel;
+  for (const og of ORGS) {
+    if (og.org && og.workshops.some(ws => ws.id === w.id)) { orgName = og.org; break; }
+  }
+
+  let html = `
+    <div class="report-header">
+      <h2>${w.name}</h2>
+      <div class="rh-meta">
+        Client: <span>${orgName}</span> \u2022
+        Delivery: <span>${w.delivery}</span> \u2022
+        Date: <span>${w.date}</span>
+        ${w.trainer ? `<span class="trainer-tag">${w.trainer}</span>` : ''}
+      </div>
+    </div>`;
+
+  // Overall Score
+  if (score10 !== null) {
+    // Trainer score (if rated5 with trainer column)
+    let trainerScore10 = '';
+    if (w.type === 'rated5' && w.ratingLabels.length >= 3) {
+      const ts = calcRatingAvg(w, 2);
+      trainerScore10 = ((ts / scaleMax) * 10).toFixed(1);
+    }
+
+    html += `
+    <div class="overall-card">
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#888;margin-bottom:8px">Overall Workshop Score</div>
+      <div class="overall-score-display">${score10.toFixed(1)}<small>/10</small></div>
+      <div class="overall-pct">${pct}%</div>
+      <div class="overall-label">Based on ${w.participants.length} participant responses${w.ratingLabels.length > 1 ? ' across ' + w.ratingLabels.length + ' criteria' : ''}</div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">${w.participants.length}</div>
+        <div class="stat-label">Respondents</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value gold">${score10.toFixed(1)}</div>
+        <div class="stat-label">Score /10</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value green">${interestedCount}</div>
+        <div class="stat-label">Keen for More</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">${trainerScore10 || score10.toFixed(1)}</div>
+        <div class="stat-label">${trainerScore10 ? 'Trainer Score /10' : 'Avg Rating /10'}</div>
+      </div>
+    </div>`;
+
+    // Rating breakdown bars (if multiple ratings)
+    if (w.ratingLabels.length > 1) {
+      html += `<div class="section-title">Rating Breakdown</div><div class="scores-grid">`;
+      w.ratingLabels.forEach((label, idx) => {
+        const avg = calcRatingAvg(w, idx);
+        const out10 = ((avg / scaleMax) * 10).toFixed(1);
+        const pctBar = ((avg / scaleMax) * 100).toFixed(0);
+        html += `<div class="score-card"><h4>${label}</h4>
+          <div class="score-bar-wrap">
+            <div class="score-bar-label"><span>Average</span><span>${out10}/10</span></div>
+            <div class="score-bar"><div class="score-bar-fill ${getBarClass(parseFloat(pctBar))}" style="width:${pctBar}%">${out10}</div></div>
+          </div></div>`;
+      });
+      html += `</div>`;
+    }
+  } else {
+    // Unrated workshop - just show stats
+    html += `<div class="stats-row">
+      <div class="stat-card"><div class="stat-value">${w.participants.length}</div><div class="stat-label">Respondents</div></div>
+      <div class="stat-card"><div class="stat-value green">${interestedCount}</div><div class="stat-label">Keen for More</div></div>
+      <div class="stat-card"><div class="stat-value gold">${w.delivery}</div><div class="stat-label">Delivery</div></div>
+      <div class="stat-card"><div class="stat-value">${w.date}</div><div class="stat-label">Date</div></div>
+    </div>`;
+  }
+
+  // Individual Scores Table
+  if (w.type !== 'unrated') {
+    html += `<div class="section-title">Individual Scores</div>
+    <table class="participant-table"><thead><tr>
+      <th>Name</th><th>Position</th><th>Location</th>`;
+    w.ratingLabels.forEach(l => {
+      const short = l.length > 18 ? l.substring(0, 18) + '\u2026' : l;
+      html += `<th>${short}</th>`;
+    });
+    if (w.ratingLabels.length > 1) html += `<th>Avg /10</th>`;
+    html += `<th>Interest</th></tr></thead><tbody>`;
+
+    sorted.forEach(p => {
+      const pAvg = p.ratings.length > 0 ? p.ratings.reduce((s,v) => s+v, 0) / p.ratings.length : 0;
+      const pOut10 = w.type === 'rated5' ? ((pAvg / 5) * 10).toFixed(1) : pAvg.toFixed(1);
+      const pPct = w.type === 'rated5' ? (pAvg / 5) * 100 : (pAvg / 10) * 100;
+      html += `<tr><td><strong>${p.name}</strong></td><td>${p.position || ''}</td><td>${p.location || ''}</td>`;
+      p.ratings.forEach(r => {
+        const rOut10 = w.type === 'rated5' ? ((r / 5) * 10).toFixed(1) : r.toFixed(1);
+        const rPct = w.type === 'rated5' ? (r / 5) * 100 : (r / 10) * 100;
+        html += `<td><span class="score-badge ${getBadgeClass(rPct)}">${rOut10}</span></td>`;
+      });
+      if (w.ratingLabels.length > 1) {
+        html += `<td><span class="score-badge ${getBadgeClass(pPct)}">${pOut10}</span></td>`;
+      }
+      html += `<td>${interestLabel(p.interest)}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  } else {
+    // Unrated - show participant list
+    html += `<div class="section-title">Participants</div>
+    <table class="participant-table"><thead><tr>
+      <th>Name</th><th>Position</th><th>Organisation</th><th>Interest</th>
+    </tr></thead><tbody>`;
+    sorted.forEach(p => {
+      html += `<tr><td><strong>${p.name}</strong></td><td>${p.position || ''}</td><td>${p.location || ''}</td><td>${interestLabel(p.interest)}</td></tr>`;
+    });
+    html += `</tbody></table>`;
+  }
+
+  // Comments Section
+  html += `<div class="section-title">Participant Feedback</div><div class="comments-section">`;
+
+  // Most Valuable / Biggest Takeaway
+  const mvComments = sorted.filter(p => p.mostValuable && !isNA(p.mostValuable));
+  if (mvComments.length > 0) {
+    html += `<div class="comment-group"><h4>What was your biggest takeaway / most valuable aspect?</h4>`;
+    mvComments.forEach(p => {
+      html += `<div class="comment-item">
+        <div class="ci-name">${p.name} <span class="ci-position">${p.position || ''} ${p.location ? '- ' + p.location : ''}</span>${isInterested(p.interest) ? '<span class="ci-interest">Keen</span>' : ''}</div>
+        ${p.mostValuable}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Not covered / areas to develop
+  const ncComments = sorted.filter(p => p.notCovered && !isNA(p.notCovered));
+  if (ncComments.length > 0) {
+    html += `<div class="comment-group"><h4>Areas not covered adequately / Want to develop further</h4>`;
+    ncComments.forEach(p => {
+      html += `<div class="comment-item">
+        <div class="ci-name">${p.name} <span class="ci-position">${p.position || ''}</span></div>
+        ${p.notCovered}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Suggestions
+  const sgComments = sorted.filter(p => p.suggestions && !isNA(p.suggestions));
+  if (sgComments.length > 0) {
+    html += `<div class="comment-group"><h4>Suggestions for improvement</h4>`;
+    sgComments.forEach(p => {
+      html += `<div class="comment-item">
+        <div class="ci-name">${p.name} <span class="ci-position">${p.position || ''}</span></div>
+        ${p.suggestions}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // General Comments
+  const genComments = sorted.filter(p => p.general && !isNA(p.general));
+  if (genComments.length > 0) {
+    html += `<div class="comment-group"><h4>General Comments</h4>`;
+    genComments.forEach(p => {
+      html += `<div class="comment-item">
+        <div class="ci-name">${p.name} <span class="ci-position">${p.position || ''}</span>${isInterested(p.interest) ? '<span class="ci-interest">Keen</span>' : ''}</div>
+        ${p.general}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+  main.innerHTML = html;
+}
+
+function renderOverallReport() {
+  const main = document.getElementById('main-content');
+  const allWorkshops = [];
+  ORGS.forEach(og => og.workshops.forEach(w => {
+    allWorkshops.push(Object.assign({_org: og.org || 'Other'}, w));
+  }));
+
+  const totalWs = allWorkshops.length;
+  const totalPax = allWorkshops.reduce((s, w) => s + w.participants.length, 0);
+  const rated = allWorkshops.filter(w => w.type !== 'unrated');
+  const unrated = allWorkshops.filter(w => w.type === 'unrated');
+
+  // All individual ratings normalised to /10
+  let allScores = [];
+  rated.forEach(w => {
+    const scale = w.type === 'rated5' ? 5 : 10;
+    w.participants.forEach(p => p.ratings.forEach(r => allScores.push((r / scale) * 10)));
+  });
+  const avgScore = allScores.length > 0 ? allScores.reduce((a,b) => a+b, 0) / allScores.length : 0;
+
+  // Interested count
+  const interestedTotal = allWorkshops.reduce((s, w) => s + w.participants.filter(p => isInterested(p.interest)).length, 0);
+
+  // By year (extract from date field)
+  const yearData = {};
+  allWorkshops.forEach(w => {
+    const m = (w.date || '').match(/(20\d{2})/);
+    const year = m ? m[1] : 'Unknown';
+    if (!yearData[year]) yearData[year] = {ws: 0, pax: 0, scores: []};
+    yearData[year].ws++;
+    yearData[year].pax += w.participants.length;
+    if (w.type !== 'unrated') {
+      const scale = w.type === 'rated5' ? 5 : 10;
+      w.participants.forEach(p => p.ratings.forEach(r => yearData[year].scores.push((r / scale) * 10)));
+    }
+  });
+
+  // By org
+  const orgData = {};
+  allWorkshops.forEach(w => {
+    const org = w._org;
+    if (!orgData[org]) orgData[org] = {ws: 0, pax: 0, scores: []};
+    orgData[org].ws++;
+    orgData[org].pax += w.participants.length;
+    if (w.type !== 'unrated') {
+      const scale = w.type === 'rated5' ? 5 : 10;
+      w.participants.forEach(p => p.ratings.forEach(r => orgData[org].scores.push((r / scale) * 10)));
+    }
+  });
+
+  // Top-rated workshops
+  const wsScores = [];
+  rated.forEach(w => {
+    const scale = w.type === 'rated5' ? 5 : 10;
+    const allR = [];
+    w.participants.forEach(p => allR.push(...p.ratings));
+    if (allR.length > 0) {
+      const avg = allR.reduce((s,r) => s + (r/scale)*10, 0) / allR.length;
+      wsScores.push({avg, name: w.name, org: w._org, date: w.date, pax: w.participants.length});
+    }
+  });
+  wsScores.sort((a, b) => b.avg - a.avg);
+
+  // Best quotes
+  const quotes = [];
+  allWorkshops.forEach(w => {
+    w.participants.forEach(p => {
+      ['mostValuable', 'general'].forEach(field => {
+        const c = p[field] || '';
+        if (c.length > 60) {
+          let score = c.length;
+          ['excellent','fantastic','amazing','great','love','outstanding','incredible','best','wonderful','engaging','brilliant','valuable','enjoyed','thank','recommend','helpful','inspiring','positive','eye opening','powerful'].forEach(word => {
+            if (c.toLowerCase().includes(word)) score += 50;
+          });
+          quotes.push({score, text: c, name: p.name || '', ws: w.name, org: w._org, date: w.date});
+        }
+      });
+    });
+  });
+  quotes.sort((a, b) => b.score - a.score);
+
+  // Delivery breakdown
+  const virtual = allWorkshops.filter(w => w.delivery === 'Virtual').length;
+  const inPerson = allWorkshops.filter(w => w.delivery === 'In-Person').length;
+
+  let html = `
+    <div class="report-header">
+      <h2>Overall Data Report</h2>
+      <div class="rh-meta">All workshops <span>2022 \u2013 2025</span> \u2022 ${totalWs} workshops \u2022 ${totalPax} participants</div>
+    </div>
+
+    <div class="overall-card">
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:2px;color:#888;margin-bottom:8px">Overall Average Score</div>
+      <div class="overall-score-display">${avgScore.toFixed(1)}<small>/10</small></div>
+      <div class="overall-pct">${((avgScore/10)*100).toFixed(0)}%</div>
+      <div class="overall-label">Based on ${allScores.length} individual ratings across ${rated.length} rated workshops</div>
+    </div>
+
+    <div class="overall-grid">
+      <div class="stat-card"><div class="stat-value">${totalWs}</div><div class="stat-label">Workshops</div></div>
+      <div class="stat-card"><div class="stat-value">${totalPax}</div><div class="stat-label">Participants</div></div>
+      <div class="stat-card"><div class="stat-value green">${interestedTotal}</div><div class="stat-label">Keen for More</div></div>
+      <div class="stat-card"><div class="stat-value gold">${avgScore.toFixed(1)}</div><div class="stat-label">Avg Score /10</div></div>
+    </div>
+
+    <div class="stats-row" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="stat-card"><div class="stat-value">${rated.length}</div><div class="stat-label">Rated Workshops</div></div>
+      <div class="stat-card"><div class="stat-value">${unrated.length}</div><div class="stat-label">Unrated (Comments Only)</div></div>
+      <div class="stat-card"><div class="stat-value">${virtual} / ${inPerson}</div><div class="stat-label">Virtual / In-Person</div></div>
+    </div>`;
+
+  // Year breakdown
+  html += `<div class="section-title">Score by Year</div>
+    <div class="score-card" style="margin-bottom:28px">`;
+  Object.keys(yearData).sort().forEach(year => {
+    const d = yearData[year];
+    const avg = d.scores.length > 0 ? d.scores.reduce((a,b) => a+b, 0) / d.scores.length : 0;
+    const pct = (avg / 10) * 100;
+    html += `<div class="year-row">
+      <div class="year-label">${year}</div>
+      <div class="year-bar-wrap"><div class="year-bar"><div class="year-bar-fill ${getBarClass(pct)}" style="width:${pct}%">${avg > 0 ? avg.toFixed(1) + '/10' : 'No ratings'}</div></div></div>
+      <div class="year-meta">${d.ws} workshops \u2022 ${d.pax} pax</div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Org rankings
+  const orgRanked = Object.keys(orgData)
+    .filter(o => orgData[o].scores.length > 0)
+    .map(o => ({name: o, avg: orgData[o].scores.reduce((a,b)=>a+b,0)/orgData[o].scores.length, ws: orgData[o].ws, pax: orgData[o].pax}))
+    .sort((a, b) => b.avg - a.avg);
+
+  html += `<div class="section-title">Organisation Rankings</div>
+    <div class="score-card" style="margin-bottom:28px">`;
+  orgRanked.forEach((o, i) => {
+    html += `<div class="org-rank-row">
+      <div class="org-rank-pos">${i + 1}</div>
+      <div class="org-rank-name">${o.name}</div>
+      <div style="text-align:right"><div class="org-rank-score">${o.avg.toFixed(1)}/10</div>
+      <div class="org-rank-meta">${o.ws} workshops \u2022 ${o.pax} participants</div></div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Top 10 workshops
+  html += `<div class="section-title">Top 10 Highest Rated Workshops</div>
+    <div class="score-card" style="margin-bottom:28px">`;
+  wsScores.slice(0, 10).forEach(w => {
+    html += `<div class="top-ws-row">
+      <div class="top-ws-score">${w.avg.toFixed(1)}</div>
+      <div class="top-ws-info">
+        <div class="top-ws-name">${w.name}</div>
+        <div class="top-ws-meta">${w.org} \u2022 ${w.date} \u2022 ${w.pax} participants</div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  // Best quotes
+  html += `<div class="section-title">Best Participant Feedback</div>`;
+  quotes.slice(0, 10).forEach(q => {
+    html += `<div class="quote-card">
+      <div class="quote-text">\u201C${q.text}\u201D</div>
+      <div class="quote-attr">\u2014 ${q.name}, ${q.ws} (${q.org}, ${q.date})</div>
+    </div>`;
+  });
+
+  main.innerHTML = html;
+}
+
+// Data loaded via external scripts, then buildOrgsFromData called at the end
+</script>
+
+<script src="workshop-data/2019.js" onerror=""></script>
+<script src="workshop-data/2020.js" onerror=""></script>
+<script src="workshop-data/2021.js" onerror=""></script>
+<script src="workshop-data/2022.js" onerror=""></script>
+<script src="workshop-data/2023.js" onerror=""></script>
+<script src="workshop-data/2024.js" onerror=""></script>
+<script src="workshop-data/2025.js" onerror=""></script>
+<script src="workshop-data/2026.js" onerror=""></script>
+<script>buildOrgsFromData();</script>
+
+</body>
+</html>
