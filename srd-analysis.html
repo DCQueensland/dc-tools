@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie QLD - Strategic Readiness Discussion Analysis</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,Helvetica,sans-serif;background:#1a1a1a;color:#fff;min-height:100vh;display:flex;flex-direction:column;}
+a{color:#ffc708;text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+/* Header */
+header{background:#000;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #ffc708;flex-shrink:0;}
+header .left{display:flex;flex-direction:column;gap:2px;}
+header h1{font-size:22px;font-weight:600;letter-spacing:.5px;}
+header h1 span{color:#ffc708;}
+header .subtitle{color:#999;font-size:13px;}
+header .right{display:flex;align-items:center;gap:16px;}
+.back-link{font-size:13px;color:#999;transition:color .2s;}
+.back-link:hover{color:#ffc708;text-decoration:none;}
+.print-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;background:#ffc708;color:#000;border:none;cursor:pointer;transition:opacity .15s;}
+.print-btn:hover{opacity:.85;}
+
+/* Layout */
+.app{display:flex;flex:1;overflow:hidden;}
+.sidebar{width:240px;background:#111;border-right:1px solid #333;overflow-y:auto;flex-shrink:0;padding:16px 0;}
+.sidebar h2{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:#666;padding:8px 20px 12px;margin:0;}
+.sidebar .company-item{display:block;padding:12px 20px;font-size:14px;color:#ccc;cursor:pointer;border-left:3px solid transparent;transition:all .15s;}
+.sidebar .company-item:hover{background:#1a1a1a;color:#fff;}
+.sidebar .company-item.active{background:#1a1a1a;color:#ffc708;border-left-color:#ffc708;font-weight:600;}
+.main{flex:1;overflow-y:auto;padding:32px;}
+
+/* Tabs */
+.tabs{display:flex;gap:4px;border-bottom:1px solid #333;margin-bottom:28px;flex-wrap:wrap;}
+.tab{padding:10px 18px;font-size:13px;font-weight:600;color:#999;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
+.tab:hover{color:#ccc;}
+.tab.active{color:#ffc708;border-bottom-color:#ffc708;}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* Cards */
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:32px;}
+.stat-card{background:#242424;border:1px solid #333;border-radius:12px;padding:24px;}
+.stat-card .label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:#999;margin-bottom:8px;}
+.stat-card .value{font-size:28px;font-weight:700;color:#ffc708;}
+.stat-card .detail{font-size:13px;color:#999;margin-top:4px;}
+
+/* Tables */
+.score-table-wrapper{overflow-x:auto;margin-bottom:32px;}
+table.score-table{border-collapse:collapse;width:100%;min-width:900px;font-size:13px;}
+table.score-table th,table.score-table td{padding:10px 12px;text-align:center;border:1px solid #333;}
+table.score-table th{background:#111;color:#ccc;font-weight:600;position:sticky;top:0;z-index:1;}
+table.score-table th:first-child,table.score-table td:first-child{text-align:left;min-width:220px;position:sticky;left:0;z-index:2;background:#1a1a1a;}
+table.score-table th:first-child{z-index:3;background:#111;}
+table.score-table td{font-weight:600;}
+.score-1,.score-2,.score-3,.score-4{background:#ff634733 !important;color:#ff6347;}
+.score-5,.score-6{background:#ffa50033 !important;color:#ffa500;}
+.score-7,.score-8{background:#84c44c33 !important;color:#84c44c;}
+.score-9,.score-10{background:#ffc70833 !important;color:#ffc708;}
+td.competency-cell{color:#ccc !important;background:#1a1a1a !important;font-weight:400 !important;}
+td.avg-cell{font-weight:700 !important;}
+
+/* Bar Charts */
+.bar-chart{margin-bottom:32px;}
+.bar-row{display:flex;align-items:center;margin-bottom:6px;gap:12px;}
+.bar-label{width:240px;font-size:12px;color:#ccc;text-align:right;flex-shrink:0;}
+.bar-track{flex:1;height:24px;background:#333;border-radius:4px;position:relative;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;transition:width .6s ease;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:11px;font-weight:700;color:#000;min-width:32px;}
+.bar-fill.green{background:#84c44c;}
+.bar-fill.yellow{background:#ffc708;}
+.bar-fill.amber{background:#ffa500;}
+.bar-fill.red{background:#ff6347;}
+.bar-fill.blue{background:#0090cf;}
+
+/* Radar / Spider chart via CSS */
+.radar-container{display:flex;justify-content:center;margin:24px 0;}
+.radar-svg{max-width:100%;}
+
+/* Section headers */
+.section-title{font-size:18px;font-weight:700;margin-bottom:16px;color:#fff;}
+.section-subtitle{font-size:14px;color:#999;margin-bottom:20px;}
+.subsection{margin-bottom:36px;}
+
+/* Strengths / Dev areas */
+.dual-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;}
+@media(max-width:768px){.dual-cols{grid-template-columns:1fr;}}
+.list-card{background:#242424;border:1px solid #333;border-radius:12px;padding:24px;}
+.list-card h3{font-size:14px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.list-card h3 .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.list-card h3 .dot.green{background:#84c44c;}
+.list-card h3 .dot.red{background:#ff6347;}
+.list-card ol{padding-left:20px;}
+.list-card li{font-size:13px;color:#ccc;margin-bottom:8px;line-height:1.5;}
+.list-card li strong{color:#fff;}
+
+/* Strategic Discussion */
+.participant-card{background:#242424;border:1px solid #333;border-radius:12px;padding:24px;margin-bottom:20px;}
+.participant-card h3{font-size:16px;font-weight:700;color:#ffc708;margin-bottom:4px;}
+.participant-card .email{font-size:12px;color:#666;margin-bottom:16px;}
+.qa-block{margin-bottom:14px;}
+.qa-block .q{font-size:12px;font-weight:700;color:#0090cf;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.qa-block .a{font-size:13px;color:#ccc;line-height:1.6;}
+
+.themes-card{background:#111;border:1px solid #ffc70844;border-radius:12px;padding:28px;margin-bottom:32px;}
+.themes-card h3{font-size:16px;font-weight:700;color:#ffc708;margin-bottom:20px;}
+.theme-block{margin-bottom:18px;}
+.theme-block .q{font-size:12px;font-weight:700;color:#0090cf;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+.theme-block .themes{display:flex;flex-wrap:wrap;gap:8px;}
+.theme-tag{background:#333;color:#ccc;font-size:12px;padding:4px 12px;border-radius:16px;border:1px solid #444;}
+
+/* Individual tab */
+.individual-select{margin-bottom:24px;}
+.individual-select select{background:#242424;color:#fff;border:1px solid #444;padding:10px 16px;border-radius:8px;font-size:14px;min-width:280px;}
+.individual-select select:focus{outline:none;border-color:#ffc708;}
+.individual-section{margin-bottom:36px;}
+.individual-section h3{font-size:16px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid #333;}
+
+/* Description tooltip */
+.comp-desc{font-size:11px;color:#888;font-style:italic;display:block;margin-top:2px;}
+
+/* Print */
+@media print{
+  body{background:#fff !important;color:#000 !important;}
+  header{background:#fff !important;border-bottom:2px solid #000 !important;padding:12px 20px !important;}
+  header h1,header h1 span{color:#000 !important;}
+  .sidebar{display:none !important;}
+  .main{padding:16px !important;}
+  .tabs{display:none !important;}
+  .tab-content{display:block !important;page-break-before:always;}
+  .tab-content:first-of-type{page-break-before:auto;}
+  .stat-card,.list-card,.participant-card,.themes-card{background:#f9f9f9 !important;border-color:#ddd !important;color:#000 !important;}
+  .stat-card .value{color:#000 !important;}
+  .stat-card .label,.stat-card .detail{color:#666 !important;}
+  table.score-table th{background:#eee !important;color:#000 !important;}
+  table.score-table td:first-child{background:#fff !important;}
+  .bar-track{background:#ddd !important;}
+  .back-link,.print-btn{display:none !important;}
+  .section-title,.list-card h3,.themes-card h3,.participant-card h3{color:#000 !important;}
+  .qa-block .a,.list-card li{color:#333 !important;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="left">
+    <h1>Dale Carnegie <span>QLD</span></h1>
+    <div class="subtitle">Strategic Readiness Discussion Analysis</div>
+  </div>
+  <div class="right">
+    <a href="dashboard.html" class="back-link">&larr; Back to Dashboard</a>
+    <button class="print-btn" onclick="window.print()">&#128438; Print / Export PDF</button>
+  </div>
+</header>
+
+<div class="app">
+  <div class="sidebar">
+    <h2>Companies</h2>
+    <div id="companyList"></div>
+  </div>
+  <div class="main" id="mainContent">
+    <div style="text-align:center;padding:80px 20px;color:#666;">
+      <div style="font-size:48px;margin-bottom:16px;">&#128202;</div>
+      <div style="font-size:16px;">Select a company from the sidebar to view their Strategic Readiness Discussion Analysis.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const DATA = {
+  "Golden Cockerel Chicken": {
+    participants: [
+      {
+        name: "Andre Dercksen", email: "AndreD@gcc.com.au",
+        strategic: {
+          q1: ["Flexible","Family owned"],
+          q2: ["More positive","Open for new ideas","Inclusive and communication"],
+          q3: ["More imagery in our approach","More effective"],
+          q4: ["Health expectations"],
+          q5: ["Learn to listen better","Be more patient"]
+        },
+        leadershipDNA: {
+          "Effective Communication":6,"Understanding":5,"Selling Your Ideas":7,"Relate-ability":7,
+          "People Skills":7,"Conflict Management":7,"Facilitation Skills":6,"Motivation":7,
+          "Problem Solving":9,"Managing Stress":4,"Goal Setting":4,"Risk Taking":6,
+          "Flexibility":6,"Partnering":7,"Attitude Control":7,"Human Nature":7,"Self Belief":4
+        },
+        uylp: {
+          "Inspiring Confidence":8,"Self-Awareness":7,"Coaching":6,"Being Coached":7,
+          "Communication":9,"Listening Skills":6,"Authenticity":7,"Integrity":7,
+          "Leadership Styles":7,"Motivation":8,"Accountability":8,"Engaging Others":4,
+          "Focus":9,"Harmony":9,"Managing Stress":9,"Leadership Skills":7,"Attitude to Learning":7
+        },
+        lfr: {
+          "Leadership":7,"Structuring Jobs for Results":10,"Planning":10,"Innovation":7,
+          "Communication":6,"Sharing Information":5,"Delegation":7,"Coaching":6,
+          "Performance Appraisals":10,"Time Management":10,"Motivation":10,"Presentation Skills":4,
+          "Atmosphere of Trust":7,"Rapport":7,"Recognition":10,"Market Awareness":4,
+          "Problem Solving":10,"Decision Making":10
+        }
+      },
+      {
+        name: "Cecil Fernandes", email: "cecilf@gcc.com.au",
+        strategic: {
+          q1: ["Family owned","Unique","Customer focus"],
+          q2: ["Management changes","Customer needs/expectations"],
+          q3: ["Automation","Customer needs/expectations"],
+          q4: ["Learning to keep up with changes","Planning for the future","Innovate to combat disruption"],
+          q5: ["Planning","Meeting deadlines","Quick decision making"]
+        },
+        leadershipDNA: {
+          "Effective Communication":8,"Understanding":8,"Selling Your Ideas":7,"Relate-ability":7,
+          "People Skills":9,"Conflict Management":7,"Facilitation Skills":8,"Motivation":8,
+          "Problem Solving":7,"Managing Stress":7,"Goal Setting":5,"Risk Taking":7,
+          "Flexibility":7,"Partnering":8,"Attitude Control":7,"Human Nature":8,"Self Belief":8
+        },
+        uylp: {
+          "Inspiring Confidence":8,"Self-Awareness":6,"Coaching":8,"Being Coached":7,
+          "Communication":9,"Listening Skills":8,"Authenticity":7,"Integrity":6,
+          "Leadership Styles":8,"Motivation":9,"Accountability":8,"Engaging Others":9,
+          "Focus":7,"Harmony":8,"Managing Stress":7,"Leadership Skills":8,"Attitude to Learning":7
+        },
+        lfr: {
+          "Leadership":7,"Structuring Jobs for Results":7,"Planning":5,"Innovation":6,
+          "Communication":8,"Sharing Information":8,"Delegation":7,"Coaching":7,
+          "Performance Appraisals":8,"Time Management":6,"Motivation":7,"Presentation Skills":8,
+          "Atmosphere of Trust":7,"Rapport":8,"Recognition":8,"Market Awareness":6,
+          "Problem Solving":6,"Decision Making":6
+        }
+      },
+      {
+        name: "Dennis Starck", email: "denniss@gcc.com.au",
+        strategic: {
+          q1: ["Adaptable","Driven","Customer Service","Trusted Supplier","We reinvest","Legacy"],
+          q2: ["Growth","Stronger Team and Culture","$60M investment","Delivered on promises","Optimise the marketplace","Embraced technology","Found our niche"],
+          q3: ["New lines and ownership direction","QLD expansion","Adaptation","New leaders","Alignment and engagement"],
+          q4: ["Passion","Motivation","Be open and humble","Agile"],
+          q5: ["Listening","Leading with motivation","Setting vision","Coaching better"]
+        },
+        leadershipDNA: {
+          "Effective Communication":7,"Understanding":4,"Selling Your Ideas":9,"Relate-ability":7,
+          "People Skills":8,"Conflict Management":4,"Facilitation Skills":5,"Motivation":6,
+          "Problem Solving":9,"Managing Stress":6,"Goal Setting":7,"Risk Taking":7,
+          "Flexibility":9,"Partnering":8,"Attitude Control":5,"Human Nature":3,"Self Belief":8
+        },
+        uylp: {
+          "Inspiring Confidence":8,"Self-Awareness":7,"Coaching":4,"Being Coached":6,
+          "Communication":8,"Listening Skills":5,"Authenticity":7,"Integrity":8,
+          "Leadership Styles":8,"Motivation":9,"Accountability":5,"Engaging Others":6,
+          "Focus":7,"Harmony":7,"Managing Stress":8,"Leadership Skills":4,"Attitude to Learning":7
+        },
+        lfr: {
+          "Leadership":7,"Structuring Jobs for Results":5,"Planning":5,"Innovation":8,
+          "Communication":5,"Sharing Information":5,"Delegation":5,"Coaching":6,
+          "Performance Appraisals":6,"Time Management":6,"Motivation":8,"Presentation Skills":7,
+          "Atmosphere of Trust":8,"Rapport":7,"Recognition":6,"Market Awareness":4,
+          "Problem Solving":7,"Decision Making":7
+        }
+      },
+      {
+        name: "Jo Holcroft", email: "joannah@gcc.com.au",
+        strategic: {
+          q1: ["Independent family company","Adaptability","Dynamic","Trust"],
+          q2: ["Investment in the company","New leadership","New way of doing business","Data"],
+          q3: ["Technology adaptation","Expectations of the younger generation","Challenges pricing","Priority of expansion"],
+          q4: ["Need to keep up to date and informed","Understand the business","Efficiencies"],
+          q5: ["Training in mentoring","Slow down","Time out to listen","Engage people"]
+        },
+        leadershipDNA: {
+          "Effective Communication":5,"Understanding":5,"Selling Your Ideas":7,"Relate-ability":5,
+          "People Skills":6,"Conflict Management":4,"Facilitation Skills":6,"Motivation":6,
+          "Problem Solving":7,"Managing Stress":7,"Goal Setting":5,"Risk Taking":7,
+          "Flexibility":6,"Partnering":8,"Attitude Control":8,"Human Nature":6,"Self Belief":7
+        },
+        uylp: {
+          "Inspiring Confidence":7,"Self-Awareness":7,"Coaching":6,"Being Coached":6,
+          "Communication":6,"Listening Skills":6,"Authenticity":7,"Integrity":8,
+          "Leadership Styles":7,"Motivation":7,"Accountability":6,"Engaging Others":5,
+          "Focus":7,"Harmony":6,"Managing Stress":7,"Leadership Skills":6,"Attitude to Learning":8
+        },
+        lfr: {
+          "Leadership":6,"Structuring Jobs for Results":7,"Planning":8,"Innovation":8,
+          "Communication":6,"Sharing Information":7,"Delegation":5,"Coaching":6,
+          "Performance Appraisals":6,"Time Management":7,"Motivation":7,"Presentation Skills":7,
+          "Atmosphere of Trust":5,"Rapport":6,"Recognition":5,"Market Awareness":4,
+          "Problem Solving":7,"Decision Making":7
+        }
+      },
+      {
+        name: "Robert Allison", email: "roba@gcc.com.au",
+        strategic: {
+          q1: ["A south east QLD family business","Its people"],
+          q2: ["Better alignment","Simplification","Organisational structure","Australian market dynamics"],
+          q3: ["Winning the hearts and minds of the next generation of leaders","Australian market continuing to evolve"],
+          q4: ["Keep being open to anything"],
+          q5: ["Better active listening"]
+        },
+        leadershipDNA: {
+          "Effective Communication":6,"Understanding":7,"Selling Your Ideas":7,"Relate-ability":8,
+          "People Skills":9,"Conflict Management":9,"Facilitation Skills":5,"Motivation":7,
+          "Problem Solving":7,"Managing Stress":7,"Goal Setting":7,"Risk Taking":7,
+          "Flexibility":7,"Partnering":9,"Attitude Control":8,"Human Nature":8,"Self Belief":8
+        },
+        uylp: {
+          "Inspiring Confidence":9,"Self-Awareness":7,"Coaching":8,"Being Coached":9,
+          "Communication":7,"Listening Skills":7,"Authenticity":8,"Integrity":8,
+          "Leadership Styles":8,"Motivation":7,"Accountability":7,"Engaging Others":7,
+          "Focus":7,"Harmony":6,"Managing Stress":7,"Leadership Skills":7,"Attitude to Learning":8
+        },
+        lfr: {
+          "Leadership":7,"Structuring Jobs for Results":7,"Planning":6,"Innovation":8,
+          "Communication":7,"Sharing Information":9,"Delegation":9,"Coaching":8,
+          "Performance Appraisals":6,"Time Management":6,"Motivation":9,"Presentation Skills":7,
+          "Atmosphere of Trust":8,"Rapport":8,"Recognition":7,"Market Awareness":9,
+          "Problem Solving":7,"Decision Making":7
+        }
+      },
+      {
+        name: "Shane Duncan", email: "shaned@gcc.com.au",
+        strategic: {
+          q1: ["Family ownership","Meet promises made to customer","Authentic"],
+          q2: ["Growth","Processing volumes","Strengthen commitment to leadership group"],
+          q3: ["Automation","Staple risk free stock movement","Technology and AI","Alignment and engagement"],
+          q4: ["Change","Legacy"],
+          q5: ["Planned roadmap of future","Sales and opportunities"]
+        },
+        leadershipDNA: {
+          "Effective Communication":6,"Understanding":7,"Selling Your Ideas":7,"Relate-ability":7,
+          "People Skills":7,"Conflict Management":6,"Facilitation Skills":6,"Motivation":6,
+          "Problem Solving":7,"Managing Stress":6,"Goal Setting":6,"Risk Taking":8,
+          "Flexibility":8,"Partnering":7,"Attitude Control":7,"Human Nature":7,"Self Belief":8
+        },
+        uylp: {
+          "Inspiring Confidence":7,"Self-Awareness":7,"Coaching":6,"Being Coached":7,
+          "Communication":6,"Listening Skills":7,"Authenticity":8,"Integrity":9,
+          "Leadership Styles":7,"Motivation":7,"Accountability":8,"Engaging Others":8,
+          "Focus":8,"Harmony":7,"Managing Stress":7,"Leadership Skills":7,"Attitude to Learning":7
+        },
+        lfr: {
+          "Leadership":8,"Structuring Jobs for Results":7,"Planning":8,"Innovation":6,
+          "Communication":7,"Sharing Information":7,"Delegation":7,"Coaching":8,
+          "Performance Appraisals":6,"Time Management":8,"Motivation":7,"Presentation Skills":7,
+          "Atmosphere of Trust":7,"Rapport":7,"Recognition":7,"Market Awareness":7,
+          "Problem Solving":7,"Decision Making":7
+        }
+      },
+      {
+        name: "Tamara Scurr", email: "tamaras@gcc.com.au",
+        strategic: {
+          q1: ["Legacy","Flexibility","Adaptability","Commitment","Family values"],
+          q2: ["Focus on leadership","Team work","Fast moving pace","Focus on upskilling and training","Higher customer expectations","New equipment","Process advantages","Alignment","Positive culture"],
+          q3: ["Investment","New products","Expansions","New technology","Teamwork","Develop upskilled staff","Automation","More alignment and engagement","Proactive expectation management"],
+          q4: ["Being open, flexible, adaptable","People and experiences","Improvement","More coaching and mentoring","Implement strategies","Legacy"],
+          q5: ["Delegation","Understanding my leadership style and tendencies","Positive mindset","Resilience","Adaptive"]
+        },
+        leadershipDNA: {
+          "Effective Communication":7,"Understanding":5,"Selling Your Ideas":9,"Relate-ability":7,
+          "People Skills":9,"Conflict Management":7,"Facilitation Skills":9,"Motivation":7,
+          "Problem Solving":7,"Managing Stress":7,"Goal Setting":9,"Risk Taking":9,
+          "Flexibility":9,"Partnering":9,"Attitude Control":5,"Human Nature":5,"Self Belief":9
+        },
+        uylp: {
+          "Inspiring Confidence":7,"Self-Awareness":7,"Coaching":7,"Being Coached":7,
+          "Communication":7,"Listening Skills":7,"Authenticity":7,"Integrity":9,
+          "Leadership Styles":4,"Motivation":7,"Accountability":7,"Engaging Others":7,
+          "Focus":9,"Harmony":7,"Managing Stress":7,"Leadership Skills":4,"Attitude to Learning":9
+        },
+        lfr: {
+          "Leadership":6,"Structuring Jobs for Results":6,"Planning":5,"Innovation":5,
+          "Communication":7,"Sharing Information":7,"Delegation":4,"Coaching":7,
+          "Performance Appraisals":6,"Time Management":6,"Motivation":3,"Presentation Skills":2,
+          "Atmosphere of Trust":5,"Rapport":4,"Recognition":5,"Market Awareness":5,
+          "Problem Solving":2,"Decision Making":2
+        }
+      },
+      {
+        name: "Velmaran Arumugen", email: "velmarana@gcc.com.au",
+        strategic: {
+          q1: ["Great team","Skills","Capabilities"],
+          q2: ["Leadership team","Business growth","Partnership trust","Automation","Working as a team"],
+          q3: ["Automation","AI","Alignment","Growth","Investment","Skills development"],
+          q4: ["More coaching","Mentoring","Implement strategy and plan"],
+          q5: ["Allowing the team time to complete the work"]
+        },
+        leadershipDNA: {
+          "Effective Communication":8,"Understanding":9,"Selling Your Ideas":7,"Relate-ability":10,
+          "People Skills":10,"Conflict Management":10,"Facilitation Skills":9,"Motivation":10,
+          "Problem Solving":9,"Managing Stress":8,"Goal Setting":10,"Risk Taking":8,
+          "Flexibility":9,"Partnering":9,"Attitude Control":8,"Human Nature":9,"Self Belief":8
+        },
+        uylp: {
+          "Inspiring Confidence":9,"Self-Awareness":7,"Coaching":10,"Being Coached":6,
+          "Communication":9,"Listening Skills":9,"Authenticity":8,"Integrity":9,
+          "Leadership Styles":9,"Motivation":9,"Accountability":8,"Engaging Others":10,
+          "Focus":9,"Harmony":7,"Managing Stress":8,"Leadership Skills":9,"Attitude to Learning":9
+        },
+        lfr: {
+          "Leadership":9,"Structuring Jobs for Results":9,"Planning":10,"Innovation":8,
+          "Communication":8,"Sharing Information":10,"Delegation":8,"Coaching":10,
+          "Performance Appraisals":9,"Time Management":8,"Motivation":8,"Presentation Skills":9,
+          "Atmosphere of Trust":9,"Rapport":7,"Recognition":7,"Market Awareness":5,
+          "Problem Solving":9,"Decision Making":9
+        }
+      }
+    ]
+  }
+};
+
+// Competency descriptions
+const DNA_DESC = {
+  "Effective Communication":"Presenting ideas clearly to people and groups",
+  "Understanding":"Listening to others, encouraging them to talk",
+  "Selling Your Ideas":"Convincing other people to see things your way",
+  "Relate-ability":"Working well with people and earning their trust",
+  "People Skills":"Building a rapport with people and earning their trust",
+  "Conflict Management":"Working through conflicts in an agreeable way",
+  "Facilitation Skills":"Leading team discussions and making meetings interactive",
+  "Motivation":"Understanding people's motives for their actions",
+  "Problem Solving":"Using a systematic problem solving method",
+  "Managing Stress":"Identifying, managing and controlling stressful situations",
+  "Goal Setting":"Have written goals which are meaningful and motivating",
+  "Risk Taking":"Making decisions and taking responsibility for them",
+  "Flexibility":"Being willing to change old habits and processes",
+  "Partnering":"Willing to work in a team environment and share work",
+  "Attitude Control":"Able to improve your own attitude about the situation",
+  "Human Nature":"Understanding why people do the things they do",
+  "Self Belief":"My personal belief about my abilities and self worth"
+};
+
+const UYLP_DESC = {
+  "Inspiring Confidence":"Believe in myself and my abilities to create trust so others may follow",
+  "Self-Awareness":"Accept feedback to continually improve my leadership abilities",
+  "Coaching":"Ability to give feedback without creating resentment",
+  "Being Coached":"Ability to receive and action relevant feedback",
+  "Communication":"Ability to communicate powerfully and concisely",
+  "Listening Skills":"Ability to listen at highest level and can remove personal filters",
+  "Authenticity":"Create trust with others through being comfortable in yourself",
+  "Integrity":"Ability to be transparent and admit mistakes",
+  "Leadership Styles":"Understand my leadership style and tendencies",
+  "Motivation":"Able to inspire others to action",
+  "Accountability":"Able to keep others and self accountable to agreed outcomes",
+  "Engaging Others":"Effective People skills that inspire others to achieve results",
+  "Focus":"Able to keep focus on important tasks to achieve results",
+  "Harmony":"Minimise the effect of counter productive drama",
+  "Managing Stress":"Able to self regulate stress and encourage other to do the same",
+  "Leadership Skills":"Ability to address non performance to facilitate a positive solution",
+  "Attitude to Learning":"Continuously learning to unleash your leadership potential"
+};
+
+const LFR_DESC = {
+  "Leadership":"Reaching predetermined results through people",
+  "Structuring Jobs for Results":"Setting clear performance standards",
+  "Planning":"Having a systematic and consistent method in use",
+  "Innovation":"Capturing new opportunities through improvement",
+  "Communication":"Listening to people and encouraging them to speak",
+  "Sharing Information":"Helping people and encouraging them to speak",
+  "Delegation":"Using delegation to build people",
+  "Coaching":"Changing performance in a positive way",
+  "Performance Appraisals":"Holding people accountable in a fair way",
+  "Time Management":"Identifying and doing the important things first",
+  "Motivation":"Sustaining an atmosphere where people are excited to work",
+  "Presentation Skills":"Communicating with groups, selling and informing",
+  "Atmosphere of Trust":"Creating an environment process which fosters risk-taking",
+  "Rapport":"Understanding what people want and why they do it",
+  "Recognition":"Having a systematic method for recognising a job well done",
+  "Market Awareness":"Talking business with people outside of your industry",
+  "Problem Solving":"Using a systematic method for solving problems",
+  "Decision Making":"Weighing alternative choices using facts and criteria"
+};
+
+const STRATEGIC_QUESTIONS = {
+  q1: "What are the strengths of your company?",
+  q2: "Looking back two years, what have been some of the changes in your company?",
+  q3: "Looking ahead two years, what changes do you anticipate in your company?",
+  q4: "How are those changes impacting you today?",
+  q5: "What skills do you need to improve now, to help you adjust to change and meet the leadership demands of tomorrow?"
+};
+
+// ============================================================
+// HELPERS
+// ============================================================
+function avg(arr){ return arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0; }
+function r1(n){ return Math.round(n*10)/10; }
+function scoreClass(v){ v=Math.round(v); if(v<=4) return 'score-'+v; if(v<=6) return 'score-'+v; if(v<=8) return 'score-'+v; return 'score-'+Math.min(v,10); }
+function barColor(v){ if(v>=8.5) return 'yellow'; if(v>=7) return 'green'; if(v>=5) return 'amber'; return 'red'; }
+function firstName(name){ return name.split(' ')[0]; }
+
+function computeAverages(participants, profileKey){
+  const keys = Object.keys(participants[0][profileKey]);
+  const result = {};
+  keys.forEach(k => {
+    result[k] = r1(avg(participants.map(p => p[profileKey][k])));
+  });
+  return result;
+}
+
+function allProfileAverages(participants){
+  const profiles = ['leadershipDNA','uylp','lfr'];
+  const all = [];
+  profiles.forEach(pk => {
+    const avgs = computeAverages(participants, pk);
+    Object.values(avgs).forEach(v => all.push(v));
+  });
+  return all;
+}
+
+function getTopAndBottom(participants){
+  const profiles = [
+    {key:'leadershipDNA', label:'Leadership DNA'},
+    {key:'uylp', label:'UYLP'},
+    {key:'lfr', label:'Leadership for Results'}
+  ];
+  const combined = [];
+  profiles.forEach(p => {
+    const avgs = computeAverages(participants, p.key);
+    Object.entries(avgs).forEach(([comp,val]) => {
+      combined.push({comp, val, profile: p.label});
+    });
+  });
+  combined.sort((a,b) => b.val - a.val);
+  const top5 = combined.slice(0,5);
+  const bottom5 = combined.sort((a,b) => a.val - b.val).slice(0,5);
+  return {top5, bottom5};
+}
+
+function generateThemes(participants){
+  const questions = ['q1','q2','q3','q4','q5'];
+  const themes = {};
+  questions.forEach(q => {
+    const allResponses = [];
+    participants.forEach(p => {
+      p.strategic[q].forEach(r => allResponses.push(r.toLowerCase()));
+    });
+    // Find common words/phrases
+    const wordMap = {};
+    const themeKeywords = {
+      'family': 'Family-Owned Values',
+      'team': 'Teamwork & Culture',
+      'customer': 'Customer Focus',
+      'adapt': 'Adaptability',
+      'flexib': 'Flexibility',
+      'growth': 'Business Growth',
+      'automation': 'Automation & Technology',
+      'technology': 'Automation & Technology',
+      'ai': 'AI & Innovation',
+      'leadership': 'Leadership Development',
+      'leader': 'Leadership Development',
+      'alignment': 'Alignment & Engagement',
+      'engagement': 'Alignment & Engagement',
+      'listen': 'Active Listening',
+      'coaching': 'Coaching & Mentoring',
+      'mentoring': 'Coaching & Mentoring',
+      'investment': 'Investment & Growth',
+      'expansion': 'Expansion',
+      'legacy': 'Legacy & Heritage',
+      'people': 'People & Relationships',
+      'communication': 'Communication',
+      'trust': 'Trust & Authenticity',
+      'change': 'Change Management',
+      'innovation': 'Innovation',
+      'delegat': 'Delegation',
+      'planning': 'Planning & Strategy',
+      'strategy': 'Planning & Strategy',
+      'motivation': 'Motivation & Drive',
+      'open': 'Openness & Humility',
+      'skill': 'Skills Development',
+      'upskill': 'Skills Development',
+      'culture': 'Teamwork & Culture',
+      'vision': 'Vision Setting'
+    };
+    const found = {};
+    allResponses.forEach(r => {
+      Object.entries(themeKeywords).forEach(([kw, theme]) => {
+        if(r.includes(kw)){
+          found[theme] = (found[theme]||0) + 1;
+        }
+      });
+    });
+    // Sort by frequency, take top themes (those mentioned by 2+ people)
+    themes[q] = Object.entries(found)
+      .filter(([,c]) => c >= 2)
+      .sort((a,b) => b[1] - a[1])
+      .map(([t]) => t);
+    if(themes[q].length === 0){
+      // fallback: take top mentioned
+      themes[q] = Object.entries(found).sort((a,b) => b[1] - a[1]).slice(0,3).map(([t]) => t);
+    }
+  });
+  return themes;
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderCompanyList(){
+  const el = document.getElementById('companyList');
+  Object.keys(DATA).forEach((name, i) => {
+    const div = document.createElement('div');
+    div.className = 'company-item' + (i===0?' active':'');
+    div.textContent = name;
+    div.onclick = () => selectCompany(name, div);
+    el.appendChild(div);
+  });
+  // Auto-select first
+  selectCompany(Object.keys(DATA)[0], el.querySelector('.company-item'));
+}
+
+function selectCompany(name, el){
+  document.querySelectorAll('.company-item').forEach(e => e.classList.remove('active'));
+  if(el) el.classList.add('active');
+  renderCompany(name);
+}
+
+function renderCompany(companyName){
+  const company = DATA[companyName];
+  const p = company.participants;
+  const main = document.getElementById('mainContent');
+
+  const tabDefs = [
+    {id:'overview', label:'Overview'},
+    {id:'dna', label:'Leadership DNA'},
+    {id:'uylp', label:'UYLP'},
+    {id:'lfr', label:'Leadership for Results'},
+    {id:'strategic', label:'Strategic Discussion'},
+    {id:'individual', label:'Individual'}
+  ];
+
+  let html = '<div class="tabs">';
+  tabDefs.forEach((t,i) => {
+    html += `<div class="tab${i===0?' active':''}" data-tab="${t.id}">${t.label}</div>`;
+  });
+  html += '</div>';
+
+  // Tab contents
+  html += renderOverview(companyName, p);
+  html += renderProfileTab('dna', 'Leadership DNA', 'leadershipDNA', DNA_DESC, p);
+  html += renderProfileTab('uylp', 'Unleash Your Leadership Potential', 'uylp', UYLP_DESC, p);
+  html += renderProfileTab('lfr', 'Leadership for Results', 'lfr', LFR_DESC, p);
+  html += renderStrategicTab(p);
+  html += renderIndividualTab(p);
+
+  main.innerHTML = html;
+
+  // Tab switching
+  main.querySelectorAll('.tab').forEach(tab => {
+    tab.onclick = () => {
+      main.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      main.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      main.querySelector('#tab-'+tab.dataset.tab).classList.add('active');
+    };
+  });
+
+  // Individual dropdown
+  const sel = main.querySelector('#individualSelect');
+  if(sel){
+    sel.onchange = () => renderIndividualContent(p, parseInt(sel.value));
+    renderIndividualContent(p, 0);
+  }
+}
+
+function renderOverview(companyName, participants){
+  const n = participants.length;
+  const allVals = allProfileAverages(participants);
+  const teamAvg = r1(avg(allVals));
+  const {top5, bottom5} = getTopAndBottom(participants);
+
+  const dnaAvgs = computeAverages(participants,'leadershipDNA');
+  const uylpAvgs = computeAverages(participants,'uylp');
+  const lfrAvgs = computeAverages(participants,'lfr');
+
+  let html = `<div class="tab-content active" id="tab-overview">`;
+  html += `<div class="section-title">${companyName}</div>`;
+  html += `<div class="section-subtitle">${n} participants in Strategic Readiness Discussion</div>`;
+
+  // Stat cards
+  html += `<div class="stat-cards">`;
+  html += `<div class="stat-card"><div class="label">Team Average</div><div class="value">${teamAvg}</div><div class="detail">Across all 3 profiles (scale 1-10)</div></div>`;
+  html += `<div class="stat-card"><div class="label">Highest Area</div><div class="value" style="font-size:20px;">${top5[0].comp}</div><div class="detail">${top5[0].val} avg — ${top5[0].profile}</div></div>`;
+  html += `<div class="stat-card"><div class="label">Area for Development</div><div class="value" style="font-size:20px;color:#ff6347;">${bottom5[0].comp}</div><div class="detail">${bottom5[0].val} avg — ${bottom5[0].profile}</div></div>`;
+  html += `</div>`;
+
+  // Top 5 / Bottom 5
+  html += `<div class="dual-cols">`;
+  html += `<div class="list-card"><h3><span class="dot green"></span> Top 5 Strengths</h3><ol>`;
+  top5.forEach(t => { html += `<li><strong>${t.comp}</strong> — ${t.val} avg <span style="color:#666;font-size:11px;">(${t.profile})</span></li>`; });
+  html += `</ol></div>`;
+  html += `<div class="list-card"><h3><span class="dot red"></span> Top 5 Development Areas</h3><ol>`;
+  bottom5.forEach(t => { html += `<li><strong>${t.comp}</strong> — ${t.val} avg <span style="color:#666;font-size:11px;">(${t.profile})</span></li>`; });
+  html += `</ol></div></div>`;
+
+  // Bar charts for each profile
+  const profiles = [
+    {label:'Leadership DNA', avgs:dnaAvgs},
+    {label:'UYLP', avgs:uylpAvgs},
+    {label:'Leadership for Results', avgs:lfrAvgs}
+  ];
+  profiles.forEach(prof => {
+    html += `<div class="subsection"><div class="section-title" style="font-size:15px;">${prof.label} — Team Averages</div>`;
+    html += renderBarChart(prof.avgs, true);
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  return html;
+}
+
+function renderBarChart(avgsObj, sorted){
+  let entries = Object.entries(avgsObj);
+  if(sorted) entries.sort((a,b) => b[1] - a[1]);
+  let html = '<div class="bar-chart">';
+  entries.forEach(([label, val]) => {
+    const pct = (val/10)*100;
+    html += `<div class="bar-row">
+      <div class="bar-label">${label}</div>
+      <div class="bar-track"><div class="bar-fill ${barColor(val)}" style="width:${pct}%">${r1(val)}</div></div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderProfileTab(tabId, title, profileKey, descriptions, participants){
+  const keys = Object.keys(participants[0][profileKey]);
+  const avgs = computeAverages(participants, profileKey);
+
+  let html = `<div class="tab-content" id="tab-${tabId}">`;
+  html += `<div class="section-title">${title}</div>`;
+  html += `<div class="section-subtitle">Self-assessment scores (1 = room for improvement, 10 = achieving breakthrough results)</div>`;
+
+  // Table
+  html += `<div class="score-table-wrapper"><table class="score-table"><thead><tr>`;
+  html += `<th>Competency</th>`;
+  participants.forEach(p => { html += `<th>${firstName(p.name)}</th>`; });
+  html += `<th style="background:#ffc70822;color:#ffc708;">Team Avg</th></tr></thead><tbody>`;
+
+  keys.forEach(k => {
+    html += `<tr><td class="competency-cell">${k}<span class="comp-desc">${descriptions[k]||''}</span></td>`;
+    participants.forEach(p => {
+      const v = p[profileKey][k];
+      html += `<td class="${scoreClass(v)}">${v}</td>`;
+    });
+    html += `<td class="avg-cell ${scoreClass(avgs[k])}">${avgs[k]}</td></tr>`;
+  });
+
+  html += `</tbody></table></div>`;
+
+  // Bar chart sorted
+  html += `<div class="subsection" style="margin-top:32px;"><div class="section-title" style="font-size:15px;">Team Averages — Sorted by Score</div>`;
+  html += renderBarChart(avgs, true);
+  html += `</div></div>`;
+
+  return html;
+}
+
+function renderStrategicTab(participants){
+  const themes = generateThemes(participants);
+  let html = `<div class="tab-content" id="tab-strategic">`;
+  html += `<div class="section-title">Strategic Discussion Responses</div>`;
+  html += `<div class="section-subtitle">Qualitative responses from each participant</div>`;
+
+  // Collective themes
+  html += `<div class="themes-card"><h3>Collective Themes</h3>`;
+  ['q1','q2','q3','q4','q5'].forEach(q => {
+    html += `<div class="theme-block"><div class="q">${STRATEGIC_QUESTIONS[q]}</div><div class="themes">`;
+    (themes[q]||[]).forEach(t => { html += `<span class="theme-tag">${t}</span>`; });
+    html += `</div></div>`;
+  });
+  html += `</div>`;
+
+  // Individual cards
+  participants.forEach(p => {
+    html += `<div class="participant-card"><h3>${p.name}</h3><div class="email">${p.email}</div>`;
+    ['q1','q2','q3','q4','q5'].forEach(q => {
+      html += `<div class="qa-block"><div class="q">${STRATEGIC_QUESTIONS[q]}</div>`;
+      html += `<div class="a">${p.strategic[q].map(r => '&bull; ' + r).join('<br>')}</div></div>`;
+    });
+    html += `</div>`;
+  });
+
+  html += `</div>`;
+  return html;
+}
+
+function renderIndividualTab(participants){
+  let html = `<div class="tab-content" id="tab-individual">`;
+  html += `<div class="section-title">Individual Analysis</div>`;
+  html += `<div class="section-subtitle">Select a participant to view all their data</div>`;
+  html += `<div class="individual-select"><select id="individualSelect">`;
+  participants.forEach((p,i) => {
+    html += `<option value="${i}">${p.name}</option>`;
+  });
+  html += `</select></div>`;
+  html += `<div id="individualContent"></div></div>`;
+  return html;
+}
+
+function renderIndividualContent(participants, idx){
+  const p = participants[idx];
+  const container = document.getElementById('individualContent');
+  if(!container) return;
+
+  let html = `<div class="participant-card" style="border-color:#ffc708;">`;
+  html += `<h3>${p.name}</h3><div class="email">${p.email}</div>`;
+
+  // Strategic Readiness
+  html += `<div class="individual-section"><h3>Strategic Readiness Responses</h3>`;
+  ['q1','q2','q3','q4','q5'].forEach(q => {
+    html += `<div class="qa-block"><div class="q">${STRATEGIC_QUESTIONS[q]}</div>`;
+    html += `<div class="a">${p.strategic[q].map(r => '&bull; ' + r).join('<br>')}</div></div>`;
+  });
+  html += `</div>`;
+
+  // Profiles
+  const profiles = [
+    {key:'leadershipDNA', label:'Leadership DNA', desc: DNA_DESC},
+    {key:'uylp', label:'Unleash Your Leadership Potential', desc: UYLP_DESC},
+    {key:'lfr', label:'Leadership for Results', desc: LFR_DESC}
+  ];
+
+  // Radar chart (SVG)
+  html += `<div class="individual-section"><h3>Score Overview — All Profiles</h3>`;
+  html += renderIndividualRadar(p, profiles);
+  html += `</div>`;
+
+  profiles.forEach(prof => {
+    const scores = p[prof.key];
+    const teamAvgs = computeAverages(participants, prof.key);
+    html += `<div class="individual-section"><h3>${prof.label}</h3>`;
+    html += `<div class="bar-chart">`;
+    Object.entries(scores).forEach(([comp, val]) => {
+      const pct = (val/10)*100;
+      const tAvg = teamAvgs[comp];
+      html += `<div class="bar-row">
+        <div class="bar-label">${comp}<br><span style="font-size:10px;color:#666;">Team avg: ${tAvg}</span></div>
+        <div class="bar-track"><div class="bar-fill ${barColor(val)}" style="width:${pct}%">${val}</div></div>
+      </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += `</div>`;
+  container.innerHTML = html;
+}
+
+function renderIndividualRadar(p, profiles){
+  // Build a simplified radar using SVG
+  // Combine all profile scores into one radar with color coding per profile
+  const profileColors = ['#ffc708','#84c44c','#0090cf'];
+  const cx = 200, cy = 200, maxR = 160;
+  const allKeys = [];
+  const allProfiles = [];
+
+  profiles.forEach((prof,pi) => {
+    const keys = Object.keys(p[prof.key]);
+    const vals = Object.values(p[prof.key]);
+    allProfiles.push({keys, vals, color: profileColors[pi], label: prof.label});
+  });
+
+  // Draw separate radar for each profile overlaid
+  // Use the profile with most items to set the grid
+  let svg = `<div class="radar-container"><svg class="radar-svg" viewBox="0 0 400 420" width="400" height="420">`;
+
+  // Draw grid circles
+  for(let i=1;i<=5;i++){
+    const r = (maxR/5)*i;
+    svg += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#333" stroke-width="1"/>`;
+    svg += `<text x="${cx+4}" y="${cy-r+12}" fill="#666" font-size="9">${i*2}</text>`;
+  }
+
+  // Draw each profile as a polygon
+  allProfiles.forEach((prof,pi) => {
+    const n = prof.keys.length;
+    const angleStep = (Math.PI*2)/n;
+    let points = '';
+    prof.vals.forEach((v,i) => {
+      const angle = angleStep*i - Math.PI/2;
+      const r = (v/10)*maxR;
+      const x = cx + r*Math.cos(angle);
+      const y = cy + r*Math.sin(angle);
+      points += `${x},${y} `;
+    });
+    svg += `<polygon points="${points}" fill="${prof.color}22" stroke="${prof.color}" stroke-width="2"/>`;
+
+    // Dots
+    prof.vals.forEach((v,i) => {
+      const angle = angleStep*i - Math.PI/2;
+      const r = (v/10)*maxR;
+      const x = cx + r*Math.cos(angle);
+      const y = cy + r*Math.sin(angle);
+      svg += `<circle cx="${x}" cy="${y}" r="3" fill="${prof.color}"/>`;
+    });
+  });
+
+  // Legend
+  svg += `<text x="10" y="410" fill="#ffc708" font-size="11" font-weight="bold">&#9632; Leadership DNA</text>`;
+  svg += `<text x="150" y="410" fill="#84c44c" font-size="11" font-weight="bold">&#9632; UYLP</text>`;
+  svg += `<text x="250" y="410" fill="#0090cf" font-size="11" font-weight="bold">&#9632; Leadership for Results</text>`;
+
+  svg += `</svg></div>`;
+  return svg;
+}
+
+// Init
+renderCompanyList();
+</script>
+</body>
+</html>
