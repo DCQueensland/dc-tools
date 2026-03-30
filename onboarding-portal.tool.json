@@ -1,6 +1,9 @@
 {
   "name": "Onboarding Portal",
   "description": "Password-protected portal with login credentials for all team tools. Separated by Franchise and Partnerships teams.",
+  "file": "onboarding-portal.html",
+  "icon": "🔑",
+  "category": "online-tool",
   "type": "online",
-  "url": "onboarding-portal.html"
+  "order": 9
 }

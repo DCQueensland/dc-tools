@@ -1,0 +1,9 @@
+{
+  "name": "Workshop Sheets Analysis",
+  "description": "Workshop feedback data across 2022-2025. Rated and unrated feedback organised by company, schools, and public workshops with interest tracking.",
+  "file": "workshop-feedback.html",
+  "icon": "📋",
+  "category": "online-tool",
+  "type": "online",
+  "order": 2.6
+}
