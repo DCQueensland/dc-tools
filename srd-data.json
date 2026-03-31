@@ -1,0 +1,296 @@
+{
+  "companies": [
+    {
+      "company": "Golden Cockerel Chicken",
+      "questions": [
+        "What are the strengths of your company?",
+        "Looking back two years, what have been some of the changes in your company?",
+        "Looking ahead two years, what changes do you anticipate in your company?",
+        "How are those changes impacting you today?",
+        "What skills do you need to improve now, to help you adjust to change and meet the leadership demands of tomorrow?"
+      ],
+      "participants": [
+        {
+          "name": "Andre Dercksen",
+          "email": "AndreD@gcc.com.au",
+          "strategic": {
+            "Q1": ["Flexible", "Family owned"],
+            "Q2": ["More positive", "Open for new ideas", "Inclusive and communication"],
+            "Q3": ["More imagery in our approach", "More effective"],
+            "Q4": ["Health expectations"],
+            "Q5": ["Learn to listen better", "Be more patient"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 6, "Understanding": 5, "Selling Your Ideas": 7,
+            "Relate-ability": 7, "People Skills": 7, "Conflict Management": 7,
+            "Facilitation Skills": 6, "Motivation": 7, "Problem Solving": 9,
+            "Managing Stress": 4, "Goal Setting": 4, "Risk Taking": 6,
+            "Flexibility": 6, "Partnering": 7, "Attitude Control": 7,
+            "Human Nature": 7, "Self Belief": 4
+          },
+          "UYLP": {
+            "Inspiring Confidence": 8, "Self-Awareness": 7, "Coaching": 6,
+            "Being Coached": 7, "Communication": 9, "Listening Skills": 6,
+            "Authenticity": 7, "Integrity": 7, "Leadership Styles": 7,
+            "Motivation": 8, "Accountability": 8, "Engaging Others": 4,
+            "Focus": 9, "Harmony": 9, "Managing Stress": 9,
+            "Leadership Skills": 7, "Attitude to Learning": 7
+          },
+          "Leadership for Results": {
+            "Leadership": 7, "Structuring Jobs for Results": 10, "Planning": 10,
+            "Innovation": 7, "Communication": 6, "Sharing Information": 5,
+            "Delegation": 7, "Coaching": 6, "Performance Appraisals": 10,
+            "Time Management": 10, "Motivation": 10, "Presentation Skills": 4,
+            "Atmosphere of Trust": 7, "Rapport": 7, "Recognition": 10,
+            "Market Awareness": 4, "Problem Solving": 10, "Decision Making": 10
+          }
+        },
+        {
+          "name": "Cecil Fernandes",
+          "email": "cecilf@gcc.com.au",
+          "strategic": {
+            "Q1": ["Family owned", "Unique", "Customer focus"],
+            "Q2": ["Management changes", "Customer needs and expectations"],
+            "Q3": ["Automation", "Customer needs and expectations"],
+            "Q4": ["Learning to keep up with changes", "Planning for the future", "Innovate to combat disruption"],
+            "Q5": ["Planning", "Meeting deadlines", "Quick decision making"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 8, "Understanding": 8, "Selling Your Ideas": 7,
+            "Relate-ability": 7, "People Skills": 9, "Conflict Management": 7,
+            "Facilitation Skills": 8, "Motivation": 8, "Problem Solving": 7,
+            "Managing Stress": 7, "Goal Setting": 5, "Risk Taking": 7,
+            "Flexibility": 7, "Partnering": 8, "Attitude Control": 7,
+            "Human Nature": 8, "Self Belief": 8
+          },
+          "UYLP": {
+            "Inspiring Confidence": 8, "Self-Awareness": 6, "Coaching": 8,
+            "Being Coached": 7, "Communication": 9, "Listening Skills": 8,
+            "Authenticity": 7, "Integrity": 6, "Leadership Styles": 8,
+            "Motivation": 9, "Accountability": 8, "Engaging Others": 9,
+            "Focus": 7, "Harmony": 8, "Managing Stress": 7,
+            "Leadership Skills": 8, "Attitude to Learning": 7
+          },
+          "Leadership for Results": {
+            "Leadership": 7, "Structuring Jobs for Results": 7, "Planning": 5,
+            "Innovation": 6, "Communication": 8, "Sharing Information": 8,
+            "Delegation": 7, "Coaching": 7, "Performance Appraisals": 8,
+            "Time Management": 6, "Motivation": 7, "Presentation Skills": 8,
+            "Atmosphere of Trust": 7, "Rapport": 8, "Recognition": 8,
+            "Market Awareness": 6, "Problem Solving": 6, "Decision Making": 6
+          }
+        },
+        {
+          "name": "Dennis Starck",
+          "email": "denniss@gcc.com.au",
+          "strategic": {
+            "Q1": ["Adaptable", "Driven", "Customer Service", "Trusted Supplier", "We reinvest", "Legacy"],
+            "Q2": ["Growth", "Stronger Team and Culture", "$60M investment", "Delivered on promises", "Optimise the marketplace", "Embraced technology", "Found our niche"],
+            "Q3": ["New lines and ownership direction", "QLD expansion", "Adaptation", "New leaders", "Alignment and engagement"],
+            "Q4": ["Passion", "Motivation", "Be open and humble", "Agile"],
+            "Q5": ["Listening", "Leading with motivation", "Setting vision", "Coaching better"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 7, "Understanding": 4, "Selling Your Ideas": 9,
+            "Relate-ability": 7, "People Skills": 8, "Conflict Management": 4,
+            "Facilitation Skills": 5, "Motivation": 6, "Problem Solving": 9,
+            "Managing Stress": 6, "Goal Setting": 7, "Risk Taking": 7,
+            "Flexibility": 9, "Partnering": 8, "Attitude Control": 5,
+            "Human Nature": 3, "Self Belief": 8
+          },
+          "UYLP": {
+            "Inspiring Confidence": 8, "Self-Awareness": 7, "Coaching": 4,
+            "Being Coached": 6, "Communication": 8, "Listening Skills": 5,
+            "Authenticity": 7, "Integrity": 8, "Leadership Styles": 8,
+            "Motivation": 9, "Accountability": 5, "Engaging Others": 6,
+            "Focus": 7, "Harmony": 7, "Managing Stress": 8,
+            "Leadership Skills": 4, "Attitude to Learning": 7
+          },
+          "Leadership for Results": {
+            "Leadership": 7, "Structuring Jobs for Results": 5, "Planning": 5,
+            "Innovation": 8, "Communication": 5, "Sharing Information": 5,
+            "Delegation": 5, "Coaching": 6, "Performance Appraisals": 6,
+            "Time Management": 6, "Motivation": 8, "Presentation Skills": 7,
+            "Atmosphere of Trust": 8, "Rapport": 7, "Recognition": 6,
+            "Market Awareness": 4, "Problem Solving": 7, "Decision Making": 7
+          }
+        },
+        {
+          "name": "Jo Holcroft",
+          "email": "joannah@gcc.com.au",
+          "strategic": {
+            "Q1": ["Independent family company", "Adaptability", "Dynamic", "Trust"],
+            "Q2": ["Investment in the company", "New leadership", "New way of doing business", "Data"],
+            "Q3": ["Technology adaptation", "Expectations of the younger generation", "Challenges pricing", "Priority of expansion"],
+            "Q4": ["Need to keep up to date and informed", "Understand the business", "Efficiencies"],
+            "Q5": ["Training in mentoring", "Slow down", "Time out to listen", "Engage people"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 5, "Understanding": 5, "Selling Your Ideas": 7,
+            "Relate-ability": 5, "People Skills": 6, "Conflict Management": 4,
+            "Facilitation Skills": 6, "Motivation": 6, "Problem Solving": 7,
+            "Managing Stress": 7, "Goal Setting": 5, "Risk Taking": 7,
+            "Flexibility": 6, "Partnering": 8, "Attitude Control": 8,
+            "Human Nature": 6, "Self Belief": 7
+          },
+          "UYLP": {
+            "Inspiring Confidence": 7, "Self-Awareness": 7, "Coaching": 6,
+            "Being Coached": 6, "Communication": 6, "Listening Skills": 6,
+            "Authenticity": 7, "Integrity": 8, "Leadership Styles": 7,
+            "Motivation": 7, "Accountability": 6, "Engaging Others": 5,
+            "Focus": 7, "Harmony": 6, "Managing Stress": 7,
+            "Leadership Skills": 6, "Attitude to Learning": 8
+          },
+          "Leadership for Results": {
+            "Leadership": 6, "Structuring Jobs for Results": 7, "Planning": 8,
+            "Innovation": 8, "Communication": 6, "Sharing Information": 7,
+            "Delegation": 5, "Coaching": 6, "Performance Appraisals": 6,
+            "Time Management": 7, "Motivation": 7, "Presentation Skills": 7,
+            "Atmosphere of Trust": 5, "Rapport": 6, "Recognition": 5,
+            "Market Awareness": 4, "Problem Solving": 7, "Decision Making": 7
+          }
+        },
+        {
+          "name": "Robert Allison",
+          "email": "roba@gcc.com.au",
+          "strategic": {
+            "Q1": ["A south east QLD family business", "Its people"],
+            "Q2": ["Better alignment", "Simplification", "Organisational structure", "Australian market dynamics"],
+            "Q3": ["Winning the hearts and minds of the next generation of leaders", "Australian market continuing to evolve"],
+            "Q4": ["Keep being open to anything"],
+            "Q5": ["Better active listening"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 6, "Understanding": 7, "Selling Your Ideas": 7,
+            "Relate-ability": 8, "People Skills": 9, "Conflict Management": 9,
+            "Facilitation Skills": 5, "Motivation": 7, "Problem Solving": 7,
+            "Managing Stress": 7, "Goal Setting": 7, "Risk Taking": 7,
+            "Flexibility": 7, "Partnering": 9, "Attitude Control": 8,
+            "Human Nature": 8, "Self Belief": 8
+          },
+          "UYLP": {
+            "Inspiring Confidence": 9, "Self-Awareness": 7, "Coaching": 8,
+            "Being Coached": 9, "Communication": 7, "Listening Skills": 7,
+            "Authenticity": 8, "Integrity": 8, "Leadership Styles": 8,
+            "Motivation": 7, "Accountability": 7, "Engaging Others": 7,
+            "Focus": 7, "Harmony": 6, "Managing Stress": 7,
+            "Leadership Skills": 7, "Attitude to Learning": 8
+          },
+          "Leadership for Results": {
+            "Leadership": 7, "Structuring Jobs for Results": 7, "Planning": 6,
+            "Innovation": 8, "Communication": 7, "Sharing Information": 9,
+            "Delegation": 9, "Coaching": 8, "Performance Appraisals": 6,
+            "Time Management": 6, "Motivation": 9, "Presentation Skills": 7,
+            "Atmosphere of Trust": 8, "Rapport": 8, "Recognition": 7,
+            "Market Awareness": 9, "Problem Solving": 7, "Decision Making": 7
+          }
+        },
+        {
+          "name": "Shane Duncan",
+          "email": "shaned@gcc.com.au",
+          "strategic": {
+            "Q1": ["Family ownership", "Meet promises made to customer", "Authentic"],
+            "Q2": ["Growth", "Processing volumes", "Strengthen commitment to leadership group"],
+            "Q3": ["Automation", "Staple risk free stock movement", "Technology and AI", "Alignment and engagement"],
+            "Q4": ["Change", "Legacy"],
+            "Q5": ["Planned roadmap of future", "Sales and opportunities"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 6, "Understanding": 7, "Selling Your Ideas": 7,
+            "Relate-ability": 7, "People Skills": 7, "Conflict Management": 6,
+            "Facilitation Skills": 6, "Motivation": 6, "Problem Solving": 7,
+            "Managing Stress": 6, "Goal Setting": 6, "Risk Taking": 8,
+            "Flexibility": 8, "Partnering": 7, "Attitude Control": 7,
+            "Human Nature": 7, "Self Belief": 8
+          },
+          "UYLP": {
+            "Inspiring Confidence": 7, "Self-Awareness": 7, "Coaching": 6,
+            "Being Coached": 7, "Communication": 6, "Listening Skills": 7,
+            "Authenticity": 8, "Integrity": 9, "Leadership Styles": 7,
+            "Motivation": 7, "Accountability": 8, "Engaging Others": 8,
+            "Focus": 8, "Harmony": 7, "Managing Stress": 7,
+            "Leadership Skills": 7, "Attitude to Learning": 7
+          },
+          "Leadership for Results": {
+            "Leadership": 8, "Structuring Jobs for Results": 7, "Planning": 8,
+            "Innovation": 6, "Communication": 7, "Sharing Information": 7,
+            "Delegation": 7, "Coaching": 8, "Performance Appraisals": 6,
+            "Time Management": 8, "Motivation": 7, "Presentation Skills": 7,
+            "Atmosphere of Trust": 7, "Rapport": 7, "Recognition": 7,
+            "Market Awareness": 7, "Problem Solving": 7, "Decision Making": 7
+          }
+        },
+        {
+          "name": "Tamara Scurr",
+          "email": "tamaras@gcc.com.au",
+          "strategic": {
+            "Q1": ["Legacy", "Flexibility", "Adaptability", "Commitment", "Family values"],
+            "Q2": ["Focus on leadership", "Team work", "Fast moving pace", "Focus on upskilling and training", "Higher customer expectations", "New equipment", "Process advantages", "Alignment", "Positive culture"],
+            "Q3": ["Investment", "New products", "Expansions", "New technology", "Teamwork", "Develop upskilled staff", "Automation", "More alignment and engagement", "Proactive expectation management"],
+            "Q4": ["Being open flexible and adaptable", "People and experiences", "Improvement", "More coaching and mentoring", "Implement strategies", "Legacy"],
+            "Q5": ["Delegation", "Understanding my leadership style and tendencies", "Positive mindset", "Resilience", "Adaptive"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 7, "Understanding": 5, "Selling Your Ideas": 9,
+            "Relate-ability": 7, "People Skills": 9, "Conflict Management": 7,
+            "Facilitation Skills": 9, "Motivation": 7, "Problem Solving": 7,
+            "Managing Stress": 7, "Goal Setting": 9, "Risk Taking": 9,
+            "Flexibility": 9, "Partnering": 9, "Attitude Control": 5,
+            "Human Nature": 5, "Self Belief": 9
+          },
+          "UYLP": {
+            "Inspiring Confidence": 7, "Self-Awareness": 7, "Coaching": 7,
+            "Being Coached": 7, "Communication": 7, "Listening Skills": 7,
+            "Authenticity": 7, "Integrity": 9, "Leadership Styles": 4,
+            "Motivation": 7, "Accountability": 7, "Engaging Others": 7,
+            "Focus": 9, "Harmony": 7, "Managing Stress": 7,
+            "Leadership Skills": 4, "Attitude to Learning": 9
+          },
+          "Leadership for Results": {
+            "Leadership": 6, "Structuring Jobs for Results": 6, "Planning": 5,
+            "Innovation": 5, "Communication": 7, "Sharing Information": 7,
+            "Delegation": 4, "Coaching": 7, "Performance Appraisals": 6,
+            "Time Management": 6, "Motivation": 3, "Presentation Skills": 2,
+            "Atmosphere of Trust": 5, "Rapport": 4, "Recognition": 5,
+            "Market Awareness": 5, "Problem Solving": 2, "Decision Making": 2
+          }
+        },
+        {
+          "name": "Velmaran Arumugen",
+          "email": "velmarana@gcc.com.au",
+          "strategic": {
+            "Q1": ["Great team", "Skills", "Capabilities"],
+            "Q2": ["Leadership team", "Business growth", "Partnership trust", "Automation", "Working as a team"],
+            "Q3": ["Automation", "AI", "Alignment", "Growth", "Investment", "Skills development"],
+            "Q4": ["More coaching", "Mentoring", "Implement strategy and plan"],
+            "Q5": ["Allowing the team time to complete the work"]
+          },
+          "Leadership DNA": {
+            "Effective Communication": 8, "Understanding": 9, "Selling Your Ideas": 7,
+            "Relate-ability": 10, "People Skills": 10, "Conflict Management": 10,
+            "Facilitation Skills": 9, "Motivation": 10, "Problem Solving": 9,
+            "Managing Stress": 8, "Goal Setting": 10, "Risk Taking": 8,
+            "Flexibility": 9, "Partnering": 9, "Attitude Control": 8,
+            "Human Nature": 9, "Self Belief": 8
+          },
+          "UYLP": {
+            "Inspiring Confidence": 9, "Self-Awareness": 7, "Coaching": 10,
+            "Being Coached": 6, "Communication": 9, "Listening Skills": 9,
+            "Authenticity": 8, "Integrity": 9, "Leadership Styles": 9,
+            "Motivation": 9, "Accountability": 8, "Engaging Others": 10,
+            "Focus": 9, "Harmony": 7, "Managing Stress": 8,
+            "Leadership Skills": 9, "Attitude to Learning": 9
+          },
+          "Leadership for Results": {
+            "Leadership": 9, "Structuring Jobs for Results": 9, "Planning": 10,
+            "Innovation": 8, "Communication": 8, "Sharing Information": 10,
+            "Delegation": 8, "Coaching": 10, "Performance Appraisals": 9,
+            "Time Management": 8, "Motivation": 8, "Presentation Skills": 9,
+            "Atmosphere of Trust": 9, "Rapport": 7, "Recognition": 7,
+            "Market Awareness": 5, "Problem Solving": 9, "Decision Making": 9
+          }
+        }
+      ]
+    }
+  ]
+}
