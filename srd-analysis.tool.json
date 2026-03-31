@@ -1,0 +1,9 @@
+{
+  "name": "Strategic Readiness Discussion Analysis",
+  "description": "SRD workshop analysis portal. Leadership DNA, UYLP, and Leadership for Results improvement profiles with collective scoring, individual views, and strategic discussion themes.",
+  "file": "srd-analysis.html",
+  "icon": "🎯",
+  "category": "online-tool",
+  "type": "online",
+  "order": 2.6
+}
