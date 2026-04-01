@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA Database Cleanup — Process Flowchart</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 40px 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; margin-bottom: 5px; font-size: 28px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 14px; }
+        .step { display: flex; align-items: flex-start; margin-bottom: 0; position: relative; }
+        .step-number { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 20px; color: white; flex-shrink: 0; z-index: 2; }
+        .step-content { flex: 1; margin-left: 20px; padding: 20px 25px; border-radius: 12px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 10px; }
+        .step-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+        .step-detail { font-size: 14px; color: #555; line-height: 1.6; }
+        .step-result { display: inline-block; margin-top: 10px; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: bold; }
+        .connector { width: 4px; height: 30px; margin-left: 23px; }
+        .remove .step-number { background: #e74c3c; }
+        .remove .step-title { color: #e74c3c; }
+        .remove .step-result { background: #fde8e8; color: #e74c3c; }
+        .archive .step-number { background: #f39c12; }
+        .archive .step-title { color: #f39c12; }
+        .archive .step-result { background: #fef3e2; color: #e67e22; }
+        .skip .step-number { background: #bbb; }
+        .skip .step-title { color: #999; }
+        .skip .step-result { background: #f0f0f0; color: #999; }
+        .skip .step-content { opacity: 0.6; }
+        .filter .step-number { background: #84c44c; }
+        .filter .step-title { color: #84c44c; }
+        .filter .step-result { background: #eef7e5; color: #5a9a2a; }
+        .final .step-number { background: #84c44c; width: 60px; height: 60px; font-size: 24px; }
+        .final .step-content { background: #84c44c; color: white; border: 3px solid #6ba33a; }
+        .final .step-title { color: white; font-size: 20px; }
+        .final .step-detail { color: rgba(255,255,255,0.9); }
+        .start-box { text-align: center; padding: 20px; background: #333; color: white; border-radius: 12px; margin-bottom: 30px; font-size: 18px; }
+        .start-box .count { font-size: 36px; font-weight: bold; color: #ffc708; }
+        .summary { margin-top: 40px; padding: 25px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+        .summary h2 { margin-bottom: 15px; font-size: 20px; }
+        .summary table { width: 100%; border-collapse: collapse; }
+        .summary th, .summary td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        .summary th { background: #f9f9f9; font-weight: bold; }
+        .summary .highlight { font-weight: bold; color: #84c44c; }
+        .legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap; }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
+        .next-steps { margin-top: 20px; padding: 20px 25px; background: #fff8e1; border-radius: 12px; border-left: 4px solid #ffc708; }
+        .next-steps h3 { margin-bottom: 10px; color: #333; }
+        .next-steps ul { padding-left: 20px; font-size: 14px; line-height: 1.8; color: #555; }
+        .file-location { margin-top: 20px; padding: 15px 20px; background: #f0f0f0; border-radius: 8px; font-size: 13px; color: #555; }
+        .file-location code { background: #e0e0e0; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        .note { font-size: 12px; color: #999; font-style: italic; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>South Australia Database Cleanup</h1>
+        <p class="subtitle">Dale Carnegie Queensland — 1 April 2026</p>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div> Removed</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> Archived</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#bbb"></div> Skipped (0 found)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#84c44c"></div> Filtered / Final</div>
+        </div>
+
+        <div class="start-box">
+            South Australia Database (separated from main cleanup)<br>
+            <span class="count">10,865</span> records
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step skip">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <div class="step-title">Deduplicate</div>
+                <div class="step-detail">No duplicate emails found — already clean from the main dedup pass.</div>
+                <div class="step-result">0 removed &rarr; 10,865 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#bbb"></div></div>
+
+        <!-- Step 2 -->
+        <div class="step skip">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <div class="step-title">Archive — No Contact Info</div>
+                <div class="step-detail">No records with zero contact methods — already removed in the main cleanup.</div>
+                <div class="step-result">0 archived &rarr; 10,865 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#bbb"></div></div>
+
+        <!-- Step 3 -->
+        <div class="step skip">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <div class="step-title">Archive — Unsubscribed & Do Not Contact</div>
+                <div class="step-detail">None found — already removed in the main cleanup.</div>
+                <div class="step-result">0 archived &rarr; 10,865 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#f39c12"></div></div>
+
+        <!-- Step 4 -->
+        <div class="step archive">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <div class="step-title">Filter — Require Both Email + Phone</div>
+                <div class="step-detail">
+                    Only keep leads with both an email address and a phone/mobile number.<br>
+                    Leads with only one contact method archived.
+                </div>
+                <div class="step-result">-4,841 archived &rarr; 6,024 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#84c44c"></div></div>
+
+        <!-- Step 5 -->
+        <div class="step filter">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <div class="step-title">Filter — Mobile Numbers Only</div>
+                <div class="step-detail">
+                    Only keep leads with a mobile/cell number.<br>
+                    Landline-only leads archived — candidates for Apollo enrichment.
+                </div>
+                <div class="step-result">-4,164 archived &rarr; 1,860 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#84c44c"></div></div>
+
+        <!-- Step 6 -->
+        <div class="step filter">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <div class="step-title">Filter — Decision Makers Only (Category B)</div>
+                <div class="step-detail">
+                    CEO, COO, CFO, Directors, GMs, Partners, Principals, Owners,<br>
+                    plus senior managers (Operations, Sales, HR, Marketing, BDM, etc.).<br>
+                    Excluded: coordinators, consultants, supervisors, students, assistants.
+                </div>
+                <div class="step-result">-781 archived &rarr; 1,079 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#84c44c"></div></div>
+
+        <!-- Step 7 -->
+        <div class="step skip">
+            <div class="step-number">7</div>
+            <div class="step-content">
+                <div class="step-title">Remove — No Potential</div>
+                <div class="step-detail">None found in the SA decision maker set.</div>
+                <div class="step-result">0 removed &rarr; 1,079 remaining</div>
+            </div>
+        </div>
+        <div class="connector"><div style="width:4px;height:30px;margin-left:23px;background:#84c44c"></div></div>
+
+        <!-- Final -->
+        <div class="step final">
+            <div class="step-number">&#10003;</div>
+            <div class="step-content">
+                <div class="step-title">SA Decision Makers — Call List</div>
+                <div class="step-detail">
+                    1,079 decision makers with mobile numbers in South Australia.<br>
+                    Sorted: Hot (44) &rarr; Warm (1,035). Adelaide-centric.
+                </div>
+            </div>
+        </div>
+
+        <!-- Region Breakdown -->
+        <div class="summary">
+            <h2>SA Decision Makers by Region</h2>
+            <table>
+                <tr><th>Region</th><th>Leads</th></tr>
+                <tr><td>Adelaide CBD</td><td>240</td></tr>
+                <tr><td>Adelaide Western Suburbs</td><td>180</td></tr>
+                <tr><td>Adelaide Inner West / North Adelaide</td><td>171</td></tr>
+                <tr><td>Adelaide Eastern Suburbs</td><td>121</td></tr>
+                <tr><td>Adelaide North East</td><td>112</td></tr>
+                <tr><td>Fleurieu / South Coast</td><td>109</td></tr>
+                <tr><td>Adelaide Northern Suburbs</td><td>63</td></tr>
+                <tr><td>Far North / Outback</td><td>20</td></tr>
+                <tr><td>Murray / Riverland</td><td>19</td></tr>
+                <tr><td>No Postcode</td><td>15</td></tr>
+                <tr><td>Adelaide Southern Suburbs</td><td>8</td></tr>
+                <tr><td>Barossa / Clare</td><td>8</td></tr>
+                <tr><td>Mid North / Yorke Peninsula</td><td>7</td></tr>
+                <tr><td>Eyre Peninsula / West Coast</td><td>3</td></tr>
+                <tr><td>Mount Gambier / South East</td><td>2</td></tr>
+                <tr><td>Other</td><td>1</td></tr>
+            </table>
+        </div>
+
+        <!-- File Summary -->
+        <div class="summary" style="margin-top: 20px;">
+            <h2>All SA Files Created</h2>
+            <table>
+                <tr><th>File</th><th>Records</th><th>Status</th></tr>
+                <tr><td class="highlight">SA Decision Makers.csv</td><td class="highlight">1,079</td><td class="highlight">Call List</td></tr>
+                <tr><td class="highlight">SA Apollo Cleaning - Decision Makers.csv</td><td class="highlight">1,314</td><td class="highlight">Ready for Apollo</td></tr>
+                <tr><td>Archive - SA No Number No Email.csv</td><td>4,841</td><td>Archived</td></tr>
+                <tr><td>Archive - SA No Mobile.csv</td><td>4,164</td><td>Archived</td></tr>
+                <tr><td>Archive - SA Non Decision Makers.csv</td><td>781</td><td>Archived</td></tr>
+            </table>
+        </div>
+
+        <!-- Apollo Track -->
+        <div class="summary" style="margin-top: 20px; border-left: 4px solid #3498db;">
+            <h2>Apollo Enrichment Track</h2>
+            <p style="font-size: 14px; color: #555; line-height: 1.6;">
+                <strong>1,314 SA decision makers</strong> with email + landline but no mobile number.
+                One record per company (highest seniority kept), sorted A-Z by company.
+                Ready to run through Apollo to find mobile numbers.
+            </p>
+        </div>
+
+        <!-- Comparison -->
+        <div class="summary" style="margin-top: 20px; border-left: 4px solid #84c44c;">
+            <h2>QLD vs SA Comparison</h2>
+            <table>
+                <tr><th></th><th>Queensland</th><th>South Australia</th></tr>
+                <tr><td>Starting records</td><td>22,145 (full DB)</td><td>10,865</td></tr>
+                <tr><td>Decision Makers (call list)</td><td>270</td><td>1,079</td></tr>
+                <tr><td>Apollo Enrichment candidates</td><td>1,091</td><td>1,314</td></tr>
+                <tr><td>Hit rate (call list / start)</td><td>1.2%</td><td>9.9%</td></tr>
+            </table>
+            <p style="font-size: 13px; color: #666; margin-top: 10px;">
+                SA has a much higher hit rate — likely because the SA data was more mature and complete
+                from years of active prospecting before the move to Queensland.
+            </p>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="next-steps">
+            <h3>Next Steps</h3>
+            <ul>
+                <li><strong>Apollo enrichment</strong> — run 1,314 SA decision makers through Apollo for mobile numbers</li>
+                <li><strong>Review with Matthew</strong> — this data could be valuable for the SA expansion</li>
+                <li><strong>Cross-reference</strong> — check which SA leads are already in HubSpot or active pipeline</li>
+            </ul>
+        </div>
+
+        <div class="file-location">
+            All files stored in: <code>~/Dropbox/2026/William/Database 2025 AI/salesforce-export/</code>
+        </div>
+    </div>
+</body>
+</html>

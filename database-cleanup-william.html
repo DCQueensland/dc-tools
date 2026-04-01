@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce Database Cleanup — Process Flowchart</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 40px 20px; color: #333; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; color: #333; margin-bottom: 5px; font-size: 28px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 40px; font-size: 14px; }
+
+        .step { display: flex; align-items: flex-start; margin-bottom: 0; position: relative; }
+        .step-number {
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold; font-size: 20px; color: white; flex-shrink: 0;
+            z-index: 2;
+        }
+        .step-content {
+            flex: 1; margin-left: 20px; padding: 20px 25px;
+            border-radius: 12px; background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 10px;
+        }
+        .step-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+        .step-detail { font-size: 14px; color: #555; line-height: 1.6; }
+        .step-result {
+            display: inline-block; margin-top: 10px; padding: 4px 12px;
+            border-radius: 20px; font-size: 13px; font-weight: bold;
+        }
+
+        .connector {
+            width: 4px; height: 30px; margin-left: 23px;
+            position: relative; z-index: 1;
+        }
+
+        /* Color coding */
+        .remove .step-number { background: #e74c3c; }
+        .remove .step-title { color: #e74c3c; }
+        .remove .step-result { background: #fde8e8; color: #e74c3c; }
+        .remove .connector-line { background: #e74c3c; }
+
+        .archive .step-number { background: #f39c12; }
+        .archive .step-title { color: #f39c12; }
+        .archive .step-result { background: #fef3e2; color: #e67e22; }
+        .archive .connector-line { background: #f39c12; }
+
+        .separate .step-number { background: #3498db; }
+        .separate .step-title { color: #3498db; }
+        .separate .step-result { background: #e8f4fd; color: #2980b9; }
+        .separate .connector-line { background: #3498db; }
+
+        .filter .step-number { background: #84c44c; }
+        .filter .step-title { color: #84c44c; }
+        .filter .step-result { background: #eef7e5; color: #5a9a2a; }
+        .filter .connector-line { background: #84c44c; }
+
+        .final .step-number { background: #84c44c; width: 60px; height: 60px; font-size: 24px; }
+        .final .step-content { background: #84c44c; color: white; border: 3px solid #6ba33a; }
+        .final .step-title { color: white; font-size: 20px; }
+        .final .step-detail { color: rgba(255,255,255,0.9); }
+
+        .connector-line { width: 4px; height: 100%; margin: 0 auto; }
+
+        .start-box {
+            text-align: center; padding: 20px; background: #333; color: white;
+            border-radius: 12px; margin-bottom: 30px; font-size: 18px;
+        }
+        .start-box .count { font-size: 36px; font-weight: bold; color: #ffc708; }
+
+        .summary {
+            margin-top: 40px; padding: 25px; background: white; border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .summary h2 { margin-bottom: 15px; font-size: 20px; }
+        .summary table { width: 100%; border-collapse: collapse; }
+        .summary th, .summary td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+        .summary th { background: #f9f9f9; font-weight: bold; }
+        .summary .highlight { font-weight: bold; color: #84c44c; }
+
+        .legend {
+            display: flex; gap: 20px; justify-content: center; margin-bottom: 30px; flex-wrap: wrap;
+        }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+        .legend-dot { width: 14px; height: 14px; border-radius: 50%; }
+
+        .next-steps {
+            margin-top: 20px; padding: 20px 25px; background: #fff8e1;
+            border-radius: 12px; border-left: 4px solid #ffc708;
+        }
+        .next-steps h3 { margin-bottom: 10px; color: #333; }
+        .next-steps ul { padding-left: 20px; font-size: 14px; line-height: 1.8; color: #555; }
+
+        .file-location {
+            margin-top: 20px; padding: 15px 20px; background: #f0f0f0;
+            border-radius: 8px; font-size: 13px; color: #555;
+        }
+        .file-location code { background: #e0e0e0; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Salesforce Database Cleanup</h1>
+        <p class="subtitle">Dale Carnegie Queensland — 1 April 2026</p>
+
+        <div class="legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#e74c3c"></div> Removed (duplicates)</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#f39c12"></div> Archived</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#3498db"></div> Separated</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#84c44c"></div> Filtered / Final</div>
+        </div>
+
+        <div class="start-box">
+            Starting Database (William's Leads)<br>
+            <span class="count">22,145</span> records
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step remove">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <div class="step-title">Remove Duplicates</div>
+                <div class="step-detail">
+                    89 duplicate email addresses found (covering 185 records).<br>
+                    Kept the most complete record for each duplicate.
+                </div>
+                <div class="step-result">-96 removed &rarr; 22,049 remaining</div>
+            </div>
+        </div>
+        <div class="connector remove"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 2 -->
+        <div class="step archive">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <div class="step-title">Archive — No Contact Info</div>
+                <div class="step-detail">
+                    Records with no email AND no phone/mobile.<br>
+                    Uncontactable — archived, not deleted.
+                </div>
+                <div class="step-result">-868 archived &rarr; 21,181 remaining</div>
+            </div>
+        </div>
+        <div class="connector archive"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 3 -->
+        <div class="step archive">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <div class="step-title">Archive — Unsubscribed & Do Not Contact</div>
+                <div class="step-detail">
+                    1,130 unsubscribed + 99 "Do Not Contact".<br>
+                    Opted out — compliance requirement. Need manual Salesforce cleanup.
+                </div>
+                <div class="step-result">-1,223 archived &rarr; 19,958 remaining</div>
+            </div>
+        </div>
+        <div class="connector archive"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 4 -->
+        <div class="step separate">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <div class="step-title">Separate — South Australia Database</div>
+                <div class="step-detail">
+                    56% of all leads were SA (pre-Queensland era).<br>
+                    Separated into own database for future work.
+                </div>
+                <div class="step-result">-10,865 separated &rarr; 9,093 remaining</div>
+            </div>
+        </div>
+        <div class="connector separate"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 5 -->
+        <div class="step archive">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <div class="step-title">Archive — Unknown State</div>
+                <div class="step-detail">
+                    Records with no state listed or non-QLD states.<br>
+                    Could be QLD — to review later using postcodes/area codes.
+                </div>
+                <div class="step-result">-4,708 archived &rarr; 4,385 QLD records</div>
+            </div>
+        </div>
+        <div class="connector filter"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 6 -->
+        <div class="step filter">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <div class="step-title">Filter — Require Both Email + Phone</div>
+                <div class="step-detail">
+                    Only keep leads with both an email address and a phone/mobile number.<br>
+                    Leads with only one contact method archived separately.
+                </div>
+                <div class="step-result">-842 archived &rarr; 3,543 remaining</div>
+            </div>
+        </div>
+        <div class="connector filter"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 7 -->
+        <div class="step filter">
+            <div class="step-number">7</div>
+            <div class="step-content">
+                <div class="step-title">Filter — Mobile Numbers Only</div>
+                <div class="step-detail">
+                    Only keep leads with a mobile/cell number (not just landline).<br>
+                    Landline-only leads archived for Apollo enrichment.
+                </div>
+                <div class="step-result">-2,908 archived &rarr; 635 remaining</div>
+            </div>
+        </div>
+        <div class="connector filter"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 8 -->
+        <div class="step filter">
+            <div class="step-number">8</div>
+            <div class="step-content">
+                <div class="step-title">Filter — Decision Makers Only</div>
+                <div class="step-detail">
+                    Category B: CEO, COO, CFO, Directors, GMs, Partners, Principals, Owners,<br>
+                    plus senior managers (Operations, Sales, HR, Marketing, BDM, etc.).<br>
+                    Excluded: coordinators, consultants, supervisors, students, assistants.
+                </div>
+                <div class="step-result">-362 archived &rarr; 273 remaining</div>
+            </div>
+        </div>
+        <div class="connector filter"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Step 9 -->
+        <div class="step remove">
+            <div class="step-number">9</div>
+            <div class="step-content">
+                <div class="step-title">Remove — No Potential</div>
+                <div class="step-detail">
+                    3 leads rated "No Potential" removed to archive.
+                </div>
+                <div class="step-result">-3 removed &rarr; 270 remaining</div>
+            </div>
+        </div>
+        <div class="connector filter"><div class="connector-line" style="width:4px;height:30px;margin-left:23px"></div></div>
+
+        <!-- Final -->
+        <div class="step final">
+            <div class="step-number">&#10003;</div>
+            <div class="step-content">
+                <div class="step-title">QLD Decision Makers — Call List</div>
+                <div class="step-detail">
+                    270 decision makers with mobile numbers in Queensland.<br>
+                    Sorted: Hot (40) &rarr; Warm (163) &rarr; Cold (67). Brisbane first.
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Table -->
+        <div class="summary">
+            <h2>All Files Created</h2>
+            <table>
+                <tr><th>File</th><th>Records</th><th>Status</th></tr>
+                <tr><td class="highlight">QLD Decision Makers.csv</td><td class="highlight">270</td><td class="highlight">Call List</td></tr>
+                <tr><td class="highlight">Apollo Cleaning - Decision Makers.csv</td><td class="highlight">1,091</td><td class="highlight">Ready for Apollo</td></tr>
+                <tr><td>QLD Ready to Contact.csv</td><td>3,543</td><td>Broader QLD list</td></tr>
+                <tr><td>South Australia Database.csv</td><td>10,865</td><td>Separated</td></tr>
+                <tr><td>Archive - QLD No Mobile.csv</td><td>2,908</td><td>Archived</td></tr>
+                <tr><td>Archive - QLD Non Decision Makers.csv</td><td>362</td><td>Archived</td></tr>
+                <tr><td>Archive - Queensland No Number No Email.csv</td><td>842</td><td>Archived</td></tr>
+                <tr><td>Archive - Unsubscribed and Do Not Contact.csv</td><td>1,223</td><td>Archived</td></tr>
+                <tr><td>Archive - No Contact Info.csv</td><td>868</td><td>Archived</td></tr>
+                <tr><td>Archive - Unknown State - To Review.csv</td><td>4,708</td><td>Archived</td></tr>
+                <tr><td>Archive - QLD No Potential.csv</td><td>3</td><td>Archived</td></tr>
+                <tr><td>emma-leads.csv</td><td>9,299</td><td>Untouched</td></tr>
+            </table>
+        </div>
+
+        <!-- Apollo Side Track -->
+        <div class="summary" style="margin-top: 20px; border-left: 4px solid #3498db;">
+            <h2>Apollo Enrichment Track</h2>
+            <p style="font-size: 14px; color: #555; line-height: 1.6;">
+                Separately, <strong>1,091 decision makers</strong> were extracted from the QLD database who have email + landline but <strong>no mobile number</strong>.
+                One record per company (highest seniority kept), sorted A-Z by company.
+                Ready to run through Apollo to find mobile numbers — once enriched, these can join the main call list.
+            </p>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="next-steps">
+            <h3>Next Steps</h3>
+            <ul>
+                <li><strong>Apollo enrichment</strong> — run 1,091 decision makers through Apollo to find mobile numbers</li>
+                <li><strong>South Australia Database</strong> — review and clean separately (another day)</li>
+                <li><strong>Unknown State records</strong> — sort using postcodes/area codes to find hidden QLD leads</li>
+                <li><strong>Salesforce cleanup</strong> — manually remove unsubscribed/DNC from Salesforce (franchise-controlled)</li>
+            </ul>
+        </div>
+
+        <div class="file-location">
+            All files stored in: <code>~/Dropbox/2026/William/Database 2025 AI/salesforce-export/</code>
+        </div>
+    </div>
+</body>
+</html>
