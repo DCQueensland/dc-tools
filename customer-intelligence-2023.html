@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie Queensland — 2023 Customer Intelligence</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; background: #f4f5f7; color: #333; }
+  .header {
+    background: linear-gradient(135deg, #1a2332 0%, #2c3e50 50%, #1a2332 100%);
+    color: #fff; padding: 32px 40px 28px; position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #ffc708, #0090cf, #84c44c);
+  }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { font-size: 14px; color: #a0b0c0; margin-top: 4px; }
+  .header .brand { display: flex; align-items: center; gap: 16px; }
+  .header .brand .dc-mark {
+    background: #ffc708; color: #1a2332; font-weight: 800; font-size: 18px;
+    width: 44px; height: 44px; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px 48px; }
+
+  /* Highlights banner */
+  .highlights {
+    background: linear-gradient(135deg, #1a2332, #263445);
+    border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+    border-left: 4px solid #ffc708; color: #fff;
+  }
+  .highlights h2 { font-size: 16px; color: #ffc708; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .highlight-item { font-size: 13px; color: #c0cdd8; line-height: 1.5; padding: 6px 0; }
+  .highlight-item strong { color: #fff; }
+  .highlight-item .hl-num { color: #ffc708; font-weight: 700; font-size: 15px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card {
+    background: #fff; border-radius: 10px; padding: 20px 22px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08); border-top: 3px solid #0090cf;
+    text-align: center;
+  }
+  .card.yellow { border-top-color: #ffc708; }
+  .card.green { border-top-color: #84c44c; }
+  .card.red { border-top-color: #e74c3c; }
+  .card .card-value { font-size: 32px; font-weight: 700; color: #1a2332; }
+  .card .card-label { font-size: 12px; color: #6b7c8d; text-transform: uppercase; letter-spacing: .6px; margin-top: 4px; }
+
+  .controls { background: #fff; border-radius: 10px; padding: 18px 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.08); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .controls label { font-size: 12px; font-weight: 600; color: #6b7c8d; text-transform: uppercase; letter-spacing: .5px; margin-right: 4px; }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .btn-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fbtn {
+    border: 1px solid #d0d5db; background: #fff; border-radius: 6px; padding: 6px 14px;
+    font-size: 13px; cursor: pointer; transition: all .15s; color: #333;
+  }
+  .fbtn:hover { background: #f0f4f8; border-color: #0090cf; }
+  .fbtn.active { background: #0090cf; color: #fff; border-color: #0090cf; }
+  .search-box {
+    margin-left: auto; border: 1px solid #d0d5db; border-radius: 6px; padding: 7px 14px;
+    font-size: 13px; width: 260px; outline: none; transition: border .15s;
+  }
+  .search-box:focus { border-color: #0090cf; box-shadow: 0 0 0 2px rgba(0,144,207,.15); }
+  .table-wrap { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: #1a2332; color: #fff; padding: 12px 14px; text-align: left;
+    font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px;
+    cursor: pointer; user-select: none; white-space: nowrap; position: sticky; top: 0; z-index: 2;
+  }
+  thead th:hover { background: #263445; }
+  thead th .sort-icon { margin-left: 4px; font-size: 10px; opacity: .4; }
+  thead th.sorted-asc .sort-icon::after { content: ' \25B2'; opacity: 1; }
+  thead th.sorted-desc .sort-icon::after { content: ' \25BC'; opacity: 1; }
+  tbody tr { border-bottom: 1px solid #eef0f2; transition: background .1s; }
+  tbody tr:hover { background: #f7f9fb !important; }
+  tbody td { padding: 10px 14px; vertical-align: top; }
+  tbody td:nth-child(2) { font-weight: 600; color: #1a2332; }
+  tr.tier-1 { background: rgba(255,199,8,.08); }
+  tr.tier-1:hover { background: rgba(255,199,8,.15) !important; }
+  tr.tier-2 { background: rgba(132,196,76,.07); }
+  tr.tier-2:hover { background: rgba(132,196,76,.14) !important; }
+  tr.tier-3 { background: rgba(0,144,207,.05); }
+  tr.tier-3:hover { background: rgba(0,144,207,.10) !important; }
+  tr.tier-school { background: rgba(155,89,182,.05); }
+  tr.tier-school:hover { background: rgba(155,89,182,.10) !important; }
+  tr.tier-sa { background: rgba(230,126,34,.05); }
+  tr.tier-sa:hover { background: rgba(230,126,34,.10) !important; }
+  tr.tier-prospect { background: #fff; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px;
+    font-weight: 600; letter-spacing: .3px; white-space: nowrap;
+  }
+  .badge-anchor { background: #fff3cd; color: #856404; }
+  .badge-active { background: #e8f5e0; color: #2e7d32; }
+  .badge-delivered { background: #e0f0fa; color: #0277bd; }
+  .badge-school { background: #f3e5f5; color: #7b1fa2; }
+  .badge-prospect { background: #fff3e0; color: #e65100; }
+  .badge-conference { background: #e8eaf6; color: #283593; }
+  .badge-individual { background: #fce4ec; color: #c62828; }
+  .badge-sa { background: #fdebd0; color: #d35400; }
+  .badge-wa { background: #d5f5e3; color: #1e8449; }
+  .revenue-est { font-size: 11px; color: #84c44c; font-weight: 600; }
+  .footer { text-align: center; color: #a0b0c0; font-size: 11px; margin-top: 32px; padding-bottom: 24px; }
+  .result-count { font-size: 13px; color: #6b7c8d; margin-bottom: 10px; }
+  .no-results { text-align: center; padding: 40px 20px; color: #6b7c8d; font-size: 15px; }
+
+  @media print {
+    body { background: #fff; font-size: 11px; }
+    .controls { display: none !important; }
+    .header { print-color-adjust: exact; -webkit-print-color-adjust: exact; padding: 20px 24px 16px; }
+    .highlights { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    thead th { print-color-adjust: exact; -webkit-print-color-adjust: exact; padding: 8px 10px; font-size: 10px; }
+    tbody td { padding: 6px 10px; font-size: 11px; }
+    .card, tr.tier-1, tr.tier-2, tr.tier-3, tr.tier-school, .badge { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .result-count { display: none; }
+    .table-wrap { box-shadow: none; border: 1px solid #ddd; }
+  }
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .header h1 { font-size: 20px; }
+    .container { padding: 16px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-box { width: 100%; margin-left: 0; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .highlights-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="brand">
+    <div class="dc-mark">DC</div>
+    <div>
+      <h1>Dale Carnegie Queensland &mdash; 2023 Customer Intelligence</h1>
+      <div class="subtitle">Full Year Analysis | Corporate, Schools, SA/WA, Individuals &amp; Prospects | Generated 3 April 2026</div>
+    </div>
+  </div>
+</div>
+<div class="container">
+
+  <!-- Highlights Banner -->
+  <div class="highlights">
+    <h2>2023 Highlights</h2>
+    <div class="highlights-grid">
+      <div class="highlight-item"><span class="hl-num">$1.1M&ndash;$1.6M</span> estimated total revenue across QLD, SA &amp; WA</div>
+      <div class="highlight-item"><span class="hl-num">14</span> public classes delivered across 3 states (QLD &times;11, SA &times;1, WA &times;1 + SCDCC)</div>
+      <div class="highlight-item"><strong>Bradnam&rsquo;s largest client ($150&ndash;200k)</strong> &mdash; 8+ programs delivered, national multi-year</div>
+      <div class="highlight-item"><strong>DOE Government contract ~$150&ndash;250k</strong> &mdash; 9 invoices, schools + SBMAQ + Redland</div>
+      <div class="highlight-item"><span class="hl-num">~85</span> corporate clients total (paying + proposal stage combined)</div>
+      <div class="highlight-item"><strong>SBMAQ 7 regional workshops</strong> &mdash; Gold Coast, Metro, Rockhampton, Sunshine Coast, Toowoomba, Townsville, Wide Bay</div>
+      <div class="highlight-item"><strong>Multi-state delivery:</strong> QLD primary, SA growing (Viterra anchor), WA smaller (workshops + Academy)</div>
+      <div class="highlight-item"><strong>Late 2023 pipeline seeds:</strong> IOR proposal (Nov) &rarr; $152k/yr Gold by 2025; Champ Group approved $100k+</div>
+      <div class="highlight-item"><strong>~70 individual proposals</strong> &mdash; 12+ Carnegie Academy, ~15 DCC, strongest individual pipeline year</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card"><div class="card-value">~85</div><div class="card-label">Corporate Clients</div></div>
+    <div class="card green"><div class="card-value">11+</div><div class="card-label">Schools</div></div>
+    <div class="card yellow"><div class="card-value">~70</div><div class="card-label">Individuals</div></div>
+    <div class="card"><div class="card-value">10+</div><div class="card-label">Conferences / Assoc.</div></div>
+    <div class="card yellow"><div class="card-value">14</div><div class="card-label">Public Classes (3 States)</div></div>
+    <div class="card green"><div class="card-value">~27</div><div class="card-label">Unconverted Prospects</div></div>
+    <div class="card red"><div class="card-value">5+</div><div class="card-label">SA/WA Clients</div></div>
+    <div class="card"><div class="card-value">9</div><div class="card-label">DOE Invoices</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-group">
+      <label>Tier</label>
+      <div class="btn-group" id="tier-filters">
+        <button class="fbtn active" data-tier="all">All</button>
+        <button class="fbtn" data-tier="Anchor">Anchor</button>
+        <button class="fbtn" data-tier="Active">Revenue</button>
+        <button class="fbtn" data-tier="Delivered">Delivered</button>
+        <button class="fbtn" data-tier="School">Schools</button>
+        <button class="fbtn" data-tier="Conference">Conference</button>
+        <button class="fbtn" data-tier="SA/WA">SA/WA</button>
+        <button class="fbtn" data-tier="Individual">Individuals</button>
+        <button class="fbtn" data-tier="Prospect">Prospects</button>
+      </div>
+    </div>
+    <input type="text" class="search-box" id="search" placeholder="Search company, industry, or program...">
+  </div>
+
+  <div class="result-count" id="result-count"></div>
+
+  <div class="table-wrap">
+    <table id="customer-table">
+      <thead>
+        <tr>
+          <th data-col="0"># <span class="sort-icon"></span></th>
+          <th data-col="1">Company <span class="sort-icon"></span></th>
+          <th data-col="2">Industry <span class="sort-icon"></span></th>
+          <th data-col="3">Programs <span class="sort-icon"></span></th>
+          <th data-col="4">Est. Revenue <span class="sort-icon"></span></th>
+          <th data-col="5">Tier <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2023<br>
+    Data compiled from Dropbox customer folders, DOE invoices, workshop data, and proposal records
+  </div>
+</div>
+
+<script>
+// [row#, company, industry, programs, estRevenue (for sorting), estRevenueDisplay, tier]
+var DATA = [
+  // TIER 1: ANCHOR
+  [1,"Bradnam's Windows & Doors","Manufacturing","DCC (x2), UYLP (x2), LTM, WGYH, WCCS (x2 groups), Strategic Readiness, Coaching, 360 Feedback, VOC reports all programs",175000,"$150\u2013200,000","Anchor"],
+  [2,"DOE Government Contract","QLD Government","Contract QED106598 \u2014 9 invoices, schools + SBMAQ + Redland City Council, quarterly government reports",200000,"$150\u2013250,000","Anchor"],
+  [3,"Bartons","Automotive","DCC (x2 classes), Carnegie Academy (4 family: Mark, Jack, Trent, Gaylene), 360s, HTWFIPDA workshop, Leadership Breakfast",125000,"$100\u2013150,000","Anchor"],
+  [4,"Swoosh Finance","Finance / Business Services","DCC (x2 classes, VOC reports), LTM, 5 Drivers, Sustainment Workshop, Awareness Session",100000,"$80\u2013120,000","Anchor"],
+
+  // TIER 2: REVENUE-GENERATING
+  [5,"Colpak","Packaging / Manufacturing","Academy (multiple proposals), BID Report, Strategic Readiness, 360s, activity Sep 2022\u2013Oct 2023",80000,"$60\u2013100,000","Active"],
+  [6,"Alceon","Investment / Financial Services","HIP (VOC report), WGYH (VOC report), Strategic Readiness Day, Academy & Coaching",70000,"$60\u201380,000","Active"],
+  [7,"Rowland","Communications / PR","Trusted Advisor Bootcamp (5 sessions Mar\u2013Jul), Follow-Through, Value Proposition, Managing Expectations",40000,"$30\u201350,000","Active"],
+  [8,"Redland City Council","Local Government","Advanced Leadership Development Journey, Art of Decision Making, invoiced under DOE contract",40000,"$30\u201350,000","Active"],
+  [9,"Ulton","Accounting","LTM (VOC report), Sustainment Workshop, Awareness Session. Trainer: Anne-Marie Naesby",40000,"$38\u201345,000","Active"],
+  [10,"National Tiles Traralgon","Retail (VIC)","Inhouse program \u2014 William flew Melbourne/Traralgon Feb 2023",40000,"$38\u201345,000","Active"],
+  [11,"Shamrock Marketing","Marketing","DCC (Sep 2023, VOC), WRS (VOC report Sept 2023), photos",40000,"$38\u201345,000","Active"],
+  [12,"Centenary Landscaping Supplies","Retail / Landscaping","WCCS (7 sessions), feedback forms sessions 1, 6, 7",35000,"$30\u201340,000","Active"],
+  [13,"CPO Architects","Architecture","Strategic Readiness, 10-minute scorecards, PRDs. 3 proposals (Feb, Jul, Aug 2023)",30000,"$20\u201340,000","Active"],
+  [14,"IOR Refuelling","Fuel / Petroleum","GLT Strategic Readiness, BID (Oct 2023), SRE feedback, Drew Morland coaching. Nov 2023 proposal \u2192 Gold by 2025",30000,"$20\u201340,000","Active"],
+  [15,"Champ Group","Mining Services (Mackay)","HPT (1-day), BID (Nov 2023), Strategy Workshop, 10 PRD scorecards. $100k+ proposal approved late 2023",20000,"$15\u201325,000","Active"],
+
+  // TIER 3: DELIVERED (SMALLER)
+  [16,"BDO","Accounting","Inhouse program, Consolid8 (Jason Powell), breakthrough sheets",40000,"$38\u201345,000","Delivered"],
+  [17,"AC Plumbing","Plumbing / Trade","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [18,"Caterpillar","Heavy Equipment","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [19,"DMA","Engineering","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [20,"EJ","Engineering / Manufacturing","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [21,"Fugen","Engineering","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [22,"Levett Engineering","Engineering","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [23,"National Glass","Manufacturing (via Bradnam's)","Inhouse program delivered \u2014 Bradnam's sub-client/division",40000,"$38\u201345,000","Delivered"],
+  [24,"One Stop Interiors","Retail / Interiors","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [25,"Detechtion Technologies","Technology / Oil & Gas","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [26,"Medical & Surgical Requisites","Healthcare Supplies","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [27,"Santrev","Agriculture / Cattle","Inhouse program delivered",40000,"$38\u201345,000","Delivered"],
+  [28,"Savanna Energy","Energy / Oil & Gas","Exceptional Performance Dynamics (Mar 2023), purchase order found",40000,"$38\u201345,000","Delivered"],
+  [29,"Barkly Regional Council","Local Government (NT)","Custom workshop delivered",22000,"$15\u201330,000","Delivered"],
+  [30,"Chartered Accountants / CPA","Professional Body","WGYH workshop (Mar 2023), Goal Setting & Accountability",12000,"$10\u201315,000","Delivered"],
+  [31,"DESBT","QLD Government","Endorsed Offer programs, pricing schedule, quarterly reporting",30000,"$20\u201338,000","Delivered"],
+  [32,"Dept Youth Justice","QLD Government","Proposals sent (4 versions Jul 2023)",30000,"$20\u201338,000","Delivered"],
+  [33,"Residential Tenants Authority","Government / Regulatory","Inhouse program",30000,"$20\u201338,000","Delivered"],
+  [34,"TPAQ","Professional Association","Program (March 2023)",22000,"$15\u201330,000","Delivered"],
+  [35,"United Fortune Financial","Financial Services","Inhouse program delivered",30000,"$20\u201338,000","Delivered"],
+  [36,"Worrells Rockhampton","Insolvency / Accounting","HTWFIPDA workshop \u2014 William flew to Rockhampton",10000,"$5\u201315,000","Delivered"],
+
+  // CONFERENCES / ASSOCIATIONS
+  [37,"SBMAQ \u2014 Gold Coast","School Business Managers","How to Win Friends and Influence People",0,"","Conference"],
+  [38,"SBMAQ \u2014 Metro Brisbane","School Business Managers","Executive Development Challenge, Energise Your Communication",0,"","Conference"],
+  [39,"SBMAQ \u2014 Rockhampton","School Business Managers","5 Drivers (Dawn Lee flew in)",0,"","Conference"],
+  [40,"SBMAQ \u2014 Sunshine Coast","School Business Managers","5 Drivers (Invoice 21442)",0,"","Conference"],
+  [41,"SBMAQ \u2014 Toowoomba","School Business Managers","Executive Development Challenge",0,"","Conference"],
+  [42,"SBMAQ \u2014 Townsville","School Business Managers","5 Drivers (Scott flew in)",0,"","Conference"],
+  [43,"SBMAQ \u2014 Wide Bay","School Business Managers","WGYH",0,"","Conference"],
+  [44,"CPA Australia","Professional Body","Art of Storytelling workshop (Jun 2023)",0,"","Conference"],
+  [45,"IPWEA","Government Association","Conference workshops + exhibitor (Oct 2023)",0,"","Conference"],
+  [46,"QASEL","Education Association","Workshop engagement",0,"","Conference"],
+  [47,"Logan Chamber of Commerce","Chamber of Commerce","Endorsed offer workshops",0,"","Conference"],
+  [48,"Brisbane Innerwest Chamber","Chamber of Commerce","Endorsed offer workshops",0,"","Conference"],
+  [49,"Fortitude Valley Chamber","Chamber of Commerce","Endorsed offer workshops",0,"","Conference"],
+  [50,"Greater Springfield Chamber","Chamber of Commerce","Endorsed offer workshops",0,"","Conference"],
+
+  // SCHOOLS (via DOE contract + direct)
+  [51,"Brisbane State High School","School (Brisbane)","Leadership Challenge, Embracing Change (Sep 2023, Invoice 21444)",0,"","School"],
+  [52,"Murrumba State Secondary","School (Brisbane North)","Leader In You, Leading Others, Staying Ahead Through Innovation (Invoice 21418)",0,"","School"],
+  [53,"Moranbah State High School","School (Central QLD)","Confident Assertive & In Charge, Handle Multiple Demands (Oct 2023, Invoice 21438, Annemarie flew in)",0,"","School"],
+  [54,"Woodcrest State College","School (Brisbane South)","How to Stop Worrying and Start Living (Invoice 21446)",0,"","School"],
+  [55,"Rockhampton North Special School","School (Rockhampton)","Workshop delivered (Invoice 21404)",0,"","School"],
+  [56,"Ormeau Hills SHS","School (Gold Coast)","Workshop delivered (PO 6136 2001414)",0,"","School"],
+  [57,"Ipswich State High School","School (Ipswich)","Workshop delivered (DOE invoice)",0,"","School"],
+  [58,"Bellbird Park State Secondary","School (Brisbane)","Workshop delivered (DOE invoice)",0,"","School"],
+  [59,"Craigslea State High School","School (Brisbane)","Workshop delivered (DOE invoice)",0,"","School"],
+  [60,"Burleigh Heads State School","School (Gold Coast)","Workshop delivered (DOE invoice)",0,"","School"],
+  [61,"Tullawong State School","School (Caboolture)","Workshop delivered (DOE invoice)",0,"","School"],
+  [62,"Sandy Strait State School","School (Hervey Bay)","Workshop delivered (DOE invoice)",0,"","School"],
+  [63,"Windaroo Valley SHS","School (Brisbane South)","Workshop delivered (DOE invoice)",0,"","School"],
+  [64,"Capricornia SoDE","School (Rockhampton)","Workshop delivered (DOE invoice)",0,"","School"],
+  [65,"Coombabah SHS","School (Gold Coast)","Aspiring Leaders, Art of Storytelling through HIP (proposal)",0,"","School"],
+  [66,"Burbengery Meadows State School","School (Caboolture)","Managing Difficult Conversations (proposal)",0,"","School"],
+  [67,"St Peters Gen Next","School (Brisbane)","Youth leadership program (contracted 2023, delivered Jan 2024), 6+ students, VOC, breakthrough sheets",0,"","School"],
+
+  // SA/WA CLIENTS
+  [68,"Viterra (SA)","Agriculture / Grain (SA)","DCC (VOC), BID (Apr 2023), Leading Through Change, 360s, CIS profiles, Awareness Session",60000,"$50\u201370,000","SA/WA"],
+  [69,"Australia Outdoor Living (SA)","Home Improvement (SA)","LTR (VOC Jul 2023), Skills Gap Analysis, UYLP (Jul 2023), Innovation Process",44000,"$38\u201350,000","SA/WA"],
+  [70,"Oreon (SA)","Unknown (SA)","Trusted Advisor Bootcamp \u2014 accommodation/taxi receipts suggest visit",25000,"$20\u201330,000","SA/WA"],
+  [71,"Summit Health (SA)","Healthcare (SA)","Inhouse program (proposal stage)",25000,"$20\u201338,000","SA/WA"],
+  [72,"Youth Inc (SA)","Youth Services (SA)","Fred Heidt proposal sent",25000,"$20\u201330,000","SA/WA"],
+  [73,"Sikla (WA)","Engineering (WA)","Inhouse program (Berneice Sieber)",15000,"","SA/WA"],
+  [74,"Worthy Parts (WA)","Mining Parts (WA)","Workshop delivered (feedback forms exist)",15000,"","SA/WA"],
+  [75,"Casa (WA)","Unknown (WA)","Workshop delivered",10000,"","SA/WA"],
+  [76,"Hender Lee (WA)","Unknown (WA)","Workshop delivered",10000,"","SA/WA"],
+  [77,"In Front (WA)","Business Services (WA)","Workshop delivered",10000,"","SA/WA"],
+  [78,"SA Drains (WA)","Plumbing / Drainage (WA)","Workshop delivered",10000,"","SA/WA"],
+
+  // INDIVIDUALS (~70 proposals \u2014 key names)
+  [79,"Alan Robertson","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [80,"Andrea Pennisi","Individual","WRS",3395,"$3,395","Individual"],
+  [81,"Brooke Cairns","Individual","DCC",3395,"$3,395","Individual"],
+  [82,"Ceasar","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [83,"David Saloukvadze / Easy Cool Air","Individual","DCC",3395,"$3,395","Individual"],
+  [84,"Declan Ruan","Individual","DCC",3395,"$3,395","Individual"],
+  [85,"Denise Morrow","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [86,"Derrick Sparks / Youi","Individual","DCC",3395,"$3,395","Individual"],
+  [87,"Elizabeth Marslend","Individual","DCC",3395,"$3,395","Individual"],
+  [88,"Emma Clark","Individual","DCC",3395,"$3,395","Individual"],
+  [89,"Fluid Control / Nick Pedler","Individual","DCC",3395,"$3,395","Individual"],
+  [90,"Ian Pearce","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [91,"James Grace","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [92,"Jamie / Kangarootime","Individual","WRS",3395,"$3,395","Individual"],
+  [93,"Jan Bodnaruk","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [94,"Kym Wilkie","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [95,"Kym Wilkinson","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [96,"Lauren Noble","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [97,"Lloyd Hancock","Individual","DCC",3395,"$3,395","Individual"],
+  [98,"Mostafa Mahdi","Individual","DCC",3395,"$3,395","Individual"],
+  [99,"Ravi Pratap","Individual","DCC",3395,"$3,395","Individual"],
+  [100,"Robert Wilson","Individual","DCC",3395,"$3,395","Individual"],
+  [101,"Todd Purdey","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [102,"Serena","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [103,"Shae","Individual","DCC",3395,"$3,395","Individual"],
+  [104,"Sharron Rowe","Individual","DCC / Academy",3395,"$3,395","Individual"],
+  [105,"Alva Tan","Individual","DCC",3395,"$3,395","Individual"],
+  [106,"Chloe Lewis-lord","Individual","DCC",3395,"$3,395","Individual"],
+  [107,"Dante Bassett","Individual","DCC",3395,"$3,395","Individual"],
+  [108,"Denis Brown / Design Solutions","Individual","DCC",3395,"$3,395","Individual"],
+  [109,"Fred Heidt / Youth Inc","Individual (SA)","DCC / Academy proposal",3395,"$3,395","Individual"],
+  [110,"Hao Chen","Individual","DCC",3395,"$3,395","Individual"],
+  [111,"Hollie Bateman","Individual","DCC",3395,"$3,395","Individual"],
+  [112,"John Macdonnell","Individual","DCC",3395,"$3,395","Individual"],
+  [113,"Joshua Karklins","Individual","DCC",3395,"$3,395","Individual"],
+  [114,"JR Stephens","Individual","DCC",3395,"$3,395","Individual"],
+  [115,"Kah Leong / KMW Accountants","Individual (VIC)","DCC",3395,"$3,395","Individual"],
+  [116,"Marcella","Individual","DCC",3395,"$3,395","Individual"],
+  [117,"Michelle","Individual","DCC",3395,"$3,395","Individual"],
+  [118,"Michelle Adlam","Individual","Carnegie Academy",40265,"Academy","Individual"],
+  [119,"Naomi Gordon","Individual","DCC",3395,"$3,395","Individual"],
+  [120,"Philip Iskander","Individual","DCC",3395,"$3,395","Individual"],
+  [121,"Poppy Foley","Individual","DCC",3395,"$3,395","Individual"],
+  [122,"Thi Nygun","Individual","DCC",3395,"$3,395","Individual"],
+  [123,"Tim Donkins","Individual","DCC",3395,"$3,395","Individual"],
+  [124,"WA Academy \u2014 Josip","Individual (WA)","Carnegie Academy",40265,"Academy","Individual"],
+  [125,"WA Academy \u2014 Michael","Individual (WA)","Carnegie Academy",40265,"Academy","Individual"],
+  [126,"WA Academy \u2014 Natalie Payne","Individual (WA)","Carnegie Academy",40265,"Academy","Individual"],
+  [127,"WA Academy \u2014 Renae Issacs","Individual (WA)","Carnegie Academy",40265,"Academy","Individual"],
+  [128,"WA Academy \u2014 Sam","Individual (WA)","Carnegie Academy",40265,"Academy","Individual"],
+
+  // PROSPECTS (~27 unconverted)
+  [129,"Australian Poly Specialists","Manufacturing","Proposal Aug 2023",0,"","Prospect"],
+  [130,"BB Civil","Civil Construction","Proposal Aug 2023",0,"","Prospect"],
+  [131,"BFP Engineering","Engineering","Proposal Aug 2023",0,"","Prospect"],
+  [132,"BHP","Mining","Proposal + Neil James Academy (Sep 2023)",0,"","Prospect"],
+  [133,"Bindaree Food Group","Food Processing","Clinton Blake Proposal (May 2023)",0,"","Prospect"],
+  [134,"Colas","Infrastructure","DCC Immersion \u2014 Shane Devine via Tanya Konigsberger (Jan 2023)",0,"","Prospect"],
+  [135,"DBS","Building Services","Academy + DCC (Jun 2023)",0,"","Prospect"],
+  [136,"Dexus Group","Property / Real Estate","Proposal Nov 2023",0,"","Prospect"],
+  [137,"DSV Air & Sea","Logistics","Proposal 2023",0,"","Prospect"],
+  [138,"East West Insurance","Insurance","Proposal Jun 2023",0,"","Prospect"],
+  [139,"Ergomotion","Manufacturing","Proposal 2023",0,"","Prospect"],
+  [140,"Green Triangle Forest Products","Forestry","Proposal Oct 2023",0,"","Prospect"],
+  [141,"Height4Hire","Equipment Hire","Proposals + Victoria Baker Academy (Jul 2023)",0,"","Prospect"],
+  [142,"Holmans","Accounting","Endorsed Offer + full proposal (Aug 2023)",0,"","Prospect"],
+  [143,"Infoxchange","NFP Technology","Proposal Jul 2023",0,"","Prospect"],
+  [144,"Lannah Dunn","Fashion / Retail","Proposal May 2023",0,"","Prospect"],
+  [145,"Latter Kennedy Accountants","Accounting","Proposal 2023",0,"","Prospect"],
+  [146,"Mass Products","Manufacturing","Proposal Oct 2023",0,"","Prospect"],
+  [147,"Mangan Logging","Forestry / Logging","Academy + Strategic Readiness (Apr 2023)",0,"","Prospect"],
+  [148,"Mineral Technologies","Mining Services","HPT + Innovation Day (2023)",0,"","Prospect"],
+  [149,"Office of Fair Trading","QLD Government","Proposal 2023",0,"","Prospect"],
+  [150,"Paynters","Construction","Proposal Sep 2023",0,"","Prospect"],
+  [151,"Porters Hotel","Hospitality","DCC Immersion proposal",0,"","Prospect"],
+  [152,"Tilly's Crawler Parts","Mining Parts","Proposal May 2023",0,"","Prospect"],
+  [153,"Whyalla Beef","Agriculture","2 proposal versions (Sep 2023)",0,"","Prospect"],
+  [154,"Elec Power Technologies (WA)","Electrical Engineering (WA)","Proposal 2023",0,"","Prospect"],
+  [155,"National Aluminium","Manufacturing","Referenced in Bradnam's folder",0,"","Prospect"],
+  [156,"Outsource To Us","BPO","Endorsed Offer (Jun 2023)",0,"","Prospect"],
+  [157,"KMW Accountants (Traralgon)","Accounting (VIC)","Endorsed Offer proposal",0,"","Prospect"],
+  [158,"Ascension","Property / Financial Services","Folder created, minimal content",0,"","Prospect"],
+  [159,"Michael McGuinnes","Individual / Business","Coaching proposal",0,"","Prospect"]
+];
+
+var activeTier = 'all';
+var searchTerm = '';
+var sortCol = 0;
+var sortDir = 1;
+
+function tierClass(t) {
+  if (t === 'Anchor') return 'tier-1';
+  if (t === 'Active') return 'tier-2';
+  if (t === 'Delivered') return 'tier-3';
+  if (t === 'School') return 'tier-school';
+  if (t === 'SA/WA') return 'tier-sa';
+  return 'tier-prospect';
+}
+
+function badgeClass(t) {
+  if (t === 'Anchor') return 'badge-anchor';
+  if (t === 'Active') return 'badge-active';
+  if (t === 'Delivered') return 'badge-delivered';
+  if (t === 'School') return 'badge-school';
+  if (t === 'Conference') return 'badge-conference';
+  if (t === 'Individual') return 'badge-individual';
+  if (t === 'SA/WA') return 'badge-sa';
+  return 'badge-prospect';
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+function matchesFilters(row) {
+  var tier = row[6];
+  if (activeTier !== 'all' && tier !== activeTier) return false;
+  if (searchTerm) {
+    var q = searchTerm.toLowerCase();
+    if (row[1].toLowerCase().indexOf(q) === -1 &&
+        row[2].toLowerCase().indexOf(q) === -1 &&
+        row[3].toLowerCase().indexOf(q) === -1 &&
+        row[5].toLowerCase().indexOf(q) === -1 &&
+        tier.toLowerCase().indexOf(q) === -1) return false;
+  }
+  return true;
+}
+
+function render() {
+  var filtered = DATA.filter(matchesFilters);
+  filtered.sort(function(a, b) {
+    var va = a[sortCol];
+    var vb = b[sortCol];
+    if (sortCol === 0 || sortCol === 4) return ((va||0) - (vb||0)) * sortDir;
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+
+  var tbody = document.getElementById('tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-results">No matching organisations found.</td></tr>';
+  } else {
+    var html = '';
+    for (var i = 0; i < filtered.length; i++) {
+      var r = filtered[i];
+      var revDisplay = r[5] || '\u2014';
+      if (revDisplay === 'Academy') revDisplay = '<span style="color:#0090cf;font-size:11px;">Academy Sub</span>';
+      html += '<tr class="' + tierClass(r[6]) + '">' +
+        '<td>' + r[0] + '</td>' +
+        '<td>' + escapeHtml(r[1]) + '</td>' +
+        '<td>' + escapeHtml(r[2]) + '</td>' +
+        '<td>' + escapeHtml(r[3]) + '</td>' +
+        '<td>' + revDisplay + '</td>' +
+        '<td><span class="badge ' + badgeClass(r[6]) + '">' + r[6] + '</span></td>' +
+        '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+  document.getElementById('result-count').textContent = 'Showing ' + filtered.length + ' of ' + DATA.length + ' entries';
+
+  var ths = document.querySelectorAll('thead th');
+  for (var j = 0; j < ths.length; j++) {
+    ths[j].classList.remove('sorted-asc', 'sorted-desc');
+    if (parseInt(ths[j].getAttribute('data-col')) === sortCol) {
+      ths[j].classList.add(sortDir === 1 ? 'sorted-asc' : 'sorted-desc');
+    }
+  }
+}
+
+document.getElementById('tier-filters').addEventListener('click', function(e) {
+  if (!e.target.classList.contains('fbtn')) return;
+  var btns = document.querySelectorAll('#tier-filters .fbtn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  e.target.classList.add('active');
+  activeTier = e.target.getAttribute('data-tier');
+  render();
+});
+
+document.getElementById('search').addEventListener('input', function(e) {
+  searchTerm = e.target.value;
+  render();
+});
+
+var ths = document.querySelectorAll('thead th');
+for (var k = 0; k < ths.length; k++) {
+  (function(th) {
+    th.addEventListener('click', function() {
+      var col = parseInt(th.getAttribute('data-col'));
+      if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+      render();
+    });
+  })(ths[k]);
+}
+
+render();
+</script>
+</body>
+</html>
