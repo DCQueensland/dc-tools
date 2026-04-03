@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposals & Pipeline — DC Queensland Command Centre</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; background: #f5f6fa; color: #333; }
+
+        /* Header */
+        .header { background: #1a1a2e; color: white; padding: 20px 30px; display: flex; align-items: center; justify-content: space-between; }
+        .header h1 { font-size: 22px; font-weight: bold; }
+        .header .breadcrumb { font-size: 13px; color: #888; }
+        .header .breadcrumb span { color: #ffc708; }
+
+        /* Stats Bar */
+        .stats-bar { display: flex; gap: 15px; padding: 20px 30px; background: white; border-bottom: 1px solid #e0e0e0; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 150px; padding: 15px 20px; border-radius: 10px; text-align: center; }
+        .stat-card .value { font-size: 28px; font-weight: bold; }
+        .stat-card .label { font-size: 12px; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-proposals { background: #e8f4fd; }
+        .stat-proposals .value { color: #0090cf; }
+        .stat-quoted { background: #fef3e2; }
+        .stat-quoted .value { color: #e67e22; }
+        .stat-won { background: #eef7e5; }
+        .stat-won .value { color: #84c44c; }
+        .stat-pending { background: #fff8e1; }
+        .stat-pending .value { color: #f39c12; }
+        .stat-active { background: #f3e8fd; }
+        .stat-active .value { color: #8e44ad; }
+        .stat-conversion { background: #e8f8f5; }
+        .stat-conversion .value { color: #1abc9c; }
+
+        /* Filters */
+        .filters { padding: 15px 30px; background: white; border-bottom: 1px solid #e0e0e0; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .filters label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+        .filters select, .filters input { padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; background: white; }
+        .filter-group { display: flex; align-items: center; gap: 6px; }
+        .btn-reset { padding: 6px 14px; border: 1px solid #ddd; border-radius: 6px; background: #f5f5f5; cursor: pointer; font-size: 13px; }
+        .btn-reset:hover { background: #e0e0e0; }
+
+        /* Tabs */
+        .tabs { display: flex; padding: 0 30px; background: white; border-bottom: 2px solid #e0e0e0; }
+        .tab { padding: 12px 20px; font-size: 14px; font-weight: bold; color: #888; cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
+        .tab:hover { color: #333; }
+        .tab.active { color: #84c44c; border-bottom-color: #84c44c; }
+        .tab .count { background: #e0e0e0; color: #666; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-left: 6px; }
+        .tab.active .count { background: #eef7e5; color: #84c44c; }
+
+        /* Content */
+        .content { padding: 20px 30px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Table */
+        .table-wrapper { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        th { background: #1a1a2e; color: white; padding: 12px 15px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; position: sticky; top: 0; }
+        td { padding: 12px 15px; border-bottom: 1px solid #f0f0f0; font-size: 13px; vertical-align: top; }
+        tr:hover { background: #fafbfc; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Status badges */
+        .status { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-sent { background: #e8f4fd; color: #0090cf; }
+        .status-pending { background: #fff8e1; color: #e67e22; }
+        .status-won { background: #eef7e5; color: #84c44c; }
+        .status-lost { background: #fde8e8; color: #e74c3c; }
+        .status-active { background: #f3e8fd; color: #8e44ad; }
+
+        /* Program tags */
+        .program-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; margin: 1px 2px; font-weight: bold; }
+        .tag-dcc { background: #84c44c; color: white; }
+        .tag-uylp { background: #ffc708; color: #333; }
+        .tag-ltm { background: #0090cf; color: white; }
+        .tag-hpt { background: #e74c3c; color: white; }
+        .tag-wrs { background: #9b59b6; color: white; }
+        .tag-disc { background: #e67e22; color: white; }
+        .tag-coaching { background: #1abc9c; color: white; }
+        .tag-workshop { background: #34495e; color: white; }
+        .tag-academy { background: #ffc708; color: #333; }
+        .tag-other { background: #95a5a6; color: white; }
+
+        /* Value formatting */
+        .value-cell { font-weight: bold; color: #333; white-space: nowrap; }
+        .date-cell { white-space: nowrap; color: #666; }
+        .company-cell { font-weight: bold; }
+        .contact-cell { color: #555; }
+
+        /* Section headers in table */
+        .section-row td { background: #f8f9fa; font-weight: bold; color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; padding: 8px 15px; }
+
+        /* Editable status dropdown */
+        .status-select { border: none; background: transparent; font-size: 11px; font-weight: bold; cursor: pointer; padding: 3px 6px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* Notes */
+        .notes-cell { font-size: 12px; color: #888; max-width: 200px; }
+
+        /* Footer */
+        .footer { padding: 20px 30px; text-align: center; color: #999; font-size: 12px; border-top: 1px solid #e0e0e0; margin-top: 20px; }
+
+        /* Print */
+        @media print {
+            .filters, .tabs, .header .breadcrumb { display: none; }
+            .header { background: #333; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div>
+        <div class="breadcrumb">DC Queensland Command Centre &rsaquo; <span>Sales & Marketing Engine</span></div>
+        <h1>Proposals & Pipeline</h1>
+    </div>
+    <div style="font-size: 13px; color: #888;">2026 Financial Year</div>
+</div>
+
+<div class="stats-bar" id="statsBar">
+    <div class="stat-card stat-proposals">
+        <div class="value" id="statProposals">16</div>
+        <div class="label">Proposals Sent</div>
+    </div>
+    <div class="stat-card stat-active">
+        <div class="value" id="statActive">6</div>
+        <div class="label">Active Clients</div>
+    </div>
+    <div class="stat-card stat-pending">
+        <div class="value" id="statPending">16</div>
+        <div class="label">Pending</div>
+    </div>
+    <div class="stat-card stat-won">
+        <div class="value" id="statWon">0</div>
+        <div class="label">Won</div>
+    </div>
+    <div class="stat-card stat-quoted">
+        <div class="value" id="statQuoted">$0</div>
+        <div class="label">Total Quoted</div>
+    </div>
+    <div class="stat-card stat-conversion">
+        <div class="value" id="statConversion">0%</div>
+        <div class="label">Conversion Rate</div>
+    </div>
+</div>
+
+<div class="filters">
+    <div class="filter-group">
+        <label>Month:</label>
+        <select id="filterMonth" onchange="applyFilters()">
+            <option value="all">All</option>
+            <option value="Jan 2026">January</option>
+            <option value="Feb 2026">February</option>
+            <option value="Mar 2026">March</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Status:</label>
+        <select id="filterStatus" onchange="applyFilters()">
+            <option value="all">All</option>
+            <option value="Pending">Pending</option>
+            <option value="Won">Won</option>
+            <option value="Lost">Lost</option>
+            <option value="Sent">Sent</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Program:</label>
+        <select id="filterProgram" onchange="applyFilters()">
+            <option value="all">All</option>
+            <option value="DCC">DCC</option>
+            <option value="UYLP">UYLP</option>
+            <option value="LTM">LTM</option>
+            <option value="HPT">HPT</option>
+            <option value="WRS">WRS</option>
+            <option value="Coaching">Coaching</option>
+            <option value="Workshop">Workshop</option>
+        </select>
+    </div>
+    <div class="filter-group">
+        <label>Search:</label>
+        <input type="text" id="filterSearch" placeholder="Company or contact..." oninput="applyFilters()">
+    </div>
+    <button class="btn-reset" onclick="resetFilters()">Reset</button>
+</div>
+
+<div class="tabs">
+    <div class="tab active" onclick="switchTab('proposals')">Proposals <span class="count">16</span></div>
+    <div class="tab" onclick="switchTab('active')">Active Clients <span class="count">6</span></div>
+    <div class="tab" onclick="switchTab('individuals')">Individuals <span class="count">6</span></div>
+</div>
+
+<div class="content">
+    <!-- Proposals Tab -->
+    <div class="tab-content active" id="tab-proposals">
+        <div class="table-wrapper">
+            <table id="proposalsTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Company</th>
+                        <th>Contact</th>
+                        <th>Programs</th>
+                        <th>Pitch Summary</th>
+                        <th>Value Range</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="proposalsBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Active Clients Tab -->
+    <div class="tab-content" id="tab-active">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Relationship</th>
+                        <th>Current Engagement</th>
+                        <th>Programs Delivered</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="company-cell">IOR</td>
+                        <td>Carnegie Academy Gold Subscriber</td>
+                        <td>$152,000/yr subscription — anchor client</td>
+                        <td><span class="program-tag tag-academy">Academy Gold</span></td>
+                        <td><span class="status status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">Bradnam's Windows and Doors</td>
+                        <td>Multi-year anchor client</td>
+                        <td>6+ programs delivered, working from prior year agreements</td>
+                        <td>
+                            <span class="program-tag tag-dcc">DCC</span>
+                            <span class="program-tag tag-uylp">UYLP</span>
+                            <span class="program-tag tag-ltm">LTM</span>
+                        </td>
+                        <td><span class="status status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">Ulton</td>
+                        <td>Current engagement</td>
+                        <td>HPT delivered Feb 2026 + 1-on-1 coaching ongoing</td>
+                        <td>
+                            <span class="program-tag tag-hpt">HPT</span>
+                            <span class="program-tag tag-coaching">Coaching</span>
+                        </td>
+                        <td><span class="status status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">BDO</td>
+                        <td>Existing client</td>
+                        <td>"Art of Effective Communication" workshop — 12 Feb 2026</td>
+                        <td><span class="program-tag tag-workshop">Workshop</span></td>
+                        <td><span class="status status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">GCWA</td>
+                        <td>Existing client</td>
+                        <td>DISC workshop delivered Feb 2026</td>
+                        <td><span class="program-tag tag-disc">DISC</span></td>
+                        <td><span class="status status-active">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">QSPA</td>
+                        <td>Conference / association</td>
+                        <td>"Difficult Conversations" workshop series — Mar 2026</td>
+                        <td><span class="program-tag tag-workshop">Workshop</span></td>
+                        <td><span class="status status-active">Active</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Individuals Tab -->
+    <div class="tab-content" id="tab-individuals">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Participant</th>
+                        <th>Program</th>
+                        <th>Date</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="company-cell">Austrak Vossloh</td>
+                        <td>Lara Foster</td>
+                        <td><span class="program-tag tag-dcc">DCC</span></td>
+                        <td class="date-cell">Mar 2026</td>
+                        <td class="notes-cell">Breakthrough report on file</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">Big Tyre</td>
+                        <td>Dan Louden</td>
+                        <td><span class="program-tag tag-dcc">DCC</span></td>
+                        <td class="date-cell">Mar 2026</td>
+                        <td class="notes-cell">Breakthrough report on file</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">Bundaberg Port Marina</td>
+                        <td>Kim Roebuck</td>
+                        <td><span class="program-tag tag-dcc">DCC</span></td>
+                        <td class="date-cell">Mar 2026</td>
+                        <td class="notes-cell">Breakthrough report on file</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">City Golf</td>
+                        <td>—</td>
+                        <td><span class="program-tag tag-dcc">DCC</span></td>
+                        <td class="date-cell">Mar 2026</td>
+                        <td class="notes-cell">Breakthrough report on file</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">JR Stephens</td>
+                        <td>Sharawn Hyde-Renga</td>
+                        <td><span class="program-tag tag-dcc">DCC</span></td>
+                        <td class="date-cell">Mar 2026</td>
+                        <td class="notes-cell">Breakthrough report on file</td>
+                    </tr>
+                    <tr>
+                        <td class="company-cell">Red Tree Finance</td>
+                        <td>—</td>
+                        <td><span class="program-tag tag-dcc">DCC</span></td>
+                        <td class="date-cell">Mar 2026</td>
+                        <td class="notes-cell">Breakthrough report on file</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    DC Queensland Command Centre &mdash; Sales & Marketing Engine &mdash; Updated 1 April 2026
+</div>
+
+<script>
+const proposals = [
+    { date: "Jan 2026", company: "iSeek Plant", contact: "Garcon and Drew", programs: ["DCC", "UYLP", "Coaching"], pitch: "DCC (public, 1-2 pax) + UYLP + Executive Coaching", value: "$3,262.05", status: "Won" },
+    { date: "Feb 2026", company: "Bartons Motors", contact: "Mark Beitz & Tony Lum", programs: ["DCC"], pitch: "Inhouse DCC (3-day)", value: "$38,995", status: "Won" },
+    { date: "Feb 2026", company: "FarmFresh Fine Foods", contact: "Andrew Gerry", programs: ["DCC", "UYLP", "LTM", "HPT"], pitch: "Multi-program strategic proposal — 4 programs", value: "$16,475 – $54,945", status: "Pending" },
+    { date: "Feb 2026", company: "Gama Consulting", contact: "Leo Karadimitris", programs: ["DCC", "LTM", "WRS"], pitch: "DCC (public, 1 pax) + LTM + WRS strategic proposal", value: "$3,295+", status: "Pending" },
+    { date: "Feb 2026", company: "Milkmans Cookies", contact: "Aiden Williamson & Amy Boardman", programs: ["DCC", "WRS", "LTM"], pitch: "DCC + WRS + LTM strategic proposal", value: "$3,295 – $16,475", status: "Pending" },
+    { date: "Feb 2026", company: "North Queensland Engineering", contact: "Doug Lee", programs: ["DCC", "LTM"], pitch: "DCC + LTM strategic proposal", value: "$16,475 – $21,995", status: "Pending" },
+    { date: "Feb 2026", company: "SBMAQ", contact: "Association", programs: ["Workshop"], pitch: "8-workshop online leadership series for school business managers", value: "TBC", status: "Pending" },
+    { date: "Mar 2026", company: "AJ Baker Refrigeration", contact: "Brendan Krummel", programs: ["DCC"], pitch: "DCC (public, 1 pax) — strategic proposal with full program menu", value: "$3,295+", status: "Pending" },
+    { date: "Mar 2026", company: "Aptus Business Solutions", contact: "Joe Gentile", programs: ["DCC", "HPT"], pitch: "DCC + HPT + customised options (via Matthew Page-Hanify)", value: "$16,475 – $38,995", status: "Pending" },
+    { date: "Mar 2026", company: "Barazi Bezzera Coffee Machines", contact: "Christopher Newsome", programs: ["DCC", "LTM", "WRS"], pitch: "DCC + LTM + WRS — leadership + sales team development", value: "TBC", status: "Pending" },
+    { date: "Mar 2026", company: "Dept of Transport & Main Roads", contact: "Maya Menon", programs: ["DCC", "UYLP", "LTM", "DISC", "Coaching"], pitch: "DCC + UYLP + LTM + 360 Review + DISC + Exec Coaching", value: "$16,475 – $38,995", status: "Pending" },
+    { date: "Mar 2026", company: "Golden Cockerel", contact: "Dennis Stark", programs: ["DCC", "UYLP", "LTM", "HPT"], pitch: "DCC + UYLP + LTM + HPT — all key leaders", value: "TBC", status: "Pending" },
+    { date: "Mar 2026", company: "Rio Rhythmics", contact: "Tarcisio Teatini-Climaco", programs: ["DCC"], pitch: "DCC (public, 1 pax)", value: "$3,295", status: "Pending" },
+    { date: "Mar 2026", company: "Surface Projects", contact: "Manoj Hingorani", programs: ["DCC", "LTM"], pitch: "DCC + LTM strategic proposal", value: "$16,475", status: "Pending" },
+    { date: "Mar 2026", company: "Swift Energy Group", contact: "Jordan Hintz", programs: ["DCC", "UYLP", "LTM"], pitch: "DCC + UYLP + LTM strategic proposal", value: "$16,475 – $32,950", status: "Pending" },
+    { date: "2026", company: "Commercial Marine Group", contact: "Nicholas Ayres & Ray Crampton", programs: ["DCC", "LTM"], pitch: "DCC + LTM strategic proposal", value: "$6,590 – $16,475", status: "Pending" }
+];
+
+const programTagMap = {
+    "DCC": "tag-dcc", "UYLP": "tag-uylp", "LTM": "tag-ltm", "HPT": "tag-hpt",
+    "WRS": "tag-wrs", "DISC": "tag-disc", "Coaching": "tag-coaching",
+    "Workshop": "tag-workshop", "Academy": "tag-academy"
+};
+
+const statusClassMap = {
+    "Pending": "status-pending", "Won": "status-won", "Lost": "status-lost", "Sent": "status-sent"
+};
+
+function renderPrograms(programs) {
+    return programs.map(p => `<span class="program-tag ${programTagMap[p] || 'tag-other'}">${p}</span>`).join(' ');
+}
+
+function renderStatus(status, idx) {
+    return `<select class="status-select" style="background: ${status === 'Won' ? '#eef7e5' : status === 'Lost' ? '#fde8e8' : status === 'Pending' ? '#fff8e1' : '#e8f4fd'}; color: ${status === 'Won' ? '#84c44c' : status === 'Lost' ? '#e74c3c' : status === 'Pending' ? '#e67e22' : '#0090cf'}" onchange="updateStatus(${idx}, this.value)">
+        <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>Pending</option>
+        <option value="Won" ${status === 'Won' ? 'selected' : ''}>Won</option>
+        <option value="Lost" ${status === 'Lost' ? 'selected' : ''}>Lost</option>
+        <option value="Sent" ${status === 'Sent' ? 'selected' : ''}>Sent</option>
+    </select>`;
+}
+
+function renderTable(data) {
+    const tbody = document.getElementById('proposalsBody');
+    tbody.innerHTML = '';
+    data.forEach((p, i) => {
+        const origIdx = proposals.indexOf(p);
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-month', p.date);
+        tr.setAttribute('data-status', p.status);
+        tr.setAttribute('data-programs', p.programs.join(','));
+        tr.innerHTML = `
+            <td class="date-cell">${p.date}</td>
+            <td class="company-cell">${p.company}</td>
+            <td class="contact-cell">${p.contact}</td>
+            <td>${renderPrograms(p.programs)}</td>
+            <td>${p.pitch}</td>
+            <td class="value-cell">${p.value}</td>
+            <td>${renderStatus(p.status, origIdx)}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function updateStatus(idx, newStatus) {
+    proposals[idx].status = newStatus;
+    applyFilters();
+    updateStats();
+    saveState();
+}
+
+function applyFilters() {
+    const month = document.getElementById('filterMonth').value;
+    const status = document.getElementById('filterStatus').value;
+    const program = document.getElementById('filterProgram').value;
+    const search = document.getElementById('filterSearch').value.toLowerCase();
+
+    let filtered = proposals.filter(p => {
+        if (month !== 'all' && p.date !== month) return false;
+        if (status !== 'all' && p.status !== status) return false;
+        if (program !== 'all' && !p.programs.includes(program)) return false;
+        if (search && !p.company.toLowerCase().includes(search) && !p.contact.toLowerCase().includes(search)) return false;
+        return true;
+    });
+
+    renderTable(filtered);
+}
+
+function resetFilters() {
+    document.getElementById('filterMonth').value = 'all';
+    document.getElementById('filterStatus').value = 'all';
+    document.getElementById('filterProgram').value = 'all';
+    document.getElementById('filterSearch').value = '';
+    renderTable(proposals);
+}
+
+function updateStats() {
+    const total = proposals.length;
+    const won = proposals.filter(p => p.status === 'Won').length;
+    const pending = proposals.filter(p => p.status === 'Pending').length;
+    const lost = proposals.filter(p => p.status === 'Lost').length;
+
+    // Calculate total quoted (parse value ranges, take midpoint)
+    let totalQuoted = 0;
+    proposals.forEach(p => {
+        const nums = p.value.match(/[\d,]+/g);
+        if (nums && nums.length > 0) {
+            const values = nums.map(n => parseInt(n.replace(/,/g, '')));
+            totalQuoted += values[values.length - 1]; // Take highest value
+        }
+    });
+
+    let wonValue = 0;
+    proposals.filter(p => p.status === 'Won').forEach(p => {
+        const nums = p.value.match(/[\d,]+/g);
+        if (nums && nums.length > 0) {
+            const values = nums.map(n => parseInt(n.replace(/,/g, '')));
+            wonValue += values[values.length - 1];
+        }
+    });
+
+    document.getElementById('statProposals').textContent = total;
+    document.getElementById('statPending').textContent = pending;
+    document.getElementById('statWon').textContent = won;
+    document.getElementById('statQuoted').textContent = '$' + totalQuoted.toLocaleString();
+    document.getElementById('statConversion').textContent = total > 0 ? Math.round((won / total) * 100) + '%' : '0%';
+}
+
+function switchTab(tabName) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+    event.target.closest('.tab').classList.add('active');
+    document.getElementById('tab-' + tabName).classList.add('active');
+}
+
+// Persistence via localStorage
+function saveState() {
+    const statuses = proposals.map(p => p.status);
+    localStorage.setItem('dcqcc_proposal_statuses', JSON.stringify(statuses));
+}
+
+function loadState() {
+    const saved = localStorage.getItem('dcqcc_proposal_statuses');
+    if (saved) {
+        const statuses = JSON.parse(saved);
+        statuses.forEach((s, i) => {
+            if (proposals[i]) proposals[i].status = s;
+        });
+    }
+}
+
+// Init
+loadState();
+renderTable(proposals);
+updateStats();
+</script>
+
+</body>
+</html>

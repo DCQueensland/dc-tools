@@ -42,7 +42,7 @@ LIGHT_GREY = RGBColor(0xF2, 0xF2, 0xF2)
 # Logos
 LOGO_WHITE = os.path.expanduser("~/Dropbox/2026/Marketing/Logos & Badges/White DC Logo.png")
 LOGO_BLACK = os.path.expanduser("~/Dropbox/2026/Marketing/Logos & Badges/Black DC Logo No Background.png")
-LOGO_GCC = os.path.expanduser("~/Desktop/gcc-logo-transparent.png")
+CLIENT_LOGOS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "client-logos")
 COVER_BG = os.path.expanduser("~/Desktop/slide1_img_0.png")
 
 # Header bar colour (DC Green)
@@ -234,8 +234,9 @@ def build_title_slide(prs, data):
     logo_y = Inches(0.5)
     if os.path.exists(LOGO_WHITE):
         slide.shapes.add_picture(LOGO_WHITE, Inches(1.0), logo_y, height=logo_height)
-    if os.path.exists(LOGO_GCC):
-        slide.shapes.add_picture(LOGO_GCC, Inches(8.5), logo_y, height=logo_height)
+    client_logo = os.path.join(os.path.dirname(os.path.abspath(__file__)), data.get("logo", "")) if data.get("logo") else None
+    if client_logo and os.path.exists(client_logo):
+        slide.shapes.add_picture(client_logo, Inches(10.5), logo_y, height=logo_height)
 
     # Main title — centred, pushed down for breathing room
     add_text_box(slide, Inches(1.5), Inches(3.0), Inches(10.3), Inches(1.2),
@@ -530,8 +531,9 @@ def build_back_cover_slide(prs, data):
     logo_y = Inches(0.5)
     if os.path.exists(LOGO_WHITE):
         slide.shapes.add_picture(LOGO_WHITE, Inches(1.0), logo_y, height=logo_height)
-    if os.path.exists(LOGO_GCC):
-        slide.shapes.add_picture(LOGO_GCC, Inches(8.5), logo_y, height=logo_height)
+    client_logo = os.path.join(os.path.dirname(os.path.abspath(__file__)), data.get("logo", "")) if data.get("logo") else None
+    if client_logo and os.path.exists(client_logo):
+        slide.shapes.add_picture(client_logo, Inches(10.5), logo_y, height=logo_height)
 
     # Title — same as front
     add_text_box(slide, Inches(1.5), Inches(3.0), Inches(10.3), Inches(1.2),

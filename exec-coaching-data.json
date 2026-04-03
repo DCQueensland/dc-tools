@@ -1,0 +1,159 @@
+{
+  "clients": [
+    {
+      "name": "Drew Morland",
+      "role": "CEO, IOR",
+      "session": "March 2026",
+      "client_logo": "~/Desktop/ior-logo.png",
+
+      "disc_style": "IS/Is",
+      "disc_label": "Coach",
+      "disc_adapted": {"D": 34, "I": 85, "S": 66, "C": 27},
+      "disc_natural": {"D": 45, "I": 98, "S": 58, "C": 20},
+
+      "category_scores": [
+        ["Leadership Skills", 4.56],
+        ["People Skills", 4.55],
+        ["Self-Confidence", 4.48],
+        ["Accountability", 4.44],
+        ["Self-Direction", 4.41],
+        ["Communication Skills", 4.18],
+        ["Controls Stress", 4.00],
+        ["Process Skills", 3.84]
+      ],
+
+      "top_strengths": [
+        ["\"Demonstrates a positive attitude; focuses on 'I can do it' way of thinking\"", 5.00],
+        ["\"Expresses genuine interest in other people\"", 5.00],
+        ["\"Contributes to an atmosphere of trust\"", 4.90],
+        ["\"Leads by example\"", 4.90],
+        ["\"Shows respect for other people's opinions and ideas\"", 4.90]
+      ],
+
+      "key_gaps": [
+        ["Effectively manages the performance of others", 2.0, 4.20, 2.20],
+        ["Uses evidence to support ideas", 2.0, 3.90, 1.90],
+        ["Leads by example", 3.0, 4.90, 1.90],
+        ["Utilizes time effectively", 2.0, 3.67, 1.67],
+        ["Separates the person from the problem", 3.0, 4.40, 1.40],
+        ["Uses an effective planning process", 2.0, 3.33, 1.33],
+        ["Effectively delegates", 3.0, 4.11, 1.11]
+      ],
+
+      "areas_needing_attention": [
+        ["Effectively prepares and delivers presentations", 3.20],
+        ["Maintains work/life balance", 3.22],
+        ["Uses a process to define performance expectations", 3.30],
+        ["Uses an effective planning process", 3.33],
+        ["Effectively organises resources to achieve work objectives", 3.56]
+      ],
+
+      "disc_characteristics": [
+        "Unselfish, sensitive to others' needs, genuine",
+        "Long fuse, empathetic listener, builds trust naturally",
+        "Projects confidence without arrogance",
+        "High persistence on complex projects",
+        "Prefers long-term relationships over superficial ones"
+      ],
+
+      "disc_focus_areas": [
+        "Learning to say \"no\" to avoid spreading too thin",
+        "More direction toward work tasks, less chatting/socialising during critical periods",
+        "Setting more ambitious deadlines",
+        "Increased urgency in decision-making",
+        "Detailed delegation to reduce ambiguity",
+        "May hesitate to correct/discipline for fear of offending \u2014 needs to lean into \"good guy not just nice guy\"",
+        "Under stress: may become non-committal, vague, or overly tolerant of non-performers"
+      ],
+
+      "victories": [
+        "Completed triathlon with brothers (March) \u2014 huge milestone",
+        "Built one of the most formidable senior teams in Australian business (Drew, Nick, Linda)",
+        "Broke free from poor behaviours \u2014 committed to daily morning training",
+        "Achieved 28% growth \u2014 outpaces most companies",
+        "Board relationships redesigned and strengthened",
+        "Consistent morning journaling and Stoic reading practice established",
+        "Holiday scored \"15 out of 10\" for family connection",
+        "Embracing vulnerability and authentic leadership style",
+        "Unlocking talent across the organisation \u2014 attracting more talent as a result",
+        "X2U project now ahead of traditional pipeline",
+        "Broke into Victorian market in back-to-base services",
+        "Working a productive 50 hours/week focused on high-value relationships",
+        "Partner relationship (Jodie) strong and balanced"
+      ],
+
+      "challenges": [
+        "Board pressure \u2014 meetings felt \"just about the numbers\" not vision/purpose",
+        "Imposter syndrome around finance/board papers \u2014 feeling \"uneducated\"",
+        "Feeling stretched \u2014 having to push to \"turn up as Drew\" for the team",
+        "Balancing empathy with accountability (nice guy vs good guy)",
+        "Work/life balance \u2014 lowest scored area on 360",
+        "Weekend dynamics with Jodie \u2014 collaborative planning vs. perceived indifference",
+        "Process and planning skills remain the weakest area (3.84/5)",
+        "Communication clarity \u2014 expressing ideas concisely (3.60 on team feedback)",
+        "Self-medication with alcohol \u2014 shifted to celebration-only approach"
+      ],
+
+      "frameworks": [
+        "Cognitive Reframing (red/blue-green journaling)",
+        "\"Facilitator of Talent\" identity \u2014 not needing to know everything",
+        "\"Protector\" mindset \u2014 shielding the team while leveraging their strengths",
+        "\"Blue Slide\" concept from Diary of a CEO \u2014 IOR's version still to be created",
+        "Nice Guy vs Good Guy distinction",
+        "Power of saying less in meetings"
+      ],
+
+      "quarterly_plan": [
+        {
+          "label": "Q1 Jan\u2013Mar",
+          "theme": "Foundations",
+          "items": [
+            "Continue morning routine (exercise, journal, Stoic reading)",
+            "Build IOR's \"Blue Slide\" \u2014 the company's clear why/vision/purpose one-pager",
+            "Set 3 personal stretch goals and share with William for accountability",
+            "Review board communication approach \u2014 present in ROI terms they value"
+          ]
+        },
+        {
+          "label": "Q2 Apr\u2013Jun",
+          "theme": "Process & Structure",
+          "items": [
+            "Address weakest 360 area: Process Skills (planning, delegation, time management)",
+            "Implement weekly 30-min planning block \u2014 priorities for the week",
+            "Delegate with detailed scope: what, why, by when, then \"I'll leave it in your capable hands\"",
+            "Practice \"evidence-based\" communication \u2014 supporting ideas with data"
+          ]
+        },
+        {
+          "label": "Q3 Jul\u2013Sep",
+          "theme": "Positive Discomfort",
+          "items": [
+            "Seek moments of discomfort that drive growth",
+            "Practice having harder accountability conversations (good guy, not just nice guy)",
+            "Address presentation skills \u2014 prepare structured board presentations",
+            "Push decision-making speed \u2014 set daily goals that test focus"
+          ]
+        },
+        {
+          "label": "Q4 Oct\u2013Dec",
+          "theme": "Legacy & Scale",
+          "items": [
+            "Build second-tier leadership capability \u2014 who leads when Drew isn't in the room?",
+            "Define clear roles and responsibilities (lowest 360 item: 4.00)",
+            "Create Drew's personal leadership \"playbook\" \u2014 codify what works",
+            "Year-end reflection and 360 re-assessment"
+          ]
+        }
+      ],
+
+      "direct_report_comments": [
+        "Drew is an inspiring leader that knows how to work to people\u2019s strengths and weaknesses...",
+        "Drew is the best manager that I have worked for. I admire Drew\u2019s determination and direction, all done in a very friendly and personable style with very high EQ...",
+        "Drew is either by nature, or by a disciplined approach, a very curious leader. He is a fantastic listener and genuinely cares about his people.",
+        "Drew has been an incredible colleague and manager to work with. He has elevated the business to a new level...",
+        "I genuinely rate Drew very highly in areas like interpersonal communication, leadership, emotional intelligence, and his positive attitude. His growth mindset is impressive...",
+        "Drew is an inspirational leader who values and fosters genuine collaboration and connection across his teams..."
+      ]
+    }
+  ]
+}

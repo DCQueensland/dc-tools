@@ -2,6 +2,7 @@
   "companies": [
     {
       "company": "Golden Cockerel Chicken",
+      "logo": "client-logos/golden-cockerel-chicken.png",
       "questions": [
         "What are the strengths of your company?",
         "Looking back two years, what have been some of the changes in your company?",
