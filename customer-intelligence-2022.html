@@ -123,52 +123,12 @@
     .highlights-grid { grid-template-columns: 1fr; }
   }
 
-  /* Password Gate */
-  #password-gate {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 80vh; padding: 24px;
-  }
-  .password-box {
-    background: #1a2332; border: 1px solid #2c3e50; border-radius: 16px;
-    padding: 48px; text-align: center; max-width: 420px; width: 100%; color: #fff;
-  }
-  .password-box .lock-icon { font-size: 48px; margin-bottom: 20px; }
-  .password-box h2 { font-size: 20px; margin-bottom: 8px; color: #fff; }
-  .password-box p { color: #a0b0c0; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
-  .password-input-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
-  .password-input-wrap input {
-    flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #444;
-    background: #0d1520; color: #fff; font-size: 15px; outline: none;
-  }
-  .password-input-wrap input:focus { border-color: #ffc708; }
-  .password-input-wrap button {
-    padding: 12px 24px; border-radius: 8px; border: none;
-    background: #ffc708; color: #000; font-size: 14px; font-weight: 700; cursor: pointer;
-  }
-  .password-input-wrap button:hover { opacity: 0.85; }
-  .pw-error { color: #ff6347; font-size: 13px; display: none; }
-  #portal-content { display: none; }
 
 </style>
 </head>
 <body>
 
-<!-- PASSWORD GATE -->
-<div id="password-gate">
-  <div class="password-box">
-    <div class="lock-icon">&#128274;</div>
-    <h2>Restricted Access</h2>
-    <p>This portal contains confidential client and revenue data.<br>Enter the access password to continue.</p>
-    <div class="password-input-wrap">
-      <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()">
-      <button onclick="checkPassword()">Unlock</button>
-    </div>
-    <div class="pw-error" id="pw-error">Incorrect password. Contact William or Harry for access.</div>
-  </div>
-</div>
 
-<!-- PORTAL CONTENT (hidden until password entered) -->
-<div id="portal-content">
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
@@ -248,28 +208,9 @@
   </div>
 </div>
 
-</div><!-- /portal-content -->
 
 <script>
 
-// ===== PASSWORD GATE =====
-const CI_PASSWORD = 'dcqld2026';
-function checkPassword() {
-  const input = document.getElementById('pw-input').value;
-  if (input === CI_PASSWORD) {
-    document.getElementById('password-gate').style.display = 'none';
-    document.getElementById('portal-content').style.display = 'block';
-    sessionStorage.setItem('ci-unlocked', 'true');
-  } else {
-    document.getElementById('pw-error').style.display = 'block';
-    document.getElementById('pw-input').value = '';
-    document.getElementById('pw-input').focus();
-  }
-}
-if (sessionStorage.getItem('ci-unlocked') === 'true') {
-  document.getElementById('password-gate').style.display = 'none';
-  document.getElementById('portal-content').style.display = 'block';
-}
 
 var DATA = [
   // TIER 1: ANCHOR CLIENTS
