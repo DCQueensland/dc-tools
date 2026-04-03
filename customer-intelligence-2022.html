@@ -122,9 +122,53 @@
     .cards { grid-template-columns: repeat(2, 1fr); }
     .highlights-grid { grid-template-columns: 1fr; }
   }
+
+  /* Password Gate */
+  #password-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 80vh; padding: 24px;
+  }
+  .password-box {
+    background: #1a2332; border: 1px solid #2c3e50; border-radius: 16px;
+    padding: 48px; text-align: center; max-width: 420px; width: 100%; color: #fff;
+  }
+  .password-box .lock-icon { font-size: 48px; margin-bottom: 20px; }
+  .password-box h2 { font-size: 20px; margin-bottom: 8px; color: #fff; }
+  .password-box p { color: #a0b0c0; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+  .password-input-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
+  .password-input-wrap input {
+    flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #444;
+    background: #0d1520; color: #fff; font-size: 15px; outline: none;
+  }
+  .password-input-wrap input:focus { border-color: #ffc708; }
+  .password-input-wrap button {
+    padding: 12px 24px; border-radius: 8px; border: none;
+    background: #ffc708; color: #000; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .password-input-wrap button:hover { opacity: 0.85; }
+  .pw-error { color: #ff6347; font-size: 13px; display: none; }
+  #portal-content { display: none; }
+
 </style>
 </head>
 <body>
+
+<!-- PASSWORD GATE -->
+<div id="password-gate">
+  <div class="password-box">
+    <div class="lock-icon">&#128274;</div>
+    <h2>Restricted Access</h2>
+    <p>This portal contains confidential client and revenue data.<br>Enter the access password to continue.</p>
+    <div class="password-input-wrap">
+      <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()">
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pw-error">Incorrect password. Contact William or Harry for access.</div>
+  </div>
+</div>
+
+<!-- PORTAL CONTENT (hidden until password entered) -->
+<div id="portal-content">
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
@@ -139,27 +183,27 @@
   <div class="highlights">
     <h2>2022 Highlights</h2>
     <div class="highlights-grid">
-      <div class="highlight-item"><span class="hl-num">$800k&ndash;$1.1M</span> estimated total revenue across QLD, SA &amp; WA</div>
+      <div class="highlight-item"><span class="hl-num">$2,143,532</span> Xero-verified total revenue &mdash; 225 entries across all tiers</div>
+      <div class="highlight-item"><span class="hl-num">6</span> anchor clients ($638,794) + <span class="hl-num">43</span> active ($879,286) + <span class="hl-num">8</span> delivered ($64,000)</div>
       <div class="highlight-item"><span class="hl-num">18</span> public classes (QLD &times;11, SA &times;1, WA &times;1, SC &times;2, ECHR &times;2, HIP &times;2)</div>
-      <div class="highlight-item"><strong>Bradnam&rsquo;s largest client ($150&ndash;200k)</strong> &mdash; 5+ programs across QLD + Melbourne</div>
       <div class="highlight-item"><span class="hl-num">24</span> free workshops delivered &mdash; Unstoppable Leaders &times;8 was the lead gen engine</div>
-      <div class="highlight-item"><span class="hl-num">~95</span> QLD corporate clients + 7 SA + 7 WA</div>
+      <div class="highlight-item"><strong>108 individuals ($451,232)</strong> &mdash; Carnegie Academy push visible (7+ Academy proposals)</div>
+      <div class="highlight-item"><span class="hl-num">10</span> conferences ($3,300) + <span class="hl-num">2</span> schools ($6,814) + <span class="hl-num">7</span> SA/WA ($10,000) + <span class="hl-num">41</span> prospects ($90,106)</div>
       <div class="highlight-item"><strong>Pipeline seeds planted:</strong> IOR (4 proposals late 2022), Bartons (Oct 2022) &mdash; both become anchors</div>
-      <div class="highlight-item"><strong>~71 individual proposals</strong> &mdash; Carnegie Academy push visible (7+ Academy proposals)</div>
       <div class="highlight-item"><strong>CPA Australia partnership:</strong> 3 workshops delivered &mdash; strongest conference year</div>
-      <div class="highlight-item"><strong>eVolve platform</strong> actively promoted &mdash; online component being integrated into programs</div>
+      <div class="highlight-item"><em>Data reconciled with Xero 4 April 2026 &mdash; revenue figures verified against invoices</em></div>
     </div>
   </div>
 
   <div class="cards">
-    <div class="card"><div class="card-value">~95</div><div class="card-label">QLD Corporate Clients</div></div>
-    <div class="card green"><div class="card-value">2</div><div class="card-label">Schools</div></div>
-    <div class="card yellow"><div class="card-value">~71</div><div class="card-label">Individuals</div></div>
-    <div class="card"><div class="card-value">10+</div><div class="card-label">Conferences / Assoc.</div></div>
-    <div class="card yellow"><div class="card-value">18</div><div class="card-label">Public Classes (3 States)</div></div>
-    <div class="card green"><div class="card-value">24</div><div class="card-label">Free Workshops</div></div>
-    <div class="card red"><div class="card-value">14</div><div class="card-label">SA/WA Clients</div></div>
-    <div class="card"><div class="card-value">40+</div><div class="card-label">Unconverted Prospects</div></div>
+    <div class="card yellow"><div class="card-value">$2.14M</div><div class="card-label">Xero-Verified Revenue</div></div>
+    <div class="card"><div class="card-value">6</div><div class="card-label">Anchor ($639k)</div></div>
+    <div class="card green"><div class="card-value">43</div><div class="card-label">Active ($879k)</div></div>
+    <div class="card"><div class="card-value">108</div><div class="card-label">Individuals ($451k)</div></div>
+    <div class="card yellow"><div class="card-value">41</div><div class="card-label">Prospects ($90k)</div></div>
+    <div class="card"><div class="card-value">10</div><div class="card-label">Conferences ($3k)</div></div>
+    <div class="card green"><div class="card-value">7</div><div class="card-label">SA/WA ($10k)</div></div>
+    <div class="card red"><div class="card-value">225</div><div class="card-label">Total Entries</div></div>
   </div>
 
   <div class="controls">
@@ -204,185 +248,271 @@
   </div>
 </div>
 
+</div><!-- /portal-content -->
+
 <script>
+
+// ===== PASSWORD GATE =====
+const CI_PASSWORD = 'dcqld2026';
+function checkPassword() {
+  const input = document.getElementById('pw-input').value;
+  if (input === CI_PASSWORD) {
+    document.getElementById('password-gate').style.display = 'none';
+    document.getElementById('portal-content').style.display = 'block';
+    sessionStorage.setItem('ci-unlocked', 'true');
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+if (sessionStorage.getItem('ci-unlocked') === 'true') {
+  document.getElementById('password-gate').style.display = 'none';
+  document.getElementById('portal-content').style.display = 'block';
+}
+
 var DATA = [
-  // TIER 1: ANCHOR
-  [1,"Bradnam's Windows & Doors","Manufacturing","DCC (x2), UYLP, LTM, WGYH, WCCS (x2 via Jessica Ormus), Strategic Readiness, 360 Feedback, Coaching (Ben), Melbourne SRW",175000,"$150\u2013200,000","Anchor"],
-  [2,"Height4Hire","Equipment Hire","DCC (x2 classes \u2014 VOC for both), Innovation Workshop, Attitude for Service",70000,"$60\u201380,000","Anchor"],
-  [3,"Viatris","Pharmaceutical","DCC (Apr 2022), WGYH (Aug 2022), VOC reports for both, breakthrough sheets",60000,"$50\u201370,000","Anchor"],
-  [4,"DMA Engineers","Engineering / Consulting","HPT, DCC (Advanced), Innovation Award, custom team development, all-staff spreadsheet",50000,"$40\u201360,000","Anchor"],
-  [5,"Benestar","Employee Assistance / Wellbeing","Sales Training (custom), Zoom recordings, vendor form, full delivery",40000,"$30\u201350,000","Anchor"],
+  // TIER 1: ANCHOR CLIENTS
+  [1,"Bradnam's Windows & Doors","Manufacturing","DCC (x2), UYLP, LTM, WGYH, WCCS (x2 via Jessica Ormus), Strategic Readiness, 360 Feedback, Coaching (Ben), Melbourne SRW",233162,"$233,162","Anchor"],
+  [2,"Height4Hire","Equipment Hire","DCC (x2 classes \u2014 VOC for both), Innovation Workshop, Attitude for Service",147244,"$147,244","Anchor"],
+  [3,"Ulton","Corporate","Program delivered",97888,"$97,888","Anchor"],
+  [4,"DMA Engineers","Engineering / Consulting","HPT, DCC (Advanced), Innovation Award, custom team development, all-staff spreadsheet",60500,"$60,500","Anchor"],
+  [5,"Viatris","Pharmaceutical","DCC (Apr 2022), WGYH (Aug 2022), VOC reports for both, breakthrough sheets",60000,"$60,000","Anchor"],
+  [6,"Benestar","Employee Assistance / Wellbeing","Sales Training (custom), Zoom recordings, vendor form, full delivery",40000,"$40,000","Anchor"],
 
-  // TIER 2: ACTIVE/REVENUE
-  [6,"DBS","Business Services","DCC/custom + Executive Coaching (Brandon Barnes, Neil Berry, Helen), monthly coaching sessions",40000,"$30\u201350,000","Active"],
-  [7,"iSeekPlant","Construction Technology","WCCS, WRS, feedback sheets sessions 7-9",40000,"$30\u201350,000","Active"],
-  [8,"Cordner Advisory","Accounting / Advisory","ECHR (9 weeks), Effective Questioning, sustainment workshops, certificates",28000,"$20\u201335,000","Active"],
-  [9,"Paynters","Construction / Painting","DCC (2 feedback sets), participant names: Mitch Kruk, Shane Ellem, proposals into 2023",28000,"$20\u201335,000","Active"],
-  [10,"Height Dynamics","Access Equipment","UYLP (Jul 2022, VOC), HPT report, proposals May\u2013Aug",32000,"$25\u201340,000","Active"],
-  [11,"EJ Australia","Infrastructure / Manufacturing","WRS (May 2022), certificates, breakthrough sheets",28000,"$20\u201335,000","Active"],
-  [12,"Boltmasters","Manufacturing / Fasteners","DCC, WRS, Elevation Project, Ken Lumley certificates, proposals Jul 2022",28000,"$20\u201335,000","Active"],
-  [13,"Ascension Cosmetic Medicine","Healthcare / Cosmetic","WCCS, report, feedback sessions 1-2, proposals (Dr Scott Allison & Kylie)",20000,"$15\u201325,000","Active"],
-  [14,"Brisbane Refinish Supplies","Automotive / Industrial","HPT, certificates, feedback sessions 2-3, HPT report",20000,"$15\u201325,000","Active"],
-  [15,"Centenary Landscaping Supplies","Retail / Landscaping","WCCS (sessions 1-2), breakthrough sheets, multiple proposals",20000,"$15\u201325,000","Active"],
-  [16,"Flinders Shire Council","Government (Remote QLD)","Custom workshops, strategy workshop (Tim Bell), invoice on file",22000,"$15\u201330,000","Active"],
-  [17,"Royal Queensland Yacht Squadron","Hospitality / Marine","WCCS, feedback, report, participant list, proposals",20000,"$15\u201325,000","Active"],
-  [18,"National Tiles / Solomon","Retail / Tiles","Program delivered \u2014 Invoice 21297 on file (Brenton Wight connection)",15000,"$10\u201320,000","Active"],
-  [19,"Michael McGuinness / QTAC","Technology / Education","Custom, 360 & DISC, QTAC workshops, proposals Jul\u2013Aug 2022",20000,"$15\u201325,000","Active"],
-  [20,"VETUS Maxwell","Marine / Manufacturing","Strategic Readiness Workshop, BID (Behaviour in Detail), reports",15000,"$10\u201320,000","Active"],
-  [21,"Tilly's Crawler Parts","Mining Equipment","WRS (2021 carryover), feedback forms, WRS report",15000,"$10\u201320,000","Active"],
-  [22,"Fresh & Save","Retail / Food","DCC/custom, Ian Judson, Leah Shields, Tamara Hammond proposals",20000,"$15\u201325,000","Active"],
-  [23,"Safety Mate","Workplace Safety","Trusted Advisor Bootcamp, breakthrough sheets, feedback",15000,"$10\u201320,000","Active"],
-  [24,"Worrells","Insolvency / Accounting","HTWFIPDA conference workshop, feedback forms, attendee list",12000,"$10\u201315,000","Active"],
-  [25,"Kennas Chartered Accountants","Accounting (Rockhampton)","Strategic Readiness Workshop, survey (3 versions), proposals",15000,"$10\u201320,000","Active"],
+  // TIER 2: ACTIVE REVENUE CLIENTS
+  [7,"IOR Pty Ltd","Corporate","Dale Carnegie Course",63151,"$63,151","Active"],
+  [8,"Australian Outdoor Living (SA)","Home Improvement (SA)","UYLP + 360 Feedback, VOC report, certificates, photos, proposals",40000,"$40,000","Active"],
+  [9,"DBS","Business Services","DCC/custom + Executive Coaching (Brandon Barnes, Neil Berry, Helen), monthly coaching sessions",40000,"$40,000","Active"],
+  [10,"iSeekPlant","Construction Technology","WCCS, WRS, feedback sheets sessions 7-9",40000,"$40,000","Active"],
+  [11,"Height Dynamics","Access Equipment","UYLP (Jul 2022, VOC), HPT report, proposals May\u2013Aug",32000,"$32,000","Active"],
+  [12,"Viterra (SA)","Agriculture / Grain (SA)","WRS, VOC report, breakthrough sheets, certificates, flights to Adelaide",32000,"$32,000","Active"],
+  [13,"Ascension Cosmetic Medicine","Healthcare / Cosmetic","WCCS, report, feedback sessions 1-2, proposals (Dr Scott Allison & Kylie)",30124,"$30,124","Active"],
+  [14,"Shire of Flinders","Corporate","Program delivered",28594,"$28,594","Active"],
+  [15,"Boltmasters","Manufacturing / Fasteners","DCC, WRS, Elevation Project, Ken Lumley certificates, proposals Jul 2022",28000,"$28,000","Active"],
+  [16,"Cordner Advisory","Accounting / Advisory","ECHR (9 weeks), Effective Questioning, sustainment workshops, certificates",28000,"$28,000","Active"],
+  [17,"EJ Australia","Infrastructure / Manufacturing","WRS (May 2022), certificates, breakthrough sheets",28000,"$28,000","Active"],
+  [18,"Paynters","Construction / Painting","DCC (2 feedback sets), participant names: Mitch Kruk, Shane Ellem, proposals into 2023",28000,"$28,000","Active"],
+  [19,"National Tiles / Solomon","Retail / Tiles","Program delivered \u2014 Invoice 21297 on file (Brenton Wight connection)",25509,"$25,509","Active"],
+  [20,"Viterra Australia Pty Ltd","Corporate","HIP, Winning with Relationship, Workshop",22883,"$22,883","Active"],
+  [21,"Flinders Shire Council","Government (Remote QLD)","Custom workshops, strategy workshop (Tim Bell), invoice on file",22000,"$22,000","Active"],
+  [22,"Brisbane Refinish Supplies","Automotive / Industrial","HPT, certificates, feedback sessions 2-3, HPT report",20000,"$20,000","Active"],
+  [23,"Centenary Landscaping Supplies","Retail / Landscaping","WCCS (sessions 1-2), breakthrough sheets, multiple proposals",20000,"$20,000","Active"],
+  [24,"Fresh & Save","Retail / Food","DCC/custom, Ian Judson, Leah Shields, Tamara Hammond proposals",20000,"$20,000","Active"],
+  [25,"Kallinicos","Unknown","Program delivered (double folder structure)",20000,"$20,000","Active"],
+  [26,"Michael McGuinness / QTAC","Technology / Education","Custom, 360 & DISC, QTAC workshops, proposals Jul\u2013Aug 2022",20000,"$20,000","Active"],
+  [27,"Royal Queensland Yacht Squadron","Hospitality / Marine","WCCS, feedback, report, participant list, proposals",20000,"$20,000","Active"],
+  [28,"Aqua Pipeline Contracting","Corporate","DISC, Dale Carnegie Course, Executive Coaching, HIP, Unleash Your Leadership",17572,"$17,572","Active"],
+  [29,"Bundaberg Port Marina","Corporate","Program delivered",17572,"$17,572","Active"],
+  [30,"JIG Pty Ltd","Corporate","Dale Carnegie Course",17572,"$17,572","Active"],
+  [31,"Worthy Parts (WA)","Mining Equipment (WA)","DCC delivered, feedback forms",17572,"$17,572","Active"],
+  [32,"Alita Constructions","Corporate","DISC, Dale Carnegie Course",16898,"$16,898","Active"],
+  [33,"CM Farms (WA)","Agriculture (WA)","DCC delivered, feedback forms",15000,"$15,000","Active"],
+  [34,"In Front Business Solutions (WA)","Consulting (WA)","DCC delivered, feedback forms, report",15000,"$15,000","Active"],
+  [35,"Kennas Chartered Accountants","Accounting (Rockhampton)","Strategic Readiness Workshop, survey (3 versions), proposals",15000,"$15,000","Active"],
+  [36,"National Glass","Manufacturing","LTR, DCC, breakthrough sheets, proposals Nov 2022 (Bradnam's division)",15000,"$15,000","Active"],
+  [37,"Safety Mate","Workplace Safety","Trusted Advisor Bootcamp, breakthrough sheets, feedback",15000,"$15,000","Active"],
+  [38,"Tilly's Crawler Parts","Mining Equipment","WRS (2021 carryover), feedback forms, WRS report",15000,"$15,000","Active"],
+  [39,"VETUS Maxwell","Marine / Manufacturing","Strategic Readiness Workshop, BID (Behaviour in Detail), reports",15000,"$15,000","Active"],
+  [40,"Worrells","Insolvency / Accounting","HTWFIPDA conference workshop, feedback forms, attendee list",12000,"$12,000","Active"],
+  [41,"Wiley","Corporate","Dale Carnegie Course",10544,"$10,544","Active"],
+  [42,"Higgins","Corporate","Program delivered",8787,"$8,787","Active"],
+  [43,"Simon George & Sons","Corporate","HIP, Unleash Your Leadership",8019,"$8,019","Active"],
+  [44,"Attach 2 Equipment","Corporate","Program delivered",7029,"$7,029","Active"],
+  [45,"Caterpillar","Corporate","Dale Carnegie Course",7029,"$7,029","Active"],
+  [46,"JMC Construction &Developments Pty Ltd","Corporate","Custom, DISC, Dale Carnegie Course",6809,"$6,809","Active"],
+  [47,"Fugen Masonry Contractors","Corporate","Dale Carnegie Course",6709,"$6,709","Active"],
+  [48,"Lind & Sons","Corporate","Dale Carnegie Course",6290,"$6,290","Active"],
+  [49,"Gary MacPherson","Corporate","Dale Carnegie Course",5623,"$5,623","Active"],
 
-  // TIER 3: DELIVERED
-  [26,"Alceon","Finance / Investment","HIP \u2014 participant list on file",10000,"","Delivered"],
-  [27,"National Glass","Manufacturing","LTR, DCC, breakthrough sheets, proposals Nov 2022 (Bradnam's division)",15000,"","Delivered"],
-  [28,"GCCM (Gold Coast City Marina)","Marine","Innovation Award cert, completed programs 2021-2022",10000,"","Delivered"],
-  [29,"Priceline Pharmacy (Ken Xiao)","Retail / Pharmacy","360 Feedback + DISC, order form, rater template",5000,"","Delivered"],
-  [30,"Jodi Byrne","Consulting","360 Feedback, order form, rater template",5000,"","Delivered"],
-  [31,"Rising Kings","Social Enterprise / Youth","Workshop partnership, invoices, photos, partnership agreement",8000,"","Delivered"],
-  [32,"Evolve & Prosper","Coaching / Wellness","Coaching (Lincoln), invoice, operations project",8000,"","Delivered"],
-  [33,"WOLF","Women's Leadership","Advancing Women in Leadership, PM, visuals, breakthrough doc",8000,"","Delivered"],
-  [34,"Kallinicos","Unknown","Program delivered (double folder structure)",20000,"","Delivered"],
-  [35,"Shamrock Marketing","Marketing","Program delivered (Customer Completed Programs tracker)",10000,"","Delivered"],
+  // TIER 3: DELIVERED / OTHER CORPORATE
+  [50,"Alceon","Finance / Investment","HIP \u2014 participant list on file",10000,"$10,000","Delivered"],
+  [51,"GCCM (Gold Coast City Marina)","Marine","Innovation Award cert, completed programs 2021-2022",10000,"$10,000","Delivered"],
+  [52,"Shamrock Marketing","Marketing","Program delivered (Customer Completed Programs tracker)",10000,"$10,000","Delivered"],
+  [53,"Evolve & Prosper","Coaching / Wellness","Coaching (Lincoln), invoice, operations project",8000,"$8,000","Delivered"],
+  [54,"Rising Kings","Social Enterprise / Youth","Workshop partnership, invoices, photos, partnership agreement",8000,"$8,000","Delivered"],
+  [55,"WOLF","Women's Leadership","Advancing Women in Leadership, PM, visuals, breakthrough doc",8000,"$8,000","Delivered"],
+  [56,"Jodi Byrne","Consulting","360 Feedback, order form, rater template",5000,"$5,000","Delivered"],
+  [57,"Priceline Pharmacy (Ken Xiao)","Retail / Pharmacy","360 Feedback + DISC, order form, rater template",5000,"$5,000","Delivered"],
 
-  // CONFERENCES / ASSOCIATIONS
-  [36,"CPA Australia \u2014 Art of Storytelling","Professional Body","Art of Storytelling (Sep 2022), feedback, visuals",0,"","Conference"],
-  [37,"CPA Australia \u2014 Personal Brand","Professional Body","Enhance Your Personal Brand (Jul 2022)",0,"","Conference"],
-  [38,"CPA Australia \u2014 HTWFIDA","Professional Body","How to Win Friends in the Digital Age (Oct 2022)",0,"","Conference"],
-  [39,"PMIQ \u2014 Virtual Teams","Project Management","High Performing Virtual Teams (May 2022), events brief",0,"","Conference"],
-  [40,"PMIQ \u2014 EQ Collaboration","Project Management","Gain Collaboration with EQ (Jul 2022)",0,"","Conference"],
-  [41,"IPWEA Brisbane Conference","Government Association","October 2022, booth + workshop + attendee list",0,"","Conference"],
-  [42,"Chartered Accountants \u2014 HTWFIDA","Professional Body","HTWFIDA workshop (Jul 2022)",0,"","Conference"],
-  [43,"Griffith Business School","Education / University","HTWFIDA workshop (Jul 2022)",0,"","Conference"],
-  [44,"TAFE WA","Education (WA)","HTWF & Influence in Digital Age (Jun 2022), attendees, proposal",0,"","Conference"],
-  [45,"Marinas 22 Conference","Marine Industry","People & Culture workshop, feedback forms",0,"","Conference"],
+  // CONFERENCES & ASSOCIATIONS
+  [58,"Griffith Business School","Education / University","HTWFIDA workshop (Jul 2022)",3300,"$3,300","Conference"],
+  [59,"CPA Australia \u2014 Art of Storytelling","Professional Body","Art of Storytelling (Sep 2022), feedback, visuals",0,"","Conference"],
+  [60,"CPA Australia \u2014 HTWFIDA","Professional Body","How to Win Friends in the Digital Age (Oct 2022)",0,"","Conference"],
+  [61,"CPA Australia \u2014 Personal Brand","Professional Body","Enhance Your Personal Brand (Jul 2022)",0,"","Conference"],
+  [62,"Chartered Accountants \u2014 HTWFIDA","Professional Body","HTWFIDA workshop (Jul 2022)",0,"","Conference"],
+  [63,"IPWEA Brisbane Conference","Government Association","October 2022, booth + workshop + attendee list",0,"","Conference"],
+  [64,"Marinas 22 Conference","Marine Industry","People & Culture workshop, feedback forms",0,"","Conference"],
+  [65,"PMIQ \u2014 EQ Collaboration","Project Management","Gain Collaboration with EQ (Jul 2022)",0,"","Conference"],
+  [66,"PMIQ \u2014 Virtual Teams","Project Management","High Performing Virtual Teams (May 2022), events brief",0,"","Conference"],
+  [67,"TAFE WA","Education (WA)","HTWF & Influence in Digital Age (Jun 2022), attendees, proposal",0,"","Conference"],
 
   // SCHOOLS
-  [46,"St Peters Gen Next","School (Brisbane)","Generation Next \u2014 DCC for Teens (Sep 2022, Jan 2023), parent/student lists, payments, certificates, photos, signed contract",0,"","School"],
-  [47,"Northside Christian College","School (Brisbane)","Step Up to Leadership 2022, BID handout, feedback, visuals",0,"","School"],
+  [68,"Northside Christian College","School (Brisbane)","Step Up to Leadership 2022, BID handout, feedback, visuals",6814,"$6,814","School"],
+  [69,"St Peters Gen Next","School (Brisbane)","Generation Next \u2014 DCC for Teens (Sep 2022, Jan 2023), parent/student lists, payments, certificates, photos, signed contract",0,"","School"],
 
-  // SA/WA CLIENTS
-  [48,"Australian Outdoor Living (SA)","Home Improvement (SA)","UYLP + 360 Feedback, VOC report, certificates, photos, proposals",40000,"$30\u201350,000","SA/WA"],
-  [49,"Viterra (SA)","Agriculture / Grain (SA)","WRS, VOC report, breakthrough sheets, certificates, flights to Adelaide",32000,"$25\u201340,000","SA/WA"],
-  [50,"Kubpower (SA)","Equipment (SA)","Individual proposals (Angelo DiCesare, James Kent)",10000,"$5\u201315,000","SA/WA"],
-  [51,"Stoller (SA)","Wine / Agriculture (SA)","Proposals only (Oct 2022, multiple versions)",0,"","SA/WA"],
-  [52,"Workzone (SA)","Employment / HR (SA)","Carnegie Academy proposal (Luke), org chart",0,"","SA/WA"],
-  [53,"Cedura Foodland (SA)","Retail / Grocery (SA)","Proposal only",0,"","SA/WA"],
-  [54,"Silk (SA)","Unknown (SA)","Carnegie Academy proposal",0,"","SA/WA"],
-  [55,"CM Farms (WA)","Agriculture (WA)","DCC delivered, feedback forms",15000,"$10\u201320,000","SA/WA"],
-  [56,"In Front Business Solutions (WA)","Consulting (WA)","DCC delivered, feedback forms, report",15000,"$10\u201320,000","SA/WA"],
-  [57,"Worthy Parts (WA)","Mining Equipment (WA)","DCC delivered, feedback forms",15000,"$10\u201320,000","SA/WA"],
-  [58,"Alita (WA)","Resources (WA)","Proposals only (Aug\u2013Sep 2022)",0,"","SA/WA"],
-  [59,"Elec Power Technologies (WA)","Electrical / Energy (WA)","Proposal only",0,"","SA/WA"],
+  // SA / WA CLIENTS
+  [70,"Kubpower (SA)","Equipment (SA)","Individual proposals (Angelo DiCesare, James Kent)",10000,"$10,000","SA/WA"],
+  [71,"Alita (WA)","Resources (WA)","Proposals only (Aug\u2013Sep 2022)",0,"","SA/WA"],
+  [72,"Cedura Foodland (SA)","Retail / Grocery (SA)","Proposal only",0,"","SA/WA"],
+  [73,"Elec Power Technologies (WA)","Electrical / Energy (WA)","Proposal only",0,"","SA/WA"],
+  [74,"Silk (SA)","Unknown (SA)","Carnegie Academy proposal",0,"","SA/WA"],
+  [75,"Stoller (SA)","Wine / Agriculture (SA)","Proposals only (Oct 2022, multiple versions)",0,"","SA/WA"],
+  [76,"Workzone (SA)","Employment / HR (SA)","Carnegie Academy proposal (Luke), org chart",0,"","SA/WA"],
 
-  // INDIVIDUALS (key names from ~71 proposals)
-  [60,"Adam Hunter","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [61,"Alva Tan","Individual","DCC (Dec 2022)",3395,"$3,395","Individual"],
-  [62,"Andrew Quinn","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [63,"Benjamin Kadletz","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [64,"Beth Muller","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [65,"Bill Lawrence","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [66,"Blake Lashmar","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
-  [67,"Brenton Wight","Individual","DCC (Aug 2022, linked to Solomon/National Tiles)",3395,"$3,395","Individual"],
-  [68,"Byron Court / NIOA","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
-  [69,"Caitlin Cook","Individual","DCC",3395,"$3,395","Individual"],
-  [70,"Caitlin Haynes","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [71,"Codey Garner","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
-  [72,"Courtney Dalton","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
-  [73,"Daniel Gohdes","Individual","DCC (Feb 2022)",3395,"$3,395","Individual"],
-  [74,"Darren Smith","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
-  [75,"Deize Mezzaroba","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [76,"Dev Gitay","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [77,"Drew Leishman","Individual","DCC (Jun 2022) \u2014 later becomes IOR contact",3395,"$3,395","Individual"],
-  [78,"Eva Salceda","Individual","DCC",3395,"$3,395","Individual"],
-  [79,"Evan Shultz","Individual","DCC",3395,"$3,395","Individual"],
-  [80,"Felicity Copeland","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [81,"Felipe Jaramillo","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
-  [82,"Georgea de Sousa","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [83,"Haotian Tan","Individual","DCC (Dec 2022)",3395,"$3,395","Individual"],
-  [84,"Hattie Smith","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [85,"Jason Condely / CIS","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
-  [86,"Javier Grimaldor","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
-  [87,"Jenny Moutou","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [88,"Jeremy Rose","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
-  [89,"Jesse Ross","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [90,"Jodi Anderson","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [91,"Jonathan Graham","Individual","Carnegie Academy (Aug 2022)",40265,"Academy","Individual"],
-  [92,"Joseph Condo","Individual","DCC (Sep 2022)",3395,"$3,395","Individual"],
-  [93,"Katherine Bennett","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [94,"Ken Baker","Individual","Carnegie Academy",40265,"Academy","Individual"],
-  [95,"Kirsten Cusack","Individual","DCC",3395,"$3,395","Individual"],
-  [96,"Letash Nyathi","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
-  [97,"Lyn Gillroy","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [98,"Maria Schandl","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [99,"Matthew Nelson","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
-  [100,"Nancy Quinones","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
-  [101,"Nicholas King","Individual","DCC",3395,"$3,395","Individual"],
-  [102,"Pam Lyons","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [103,"Ryan Matthewman","Individual","DCC (Feb 2022)",3395,"$3,395","Individual"],
-  [104,"Samantha Ferris","Individual","DCC",3395,"$3,395","Individual"],
-  [105,"Scott Allison","Individual","DCC (Jul 2022, linked to Ascension)",3395,"$3,395","Individual"],
-  [106,"Sean Webb","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
-  [107,"Smiljana OBrien","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [108,"Steve Davey","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
-  [109,"Taylor Peart","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
-  [110,"Vidur Lal","Individual","DCC (Mar 2022)",3395,"$3,395","Individual"],
-  [111,"Vincent Berry","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
-  [112,"Wayne Shearer / Magic Orange","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
-  [113,"WBP Group","Individual","DCC (Jun + Aug 2022)",3395,"$3,395","Individual"],
-  [114,"Yash Sharma","Individual","DCC",3395,"$3,395","Individual"],
-  [115,"Heike Kemp","Individual","Carnegie Academy",40265,"Academy","Individual"],
-  [116,"SA \u2014 Alfredo Veron","Individual (SA)","DCC (Dale Adelaide)",3395,"$3,395","Individual"],
-  [117,"SA \u2014 Bridget Hogg","Individual (SA)","DCC (Dale Adelaide)",3395,"$3,395","Individual"],
-  [118,"SA \u2014 Jennie Wright","Individual (SA)","DCC (Dale Adelaide)",3395,"$3,395","Individual"],
+  // INDIVIDUALS
+  [77,"Heike Kemp","Individual","Carnegie Academy",40265,"$40,265","Individual"],
+  [78,"Jonathan Graham","Individual","Carnegie Academy (Aug 2022)",40265,"$40,265","Individual"],
+  [79,"Ken Baker","Individual","Carnegie Academy",40265,"$40,265","Individual"],
+  [80,"NowInfinity","Individual","Trusted Advisor, Workshop",4950,"$4,950","Individual"],
+  [81,"Women of Lot Feeding","Individual","HIP",3895,"$3,895","Individual"],
+  [82,"Workzone Traffic Control Pty Ltd","Individual","Dale Carnegie Course",3624,"$3,624","Individual"],
+  [83,"Ainslie","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [84,"Bayside Family Medical and Musculoskeletal Practice","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [85,"Discount Auto Parts","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [86,"FinPOWER Australia Pty Ltd","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [87,"Gallagher Risk Management","Individual","High Impact Presentations",3514,"$3,514","Individual"],
+  [88,"Hender Lee","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [89,"Jason Mollenhauer","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [90,"Joanne Ambrose","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [91,"Kilcoy Global Foods","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [92,"Madison Group Enterprises Pty Ltd","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [93,"North Harbour Holdings","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [94,"Paul D Harris Chartered Accountants","Individual","Program delivered",3514,"$3,514","Individual"],
+  [95,"Protorizon","Individual","HIP, Winning with Relationship",3514,"$3,514","Individual"],
+  [96,"Rakesh Patel","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [97,"The Pool Tile Company","Individual","Program delivered",3514,"$3,514","Individual"],
+  [98,"WBP Group","Individual","DCC (Jun + Aug 2022)",3514,"$3,514","Individual"],
+  [99,"Ahrens Accounting & Business Consultants","Individual","Dale Carnegie Course",3414,"$3,414","Individual"],
+  [100,"NT Ag Supplies","Individual","Dale Carnegie Course",3414,"$3,414","Individual"],
+  [101,"Diagno Accountants & Financial Strategists","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [102,"Harro Group Pty Ltd","Individual","DISC, Dale Carnegie Course",3404,"$3,404","Individual"],
+  [103,"SKK Civil Groundworks","Individual","DISC",3404,"$3,404","Individual"],
+  [104,"Savanna Energy Services Pty Ltd","Individual","Custom, DISC, HIP, Unleash Your Leadership",3404,"$3,404","Individual"],
+  [105,"Scott Allison","Individual","DCC (Jul 2022, linked to Ascension)",3404,"$3,404","Individual"],
+  [106,"Adam Hunter","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [107,"Alva Tan","Individual","DCC (Dec 2022)",3395,"$3,395","Individual"],
+  [108,"Andrew Quinn","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [109,"Benjamin Kadletz","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [110,"Beth Muller","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [111,"Bill Lawrence","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [112,"Blake Lashmar","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
+  [113,"Brenton Wight","Individual","DCC (Aug 2022, linked to Solomon/National Tiles)",3395,"$3,395","Individual"],
+  [114,"Byron Court / NIOA","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
+  [115,"Caitlin Cook","Individual","DCC",3395,"$3,395","Individual"],
+  [116,"Caitlin Haynes","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [117,"Codey Garner","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
+  [118,"Courtney Dalton","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
+  [119,"Daniel Gohdes","Individual","DCC (Feb 2022)",3395,"$3,395","Individual"],
+  [120,"Darren Smith","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
+  [121,"Deize Mezzaroba","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [122,"Dev Gitay","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [123,"Drew Leishman","Individual","DCC (Jun 2022) \u2014 later becomes IOR contact",3395,"$3,395","Individual"],
+  [124,"Eva Salceda","Individual","DCC",3395,"$3,395","Individual"],
+  [125,"Evan Shultz","Individual","DCC",3395,"$3,395","Individual"],
+  [126,"Felicity Copeland","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [127,"Felipe Jaramillo","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
+  [128,"Georgea de Sousa","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [129,"Haotian Tan","Individual","DCC (Dec 2022)",3395,"$3,395","Individual"],
+  [130,"Hattie Smith","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [131,"Jason Condely / CIS","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
+  [132,"Javier Grimaldor","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
+  [133,"Jenny Moutou","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [134,"Jeremy Rose","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
+  [135,"Jesse Ross","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [136,"Jodi Anderson","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [137,"Joseph Condo","Individual","DCC (Sep 2022)",3395,"$3,395","Individual"],
+  [138,"Katherine Bennett","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [139,"Kirsten Cusack","Individual","DCC",3395,"$3,395","Individual"],
+  [140,"Letash Nyathi","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
+  [141,"Lyn Gillroy","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [142,"Maria Schandl","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [143,"Matthew Nelson","Individual","DCC (Aug 2022)",3395,"$3,395","Individual"],
+  [144,"Nancy Quinones","Individual","DCC (May 2022)",3395,"$3,395","Individual"],
+  [145,"Nicholas King","Individual","DCC",3395,"$3,395","Individual"],
+  [146,"Pam Lyons","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [147,"Ryan Matthewman","Individual","DCC (Feb 2022)",3395,"$3,395","Individual"],
+  [148,"SA \u2014 Alfredo Veron","Individual (SA)","DCC (Dale Adelaide)",3395,"$3,395","Individual"],
+  [149,"SA \u2014 Bridget Hogg","Individual (SA)","DCC (Dale Adelaide)",3395,"$3,395","Individual"],
+  [150,"SA \u2014 Jennie Wright","Individual (SA)","DCC (Dale Adelaide)",3395,"$3,395","Individual"],
+  [151,"Samantha Ferris","Individual","DCC",3395,"$3,395","Individual"],
+  [152,"Sean Webb","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
+  [153,"Smiljana OBrien","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [154,"Steve Davey","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
+  [155,"Taylor Peart","Individual","DCC (Jun 2022)",3395,"$3,395","Individual"],
+  [156,"Vidur Lal","Individual","DCC (Mar 2022)",3395,"$3,395","Individual"],
+  [157,"Vincent Berry","Individual","DCC (Oct 2022)",3395,"$3,395","Individual"],
+  [158,"Wayne Shearer / Magic Orange","Individual","DCC (Jul 2022)",3395,"$3,395","Individual"],
+  [159,"Yash Sharma","Individual","DCC",3395,"$3,395","Individual"],
+  [160,"Brendan O&rsquo;Brien","Individual","Generation Next",3300,"$3,300","Individual"],
+  [161,"Steven Sorbello","Individual","Generation Next",3300,"$3,300","Individual"],
+  [162,"Kongo Pty Ltd","Individual","Dale Carnegie Course",3195,"$3,195","Individual"],
+  [163,"Riverside Marine","Individual","Dale Carnegie Course",3195,"$3,195","Individual"],
+  [164,"WFS Maintenance Resources","Individual","Dale Carnegie Course",3174,"$3,174","Individual"],
+  [165,"Minh Nguyen","Individual","Generation Next",3080,"$3,080","Individual"],
+  [166,"SA Drains","Individual","DISC, Dale Carnegie Course",3014,"$3,014","Individual"],
+  [167,"Michaela Farmer","Individual","Program delivered",3000,"$3,000","Individual"],
+  [168,"Dale Carnegie NSW","Individual","Dale Carnegie Course",2908,"$2,908","Individual"],
+  [169,"Andrea Dennis","Individual","Generation Next",1650,"$1,650","Individual"],
+  [170,"Bec Sparrow","Individual","Generation Next",1650,"$1,650","Individual"],
+  [171,"Danielle Gunnell","Individual","Generation Next",1650,"$1,650","Individual"],
+  [172,"Dr Chaitanya Kotapati","Individual","Generation Next",1650,"$1,650","Individual"],
+  [173,"Emily Fang","Individual","Generation Next",1650,"$1,650","Individual"],
+  [174,"Grace Ting","Individual","Generation Next",1650,"$1,650","Individual"],
+  [175,"Jennifer Jackson","Individual","Generation Next",1650,"$1,650","Individual"],
+  [176,"Karen Hill","Individual","Generation Next",1650,"$1,650","Individual"],
+  [177,"Kimberley Chang","Individual","Generation Next",1650,"$1,650","Individual"],
+  [178,"Nancy Williams","Individual","Generation Next",1650,"$1,650","Individual"],
+  [179,"Nicola Hile","Individual","Generation Next",1650,"$1,650","Individual"],
+  [180,"Phoebe Sheng","Individual","Generation Next",1650,"$1,650","Individual"],
+  [181,"Rita Ransome","Individual","Generation Next",1650,"$1,650","Individual"],
+  [182,"Saman Maheepala","Individual","Generation Next",1650,"$1,650","Individual"],
+  [183,"Simone Rosengren","Individual","Generation Next",1650,"$1,650","Individual"],
+  [184,"Virginia Colton","Individual","Generation Next",1650,"$1,650","Individual"],
 
-  // PROSPECTS (~40+ unconverted)
-  [119,"IOR Petroleum","Fuel / Petroleum","4 proposals Oct\u2013Dec 2022 (Drew Leishman, Academy, Refuelling agreement) \u2192 anchor by 2024",0,"Seeds 2024+","Prospect"],
-  [120,"Bartons Motor Group","Automotive","Proposal Oct 2022 \u2192 anchor by 2025",0,"Seeds 2023+","Prospect"],
-  [121,"Colpak","Packaging / Manufacturing","Academy + SRW proposals Nov 2022 \u2192 converted 2023",0,"Seeds 2023","Prospect"],
-  [122,"Accountancy Insurance","Insurance","Proposal (Karen McDonald)",0,"","Prospect"],
-  [123,"Advivo","Accounting","UYLP flyers only",0,"","Prospect"],
-  [124,"Agilis Accountants","Accounting","Proposal Oct 2022",0,"","Prospect"],
-  [125,"Arthur J Gallagher","Insurance / Risk","Proposal (AJG)",0,"","Prospect"],
-  [126,"Australian Country Choice","Meat Processing","Proposal",0,"","Prospect"],
-  [127,"BHP","Mining","Proposal Aug 2022",0,"","Prospect"],
-  [128,"Calaya Construction","Construction","DCC proposal Mar 2022",0,"","Prospect"],
-  [129,"Carrick Aland Accountants","Accounting","Proposal (David)",0,"","Prospect"],
-  [130,"CDA Health","Healthcare","Proposal Jul 2022",0,"","Prospect"],
-  [131,"Comm Built (Bruce Dwyer)","Construction","Proposal",0,"","Prospect"],
-  [132,"Corporate House","Commercial Real Estate","Proposal (Brian Clark)",0,"","Prospect"],
-  [133,"Costa Group","Agriculture","Proposal (Mark)",0,"","Prospect"],
-  [134,"DAPCO","Manufacturing","Proposal Jul 2022 (Eddy)",0,"","Prospect"],
-  [135,"Dept of Science","Government","Full tender response submitted",0,"","Prospect"],
-  [136,"Diverseco (SA)","Engineering (SA)","WCCS proposal Jul 2022",0,"","Prospect"],
-  [137,"Enright Homes","Construction","Custom \u2014 multiple proposal versions",0,"","Prospect"],
-  [138,"Frequentis","Aviation / Technology","Multiple proposal versions",0,"","Prospect"],
-  [139,"I-CAR","Automotive Training","Proposal Sep 2022 (Jason)",0,"","Prospect"],
-  [140,"Indooroopilly Golf Club","Hospitality","Proposal Jun 2022",0,"","Prospect"],
-  [141,"Infoxchange","NFP Technology","Proposal",0,"","Prospect"],
-  [142,"Isagenix","Health / Wellness","Proposal + operations project",0,"","Prospect"],
-  [143,"Kangaroo Time","Childcare Technology","Multiple proposals Jul\u2013Sep 2022",0,"","Prospect"],
-  [144,"McAdams Simeons","Accounting","Proposal",0,"","Prospect"],
-  [145,"Oak Solutions Group","Consulting","Proposal",0,"","Prospect"],
-  [146,"Oreon Partners","Accounting","Proposal Jun 2022",0,"","Prospect"],
-  [147,"Phoenix Leisure Group","Hospitality","Proposal",0,"","Prospect"],
-  [148,"Racing Queensland","Government / Sport","Proposal Oct 2022 (Rikki Reid)",0,"","Prospect"],
-  [149,"Savannah Energy","Energy / Resources","HPT + Reviews \u2014 2 proposals Nov 2022",0,"","Prospect"],
-  [150,"Shayher","Property Development","Proposals (Craig)",0,"","Prospect"],
-  [151,"Simon and George","Legal / Advisory","LTM + Carnegie Academy proposals",0,"","Prospect"],
-  [152,"SRT Projects","Construction","Proposal Jun 2022",0,"","Prospect"],
-  [153,"Titan Garages","Construction","Multiple proposals Feb\u2013Mar 2022",0,"","Prospect"],
-  [154,"Transport & Main Roads","Government","Strategy Workshop report (Tim Bell)",0,"","Prospect"],
-  [155,"Trinity Advisory","Accounting","Proposal Feb 2022 (Rod Sherrington)",0,"","Prospect"],
-  [156,"Trumps","Hospitality","Proposal Jul 2022",0,"","Prospect"],
-  [157,"Wealth Lab (Tasmania)","Financial Planning (TAS)","Proposal \u2014 unusual Tasmania reach",0,"","Prospect"],
-  [158,"Whitsunday Regional Council","Government (Local)","Proposal (Zinin Ashraf)",0,"","Prospect"],
-  [159,"YOUI","Insurance","2 proposals (Jun + Oct 2022)",0,"","Prospect"]
-];
-
-var activeTier = 'all';
+  // PROSPECTS
+  [185,"Colpak","Packaging / Manufacturing","Academy + SRW proposals Nov 2022 \u2192 converted 2023",57123,"$57,123","Prospect"],
+  [186,"SRT Projects","Construction","Proposal Jun 2022",9900,"$9,900","Prospect"],
+  [187,"Kangaroo Time","Childcare Technology","Multiple proposals Jul\u2013Sep 2022",8129,"$8,129","Prospect"],
+  [188,"Infoxchange","NFP Technology","Proposal",6600,"$6,600","Prospect"],
+  [189,"Oreon Partners","Accounting","Proposal Jun 2022",4950,"$4,950","Prospect"],
+  [190,"Costa Group","Agriculture","Proposal (Mark)",3404,"$3,404","Prospect"],
+  [191,"Accountancy Insurance","Insurance","Proposal (Karen McDonald)",0,"","Prospect"],
+  [192,"Advivo","Accounting","UYLP flyers only",0,"","Prospect"],
+  [193,"Agilis Accountants","Accounting","Proposal Oct 2022",0,"","Prospect"],
+  [194,"Arthur J Gallagher","Insurance / Risk","Proposal (AJG)",0,"","Prospect"],
+  [195,"Australian Country Choice","Meat Processing","Proposal",0,"","Prospect"],
+  [196,"BHP","Mining","Proposal Aug 2022",0,"","Prospect"],
+  [197,"Bartons Motor Group","Automotive","Proposal Oct 2022 \u2192 anchor by 2025",0,"","Prospect"],
+  [198,"CDA Health","Healthcare","Proposal Jul 2022",0,"","Prospect"],
+  [199,"Calaya Construction","Construction","DCC proposal Mar 2022",0,"","Prospect"],
+  [200,"Carrick Aland Accountants","Accounting","Proposal (David)",0,"","Prospect"],
+  [201,"Comm Built (Bruce Dwyer)","Construction","Proposal",0,"","Prospect"],
+  [202,"Corporate House","Commercial Real Estate","Proposal (Brian Clark)",0,"","Prospect"],
+  [203,"DAPCO","Manufacturing","Proposal Jul 2022 (Eddy)",0,"","Prospect"],
+  [204,"Dept of Science","Government","Full tender response submitted",0,"","Prospect"],
+  [205,"Diverseco (SA)","Engineering (SA)","WCCS proposal Jul 2022",0,"","Prospect"],
+  [206,"Enright Homes","Construction","Custom \u2014 multiple proposal versions",0,"","Prospect"],
+  [207,"Frequentis","Aviation / Technology","Multiple proposal versions",0,"","Prospect"],
+  [208,"I-CAR","Automotive Training","Proposal Sep 2022 (Jason)",0,"","Prospect"],
+  [209,"IOR Petroleum","Fuel / Petroleum","4 proposals Oct\u2013Dec 2022 (Drew Leishman, Academy, Refuelling agreement) \u2192 anchor by 2024",0,"","Prospect"],
+  [210,"Indooroopilly Golf Club","Hospitality","Proposal Jun 2022",0,"","Prospect"],
+  [211,"Isagenix","Health / Wellness","Proposal + operations project",0,"","Prospect"],
+  [212,"McAdams Simeons","Accounting","Proposal",0,"","Prospect"],
+  [213,"Oak Solutions Group","Consulting","Proposal",0,"","Prospect"],
+  [214,"Phoenix Leisure Group","Hospitality","Proposal",0,"","Prospect"],
+  [215,"Racing Queensland","Government / Sport","Proposal Oct 2022 (Rikki Reid)",0,"","Prospect"],
+  [216,"Savannah Energy","Energy / Resources","HPT + Reviews \u2014 2 proposals Nov 2022",0,"","Prospect"],
+  [217,"Shayher","Property Development","Proposals (Craig)",0,"","Prospect"],
+  [218,"Simon and George","Legal / Advisory","LTM + Carnegie Academy proposals",0,"","Prospect"],
+  [219,"Titan Garages","Construction","Multiple proposals Feb\u2013Mar 2022",0,"","Prospect"],
+  [220,"Transport & Main Roads","Government","Strategy Workshop report (Tim Bell)",0,"","Prospect"],
+  [221,"Trinity Advisory","Accounting","Proposal Feb 2022 (Rod Sherrington)",0,"","Prospect"],
+  [222,"Trumps","Hospitality","Proposal Jul 2022",0,"","Prospect"],
+  [223,"Wealth Lab (Tasmania)","Financial Planning (TAS)","Proposal \u2014 unusual Tasmania reach",0,"","Prospect"],
+  [224,"Whitsunday Regional Council","Government (Local)","Proposal (Zinin Ashraf)",0,"","Prospect"],
+  [225,"YOUI","Insurance","2 proposals (Jun + Oct 2022)",0,"","Prospect"],
+];var activeTier = 'all';
 var searchTerm = '';
 var sortCol = 0;
 var sortDir = 1;

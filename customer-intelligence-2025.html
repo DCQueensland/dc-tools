@@ -114,9 +114,53 @@
     .cards { grid-template-columns: repeat(2, 1fr); }
     .highlights-grid { grid-template-columns: 1fr; }
   }
+
+  /* Password Gate */
+  #password-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 80vh; padding: 24px;
+  }
+  .password-box {
+    background: #1a2332; border: 1px solid #2c3e50; border-radius: 16px;
+    padding: 48px; text-align: center; max-width: 420px; width: 100%; color: #fff;
+  }
+  .password-box .lock-icon { font-size: 48px; margin-bottom: 20px; }
+  .password-box h2 { font-size: 20px; margin-bottom: 8px; color: #fff; }
+  .password-box p { color: #a0b0c0; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+  .password-input-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
+  .password-input-wrap input {
+    flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #444;
+    background: #0d1520; color: #fff; font-size: 15px; outline: none;
+  }
+  .password-input-wrap input:focus { border-color: #ffc708; }
+  .password-input-wrap button {
+    padding: 12px 24px; border-radius: 8px; border: none;
+    background: #ffc708; color: #000; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .password-input-wrap button:hover { opacity: 0.85; }
+  .pw-error { color: #ff6347; font-size: 13px; display: none; }
+  #portal-content { display: none; }
+
 </style>
 </head>
 <body>
+
+<!-- PASSWORD GATE -->
+<div id="password-gate">
+  <div class="password-box">
+    <div class="lock-icon">&#128274;</div>
+    <h2>Restricted Access</h2>
+    <p>This portal contains confidential client and revenue data.<br>Enter the access password to continue.</p>
+    <div class="password-input-wrap">
+      <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()">
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pw-error">Incorrect password. Contact William or Harry for access.</div>
+  </div>
+</div>
+
+<!-- PORTAL CONTENT (hidden until password entered) -->
+<div id="portal-content">
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
@@ -131,27 +175,27 @@
   <div class="highlights">
     <h2>2025 Highlights</h2>
     <div class="highlights-grid">
-      <div class="highlight-item"><span class="hl-num">$567,900</span> confirmed corporate revenue (excl. schools &amp; public individuals)</div>
-      <div class="highlight-item"><strong>Top 2 clients (IOR + Bradnam&rsquo;s) = $430,000 = 76% of corporate revenue</strong></div>
-      <div class="highlight-item"><span class="hl-num">~85</span> corporate clients, <span class="hl-num">~30+</span> schools, <span class="hl-num">~20</span> individuals</div>
-      <div class="highlight-item"><strong>IOR Gold Subscription:</strong> $152,250+GST/year &mdash; benchmark for recurring revenue model</div>
+      <div class="highlight-item"><span class="hl-num">$2.34M</span> total Xero-verified revenue (corporate + schools + individuals + conferences)</div>
+      <div class="highlight-item"><strong>Top 3 clients (IOR $270k + Bradnam&rsquo;s $237k + Centenary SHS $148k) = $655k = 28% of total revenue</strong></div>
+      <div class="highlight-item"><span class="hl-num">26</span> active corporate clients, <span class="hl-num">42</span> schools, <span class="hl-num">29</span> individuals, <span class="hl-num">27</span> prospects</div>
+      <div class="highlight-item"><strong>Schools = $935k (40% of revenue)</strong> &mdash; much larger than previously estimated</div>
+      <div class="highlight-item"><strong>IOR Gold Subscription:</strong> $270k invoiced in 2025 &mdash; benchmark for recurring revenue model</div>
       <div class="highlight-item"><span class="hl-num">~13</span> public classes delivered across DCC, HIP, LTM, UYLP, WRS</div>
-      <div class="highlight-item"><strong>3 prospects converted:</strong> CPO Architects, PRIZM Engineering, Pacific Claims</div>
-      <div class="highlight-item"><strong>Conference speaking growing</strong> as lead gen &mdash; QSPA, SBMAQ, FBAA, CPA, Engineers Australia</div>
+      <div class="highlight-item"><strong>Conference revenue $99k:</strong> SBMAQ ($57k) + QSPA ($42k) &mdash; growing channel</div>
       <div class="highlight-item"><strong>DCC remains the gateway program</strong> &mdash; in nearly every proposal</div>
-      <div class="highlight-item"><strong>Heavy client concentration risk:</strong> Top 2 = 76% &mdash; diversification needed</div>
+      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; revenue figures verified against invoices</div>
     </div>
   </div>
 
   <div class="cards">
-    <div class="card yellow"><div class="card-value">$567.9k</div><div class="card-label">Corporate Revenue</div></div>
-    <div class="card"><div class="card-value">85</div><div class="card-label">Corporate Clients</div></div>
-    <div class="card green"><div class="card-value">30+</div><div class="card-label">Schools</div></div>
-    <div class="card"><div class="card-value">~20</div><div class="card-label">Individuals</div></div>
-    <div class="card yellow"><div class="card-value">~13</div><div class="card-label">Public Classes</div></div>
-    <div class="card green"><div class="card-value">~35</div><div class="card-label">Proposals Sent</div></div>
-    <div class="card"><div class="card-value">6</div><div class="card-label">Conferences</div></div>
-    <div class="card red"><div class="card-value">3</div><div class="card-label">Converted from Prospect</div></div>
+    <div class="card yellow"><div class="card-value">$2.34M</div><div class="card-label">Total Revenue (Xero)</div></div>
+    <div class="card"><div class="card-value">26</div><div class="card-label">Corporate Clients</div></div>
+    <div class="card green"><div class="card-value">42</div><div class="card-label">Schools</div></div>
+    <div class="card"><div class="card-value">29</div><div class="card-label">Individuals</div></div>
+    <div class="card yellow"><div class="card-value">$935k</div><div class="card-label">School Revenue</div></div>
+    <div class="card green"><div class="card-value">27</div><div class="card-label">Proposals Sent</div></div>
+    <div class="card"><div class="card-value">5</div><div class="card-label">Conferences ($99k)</div></div>
+    <div class="card red"><div class="card-value">154</div><div class="card-label">Total Entries</div></div>
   </div>
 
   <div class="controls">
@@ -191,153 +235,201 @@
 
   <div class="footer">
     Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2025<br>
-    Data compiled from Dropbox customer folders, proposals, and CRM records
+    Data reconciled with Xero invoices 4 April 2026 | Revenue figures verified against accounting records
   </div>
 </div>
 
-<script>
-var DATA = [
-  // TIER 1: ANCHOR
-  [1,"IOR Group","Engineering / Infrastructure","DCC, UYLP, LTM, WRS, HIP, WGYH, Living Blue, Frank Conversations, B.U.I.L.D. Sales Playbook, Train the Trainer, HPT, Executive Coaching, 360 Reviews, Carnegie Academy Gold",215000,"$215,000","Anchor"],
-  [2,"Bradnam's Windows & Doors","Manufacturing","DCC (x2), LTR, UYLP, Take Command, Advanced DCC, HPT. 2026 pipeline: 6 programs",215000,"$215,000","Anchor"],
-  [3,"Bartons","Automotive","DCC, LTM, Road to a Sale (custom), Booster Shot",37000,"$37,000","Anchor"],
+</div><!-- /portal-content -->
 
-  // TIER 2: REVENUE
-  [4,"CPO Architects","Architecture","DCC — converted from 2024 prospect",18000,"$18,000","Active"],
-  [5,"PRIZM Engineering","Engineering","DCC — converted from prospect",17000,"$17,000","Active"],
-  [6,"Pacific Claims","Insurance","HPT — converted from prospect",17000,"$17,000","Active"],
-  [7,"Langford Metals","Manufacturing / Metals","Program delivered — converted from 2024 prospect",17000,"$17,000","Active"],
-  [8,"Trescal Calibration","Calibration","LTM, WGYH, 360 Reviews — repeat client",16900,"$16,900","Active"],
-  [9,"Le Bon Care","Aged Care","Program delivered — converted from 2024 prospect, repeat",15000,"$15,000","Active"],
+<script>
+
+// ===== PASSWORD GATE =====
+const CI_PASSWORD = 'dcqld2026';
+function checkPassword() {
+  const input = document.getElementById('pw-input').value;
+  if (input === CI_PASSWORD) {
+    document.getElementById('password-gate').style.display = 'none';
+    document.getElementById('portal-content').style.display = 'block';
+    sessionStorage.setItem('ci-unlocked', 'true');
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+if (sessionStorage.getItem('ci-unlocked') === 'true') {
+  document.getElementById('password-gate').style.display = 'none';
+  document.getElementById('portal-content').style.display = 'block';
+}
+
+var DATA = [
+  // TIER 1: ANCHOR CLIENTS
+  [1,"IOR Group","Engineering / Infrastructure","DCC, UYLP, LTM, WRS, HIP, WGYH, Living Blue, Frank Conversations, B.U.I.L.D. Sales Playbook, Train the Trainer, HPT, Executive Coaching, 360 Reviews, Carnegie Academy Gold",270347,"$270,347","Anchor"],
+  [2,"Bradnam&rsquo;s Windows & Doors","Manufacturing","DCC (x2), LTR, UYLP, Take Command, Advanced DCC, HPT. 2026 pipeline: 6 programs",236667,"$236,667","Anchor"],
+  [3,"Centenary SHS","School (Brisbane)","Strategic Readiness, DCC",148469,"$148,469","Anchor"],
+
+  // TIER 2: ACTIVE REVENUE CLIENTS
+  [4,"Bartons","Automotive","DCC, LTM, Road to a Sale (custom), Booster Shot",46959,"$46,959","Active"],
+  [5,"JR Stephens","Corporate","DCC, LTM, Strategic Readiness",44044,"$44,044","Active"],
+  [6,"Pacific Claims","Insurance","HPT",42317,"$42,317","Active"],
+  [7,"BDO","Professional Services","Custom Workshop Series (10 workshops)",40750,"$40,750","Active"],
+  [8,"Safetymate","Safety / Corporate","DCC, HIP",36245,"$36,245","Active"],
+  [9,"City Golf","Hospitality","LTM",30426,"$30,426","Active"],
+  [10,"Swoosh Finance","Finance","DCC, UYLP",29876,"$29,876","Active"],
+  [11,"RQYS","Marine / Yacht Club","WCCS, DCC, WGYH",29667,"$29,667","Active"],
+  [12,"Red Tree Finance Pty Ltd","Finance","DISC, Dale Carnegie Course, HIP, Lead with Influence, Unleash Your Leadership",26362,"$26,362","Active"],
+  [13,"Trescal Calibration","Calibration","LTM, WGYH, 360 Reviews",25263,"$25,263","Active"],
+  [14,"GCWA","Government","Program delivered",24114,"$24,114","Active"],
+  [15,"Austrak Vossloh","Corporate","DCC",22407,"$22,407","Active"],
+  [16,"PRIZM Engineering","Engineering","DCC",21747,"$21,747","Active"],
+  [17,"A&D","Corporate","DCC, UYLP",18672,"$18,672","Active"],
+  [18,"Langford Metals","Manufacturing / Metals","DCC",18122,"$18,122","Active"],
+  [19,"Le Bon Care","Aged Care","DCC",18122,"$18,122","Active"],
+  [20,"Unica Stone and Tile Boutique","Corporate","Dale Carnegie Course, HIP, Winning with Relationship",14498,"$14,498","Active"],
+  [21,"AAFP","Corporate","LTM, DCC",11204,"$11,204","Active"],
+  [22,"CPO Architects","Architecture","DCC",8426,"$8,426","Active"],
+  [23,"Advivo Accountants","Accounting","Dale Carnegie Course, HIP, Lead with Influence",7469,"$7,469","Active"],
+  [24,"Riverside Marine","Marine","DCC",7469,"$7,469","Active"],
+  [25,"Lightwave Group Pty Ltd","Corporate","Dale Carnegie Course",7249,"$7,249","Active"],
+  [26,"Moseray Textile","Textile / Manufacturing","Program delivered",7249,"$7,249","Active"],
 
   // TIER 3: DELIVERED / OTHER CORPORATE
-  [10,"A&D","Corporate","DCC, UYLP",0,"","Delivered"],
-  [11,"AAFP","Corporate","LTM, DCC",0,"","Delivered"],
-  [12,"Austrak Vossloh","Corporate","DCC",0,"","Delivered"],
-  [13,"Big Tyre","Corporate","DCC",0,"","Delivered"],
-  [14,"iPlan","Corporate / Finance","DCC, UYLP, HIP",0,"","Delivered"],
-  [15,"JR Stephens","Corporate","DCC, LTM, Strategic Readiness",0,"","Delivered"],
-  [16,"Riverside Marine","Marine","DCC",0,"","Delivered"],
-  [17,"RQYS","Marine / Yacht Club","WCCS, DCC, WGYH",0,"","Delivered"],
-  [18,"Safetymate","Safety / Corporate","DCC, HIP",0,"","Delivered"],
-  [19,"City Golf","Hospitality","LTM",0,"","Delivered"],
-  [20,"Logistics North Queensland","Logistics","UYLP",0,"","Delivered"],
-  [21,"National Glass","Manufacturing (via Bradnam's)","DCC, LTR, UYLP, Take Command",0,"","Delivered"],
-  [22,"Ulton","Accounting","DCC, UYLP, LTM, WGYH, HPT",0,"","Delivered"],
-  [23,"BDO","Professional Services","Custom Workshop Series (10 workshops)",0,"","Delivered"],
-  [24,"YOCO","Co-working / Community","WRS, Strategic Readiness, WGYH",0,"","Delivered"],
-  [25,"Sanofi","Pharmaceutical","Program delivered",0,"","Delivered"],
-  [26,"Pioneer Accounting","Accounting","Program delivered",0,"","Delivered"],
-  [27,"Shine Lawyers","Legal","Program delivered",0,"","Delivered"],
-  [28,"Moseray Textile","Textile / Manufacturing","Program delivered",0,"","Delivered"],
-  [29,"EJ","Manufacturing","Program delivered",0,"","Delivered"],
-  [30,"Thompson Cooling","HVAC","Program delivered",0,"","Delivered"],
-  [31,"Townsville City Council","Government","Program delivered",0,"","Delivered"],
-  [32,"RICC","Hospitality","Custom workshops",0,"","Delivered"],
-  [33,"Norkan","Corporate","Program delivered",0,"","Delivered"],
-  [34,"Hewitt","Corporate","Program delivered",0,"","Delivered"],
-  [35,"GCWA","Government","Program delivered",0,"","Delivered"],
-  [36,"Atherton","Corporate","Program delivered",0,"","Delivered"],
-  [37,"Allied","Corporate","Program delivered",0,"","Delivered"],
-  [38,"BRS","Automotive Services","Program delivered",0,"","Delivered"],
-  [39,"Brookies Rural Traders","Agriculture / Retail","Program delivered",0,"","Delivered"],
-  [40,"ConnectUnited","Technology","Blockchain 101 Workshop",0,"","Delivered"],
-  [41,"Street Science","Education / Entertainment","Custom Workshop",0,"","Delivered"],
-  [42,"Swoosh Finance","Finance","DCC, UYLP",0,"","Delivered"],
-  [43,"Aqua","Corporate","Program delivered",0,"","Delivered"],
-  [44,"EFI","Education","Custom Leadership Modules",0,"","Delivered"],
-  [45,"Interprac","Financial Services","Art of Storytelling Workshop",0,"","Delivered"],
-  [46,"Royal International Convention Centre","Events / Hospitality","Custom Workshops",0,"","Delivered"],
+  [27,"Big Tyre","Corporate","DCC",6600,"$6,600","Delivered"],
+  [28,"EJ","Manufacturing","Program delivered",3734,"$3,734","Delivered"],
+  [29,"Allied","Corporate","Program delivered",0,"","Delivered"],
+  [30,"Aqua","Corporate","Program delivered",0,"","Delivered"],
+  [31,"Atherton","Corporate","Program delivered",0,"","Delivered"],
+  [32,"BRS","Automotive Services","Program delivered",0,"","Delivered"],
+  [33,"Brookies Rural Traders","Agriculture / Retail","Program delivered",0,"","Delivered"],
+  [34,"ConnectUnited","Technology","Blockchain 101 Workshop",0,"","Delivered"],
+  [35,"EFI","Education","Custom Leadership Modules",0,"","Delivered"],
+  [36,"Hewitt","Corporate","Program delivered",0,"","Delivered"],
+  [37,"Interprac","Financial Services","Art of Storytelling Workshop",0,"","Delivered"],
+  [38,"Logistics North Queensland","Logistics","UYLP",0,"","Delivered"],
+  [39,"National Glass","Manufacturing (via Bradnam's)","DCC, LTR, UYLP, Take Command",0,"","Delivered"],
+  [40,"Norkan","Corporate","Program delivered",0,"","Delivered"],
+  [41,"Pioneer Accounting","Accounting","Program delivered",0,"","Delivered"],
+  [42,"RICC","Hospitality","Custom workshops",0,"","Delivered"],
+  [43,"Royal International Convention Centre","Events / Hospitality","Custom Workshops",0,"","Delivered"],
+  [44,"Sanofi","Pharmaceutical","Program delivered",0,"","Delivered"],
+  [45,"Shine Lawyers","Legal","Program delivered",0,"","Delivered"],
+  [46,"Street Science","Education / Entertainment","Custom Workshop",0,"","Delivered"],
+  [47,"Thompson Cooling","HVAC","Program delivered",0,"","Delivered"],
+  [48,"Townsville City Council","Government","Program delivered",0,"","Delivered"],
+  [49,"Ulton","Accounting","DCC, UYLP, LTM, WGYH, HPT",0,"","Delivered"],
+  [50,"YOCO","Co-working / Community","WRS, Strategic Readiness, WGYH",0,"","Delivered"],
+  [51,"iPlan","Corporate / Finance","DCC, UYLP, HIP",0,"","Delivered"],
 
-  // CONFERENCES
-  [47,"QSPA","School Principals Association","6+ Online Workshops, Conference",0,"","Conference"],
-  [48,"SBMAQ","School Business Managers","8+ Online Workshops, Conference",0,"","Conference"],
-  [49,"FBAA","Finance Brokers Association","Development Bootcamp, Workshops",0,"","Conference"],
-  [50,"CPA","Professional Body","Workshops",0,"","Conference"],
-  [51,"Engineers Australia","Professional Body","Keynote",0,"","Conference"],
+  // CONFERENCES & ASSOCIATIONS
+  [52,"SBMAQ","School Business Managers","8+ Online Workshops, Conference",56961,"$56,961","Conference"],
+  [53,"QSPA","School Principals Association","6+ Online Workshops, Conference",41741,"$41,741","Conference"],
+  [54,"CPA","Professional Body","Workshops",0,"","Conference"],
+  [55,"Engineers Australia","Professional Body","Keynote",0,"","Conference"],
+  [56,"FBAA","Finance Brokers Association","Development Bootcamp, Workshops",0,"","Conference"],
 
-  // SCHOOLS
-  [52,"Albany Creek SHS","School (Brisbane)","DCC",0,"","School"],
-  [53,"Ashgrove SS","School (Brisbane)","Custom PD",0,"","School"],
-  [54,"Beaudessert SHS","School (South East QLD)","UYLP",0,"","School"],
-  [55,"Bribie Island SHS","School (Moreton Bay)","Custom PD",0,"","School"],
-  [56,"Brisbane Bayside SC","School (Brisbane)","UYLP, DCC",0,"","School"],
-  [57,"Browns Plains SHS","School (Brisbane South)","DCC",0,"","School"],
-  [58,"Burnside SHS","School","Leading Change PD",0,"","School"],
-  [59,"Burpengary SSC","School (Brisbane North)","PD Series, UYLP, Gen Next, LTM",0,"","School"],
-  [60,"Capricornia SoDE","School (Rockhampton)","DCC, WGYH, HIP",0,"","School"],
-  [61,"Centenary SHS","School (Brisbane)","Strategic Readiness, DCC",0,"","School"],
-  [62,"Chinchilla SHS","School (Western QLD)","PD Series, HPT",0,"","School"],
-  [63,"Cloncurry SH","School (North QLD)","DCC, UYLP",0,"","School"],
-  [64,"Clontarf Beach SHS","School","Leading Change PD",0,"","School"],
-  [65,"Coombabah SHS","School (Gold Coast)","PD Series",0,"","School"],
-  [66,"Dalby State School","School (Western QLD)","PD Series",0,"","School"],
-  [67,"GinGin SHS","School (Wide Bay)","Custom PD Series",0,"","School"],
-  [68,"Innisfail State College","School (Far North QLD)","Custom PD",0,"","School"],
-  [69,"Ipswich SHS","School (Ipswich)","Custom PD Series",0,"","School"],
-  [70,"Kelvin Grove SC","School (Brisbane)","PD Series",0,"","School"],
-  [71,"Kenmore SHS","School (Brisbane)","Custom PD Series",0,"","School"],
-  [72,"Mansfield SHS","School (Brisbane)","Custom PD",0,"","School"],
-  [73,"Moranbah SHS","School (Central QLD)","UYLP, Custom PD",0,"","School"],
-  [74,"Murrumba SSC","School (Brisbane North)","DCC, UYLP",0,"","School"],
-  [75,"North Lakes State College","School (Brisbane North)","LTM",0,"","School"],
-  [76,"Ripley Valley SSC","School (Ipswich)","DCC",0,"","School"],
-  [77,"Rockhampton North SS","School (Rockhampton)","UYLP",0,"","School"],
-  [78,"St Peters","School (Brisbane)","HIP, Custom PD",0,"","School"],
-  [79,"Wooloowin SS","School (Brisbane)","Strategic Readiness",0,"","School"],
-  [80,"Yeronga SHS","School (Brisbane)","Custom PD Series",0,"","School"],
+  // SCHOOLS (sorted by Xero revenue)
+  [57,"Bribie Island SHS","School (Moreton Bay)","Custom PD",95024,"$95,024","School"],
+  [58,"Rockhampton North SS","School (Rockhampton)","UYLP",71293,"$71,293","School"],
+  [59,"North Lakes State College","School (Brisbane North)","LTM",50838,"$50,838","School"],
+  [60,"Bentley Park College","School (Far North QLD)","DISC",50599,"$50,599","School"],
+  [61,"Northern Peninsula Area State College","School (Far North QLD)","Custom, DISC, Dale Carnegie Course, Lead with Influence",50599,"$50,599","School"],
+  [62,"Chinchilla SHS","School (Western QLD)","PD Series, HPT",46390,"$46,390","School"],
+  [63,"GinGin SHS","School (Wide Bay)","Custom PD Series",37765,"$37,765","School"],
+  [64,"Tagai State College","School (Far North QLD)","DISC, Dale Carnegie Course, Lead with Influence",36461,"$36,461","School"],
+  [65,"Burpengary SSC","School (Brisbane North)","PD Series, UYLP, Gen Next, LTM",34586,"$34,586","School"],
+  [66,"St Peters","School (Brisbane)","HIP, Custom PD",34582,"$34,582","School"],
+  [67,"Ripley Valley SSC","School (Ipswich)","DCC",32657,"$32,657","School"],
+  [68,"Rockhampton Special School","School (Central QLD)","Custom, DISC, Professional Development",32373,"$32,373","School"],
+  [69,"Robina State High School","School (Brisbane / SE QLD)","DISC",31447,"$31,447","School"],
+  [70,"Beaudessert SHS","School (South East QLD)","UYLP",27717,"$27,717","School"],
+  [71,"Cloncurry SH","School (North QLD)","DCC, UYLP",25736,"$25,736","School"],
+  [72,"Kilcoy State High School","School","Custom, DISC, Professional Development",25736,"$25,736","School"],
+  [73,"Moranbah SHS","School (Central QLD)","UYLP, Custom PD",24306,"$24,306","School"],
+  [74,"Brisbane Bayside SC","School (Brisbane)","UYLP, DCC",22222,"$22,222","School"],
+  [75,"Mount Morgan State High School","School (Central QLD)","Custom, DISC",21998,"$21,998","School"],
+  [76,"Forest Lake State High School","School (Brisbane / SE QLD)","DISC, PD",21771,"$21,771","School"],
+  [77,"Wavell State High School","School (Brisbane / SE QLD)","DISC, PD",21694,"$21,694","School"],
+  [78,"Capricornia SoDE","School (Rockhampton)","DCC, WGYH, HIP",16443,"$16,443","School"],
+  [79,"Browns Plains SHS","School (Brisbane South)","DCC",15873,"$15,873","School"],
+  [80,"Dalby State School","School (Western QLD)","PD Series",10669,"$10,669","School"],
+  [81,"Clontarf Beach SHS","School","Leading Change PD",10281,"$10,281","School"],
+  [82,"Coombabah SHS","School (Gold Coast)","PD Series",10281,"$10,281","School"],
+  [83,"Flagstone State Community College","School (Brisbane / SE QLD)","DISC, PD",10281,"$10,281","School"],
+  [84,"Innisfail State College","School (Far North QLD)","Custom PD",10281,"$10,281","School"],
+  [85,"Kenmore SHS","School (Brisbane)","Custom PD Series",10281,"$10,281","School"],
+  [86,"Woodridge State High School","School (Brisbane / SE QLD)","DISC, PD",10281,"$10,281","School"],
+  [87,"Ipswich SHS","School (Ipswich)","Custom PD Series",8737,"$8,737","School"],
+  [88,"Mansfield SHS","School (Brisbane)","Custom PD",7201,"$7,201","School"],
+  [89,"Ashgrove SS","School (Brisbane)","Custom PD",5138,"$5,138","School"],
+  [90,"Burnside SHS","School","Leading Change PD",5138,"$5,138","School"],
+  [91,"Kelvin Grove SC","School (Brisbane)","PD Series",3599,"$3,599","School"],
+  [92,"Capalaba State College","School (Brisbane)","DISC, Dale Carnegie Course, HIP",1981,"$1,981","School"],
+  [93,"Maryborough State High School","School (Wide Bay)","DISC, HIP, Unleash Your Leadership",1981,"$1,981","School"],
+  [94,"Tullawong State School","School (Moreton Bay)","DISC, PD",1000,"$1,000","School"],
+  [95,"Albany Creek SHS","School (Brisbane)","DCC",0,"","School"],
+  [96,"Murrumba SSC","School (Brisbane North)","DCC, UYLP",0,"","School"],
+  [97,"Wooloowin SS","School (Brisbane)","Strategic Readiness",0,"","School"],
+  [98,"Yeronga SHS","School (Brisbane)","Custom PD Series",0,"","School"],
 
   // INDIVIDUALS
-  [81,"Alice Mabin","Individual","DCC",3395,"$3,395","Individual"],
-  [82,"Andrew Patterson","Individual","DCC",3395,"$3,395","Individual"],
-  [83,"Ben Grace","Individual","DCC",3395,"$3,395","Individual"],
-  [84,"Christina Roy","Individual","DCC",3395,"$3,395","Individual"],
-  [85,"Dan Walters","Individual","DCC",3395,"$3,395","Individual"],
-  [86,"Jeff Skinner","Individual","DCC",3395,"$3,395","Individual"],
-  [87,"Kevin Thrush","Individual","DCC",3395,"$3,395","Individual"],
-  [88,"Luke Schinella","Individual","DCC",3395,"$3,395","Individual"],
-  [89,"Paul Walmsley","Individual","DCC",3395,"$3,395","Individual"],
-  [90,"Peter Howarth","Individual","DCC",3395,"$3,395","Individual"],
-  [91,"Rod Case","Individual","DCC",3395,"$3,395","Individual"],
-  [92,"Steve Davis","Individual","DCC",3395,"$3,395","Individual"],
+  [99,"Energy Queensland","Energy / Utilities","DISC, Dale Carnegie Course, HIP, Lead with Influence",6351,"$6,351","Individual"],
+  [100,"HubSpot","Technology","High Impact Presentations",3844,"$3,844","Individual"],
+  [101,"Drakes Supermarkets - Sri Bandi","Retail / Supermarkets","Dale Carnegie Course",3734,"$3,734","Individual"],
+  [102,"Mineral Technologies","Individual","HIP, Leadership Training for Managers",3734,"$3,734","Individual"],
+  [103,"Scott Johnston","Individual","HIP, Winning with Relationship",3734,"$3,734","Individual"],
+  [104,"Sharon Sorbello","Individual","Dale Carnegie Course",3734,"$3,734","Individual"],
+  [105,"Total Building Maintenance","Building / Maintenance","Dale Carnegie Course",3734,"$3,734","Individual"],
+  [106,"Worthy Group","Corporate","Dale Carnegie Course",3734,"$3,734","Individual"],
+  [107,"Delacey M Kehl","Individual","Dale Carnegie Course",3624,"$3,624","Individual"],
+  [108,"Lukudu Gombu","Individual","Dale Carnegie Course",3624,"$3,624","Individual"],
+  [109,"Mater Foundation","Healthcare / Not-for-Profit","Dale Carnegie Course",3624,"$3,624","Individual"],
+  [110,"Simon Bottomley","Individual","Dale Carnegie Course",3624,"$3,624","Individual"],
+  [111,"Nicky Arnold","Individual","Dale Carnegie Course, Lead with Influence",3514,"$3,514","Individual"],
+  [112,"Alice Mabin","Individual","DCC",3395,"$3,395","Individual"],
+  [113,"Andrew Patterson","Individual","DCC",3395,"$3,395","Individual"],
+  [114,"Ben Grace","Individual","DCC",3395,"$3,395","Individual"],
+  [115,"Christina Roy","Individual","DCC",3395,"$3,395","Individual"],
+  [116,"Dan Walters","Individual","DCC",3395,"$3,395","Individual"],
+  [117,"Jeff Skinner","Individual","DCC",3395,"$3,395","Individual"],
+  [118,"Kevin Thrush","Individual","DCC",3395,"$3,395","Individual"],
+  [119,"Luke Schinella","Individual","DCC",3395,"$3,395","Individual"],
+  [120,"Paul Walmsley","Individual","DCC",3395,"$3,395","Individual"],
+  [121,"Peter Howarth","Individual","DCC",3395,"$3,395","Individual"],
+  [122,"Rod Case","Individual","DCC",3395,"$3,395","Individual"],
+  [123,"Steve Davis","Individual","DCC",3395,"$3,395","Individual"],
+  [124,"Accounting 4 IT Pty Ltd - Fiona Hamilton","Accounting / IT","Dale Carnegie Course",3295,"$3,295","Individual"],
+  [125,"Department of Trade, Employment and Training | DTET","Individual","Dale Carnegie Course, Lead with Influence",2075,"$2,075","Individual"],
+  [126,"We Buy Cars","Automotive","Program delivered",1239,"$1,239","Individual"],
+  [127,"Racquel Wong","Individual","Program delivered",160,"$160","Individual"],
 
-  // PROSPECTS
-  [93,"AOL","Corporate","Proposal",0,"","Prospect"],
-  [94,"ATC Engineers","Engineering","Proposal",0,"","Prospect"],
-  [95,"Autosafe","Corporate","Proposal",0,"","Prospect"],
-  [96,"Bosch Rexroth","Engineering / Manufacturing","Proposal",0,"","Prospect"],
-  [97,"Cold Front","HVAC","Proposal",0,"","Prospect"],
-  [98,"Colpak","Packaging / Manufacturing","Proposal",0,"","Prospect"],
-  [99,"Commercial Marine Group","Marine","Proposal",0,"","Prospect"],
-  [100,"Dept Trade Employment Training","Government","Proposal",0,"","Prospect"],
-  [101,"Forde","Corporate","Proposal",0,"","Prospect"],
-  [102,"HARSCO Rail","Rail / Engineering","Proposal",0,"","Prospect"],
-  [103,"Height4Hire","Equipment Hire","Proposal",0,"","Prospect"],
-  [104,"Lightwave Group","Technology","Proposal",0,"","Prospect"],
-  [105,"Mineral Technologies","Mining / Processing","Proposal",0,"","Prospect"],
-  [106,"Osmose Australia","Utilities","Proposal",0,"","Prospect"],
-  [107,"Renaissance Real Estate","Real Estate","Proposal",0,"","Prospect"],
-  [108,"Rio Rhythmics","Entertainment","Proposal",0,"","Prospect"],
-  [109,"RuralAid","Not-for-Profit","Proposal",0,"","Prospect"],
-  [110,"Santrev","Corporate","Proposal",0,"","Prospect"],
-  [111,"Sell in Style","Retail / Fashion","Proposal",0,"","Prospect"],
-  [112,"Silverwall","Corporate","Proposal (Academy)",0,"","Prospect"],
-  [113,"Snelleman Tom","Corporate","Proposal",0,"","Prospect"],
-  [114,"Soil Surveys Engineering","Engineering","Proposal",0,"","Prospect"],
-  [115,"Staged Interiors","Interior Design","Proposal",0,"","Prospect"],
-  [116,"Twin Disc","Manufacturing","Proposal",0,"","Prospect"],
-  [117,"Unica Stone & Tile","Construction","Proposal (WRS)",0,"","Prospect"],
-  [118,"WearOptimo","Technology / Medical","Proposal",0,"","Prospect"],
-  [119,"World Expeditions","Travel / Tourism","Proposal",0,"","Prospect"],
-  [120,"XYZ Accounting","Accounting","Proposal",0,"","Prospect"],
-  [121,"Zeder Corporation","Corporate","Proposal",0,"","Prospect"],
-  [122,"Brookies Rural Traders","Agriculture / Retail","Proposal",0,"","Prospect"],
-  [123,"Centenary Landscaping","Landscaping","Proposal",0,"","Prospect"],
-  [124,"Moseray Textile","Textile / Manufacturing","Proposal",0,"","Prospect"],
-  [125,"Sanofi","Pharmaceutical","Proposal",0,"","Prospect"],
-  [126,"Shine Lawyers","Legal","Proposal",0,"","Prospect"],
-  [127,"Thompson Cooling","HVAC","Proposal",0,"","Prospect"],
-  [128,"Townsville City Council","Government","Proposal",0,"","Prospect"]
+  // PROSPECTS (proposal stage)
+  [128,"AOL","Corporate","Proposal",0,"","Prospect"],
+  [129,"ATC Engineers","Engineering","Proposal",0,"","Prospect"],
+  [130,"Autosafe","Corporate","Proposal",0,"","Prospect"],
+  [131,"Bosch Rexroth","Engineering / Manufacturing","Proposal",0,"","Prospect"],
+  [132,"Cold Front","HVAC","Proposal",0,"","Prospect"],
+  [133,"Colpak","Packaging / Manufacturing","Proposal",0,"","Prospect"],
+  [134,"Commercial Marine Group","Marine","Proposal",0,"","Prospect"],
+  [135,"Dept Trade Employment Training","Government","Proposal",0,"","Prospect"],
+  [136,"Forde","Corporate","Proposal",0,"","Prospect"],
+  [137,"HARSCO Rail","Rail / Engineering","Proposal",0,"","Prospect"],
+  [138,"Height4Hire","Equipment Hire","Proposal",0,"","Prospect"],
+  [139,"Lightwave Group","Technology","Proposal",0,"","Prospect"],
+  [140,"Osmose Australia","Utilities","Proposal",0,"","Prospect"],
+  [141,"Renaissance Real Estate","Real Estate","Proposal",0,"","Prospect"],
+  [142,"Rio Rhythmics","Entertainment","Proposal",0,"","Prospect"],
+  [143,"RuralAid","Not-for-Profit","Proposal",0,"","Prospect"],
+  [144,"Santrev","Corporate","Proposal",0,"","Prospect"],
+  [145,"Sell in Style","Retail / Fashion","Proposal",0,"","Prospect"],
+  [146,"Silverwall","Corporate","Proposal (Academy)",0,"","Prospect"],
+  [147,"Snelleman Tom","Corporate","Proposal",0,"","Prospect"],
+  [148,"Soil Surveys Engineering","Engineering","Proposal",0,"","Prospect"],
+  [149,"Staged Interiors","Interior Design","Proposal",0,"","Prospect"],
+  [150,"Twin Disc","Manufacturing","Proposal",0,"","Prospect"],
+  [151,"WearOptimo","Technology / Medical","Proposal",0,"","Prospect"],
+  [152,"World Expeditions","Travel / Tourism","Proposal",0,"","Prospect"],
+  [153,"XYZ Accounting","Accounting","Proposal",0,"","Prospect"],
+  [154,"Zeder Corporation","Corporate","Proposal",0,"","Prospect"],
 ];
 
 var activeTier = 'all';
