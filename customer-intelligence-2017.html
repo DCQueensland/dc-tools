@@ -119,81 +119,67 @@
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
     <div>
       <h1>Dale Carnegie Queensland &mdash; 2017 Customer Intelligence</h1>
-      <div class="subtitle">Full Year Analysis | Xero-Verified Paid Revenue | Queensland Growth Begins</div>
+      <div class="subtitle">Full Year Analysis | QLD Growth Begins | Xero-Verified Paid Revenue</div>
     </div>
   </div>
 </div>
 <div class="container">
-
   <div class="highlights">
     <h2>2017 Highlights</h2>
     <div class="highlights-grid">
-      <div class="highlight-item"><span class="hl-num">$630k</span> Xero-verified revenue (paid only)</div>
-      <div class="highlight-item"><span class="hl-num">48</span> companies paid invoices &mdash; QLD-focused growth begins</div>
-      <div class="highlight-item"><strong>Top clients:</strong> Boltmasters ($116k), Alphapharm/Mylan ($85k), Height4Hire ($70k)</div>
-      <div class="highlight-item"><strong>First full year focused on Queensland</strong> after selling Sydney &amp; Melbourne interests</div>
-      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; paid amounts only</div>
+      <div class="highlight-item"><span class="hl-num">$636k</span> Xero-verified revenue (paid invoices only)</div>
+      <div class="highlight-item"><span class="hl-num">49</span> companies paid invoices</div>
+      <div class="highlight-item"><strong>Top clients:</strong> Boltmasters ($115,528), Alphapharm Pty Ltd (Trading as Mylan Aust ($85,379), Height 4 Hire Pty Ltd ($70,290)</div>
+      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; revenue = paid invoices only</div>
     </div>
   </div>
-
   <div class="cards">
-    <div class="card yellow"><div class="card-value">$630k</div><div class="card-label">Paid Revenue</div></div>
-    <div class="card"><div class="card-value">48</div><div class="card-label">Companies</div></div>
-    <div class="card green"><div class="card-value">QLD</div><div class="card-label">Growth Begins</div></div>
+    <div class="card yellow"><div class="card-value">$636k</div><div class="card-label">Paid Revenue</div></div>
+    <div class="card"><div class="card-value">49</div><div class="card-label">Companies</div></div>
   </div>
-
   <div class="controls">
     <div class="filter-group">
       <label>Tier</label>
-      <div class="btn-group" id="tier-filters">
-        <button class="fbtn active" data-tier="all">All</button>
+      <div class="btn-group" id="tier-filters"><button class="fbtn active" data-tier="all">All</button>
         <button class="fbtn" data-tier="Anchor">Anchor</button>
         <button class="fbtn" data-tier="Active">Revenue</button>
         <button class="fbtn" data-tier="School">Schools</button>
         <button class="fbtn" data-tier="Individual">Individuals</button>
-
-      </div>
+</div>
     </div>
     <input type="text" class="search-box" id="search" placeholder="Search company, industry, or program...">
   </div>
-
   <div class="result-count" id="result-count"></div>
-
   <div class="table-wrap">
     <table id="customer-table">
-      <thead>
-        <tr>
-          <th data-col="0"># <span class="sort-icon"></span></th>
-          <th data-col="1">Company <span class="sort-icon"></span></th>
-          <th data-col="2">Industry <span class="sort-icon"></span></th>
-          <th data-col="3">Programs <span class="sort-icon"></span></th>
-          <th data-col="4">Revenue <span class="sort-icon"></span></th>
-          <th data-col="5">Tier <span class="sort-icon"></span></th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th data-col="0"># <span class="sort-icon"></span></th>
+        <th data-col="1">Company <span class="sort-icon"></span></th>
+        <th data-col="2">Industry <span class="sort-icon"></span></th>
+        <th data-col="3">Programs <span class="sort-icon"></span></th>
+        <th data-col="4">Revenue <span class="sort-icon"></span></th>
+        <th data-col="5">Tier <span class="sort-icon"></span></th>
+      </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
-
   <div class="footer">
     Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2017<br>
-    Data reconciled with Xero invoices 4 April 2026 | Revenue = paid only (verified against accounting records)
+    Data reconciled with Xero invoices 4 April 2026 | Revenue = paid invoices only
   </div>
 </div>
-
 <script>
 var DATA = [
-  // ANCHOR CLIENTS
+  // ANCHOR
   [1,"Boltmasters","Corporate","Custom, DISC, HIP, High Performance Teams, LTM, Leadership Training for Managers, What Got You Here, Winning with Relationship",115528,"$115,528","Anchor"],
   [2,"Alphapharm Pty Ltd (Trading as Mylan Aust","Corporate","What Got You Here",85379,"$85,379","Anchor"],
 
-  // ACTIVE CLIENTS
+  // ACTIVE
   [3,"Height 4 Hire Pty Ltd","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers, Winning with Relationship",70290,"$70,290","Active"],
   [4,"Practical Peripherals Corporation","Corporate","HIP, What Got You Here, Winning with Relationship",30552,"$30,552","Active"],
   [5,"Rapid Loans","Corporate","HIP, Leadership Training for Managers, What Got You Here",27280,"$27,280","Active"],
@@ -201,11 +187,11 @@ var DATA = [
   [7,"Dale Carnegie NSW","Corporate","HIP",22253,"$22,253","Active"],
   [8,"Dan Myerson","Corporate","Program delivered",19767,"$19,767","Active"],
   [9,"Brisbane Appliance Sales","Corporate","DISC",16472,"$16,472","Active"],
-  [10,"Automatic Solutions","Corporate","HIP",15922,"$15,922","Active"],
-  [11,"Centenary Landscaping Supplies","Corporate","DISC, HIP, Winning with Relationship",15922,"$15,922","Active"],
-  [12,"DMA Engineers","Corporate","DISC, HIP, Leadership Training for Managers",15922,"$15,922","Active"],
-  [13,"Hutchinson Builders Toowoomba","Corporate","DISC, Dale Carnegie Course",15922,"$15,922","Active"],
-  [14,"Accountancy Insurance","Corporate","DISC, HIP, Winning with Relationship",15322,"$15,322","Active"],
+  [10,"Accountancy Insurance","Corporate","DISC, HIP, Winning with Relationship",15922,"$15,922","Active"],
+  [11,"Automatic Solutions","Corporate","HIP",15922,"$15,922","Active"],
+  [12,"Centenary Landscaping Supplies","Corporate","DISC, HIP, Winning with Relationship",15922,"$15,922","Active"],
+  [13,"DMA Engineers","Corporate","DISC, HIP, Leadership Training for Managers",15922,"$15,922","Active"],
+  [14,"Hutchinson Builders Toowoomba","Corporate","DISC, Dale Carnegie Course",15922,"$15,922","Active"],
   [15,"Mylan Health Pty Ltd","Corporate","Program delivered",13071,"$13,071","Active"],
   [16,"NCI Packaging Pty Ltd","Corporate","DISC",9378,"$9,378","Active"],
   [17,"Advivo Accountants & Advisors","Corporate","DISC",6589,"$6,589","Active"],
@@ -217,33 +203,34 @@ var DATA = [
   [23,"Safety Mate","Corporate","Program delivered",5929,"$5,929","Active"],
   [24,"Lion Air Conditioning","Corporate","Program delivered",5489,"$5,489","Active"],
 
-  // SCHOOLS
-  [25,"Southern Cross Catholic College","School","Program delivered",1540,"$1,540","School"],
+  // SCHOOL
+  [25,"Southern Cross Catholic College","School","Program delivered",3294,"$3,294","School"],
 
-  // INDIVIDUALS
-  [26,"Suez","Corporate","DISC, Workshop",4840,"$4,840","Individual"],
-  [27,"Boral","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [28,"Bradnam&rsquo;s Windows & Doors","Corporate","DISC, HIP, Winning with Relationship",3294,"$3,294","Individual"],
-  [29,"Ewing & Co Pty Ltd","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [30,"Gault Surgery","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [31,"Higgins Coatings","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [32,"Matt Tincknell","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [33,"Techpath Pty Ltd","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [34,"Veeam Software","Corporate","Program delivered",3294,"$3,294","Individual"],
-  [35,"Autosafe","Corporate","Dale Carnegie Course",3184,"$3,184","Individual"],
-  [36,"BHP","Corporate","Program delivered",3184,"$3,184","Individual"],
-  [37,"Hemisphere Building & Services","Corporate","Program delivered",3184,"$3,184","Individual"],
-  [38,"River City Flooring","Corporate","Program delivered",3184,"$3,184","Individual"],
-  [39,"Brisbane BMW","Corporate","High Impact Presentations",3074,"$3,074","Individual"],
-  [40,"Crackerjack Chicken","Corporate","Program delivered",2854,"$2,854","Individual"],
-  [41,"Western Downs Regional Council","Corporate","DISC",2854,"$2,854","Individual"],
-  [42,"Loscam Australia Pty Ltd","Corporate","Program delivered",2750,"$2,750","Individual"],
-  [43,"Zinpro Animal Nutrition Australia Pty Ltd","Corporate","HIP, Winning with Relationship, Workshop",2420,"$2,420","Individual"],
-  [44,"Samantha Gagner","Corporate","Program delivered",2194,"$2,194","Individual"],
-  [45,"Celina Jorgensen Design","Corporate","Program delivered",1650,"$1,650","Individual"],
-  [46,"Cooper Grace Ward Lawyers","Corporate","Workshop",1375,"$1,375","Individual"],
-  [47,"EJ Australia Pty Ltd","Corporate","Program delivered",700,"$700","Individual"],
-  [48,"True Target Marketing - Emma","Corporate","Program delivered",200,"$200","Individual"],
+  // INDIVIDUAL
+  [26,"Suez","Individual","DISC, Workshop",4840,"$4,840","Individual"],
+  [27,"Boral","Individual","Program delivered",3294,"$3,294","Individual"],
+  [28,"Bradnam&rsquo;s Windows & Doors","Individual","DISC, HIP, Winning with Relationship",3294,"$3,294","Individual"],
+  [29,"Ewing & Co Pty Ltd","Individual","Program delivered",3294,"$3,294","Individual"],
+  [30,"Gault Surgery","Individual","Program delivered",3294,"$3,294","Individual"],
+  [31,"Higgins Coatings","Individual","Program delivered",3294,"$3,294","Individual"],
+  [32,"Matt Tincknell","Individual","Program delivered",3294,"$3,294","Individual"],
+  [33,"Riverside Marine","Individual","HIP, Leadership Training for Managers",3294,"$3,294","Individual"],
+  [34,"Techpath Pty Ltd","Individual","Program delivered",3294,"$3,294","Individual"],
+  [35,"Veeam Software","Individual","Program delivered",3294,"$3,294","Individual"],
+  [36,"Autosafe","Individual","Dale Carnegie Course",3184,"$3,184","Individual"],
+  [37,"BHP","Individual","Program delivered",3184,"$3,184","Individual"],
+  [38,"Hemisphere Building & Services","Individual","Program delivered",3184,"$3,184","Individual"],
+  [39,"River City Flooring","Individual","Program delivered",3184,"$3,184","Individual"],
+  [40,"Brisbane BMW","Individual","High Impact Presentations",3074,"$3,074","Individual"],
+  [41,"Crackerjack Chicken","Individual","Program delivered",2854,"$2,854","Individual"],
+  [42,"Western Downs Regional Council","Individual","DISC",2854,"$2,854","Individual"],
+  [43,"Loscam Australia Pty Ltd","Individual","Program delivered",2750,"$2,750","Individual"],
+  [44,"Zinpro Animal Nutrition Australia Pty Ltd","Individual","HIP, Winning with Relationship, Workshop",2420,"$2,420","Individual"],
+  [45,"Samantha Gagner","Individual","Program delivered",2194,"$2,194","Individual"],
+  [46,"Celina Jorgensen Design","Individual","Program delivered",1650,"$1,650","Individual"],
+  [47,"Cooper Grace Ward Lawyers","Individual","Workshop",1375,"$1,375","Individual"],
+  [48,"EJ Australia Pty Ltd","Individual","Program delivered",700,"$700","Individual"],
+  [49,"True Target Marketing - Emma","Individual","Program delivered",200,"$200","Individual"],
 ];
 var activeTier = 'all';
 var searchTerm = '';

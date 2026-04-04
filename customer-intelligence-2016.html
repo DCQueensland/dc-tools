@@ -119,84 +119,78 @@
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
     <div>
       <h1>Dale Carnegie Queensland &mdash; 2016 Customer Intelligence</h1>
-      <div class="subtitle">Full Year Analysis | Xero-Verified Paid Revenue | Includes 2014-2015 Revenue (Includes 2014-15)</div>
+      <div class="subtitle">Includes 2014-2015 Revenue | Xero-Verified Paid Revenue | Transition Period</div>
     </div>
   </div>
 </div>
 <div class="container">
-
   <div class="highlights">
-    <h2>2016 Highlights</h2>
+    <h2>2014&ndash;2016 Highlights</h2>
     <div class="highlights-grid">
-      <div class="highlight-item"><span class="hl-num">$98k</span> Xero-verified QLD revenue (paid only) across 2014-2016 (combined)</div>
+      <div class="highlight-item"><span class="hl-num">$258,195</span> Xero-verified revenue (paid invoices, 2014&ndash;2016 combined)</div>
+      <div class="highlight-item"><strong>Partial data:</strong> migrated from previous manual accounting system &mdash; records are incomplete</div>
       <div class="highlight-item"><strong>Transition period:</strong> William running Sydney, Melbourne &amp; Queensland simultaneously</div>
-      <div class="highlight-item"><strong>Sydney &amp; Melbourne sold off</strong> &mdash; financials for those territories on separate books</div>
-      <div class="highlight-item"><span class="hl-num">7</span> QLD companies in Xero across the transition period</div>
-      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; QLD invoices only, paid amounts</div>
+      <div class="highlight-item"><strong>Sydney &amp; Melbourne sold off</strong> &mdash; those territories invoiced on separate books</div>
+      <div class="highlight-item"><span class="hl-num">9</span> QLD companies in Xero across the 3-year period</div>
+      <div class="highlight-item"><strong>Actual QLD revenue was higher</strong> &mdash; many invoices pre-date the Xero migration</div>
     </div>
   </div>
-
   <div class="cards">
-    <div class="card yellow"><div class="card-value">$98k</div><div class="card-label">QLD Paid Revenue</div></div>
-    <div class="card"><div class="card-value">7</div><div class="card-label">QLD Companies</div></div>
-    <div class="card"><div class="card-value">2016</div><div class="card-label">Includes 2014-15</div></div>
+    <div class="card yellow"><div class="card-value">$258k</div><div class="card-label">QLD Paid Revenue</div></div>
+    <div class="card"><div class="card-value">9</div><div class="card-label">QLD Companies</div></div>
+    <div class="card red"><div class="card-value">Partial</div><div class="card-label">Data Incomplete</div></div>
   </div>
-
   <div class="controls">
     <div class="filter-group">
       <label>Tier</label>
-      <div class="btn-group" id="tier-filters">
-        <button class="fbtn active" data-tier="all">All</button>
+      <div class="btn-group" id="tier-filters"><button class="fbtn active" data-tier="all">All</button>
+        <button class="fbtn" data-tier="Anchor">Anchor</button>
         <button class="fbtn" data-tier="Active">Revenue</button>
         <button class="fbtn" data-tier="Individual">Individuals</button>
-
-      </div>
+</div>
     </div>
     <input type="text" class="search-box" id="search" placeholder="Search company, industry, or program...">
   </div>
-
   <div class="result-count" id="result-count"></div>
-
   <div class="table-wrap">
     <table id="customer-table">
-      <thead>
-        <tr>
-          <th data-col="0"># <span class="sort-icon"></span></th>
-          <th data-col="1">Company <span class="sort-icon"></span></th>
-          <th data-col="2">Industry <span class="sort-icon"></span></th>
-          <th data-col="3">Programs <span class="sort-icon"></span></th>
-          <th data-col="4">Revenue <span class="sort-icon"></span></th>
-          <th data-col="5">Tier <span class="sort-icon"></span></th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th data-col="0"># <span class="sort-icon"></span></th>
+        <th data-col="1">Company <span class="sort-icon"></span></th>
+        <th data-col="2">Industry <span class="sort-icon"></span></th>
+        <th data-col="3">Programs <span class="sort-icon"></span></th>
+        <th data-col="4">Revenue <span class="sort-icon"></span></th>
+        <th data-col="5">Tier <span class="sort-icon"></span></th>
+      </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
-
   <div class="footer">
-    Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2016<br>
-    Data reconciled with Xero invoices 4 April 2026 | Revenue = paid only (verified against accounting records)
+    Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2014&ndash;2016<br>
+    Partial data &mdash; migrated from previous accounting system, records incomplete. Revenue = paid invoices only.
   </div>
 </div>
-
 <script>
 var DATA = [
-  // ACTIVE CLIENTS
-  [1,"Brisbane Refinish Supplies","Corporate","HIP, Winning with Relationship",31845,"$31,845","Active"],
-  [2,"Colpak","Corporate","DISC, HIP, Leadership Training for Managers",27118,"$27,118","Active"],
-  [3,"Bielby Holdings","Corporate","DISC, HIP, Leadership Training for Managers",14248,"$14,248","Active"],
-  [4,"Aqua","Corporate","HIP, High Performance Teams, Leadership Training for Managers, PD",12155,"$12,155","Active"],
-  [5,"Fire & Safety Systems (Australia) Pty Ltd","Corporate","Workshop",8774,"$8,774","Active"],
+  // ANCHOR
+  [1,"Jarvis ANZ Pty Ltd","Corporate","Program delivered",84604,"$84,604","Anchor"],
 
-  // INDIVIDUALS
-  [6,"Farm & Garden Products","Corporate","HIP, Leadership Training for Managers",3094,"$3,094","Individual"],
-  [7,"Sydney Individuals","Corporate","Program delivered",500,"$500","Individual"],
+  // ACTIVE
+  [2,"Fire & Safety Systems (Australia) Pty Ltd","Corporate","Workshop",52642,"$52,642","Active"],
+  [3,"Colpak","Corporate","DISC, HIP, Leadership Training for Managers",33581,"$33,581","Active"],
+  [4,"Brisbane Refinish Supplies","Corporate","HIP, Winning with Relationship",31845,"$31,845","Active"],
+  [5,"Aqua","Corporate","HIP, High Performance Teams, Leadership Training for Managers, PD",18235,"$18,235","Active"],
+  [6,"Bielby Holdings","Corporate","DISC, HIP, Leadership Training for Managers",15922,"$15,922","Active"],
+  [7,"Sydney Companies","Corporate","Program delivered",15922,"$15,922","Active"],
+
+  // INDIVIDUAL
+  [8,"Farm & Garden Products","Individual","HIP, Leadership Training for Managers",3294,"$3,294","Individual"],
+  [9,"Sydney Individuals","Individual","Program delivered",2150,"$2,150","Individual"],
 ];
 var activeTier = 'all';
 var searchTerm = '';

@@ -119,149 +119,143 @@
 </style>
 </head>
 <body>
-
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
     <div>
       <h1>Dale Carnegie Queensland &mdash; 2020 Customer Intelligence</h1>
-      <div class="subtitle">Full Year Analysis | Xero-Verified Paid Revenue | COVID Impact Year</div>
+      <div class="subtitle">Full Year Analysis | COVID Impact Year | Xero-Verified Paid Revenue</div>
     </div>
   </div>
 </div>
 <div class="container">
-
   <div class="highlights">
     <h2>2020 Highlights</h2>
     <div class="highlights-grid">
-      <div class="highlight-item"><span class="hl-num">$733k</span> Xero-verified revenue (paid only)</div>
-      <div class="highlight-item"><strong>COVID year</strong> &mdash; significant impact on delivery and revenue</div>
-      <div class="highlight-item"><span class="hl-num">69</span> companies paid invoices</div>
-      <div class="highlight-item"><strong>Top clients:</strong> Mylan ($99k), Diversified Building ($62k), Container Exchange ($52k)</div>
-      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; paid amounts only</div>
+      <div class="highlight-item"><span class="hl-num">$800k</span> Xero-verified revenue (paid invoices only) &mdash; COVID impact</div>
+      <div class="highlight-item"><span class="hl-num">77</span> companies paid invoices</div>
+      <div class="highlight-item"><strong>Top clients:</strong> Mylan Australia ($98,884), Diversified Building Services ($61,853), Container Exchange ($52,376)</div>
+      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; revenue = paid invoices only</div>
     </div>
   </div>
-
   <div class="cards">
-    <div class="card yellow"><div class="card-value">$733k</div><div class="card-label">Paid Revenue</div></div>
-    <div class="card"><div class="card-value">69</div><div class="card-label">Companies</div></div>
-    <div class="card red"><div class="card-value">COVID</div><div class="card-label">Impact Year</div></div>
+    <div class="card yellow"><div class="card-value">$800k</div><div class="card-label">Paid Revenue</div></div>
+    <div class="card"><div class="card-value">77</div><div class="card-label">Companies</div></div>
   </div>
-
   <div class="controls">
     <div class="filter-group">
       <label>Tier</label>
-      <div class="btn-group" id="tier-filters">
-        <button class="fbtn active" data-tier="all">All</button>
+      <div class="btn-group" id="tier-filters"><button class="fbtn active" data-tier="all">All</button>
         <button class="fbtn" data-tier="Anchor">Anchor</button>
         <button class="fbtn" data-tier="Active">Revenue</button>
         <button class="fbtn" data-tier="Individual">Individuals</button>
-
-      </div>
+</div>
     </div>
     <input type="text" class="search-box" id="search" placeholder="Search company, industry, or program...">
   </div>
-
   <div class="result-count" id="result-count"></div>
-
   <div class="table-wrap">
     <table id="customer-table">
-      <thead>
-        <tr>
-          <th data-col="0"># <span class="sort-icon"></span></th>
-          <th data-col="1">Company <span class="sort-icon"></span></th>
-          <th data-col="2">Industry <span class="sort-icon"></span></th>
-          <th data-col="3">Programs <span class="sort-icon"></span></th>
-          <th data-col="4">Revenue <span class="sort-icon"></span></th>
-          <th data-col="5">Tier <span class="sort-icon"></span></th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th data-col="0"># <span class="sort-icon"></span></th>
+        <th data-col="1">Company <span class="sort-icon"></span></th>
+        <th data-col="2">Industry <span class="sort-icon"></span></th>
+        <th data-col="3">Programs <span class="sort-icon"></span></th>
+        <th data-col="4">Revenue <span class="sort-icon"></span></th>
+        <th data-col="5">Tier <span class="sort-icon"></span></th>
+      </tr></thead>
       <tbody id="tbody"></tbody>
     </table>
   </div>
-
   <div class="footer">
     Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2020<br>
-    Data reconciled with Xero invoices 4 April 2026 | Revenue = paid only (verified against accounting records)
+    Data reconciled with Xero invoices 4 April 2026 | Revenue = paid invoices only
   </div>
 </div>
-
 <script>
 var DATA = [
-  // ANCHOR CLIENTS
+  // ANCHOR
   [1,"Mylan Australia","Corporate","Dale Carnegie Course, What Got You Here",98884,"$98,884","Anchor"],
 
-  // ACTIVE CLIENTS
+  // ACTIVE
   [2,"Diversified Building Services","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers, Winning with Relationship",61853,"$61,853","Active"],
   [3,"Container Exchange","Corporate","DISC, Dale Carnegie Course, HIP, Unleash Your Leadership",52376,"$52,376","Active"],
-  [4,"Centenary Landscaping Supplies","Corporate","Dale Carnegie Course, HIP, Leadership Training for Managers, Unleash Your Leadership",36359,"$36,359","Active"],
-  [5,"DMA Engineers","Corporate","360, What Got You Here",34650,"$34,650","Active"],
-  [6,"iSeekplant","Corporate","Custom, DISC, Dale Carnegie Course, HIP, Leadership Training for Managers",33000,"$33,000","Active"],
-  [7,"Tilly&rsquo;s Crawler Parts","Corporate","360, Custom, HIP, What Got You Here, Winning with Relationship, World Class Customer Service",32989,"$32,989","Active"],
-  [8,"Rio Tinto Exploration","Corporate","Trusted Advisor, Workshop",28160,"$28,160","Active"],
-  [9,"Advivo Accountants & Advisors","Corporate","Custom, DISC, Dale Carnegie Course, HIP, Leadership Training for Managers",26400,"$26,400","Active"],
-  [10,"Australian Livestock Solutions","Corporate","360, Dale Carnegie Course, What Got You Here",24189,"$24,189","Active"],
-  [11,"Cordner Advisory","Corporate","Custom, DISC",21769,"$21,769","Active"],
-  [12,"Brisbane Refinish Supplies","Corporate","HIP, High Performance Teams",21560,"$21,560","Active"],
-  [13,"Connect Truckers","Corporate","Dale Carnegie Course, HIP, Unleash Your Leadership",17835,"$17,835","Active"],
-  [14,"Ashton Manufacturing","Corporate","Dale Carnegie Course",17022,"$17,022","Active"],
-  [15,"Australian Outdoor Living","Corporate","Program delivered",16500,"$16,500","Active"],
-  [16,"Fresh & Save","Corporate","DISC, Workshop",16500,"$16,500","Active"],
-  [17,"Titan Enterprises","Corporate","DISC",16472,"$16,472","Active"],
-  [18,"Jessica Kate","Corporate","DISC, Dale Carnegie Course, HIP, High Impact Presentations, Winning with Relationship",12958,"$12,958","Active"],
-  [19,"Gold Coast City Marina & Shipyard","Corporate","Custom",10994,"$10,994","Active"],
-  [20,"Riverside Marine","Corporate","DISC, Dale Carnegie Course",10214,"$10,214","Active"],
-  [21,"Decked Out Auto","Corporate","HIP, Leadership Training for Managers, Winning with Relationship",9344,"$9,344","Active"],
-  [22,"Business House Australia","Corporate","Custom, DISC, HIP, Unleash Your Leadership",9334,"$9,334","Active"],
-  [23,"BDO","Corporate","Custom, Workshop",8789,"$8,789","Active"],
-  [24,"BDO NSW","Corporate","Custom, Workshop",8789,"$8,789","Active"],
-  [25,"Wiley","Corporate","DISC, Dale Carnegie Course",6809,"$6,809","Active"],
+  [4,"Western Downs Civil","Corporate","Dale Carnegie Course",40694,"$40,694","Active"],
+  [5,"Centenary Landscaping Supplies","Corporate","Dale Carnegie Course, HIP, Leadership Training for Managers, Unleash Your Leadership",36359,"$36,359","Active"],
+  [6,"DMA Engineers","Corporate","360, What Got You Here",34650,"$34,650","Active"],
+  [7,"iSeekplant","Corporate","Custom, DISC, Dale Carnegie Course, HIP, Leadership Training for Managers",33000,"$33,000","Active"],
+  [8,"Tilly&rsquo;s Crawler Parts","Corporate","360, Custom, HIP, What Got You Here, Winning with Relationship, World Class Customer Service",32989,"$32,989","Active"],
+  [9,"Rio Tinto Exploration","Corporate","Trusted Advisor, Workshop",28160,"$28,160","Active"],
+  [10,"Advivo Accountants & Advisors","Corporate","Custom, DISC, Dale Carnegie Course, HIP, Leadership Training for Managers",26400,"$26,400","Active"],
+  [11,"Australian Livestock Solutions","Corporate","360, Dale Carnegie Course, What Got You Here",24189,"$24,189","Active"],
+  [12,"Cordner Advisory","Corporate","Custom, DISC",21769,"$21,769","Active"],
+  [13,"Brisbane Refinish Supplies","Corporate","HIP, High Performance Teams",21560,"$21,560","Active"],
+  [14,"Connect Truckers","Corporate","Dale Carnegie Course, HIP, Unleash Your Leadership",17835,"$17,835","Active"],
+  [15,"Ashton Manufacturing","Corporate","Dale Carnegie Course",17022,"$17,022","Active"],
+  [16,"Australian Outdoor Living","Corporate","Program delivered",16500,"$16,500","Active"],
+  [17,"Fresh & Save","Corporate","DISC, Workshop",16500,"$16,500","Active"],
+  [18,"Titan Enterprises","Corporate","DISC",16472,"$16,472","Active"],
+  [19,"Jessica Kate","Corporate","DISC, Dale Carnegie Course, HIP, High Impact Presentations, Winning with Relationship",12958,"$12,958","Active"],
+  [20,"Gold Coast City Marina & Shipyard","Corporate","Custom",10994,"$10,994","Active"],
+  [21,"Riverside Marine","Corporate","DISC, Dale Carnegie Course",10214,"$10,214","Active"],
+  [22,"Decked Out Auto","Corporate","HIP, Leadership Training for Managers, Winning with Relationship",9344,"$9,344","Active"],
+  [23,"Business House Australia","Corporate","Custom, DISC, HIP, Unleash Your Leadership",9334,"$9,334","Active"],
+  [24,"BDO","Corporate","Custom, Workshop",8789,"$8,789","Active"],
+  [25,"BDO NSW","Corporate","Custom, Workshop",8789,"$8,789","Active"],
+  [26,"Brisbane Powerhouse","Corporate","DISC, Dale Carnegie Course",6809,"$6,809","Active"],
+  [27,"Wiley","Corporate","DISC, Dale Carnegie Course",6809,"$6,809","Active"],
 
-  // INDIVIDUALS
-  [26,"Aurizon","Corporate","Workshop",3872,"$3,872","Individual"],
-  [27,"Insurance Advisernet","Corporate","Program delivered",3520,"$3,520","Individual"],
-  [28,"B&R Enclosures","Corporate","DISC, Dale Carnegie Course",3404,"$3,404","Individual"],
-  [29,"Bellingham Marine","Corporate","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [30,"Ian Garrow","Corporate","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [31,"Ken Sutherland","Corporate","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [32,"LanCon Qld","Corporate","HIP, Leadership Training for Managers",3404,"$3,404","Individual"],
-  [33,"Ripple Analytics Pty Ltd","Corporate","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [34,"Singleton Solutions","Corporate","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [35,"Zancott Knight","Corporate","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [36,"Fahim Murshed","Corporate","DISC, Dale Carnegie Course",3294,"$3,294","Individual"],
-  [37,"Structural Integrity Engineering","Corporate","DISC, Dale Carnegie Course",3294,"$3,294","Individual"],
-  [38,"Marit Lieuwke","Corporate","Generation Next",3080,"$3,080","Individual"],
-  [39,"Victor Wang","Corporate","Dale Carnegie Course",3074,"$3,074","Individual"],
-  [40,"CANNA Australasia","Corporate","HIP, Winning with Relationship",2948,"$2,948","Individual"],
-  [41,"Women of Lot Feeding","Corporate","Program delivered",2316,"$2,316","Individual"],
-  [42,"Andrew Crompton","Corporate","Generation Next",1974,"$1,974","Individual"],
-  [43,"Terri Argument","Corporate","Generation Next",1974,"$1,974","Individual"],
-  [44,"Veena Ramachandran","Corporate","Generation Next",1974,"$1,974","Individual"],
-  [45,"Andrea Gill","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [46,"Bruce Richardson","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [47,"Craig Stanley","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [48,"David Pryde","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [49,"Julie Beach","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [50,"Maria Poggioli","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [51,"Mel Kurniawan","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [52,"Melissa Griffiths","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [53,"Natalie Veivers","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [54,"Rodney Samimi","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [55,"Saurabh Prakash","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [56,"Sharon Feldmann","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [57,"Vanessa Andre","Corporate","Generation Next",1760,"$1,760","Individual"],
-  [58,"Georgia McCafferty","Corporate","Generation Next",1720,"$1,720","Individual"],
-  [59,"Chris Tziolis","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [60,"Dan Taylor","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [61,"Darren Meznarich","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [62,"Gemma Burger","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [63,"Patricia Wilson","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [64,"Patricia Yusia","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [65,"Shaun Bond","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [66,"Toon Van Bergen","Corporate","Generation Next",1650,"$1,650","Individual"],
-  [67,"Sandy Ryan","Corporate","DISC, Generation Next, Workshop",1210,"$1,210","Individual"],
-  [68,"Chau N Huynh","Corporate","Generation Next",880,"$880","Individual"],
-  [69,"Tanya Riley","Corporate","Generation Next",550,"$550","Individual"],
+  // INDIVIDUAL
+  [28,"Aurizon","Individual","Workshop",3872,"$3,872","Individual"],
+  [29,"Insurance Advisernet","Individual","Program delivered",3520,"$3,520","Individual"],
+  [30,"B&R Enclosures","Individual","DISC, Dale Carnegie Course",3404,"$3,404","Individual"],
+  [31,"Bellingham Marine","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [32,"Danielle Pritchard","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [33,"Hippopotamus Pawnbrokers","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [34,"Ian Garrow","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [35,"JDG Accountants","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [36,"Kehoe Myers Consulting Engineers","Individual","DISC, Dale Carnegie Course",3404,"$3,404","Individual"],
+  [37,"Ken Sutherland","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [38,"LanCon Qld","Individual","HIP, Leadership Training for Managers",3404,"$3,404","Individual"],
+  [39,"Ripple Analytics Pty Ltd","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [40,"Singleton Solutions","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [41,"Tim Stoddart","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [42,"Zancott Knight","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [43,"Fahim Murshed","Individual","DISC, Dale Carnegie Course",3294,"$3,294","Individual"],
+  [44,"Structural Integrity Engineering","Individual","DISC, Dale Carnegie Course",3294,"$3,294","Individual"],
+  [45,"Marit Lieuwke","Individual","Generation Next",3080,"$3,080","Individual"],
+  [46,"Victor Wang","Individual","Dale Carnegie Course",3074,"$3,074","Individual"],
+  [47,"CANNA Australasia","Individual","HIP, Winning with Relationship",2948,"$2,948","Individual"],
+  [48,"Women of Lot Feeding","Individual","Program delivered",2316,"$2,316","Individual"],
+  [49,"Andrew Crompton","Individual","Generation Next",1974,"$1,974","Individual"],
+  [50,"Caroline Dalleh","Individual","Dale Carnegie Course, Generation Next",1974,"$1,974","Individual"],
+  [51,"Terri Argument","Individual","Generation Next",1974,"$1,974","Individual"],
+  [52,"Veena Ramachandran","Individual","Generation Next",1974,"$1,974","Individual"],
+  [53,"Andrea Gill","Individual","Generation Next",1760,"$1,760","Individual"],
+  [54,"Bruce Richardson","Individual","Generation Next",1760,"$1,760","Individual"],
+  [55,"Craig Stanley","Individual","Generation Next",1760,"$1,760","Individual"],
+  [56,"David Pryde","Individual","Generation Next",1760,"$1,760","Individual"],
+  [57,"Georgia McCafferty","Individual","Generation Next",1760,"$1,760","Individual"],
+  [58,"Julie Beach","Individual","Generation Next",1760,"$1,760","Individual"],
+  [59,"Maria Poggioli","Individual","Generation Next",1760,"$1,760","Individual"],
+  [60,"Mel Kurniawan","Individual","Generation Next",1760,"$1,760","Individual"],
+  [61,"Melissa Griffiths","Individual","Generation Next",1760,"$1,760","Individual"],
+  [62,"Natalie Veivers","Individual","Generation Next",1760,"$1,760","Individual"],
+  [63,"Rodney Samimi","Individual","Generation Next",1760,"$1,760","Individual"],
+  [64,"Saurabh Prakash","Individual","Generation Next",1760,"$1,760","Individual"],
+  [65,"Sharon Feldmann","Individual","Generation Next",1760,"$1,760","Individual"],
+  [66,"Tanya Riley","Individual","Generation Next",1760,"$1,760","Individual"],
+  [67,"Vanessa Andre","Individual","Generation Next",1760,"$1,760","Individual"],
+  [68,"Chris Tziolis","Individual","Generation Next",1650,"$1,650","Individual"],
+  [69,"Dan Taylor","Individual","Generation Next",1650,"$1,650","Individual"],
+  [70,"Darren Meznarich","Individual","Generation Next",1650,"$1,650","Individual"],
+  [71,"Gemma Burger","Individual","Generation Next",1650,"$1,650","Individual"],
+  [72,"Patricia Wilson","Individual","Generation Next",1650,"$1,650","Individual"],
+  [73,"Patricia Yusia","Individual","Generation Next",1650,"$1,650","Individual"],
+  [74,"Shaun Bond","Individual","Generation Next",1650,"$1,650","Individual"],
+  [75,"Toon Van Bergen","Individual","Generation Next",1650,"$1,650","Individual"],
+  [76,"Sandy Ryan","Individual","DISC, Generation Next, Workshop",1210,"$1,210","Individual"],
+  [77,"Chau N Huynh","Individual","Generation Next",880,"$880","Individual"],
 ];
 var activeTier = 'all';
 var searchTerm = '';
