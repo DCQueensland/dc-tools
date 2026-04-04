@@ -1,0 +1,9 @@
+{
+  "name": "Proposals Pipeline",
+  "description": "Active proposals tracker. View pipeline by stage, client, and value. Track proposal status from draft to closed.",
+  "file": "proposals-pipeline.html",
+  "icon": "📈",
+  "category": "client-deliverables",
+  "type": "online",
+  "order": 2
+}

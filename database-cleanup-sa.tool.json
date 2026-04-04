@@ -1,0 +1,9 @@
+{
+  "name": "Database Cleanup — SA",
+  "description": "SA Salesforce cleanup. 10,865 contacts filtered to 1,079 Decision Makers + 1,314 Apollo candidates.",
+  "file": "database-cleanup-sa.html",
+  "icon": "🗂",
+  "category": "crm-knowledge",
+  "type": "online",
+  "order": 2
+}

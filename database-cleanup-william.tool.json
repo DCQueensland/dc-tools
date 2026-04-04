@@ -1,0 +1,9 @@
+{
+  "name": "Database Cleanup — William",
+  "description": "Salesforce cleanup. 22,145 contacts filtered to 270 QLD Decision Makers + 1,091 Apollo candidates. Full flowchart.",
+  "file": "database-cleanup-william.html",
+  "icon": "🗂",
+  "category": "crm-knowledge",
+  "type": "online",
+  "order": 1
+}

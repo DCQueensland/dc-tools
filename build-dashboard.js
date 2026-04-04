@@ -13,6 +13,9 @@ try {
 
 // Group by category
 const categories = {
+  'customer-intelligence': { label: 'Customer Intelligence', tools: [] },
+  'crm-knowledge': { label: 'CRM Knowledge Station', tools: [] },
+  'client-deliverables': { label: 'Client Deliverables', tools: [] },
   'training-portal': { label: 'Training Portals', tools: [] },
   'online-tool': { label: 'Online Tools', tools: [] },
   'on-device': { label: 'On-Device Tools', tools: [] }
@@ -26,6 +29,9 @@ tools.forEach(t => {
 // Icon CSS class mapping
 function iconClass(cat) {
   const map = {
+    'customer-intelligence': 'icon-feedback',
+    'crm-knowledge': 'icon-sales',
+    'client-deliverables': 'icon-proposal',
     'training-portal': 'icon-sales',
     'online-tool': 'icon-banner',
     'on-device': 'icon-proposal'

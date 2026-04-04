@@ -1,0 +1,9 @@
+{
+  "name": "Database Cleanup — Emma",
+  "description": "Emma's Salesforce cleanup. 9,298 contacts filtered to 1,143 QLD Decision Makers + 758 Apollo candidates.",
+  "file": "database-cleanup-emma.html",
+  "icon": "🗂",
+  "category": "crm-knowledge",
+  "type": "online",
+  "order": 3
+}
