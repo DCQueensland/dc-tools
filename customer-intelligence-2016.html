@@ -248,6 +248,62 @@ function render() {
     var html = '';
     for (var i = 0; i < filtered.length; i++) {
       var r = filtered[i];
+var activeTier = 'all';
+var searchTerm = '';
+var sortCol = 0;
+var sortDir = 1;
+
+function tierClass(t) {
+  if (t === 'Anchor') return 'tier-1';
+  if (t === 'Active') return 'tier-2';
+  if (t === 'Delivered') return 'tier-3';
+  if (t === 'School') return 'tier-school';
+  return 'tier-prospect';
+}
+function badgeClass(t) {
+  if (t === 'Anchor') return 'badge-anchor';
+  if (t === 'Active') return 'badge-active';
+  if (t === 'Delivered') return 'badge-delivered';
+  if (t === 'School') return 'badge-school';
+  if (t === 'Conference') return 'badge-conference';
+  if (t === 'Individual') return 'badge-individual';
+  return 'badge-prospect';
+}
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+function matchesFilters(row) {
+  if (activeTier !== 'all' && row[6] !== activeTier) return false;
+  if (searchTerm) {
+    var q = searchTerm.toLowerCase();
+    if (row[1].toLowerCase().indexOf(q) === -1 &&
+        row[2].toLowerCase().indexOf(q) === -1 &&
+        row[3].toLowerCase().indexOf(q) === -1 &&
+        row[5].toLowerCase().indexOf(q) === -1 &&
+        row[6].toLowerCase().indexOf(q) === -1) return false;
+  }
+  return true;
+}
+function render() {
+  var filtered = DATA.filter(matchesFilters);
+  filtered.sort(function(a, b) {
+    var va = a[sortCol], vb = b[sortCol];
+    if (sortCol === 0 || sortCol === 4) return ((va||0) - (vb||0)) * sortDir;
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+  var tbody = document.getElementById('tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-results">No matching organisations found.</td></tr>';
+  } else {
+    var html = '';
+    for (var i = 0; i < filtered.length; i++) {
+      var r = filtered[i];
       var revDisplay = r[5] || '\u2014';
       html += '<tr class="' + tierClass(r[6]) + '">' +
         '<td>' + r[0] + '</td>' +
@@ -276,7 +332,22 @@ document.getElementById('tier-filters').addEventListener('click', function(e) {
   e.target.classList.add('active');
   activeTier = e.target.getAttribute('data-tier');
   render();
-
+});
+document.getElementById('search').addEventListener('input', function(e) {
+  searchTerm = e.target.value;
+  render();
+});
+var ths = document.querySelectorAll('thead th');
+for (var k = 0; k < ths.length; k++) {
+  (function(th) {
+    th.addEventListener('click', function() {
+      var col = parseInt(th.getAttribute('data-col'));
+      if (sortCol === col) { sortDir *= -1; } else { sortCol = col; sortDir = 1; }
+      render();
+    });
+  })(ths[k]);
+}
+render();
 </script>
 </body>
 </html>
