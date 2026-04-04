@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dale Carnegie Queensland &mdash; 2018 Customer Intelligence</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Arial, Helvetica, sans-serif; background: #f4f5f7; color: #333; }
+  .header {
+    background: linear-gradient(135deg, #1a2332 0%, #2c3e50 50%, #1a2332 100%);
+    color: #fff; padding: 32px 40px 28px; position: relative; overflow: hidden;
+  }
+  .header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, #ffc708, #0090cf, #84c44c);
+  }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .header .subtitle { font-size: 14px; color: #a0b0c0; margin-top: 4px; }
+  .header .brand { display: flex; align-items: center; gap: 16px; }
+  .header .brand .dc-mark {
+    background: #ffc708; color: #1a2332; font-weight: 800; font-size: 18px;
+    width: 44px; height: 44px; border-radius: 8px; display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .container { max-width: 1400px; margin: 0 auto; padding: 24px 32px 48px; }
+  .highlights {
+    background: linear-gradient(135deg, #1a2332, #263445);
+    border-radius: 12px; padding: 24px 28px; margin-bottom: 24px;
+    border-left: 4px solid #ffc708; color: #fff;
+  }
+  .highlights h2 { font-size: 16px; color: #ffc708; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+  .highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+  .highlight-item { font-size: 13px; color: #c0cdd8; line-height: 1.5; padding: 6px 0; }
+  .highlight-item strong { color: #fff; }
+  .highlight-item .hl-num { color: #ffc708; font-weight: 700; font-size: 15px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .card {
+    background: #fff; border-radius: 10px; padding: 20px 22px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08); border-top: 3px solid #0090cf;
+    text-align: center;
+  }
+  .card.yellow { border-top-color: #ffc708; }
+  .card.green { border-top-color: #84c44c; }
+  .card.red { border-top-color: #e74c3c; }
+  .card .card-value { font-size: 32px; font-weight: 700; color: #1a2332; }
+  .card .card-label { font-size: 12px; color: #6b7c8d; text-transform: uppercase; letter-spacing: .6px; margin-top: 4px; }
+  .controls { background: #fff; border-radius: 10px; padding: 18px 22px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,.08); display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .controls label { font-size: 12px; font-weight: 600; color: #6b7c8d; text-transform: uppercase; letter-spacing: .5px; margin-right: 4px; }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .btn-group { display: flex; flex-wrap: wrap; gap: 6px; }
+  .fbtn {
+    border: 1px solid #d0d5db; background: #fff; border-radius: 6px; padding: 6px 14px;
+    font-size: 13px; cursor: pointer; transition: all .15s; color: #333;
+  }
+  .fbtn:hover { background: #f0f4f8; border-color: #0090cf; }
+  .fbtn.active { background: #0090cf; color: #fff; border-color: #0090cf; }
+  .search-box {
+    margin-left: auto; border: 1px solid #d0d5db; border-radius: 6px; padding: 7px 14px;
+    font-size: 13px; width: 260px; outline: none; transition: border .15s;
+  }
+  .search-box:focus { border-color: #0090cf; box-shadow: 0 0 0 2px rgba(0,144,207,.15); }
+  .table-wrap { background: #fff; border-radius: 10px; box-shadow: 0 1px 4px rgba(0,0,0,.08); overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: #1a2332; color: #fff; padding: 12px 14px; text-align: left;
+    font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .5px;
+    cursor: pointer; user-select: none; white-space: nowrap; position: sticky; top: 0; z-index: 2;
+  }
+  thead th:hover { background: #263445; }
+  thead th .sort-icon { margin-left: 4px; font-size: 10px; opacity: .4; }
+  thead th.sorted-asc .sort-icon::after { content: ' \25B2'; opacity: 1; }
+  thead th.sorted-desc .sort-icon::after { content: ' \25BC'; opacity: 1; }
+  tbody tr { border-bottom: 1px solid #eef0f2; transition: background .1s; }
+  tbody tr:hover { background: #f7f9fb !important; }
+  tbody td { padding: 10px 14px; vertical-align: top; }
+  tbody td:nth-child(2) { font-weight: 600; color: #1a2332; }
+  tr.tier-1 { background: rgba(255,199,8,.08); }
+  tr.tier-1:hover { background: rgba(255,199,8,.15) !important; }
+  tr.tier-2 { background: rgba(132,196,76,.07); }
+  tr.tier-2:hover { background: rgba(132,196,76,.14) !important; }
+  tr.tier-3 { background: rgba(0,144,207,.05); }
+  tr.tier-3:hover { background: rgba(0,144,207,.10) !important; }
+  tr.tier-school { background: rgba(155,89,182,.05); }
+  tr.tier-school:hover { background: rgba(155,89,182,.10) !important; }
+  tr.tier-prospect { background: #fff; }
+  .badge {
+    display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px;
+    font-weight: 600; letter-spacing: .3px; white-space: nowrap;
+  }
+  .badge-anchor { background: #fff3cd; color: #856404; }
+  .badge-active { background: #e8f5e0; color: #2e7d32; }
+  .badge-delivered { background: #e0f0fa; color: #0277bd; }
+  .badge-school { background: #f3e5f5; color: #7b1fa2; }
+  .badge-prospect { background: #fff3e0; color: #e65100; }
+  .badge-conference { background: #e8eaf6; color: #283593; }
+  .badge-individual { background: #fce4ec; color: #c62828; }
+  .footer { text-align: center; color: #a0b0c0; font-size: 11px; margin-top: 32px; padding-bottom: 24px; }
+  .result-count { font-size: 13px; color: #6b7c8d; margin-bottom: 10px; }
+  .no-results { text-align: center; padding: 40px 20px; color: #6b7c8d; font-size: 15px; }
+  @media print {
+    body { background: #fff; font-size: 11px; }
+    .controls { display: none !important; }
+    .header, .highlights, thead th, .card, tr.tier-1, tr.tier-2, tr.tier-3, tr.tier-school, .badge { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .result-count { display: none; }
+    .table-wrap { box-shadow: none; border: 1px solid #ddd; }
+  }
+  @media (max-width: 768px) {
+    .header { padding: 20px; }
+    .header h1 { font-size: 20px; }
+    .container { padding: 16px; }
+    .controls { flex-direction: column; align-items: stretch; }
+    .search-box { width: 100%; margin-left: 0; }
+    .cards { grid-template-columns: repeat(2, 1fr); }
+    .highlights-grid { grid-template-columns: 1fr; }
+  }
+
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">
+    <div class="dc-mark">DC</div>
+    <div>
+      <h1>Dale Carnegie Queensland &mdash; 2018 Customer Intelligence</h1>
+      <div class="subtitle">Full Year Analysis | Xero-Verified Paid Revenue | First $1M Year</div>
+    </div>
+  </div>
+</div>
+<div class="container">
+
+  <div class="highlights">
+    <h2>2018 Highlights</h2>
+    <div class="highlights-grid">
+      <div class="highlight-item"><span class="hl-num">$1.05M</span> Xero-verified revenue (paid only) &mdash; <strong>first million-dollar year</strong></div>
+      <div class="highlight-item"><span class="hl-num">124</span> companies paid invoices &mdash; peak client count</div>
+      <div class="highlight-item"><strong>Top clients:</strong> East West Insurance ($88k), Boltmasters ($87k), Bradnam&rsquo;s ($75k)</div>
+      <div class="highlight-item"><strong>Bradnam&rsquo;s becomes anchor</strong> &mdash; first major inhouse engagement</div>
+      <div class="highlight-item"><strong>Data reconciled with Xero 4 April 2026</strong> &mdash; paid amounts only</div>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card yellow"><div class="card-value">$1.05M</div><div class="card-label">Paid Revenue</div></div>
+    <div class="card"><div class="card-value">124</div><div class="card-label">Companies</div></div>
+    <div class="card green"><div class="card-value">1st</div><div class="card-label">Million Dollar Year</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-group">
+      <label>Tier</label>
+      <div class="btn-group" id="tier-filters">
+        <button class="fbtn active" data-tier="all">All</button>
+        <button class="fbtn" data-tier="Anchor">Anchor</button>
+        <button class="fbtn" data-tier="Active">Revenue</button>
+        <button class="fbtn" data-tier="Individual">Individuals</button>
+
+      </div>
+    </div>
+    <input type="text" class="search-box" id="search" placeholder="Search company, industry, or program...">
+  </div>
+
+  <div class="result-count" id="result-count"></div>
+
+  <div class="table-wrap">
+    <table id="customer-table">
+      <thead>
+        <tr>
+          <th data-col="0"># <span class="sort-icon"></span></th>
+          <th data-col="1">Company <span class="sort-icon"></span></th>
+          <th data-col="2">Industry <span class="sort-icon"></span></th>
+          <th data-col="3">Programs <span class="sort-icon"></span></th>
+          <th data-col="4">Revenue <span class="sort-icon"></span></th>
+          <th data-col="5">Tier <span class="sort-icon"></span></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Dale Carnegie Queensland &bull; William Farmer and Associates Pty Ltd &bull; Snapshot: 2018<br>
+    Data reconciled with Xero invoices 4 April 2026 | Revenue = paid only (verified against accounting records)
+  </div>
+</div>
+
+<script>
+var DATA = [
+  // ANCHOR CLIENTS
+  [1,"East West Insurance Brokers","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers, Winning with Relationship",88206,"$88,206","Anchor"],
+  [2,"Boltmasters","Corporate","360, Custom, Dale Carnegie Course, High Performance Teams, What Got You Here, World Class Customer Service",86878,"$86,878","Anchor"],
+
+  // ACTIVE CLIENTS
+  [3,"Bradnam&rsquo;s Windows & Doors","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers",75240,"$75,240","Active"],
+  [4,"DMA Engineers","Corporate","Dale Carnegie Course",38445,"$38,445","Active"],
+  [5,"Fallon Solutions Pty Ltd","Corporate","Workshop",38379,"$38,379","Active"],
+  [6,"Fire & Safety Systems (Australia) Pty Ltd","Corporate","DISC, HIP, Leadership Training for Managers, Winning with Relationship",38214,"$38,214","Active"],
+  [7,"Centenary Landscaping Supplies","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers, Winning with Relationship",38213,"$38,213","Active"],
+  [8,"Brisbane Refinish Supplies","Corporate","Custom, Dale Carnegie Course, HIP, Leadership Training for Managers, Winning with Relationship, World Class Customer Service",34732,"$34,732","Active"],
+  [9,"Practical Peripherals Corporation","Corporate","360, HIP, Winning with Relationship",31972,"$31,972","Active"],
+  [10,"Alphapharm Pty Ltd (Trading as Mylan Aust","Corporate","360, What Got You Here",29810,"$29,810","Active"],
+  [11,"Safety Mate","Corporate","DISC, HIP, Winning with Relationship",26389,"$26,389","Active"],
+  [12,"Mylan Australia Pty Ltd Sydney","Corporate","Program delivered",26169,"$26,169","Active"],
+  [13,"Gold Coast City Marina & Shipyard","Corporate","Dale Carnegie Course, HIP, Leadership Training for Managers, Workshop",22522,"$22,522","Active"],
+  [14,"Height 4 Hire Pty Ltd","Corporate","What Got You Here",21560,"$21,560","Active"],
+  [15,"NCI Packaging Pty Ltd","Corporate","DISC",21128,"$21,128","Active"],
+  [16,"NAS Australia","Corporate","HIP, Winning with Relationship",20894,"$20,894","Active"],
+  [17,"Lima Orthopaedics Australia Pty Ltd","Corporate","Program delivered",19652,"$19,652","Active"],
+  [18,"Youfoodz","Corporate","High Performance Teams",19360,"$19,360","Active"],
+  [19,"Mylan Health Pty Ltd Sydney","Corporate","Program delivered",18117,"$18,117","Active"],
+  [20,"Corporate House Services Pty Ltd","Corporate","Custom, DISC, World Class Customer Service",17039,"$17,039","Active"],
+  [21,"Brisbane Appliance Sales","Corporate","Program delivered",16472,"$16,472","Active"],
+  [22,"Height Dynamics","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers",16252,"$16,252","Active"],
+  [23,"Telstra Toombul","Corporate","Program delivered",15620,"$15,620","Active"],
+  [24,"EJ Australia Pty Ltd","Corporate","Program delivered",15264,"$15,264","Active"],
+  [25,"Cooper Grace Ward Lawyers","Corporate","Workshop",9900,"$9,900","Active"],
+  [26,"Advivo Accountants & Advisors","Corporate","Program delivered",9884,"$9,884","Active"],
+  [27,"Impact Finance Pty Ltd","Corporate","Dale Carnegie Course",9884,"$9,884","Active"],
+  [28,"Duce Timber Windows and Doors","Corporate","HIP, Leadership Training for Managers",7411,"$7,411","Active"],
+  [29,"Telstra Toowong","Corporate","Dale Carnegie Course",6589,"$6,589","Active"],
+  [30,"DDLS","Corporate","HIP, Leadership Training for Managers",6425,"$6,425","Active"],
+  [31,"Connect Truckers","Corporate","HIP, Leadership Training for Managers",6369,"$6,369","Active"],
+  [32,"Key Engineering Solutions","Corporate","Program delivered",6369,"$6,369","Active"],
+  [33,"Dale Carnegie NSW","Corporate","HIP, WGYH",5868,"$5,868","Active"],
+
+  // INDIVIDUALS
+  [34,"Panalitix","Corporate","HIP, Leadership Training for Managers",4950,"$4,950","Individual"],
+  [35,"Orafol Australia","Corporate","Custom, Workshop",4840,"$4,840","Individual"],
+  [36,"McInnes Wilson Lawyers","Corporate","Workshop",3850,"$3,850","Individual"],
+  [37,"Anthony Fuge","Corporate","Generation Next",3300,"$3,300","Individual"],
+  [38,"Brisbane Diff & Gearbox","Corporate","HIP, Leadership Training for Managers",3294,"$3,294","Individual"],
+  [39,"Caroline Jean-Baptiste","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [40,"Chris Teasdale","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [41,"Crisp Power & Control Pty Ltd","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [42,"David Saba","Corporate","Dale Carnegie Course",3294,"$3,294","Individual"],
+  [43,"Facundo Diaz Carbo","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [44,"Fast Fit Outs","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [45,"GasFields Commission Queensland","Corporate","HIP, Leadership Training for Managers",3294,"$3,294","Individual"],
+  [46,"Ibin Varughese","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [47,"Indigenous Business Australia","Corporate","DISC, Dale Carnegie Course",3294,"$3,294","Individual"],
+  [48,"Jacob Sibenaler","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [49,"Lannah Dunn Fine Jewellery","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [50,"Lindy Mackintosh","Corporate","Dale Carnegie Course",3294,"$3,294","Individual"],
+  [51,"Modern Transport Engineers Australia Pty","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [52,"Peritas Consulting Pty Ltd","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [53,"Proterra Group Pty Ltd","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [54,"Riverside Marine","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [55,"Steelx","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [56,"Synergy Business Systems","Corporate","Dale Carnegie Course",3294,"$3,294","Individual"],
+  [57,"TBH","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [58,"University of Queensland","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [59,"Westpac Banking Corporation","Corporate","Program delivered",3294,"$3,294","Individual"],
+  [60,"Blue Dog Training","Corporate","Program delivered",3184,"$3,184","Individual"],
+  [61,"Hillier Carter Properties","Corporate","DISC",3184,"$3,184","Individual"],
+  [62,"Onehub Business Pty Ltd","Corporate","DISC, Dale Carnegie Course",3184,"$3,184","Individual"],
+  [63,"Paramor Pty Ltd","Corporate","DISC",3184,"$3,184","Individual"],
+  [64,"Penske Power Systems Pty Ltd","Corporate","DISC",3184,"$3,184","Individual"],
+  [65,"AssetFinda","Corporate","Program delivered",3074,"$3,074","Individual"],
+  [66,"Sugo Tu","Corporate","Program delivered",3074,"$3,074","Individual"],
+  [67,"Nautilus Law Group","Corporate","Dale Carnegie Course",2995,"$2,995","Individual"],
+  [68,"Wendy Hargreaves","Corporate","Generation Next",2970,"$2,970","Individual"],
+  [69,"CTBS","Corporate","DISC, Dale Carnegie Course",2964,"$2,964","Individual"],
+  [70,"Doctors Wealth","Corporate","High Impact Presentations",2964,"$2,964","Individual"],
+  [71,"Missy Ivan","Corporate","Program delivered",2964,"$2,964","Individual"],
+  [72,"Trent Daniels","Corporate","Program delivered",2860,"$2,860","Individual"],
+  [73,"WealthX","Corporate","Program delivered",2744,"$2,744","Individual"],
+  [74,"Eventbrite","Corporate","Workshop",2605,"$2,605","Individual"],
+  [75,"Mutual Marketplace","Corporate","Workshop",2475,"$2,475","Individual"],
+  [76,"A. Raptis & Sons Pty Ltd","Corporate","Program delivered",2414,"$2,414","Individual"],
+  [77,"HDR - Rice Daubney","Corporate","Program delivered",2161,"$2,161","Individual"],
+  [78,"Allan Mackintosh","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [79,"Amanda Stubbs","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [80,"Beng Choo Lim","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [81,"Brett Walker","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [82,"Chris Jones","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [83,"Deborah Osland","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [84,"Erik Hupje","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [85,"Gayle Dagg","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [86,"Georgina Woods","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [87,"Helen Gardener","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [88,"Huijing Chen","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [89,"James Cousins","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [90,"Janine Graham","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [91,"Jodie Van Der Swys","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [92,"Judy Goodward","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [93,"Karleen Hartdegen","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [94,"Kate Spencer","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [95,"Kipu Davies","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [96,"Lakshmi Srinivasan","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [97,"Larissa Hart","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [98,"Laura Fairbrother","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [99,"Leanne Cornell","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [100,"Li Huang","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [101,"Lila Peterson","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [102,"Maria Poggioli","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [103,"Mark Clayton","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [104,"Megan Buck","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [105,"Nick Herron","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [106,"Nicola Hile","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [107,"Peter & Susan O&rsquo;Brien","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [108,"Peter Howard","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [109,"Rodney Samimi","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [110,"Sandra Cranston","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [111,"Soly Raj","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [112,"Suzanne Jackson","Corporate","Generation Next",1650,"$1,650","Individual"],
+  [113,"m3property Strategists","Corporate","Dale Carnegie Course",1650,"$1,650","Individual"],
+  [114,"Leanne Thomas","Corporate","Dale Carnegie Course",1094,"$1,094","Individual"],
+  [115,"Technology Traders","Corporate","Dale Carnegie Course",1094,"$1,094","Individual"],
+  [116,"Brisbane Powerhouse","Corporate","Program delivered",660,"$660","Individual"],
+  [117,"Depot Accounting Pty Ltd","Corporate","HIP, Workshop",660,"$660","Individual"],
+  [118,"Aman Matthews","Corporate","Dale Carnegie Course",550,"$550","Individual"],
+  [119,"Anish Chawan","Corporate","Dale Carnegie Course",550,"$550","Individual"],
+  [120,"Chameleon Customer","Corporate","Dale Carnegie Course",550,"$550","Individual"],
+  [121,"Lifeline","Corporate","Dale Carnegie Course",550,"$550","Individual"],
+  [122,"Maria Watson","Corporate","Program delivered",550,"$550","Individual"],
+  [123,"Top Build QLD","Corporate","Dale Carnegie Course",550,"$550","Individual"],
+  [124,"Empowering Events1","Corporate","Program delivered",363,"$363","Individual"],
+];
+var activeTier = 'all';
+var searchTerm = '';
+var sortCol = 0;
+var sortDir = 1;
+
+function tierClass(t) {
+  if (t === 'Anchor') return 'tier-1';
+  if (t === 'Active') return 'tier-2';
+  if (t === 'Delivered') return 'tier-3';
+  if (t === 'School') return 'tier-school';
+  return 'tier-prospect';
+}
+function badgeClass(t) {
+  if (t === 'Anchor') return 'badge-anchor';
+  if (t === 'Active') return 'badge-active';
+  if (t === 'Delivered') return 'badge-delivered';
+  if (t === 'School') return 'badge-school';
+  if (t === 'Conference') return 'badge-conference';
+  if (t === 'Individual') return 'badge-individual';
+  return 'badge-prospect';
+}
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+function matchesFilters(row) {
+  if (activeTier !== 'all' && row[6] !== activeTier) return false;
+  if (searchTerm) {
+    var q = searchTerm.toLowerCase();
+    if (row[1].toLowerCase().indexOf(q) === -1 &&
+        row[2].toLowerCase().indexOf(q) === -1 &&
+        row[3].toLowerCase().indexOf(q) === -1 &&
+        row[5].toLowerCase().indexOf(q) === -1 &&
+        row[6].toLowerCase().indexOf(q) === -1) return false;
+  }
+  return true;
+}
+function render() {
+  var filtered = DATA.filter(matchesFilters);
+  filtered.sort(function(a, b) {
+    var va = a[sortCol], vb = b[sortCol];
+    if (sortCol === 0 || sortCol === 4) return ((va||0) - (vb||0)) * sortDir;
+    if (typeof va === 'string') va = va.toLowerCase();
+    if (typeof vb === 'string') vb = vb.toLowerCase();
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+  var tbody = document.getElementById('tbody');
+  if (filtered.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-results">No matching organisations found.</td></tr>';
+  } else {
+    var html = '';
+    for (var i = 0; i < filtered.length; i++) {
+      var r = filtered[i];
+      var revDisplay = r[5] || '\u2014';
+      html += '<tr class="' + tierClass(r[6]) + '">' +
+        '<td>' + r[0] + '</td>' +
+        '<td>' + escapeHtml(r[1]) + '</td>' +
+        '<td>' + escapeHtml(r[2]) + '</td>' +
+        '<td>' + escapeHtml(r[3]) + '</td>' +
+        '<td>' + revDisplay + '</td>' +
+        '<td><span class="badge ' + badgeClass(r[6]) + '">' + r[6] + '</span></td>' +
+        '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+  document.getElementById('result-count').textContent = 'Showing ' + filtered.length + ' of ' + DATA.length + ' entries';
+  var ths = document.querySelectorAll('thead th');
+  for (var j = 0; j < ths.length; j++) {
+    ths[j].classList.remove('sorted-asc', 'sorted-desc');
+    if (parseInt(ths[j].getAttribute('data-col')) === sortCol) {
+      ths[j].classList.add(sortDir === 1 ? 'sorted-asc' : 'sorted-desc');
+    }
+  }
+}
+document.getElementById('tier-filters').addEventListener('click', function(e) {
+  if (!e.target.classList.contains('fbtn')) return;
+  var btns = document.querySelectorAll('#tier-filters .fbtn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  e.target.classList.add('active');
+  activeTier = e.target.getAttribute('data-tier');
+  render();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Customer Intelligence 2016",
+  "description": "Xero-verified paid revenue for 2016. Clients, programs, and revenue by tier.",
+  "file": "customer-intelligence-2016.html",
+  "icon": "📊",
+  "category": "customer-intelligence",
+  "type": "online",
+  "order": 2016
+}
