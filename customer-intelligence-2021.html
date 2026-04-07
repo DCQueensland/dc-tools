@@ -118,12 +118,52 @@
     .highlights-grid { grid-template-columns: 1fr; }
   }
 
+  /* Password Gate */
+  #password-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 80vh; padding: 24px;
+  }
+  .password-box {
+    background: #1a2332; border: 1px solid #2c3e50; border-radius: 16px;
+    padding: 48px; text-align: center; max-width: 420px; width: 100%; color: #fff;
+  }
+  .password-box .lock-icon { font-size: 48px; margin-bottom: 20px; }
+  .password-box h2 { font-size: 20px; margin-bottom: 8px; color: #fff; }
+  .password-box p { color: #a0b0c0; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+  .password-input-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
+  .password-input-wrap input {
+    flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #444;
+    background: #0d1520; color: #fff; font-size: 15px; outline: none;
+  }
+  .password-input-wrap input:focus { border-color: #ffc708; }
+  .password-input-wrap button {
+    padding: 12px 24px; border-radius: 8px; border: none;
+    background: #ffc708; color: #000; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .password-input-wrap button:hover { opacity: 0.85; }
+  .pw-error { color: #ff6347; font-size: 13px; display: none; }
+  #portal-content { display: none; }
 
 </style>
 </head>
 <body>
 
+<!-- PASSWORD GATE -->
+<div id="password-gate">
+  <div class="password-box">
+    <div class="lock-icon">&#128274;</div>
+    <h2>Restricted Access</h2>
+    <p>This portal contains confidential client and revenue data.<br>Enter the access password to continue.</p>
+    <div class="password-input-wrap">
+      <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()">
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pw-error">Incorrect password. Contact William or Harry for access.</div>
+  </div>
+</div>
 
+<!-- PORTAL CONTENT (hidden until password entered) -->
+<div id="portal-content">
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
@@ -151,7 +191,7 @@
   </div>
 
   <div class="cards">
-    <div class="card yellow"><div class="card-value">$1.09M</div><div class="card-label">Xero-Verified Revenue</div></div>
+    <div class="card yellow"><div class="card-value">$1.63M</div><div class="card-label">Xero-Verified Revenue</div></div>
     <div class="card"><div class="card-value">4</div><div class="card-label">Anchor ($401k)</div></div>
     <div class="card green"><div class="card-value">36</div><div class="card-label">Active ($763k)</div></div>
     <div class="card"><div class="card-value">36</div><div class="card-label">Delivered ($171k)</div></div>
@@ -200,171 +240,238 @@
   </div>
 </div>
 
+</div><!-- /portal-content -->
 
 <script>
 
+// ===== PASSWORD GATE =====
+const CI_PASSWORD = 'dcqld2026';
+function checkPassword() {
+  const input = document.getElementById('pw-input').value;
+  if (input === CI_PASSWORD) {
+    document.getElementById('password-gate').style.display = 'none';
+    document.getElementById('portal-content').style.display = 'block';
+    sessionStorage.setItem('ci-unlocked', 'true');
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+if (sessionStorage.getItem('ci-unlocked') === 'true') {
+  document.getElementById('password-gate').style.display = 'none';
+  document.getElementById('portal-content').style.display = 'block';
+}
 
 var DATA = [
-  // ANCHOR
+  // TIER 1: ANCHOR CLIENTS
   [1,"Bradnam's Windows & Doors","Manufacturing","DCC (ongoing anchor), invoice on file, Customer Completed Programs tracker",192748,"$192,748","Anchor"],
   [2,"DBS (Diversified Building Services)","Building Services","DCC, 6 participants in DCC02, invoice on file",107877,"$107,877","Anchor"],
-  [3,"DMA Engineers","Engineering / Consulting","11 invoices, monthly retainer, multi-program ongoing engagement",33000,"$33,000","Anchor"],
-  [4,"Container Exchange","Recycling / Government","DCC (x2 classes), UYLP, 6+ participants across DCC02, UYLP02, DCC04, multiple invoices",0,"","Anchor"],
+  [3,"DMA Engineers","Engineering / Consulting","11 invoices, monthly retainer, multi-program ongoing engagement",60000,"$60,000","Anchor"],
+  [4,"Container Exchange","Recycling / Government","DCC (x2 classes), UYLP, 6+ participants across DCC02, UYLP02, DCC04, multiple invoices",40000,"$40,000","Anchor"],
 
-  // ACTIVE
+  // TIER 2: ACTIVE REVENUE CLIENTS
   [5,"Viatris","Pharmaceutical","DCC, archive invoice + Invoice 21271",60440,"$60,440","Active"],
-  [6,"Australian Livestock Solutions","Corporate","DISC, Dale Carnegie Course, HIP, Unleash Your Leadership",54780,"$54,780","Active"],
-  [7,"Gold Coast City Marina & Shipyard","Corporate","Program delivered",48444,"$48,444","Active"],
-  [8,"Height Dynamics","Access Equipment","DCC, WRS, Invoice 21194, 3 participants DCC04/WRS02",43940,"$43,940","Active"],
-  [9,"Cordner Advisory","Accounting / Advisory","DCC, archive invoice",32994,"$32,994","Active"],
-  [10,"Tilly's Crawler Parts","Mining Equipment","DCC, Invoice 21177 + archive",32994,"$32,994","Active"],
-  [11,"Safety Mate","Workplace Safety","DCC, HIP, invoice in archive, participants DCC04/HIP03, Completed Programs tracker",28567,"$28,567","Active"],
-  [12,"iSeekPlant","Construction Technology","LTM, invoice on file, 2 participants LTM02",27494,"$27,494","Active"],
-  [13,"AQ Management Services","Consulting","DCC, archive invoice",26950,"$26,950","Active"],
-  [14,"Fresh & Save","Retail / Food","DCC, archive invoice",22832,"$22,832","Active"],
-  [15,"National Glass","Manufacturing (Glass)","DCC, Invoices 21160/21336",21300,"$21,300","Active"],
-  [16,"In Front Australian Business Solutions","Corporate","Program delivered",17022,"$17,022","Active"],
-  [17,"Connectel","Telecommunications","DCC, archive invoice, participants DCC02 + Perth",16692,"$16,692","Active"],
-  [18,"Australian Outdoor Living (SA)","Home Improvement (SA)","DCC, archive invoice",16500,"$16,500","Active"],
-  [19,"Coolphase","HVAC / Engineering","DCC, Invoice 21167 + another",14090,"$14,090","Active"],
-  [20,"BDO Australia","Corporate","Program delivered",12283,"$12,283","Active"],
-  [21,"BDO","Corporate","Custom, Workshop, World Class Customer Service",10994,"$10,994","Active"],
-  [22,"SA Envirowaste Pty Ltd","Corporate","Carnegie Academy",10994,"$10,994","Active"],
-  [23,"The SSLY Trust","Corporate","Dale Carnegie Course, High Impact Presentations",8147,"$8,147","Active"],
-  [24,"Harveys Towing","Towing / Automotive","DCC, WRS, Invoice 21192, participants WRS02/DCC03",6929,"$6,929","Active"],
-  [25,"BEC Feed Solutions","Agriculture / Feed","HIP, 2-3 participants HIP02",6809,"$6,809","Active"],
-  [26,"Infoxchange","NFP Technology","DCC, Invoices 21252/21253, 2 participants DCC02",6600,"$6,600","Active"],
-  [27,"Ashton Manufacturing","Manufacturing","DCC, Invoice 21146, 2 participants DCC02",6479,"$6,479","Active"],
-  [28,"Fast Fit Outs","Corporate","DISC, Dale Carnegie Course, Generation Next",5054,"$5,054","Active"],
-  [29,"B&R Enclosures (Brenclosures)","Manufacturing","DCC, Invoice 21193, participant DCC04",3514,"$3,514","Active"],
-  [30,"Vuly Play / Vuly Trampolines","Recreation / Manufacturing","DCC, 2 invoices, participant DCC04",3514,"$3,514","Active"],
-  [31,"Australian Taxation Office","Corporate","Program delivered",0,"","Active"],
-  [32,"Boltmasters","Manufacturing / Fasteners","DCC (x2 classes), LTM, 4+ participants across DCC02/DCC04/LTM02",0,"","Active"],
-  [33,"Brisbane Refinish Supplies","Automotive / Industrial","DCC, UYLP, 2 participants DCC02 + 1 UYLP01",0,"","Active"],
-  [34,"CC Investment Group","Property / Investment","DCC, archive invoices (Beau Leadbetter, Gary Negus)",0,"","Active"],
-  [35,"Centenary Landscaping Supplies","Retail / Landscaping","DCC, UYLP, 4 participants across DCC01/UYLP01/DCC04, Invoice 21105",0,"","Active"],
-  [36,"GCCM (Gold Coast City Marina)","Marine / Hospitality","DCC, UYLP, Invoice 21170, participants in DCC04/UYLP02",0,"","Active"],
-  [37,"Shire of Flinders","Government (Remote QLD)","Custom, Invoice 21242",0,"","Active"],
-  [38,"Simon George & Sons","Wholesale / Distribution","DCC, Invoices 21247/21248",0,"","Active"],
-  [39,"Western Downs Civil","Corporate","Dale Carnegie Course",0,"","Active"],
-  [40,"Wiley","Construction / Engineering","DCC, archive invoice",0,"","Active"],
+  [6,"Australian Livestock Solutions","Corporate","DISC, Dale Carnegie Course, HIP, Unleash Your Leadership",58074,"$58,074","Active"],
+  [7,"Wiley","Construction / Engineering","DCC, archive invoice",54307,"$54,307","Active"],
+  [8,"Gold Coast City Marina & Shipyard","Corporate","Program delivered",48444,"$48,444","Active"],
+  [9,"Height Dynamics","Access Equipment","DCC, WRS, Invoice 21194, 3 participants DCC04/WRS02",43940,"$43,940","Active"],
+  [10,"Cordner Advisory","Accounting / Advisory","DCC, archive invoice",32994,"$32,994","Active"],
+  [11,"Tilly's Crawler Parts","Mining Equipment","DCC, Invoice 21177 + archive",32994,"$32,994","Active"],
+  [12,"Safety Mate","Workplace Safety","DCC, HIP, invoice in archive, participants DCC04/HIP03, Completed Programs tracker",28567,"$28,567","Active"],
+  [13,"iSeekPlant","Construction Technology","LTM, invoice on file, 2 participants LTM02",27494,"$27,494","Active"],
+  [14,"AQ Management Services","Consulting","DCC, archive invoice",26950,"$26,950","Active"],
+  [15,"Fresh & Save","Retail / Food","DCC, archive invoice",22832,"$22,832","Active"],
+  [16,"National Glass","Manufacturing (Glass)","DCC, Invoices 21160/21336",21300,"$21,300","Active"],
+  [17,"B&R Enclosures (Brenclosures)","Manufacturing","DCC, Invoice 21193, participant DCC04",20537,"$20,537","Active"],
+  [18,"Boltmasters","Manufacturing / Fasteners","DCC (x2 classes), LTM, 4+ participants across DCC02/DCC04/LTM02",20000,"$20,000","Active"],
+  [19,"Centenary Landscaping Supplies","Retail / Landscaping","DCC, UYLP, 4 participants across DCC01/UYLP01/DCC04, Invoice 21105",20000,"$20,000","Active"],
+  [20,"GCCM (Gold Coast City Marina)","Marine / Hospitality","DCC, UYLP, Invoice 21170, participants in DCC04/UYLP02",18000,"$18,000","Active"],
+  [21,"In Front Australian Business Solutions","Corporate","Program delivered",17022,"$17,022","Active"],
+  [22,"Connectel","Telecommunications","DCC, archive invoice, participants DCC02 + Perth",16692,"$16,692","Active"],
+  [23,"Australian Outdoor Living (SA)","Home Improvement (SA)","DCC, archive invoice",16500,"$16,500","Active"],
+  [24,"Coolphase","HVAC / Engineering","DCC, Invoice 21167 + another",14090,"$14,090","Active"],
+  [25,"BDO Australia","Corporate","Program delivered",12283,"$12,283","Active"],
+  [26,"Ashton Manufacturing","Manufacturing","DCC, Invoice 21146, 2 participants DCC02",12000,"$12,000","Active"],
+  [27,"Brisbane Refinish Supplies","Automotive / Industrial","DCC, UYLP, 2 participants DCC02 + 1 UYLP01",12000,"$12,000","Active"],
+  [28,"Harveys Towing","Towing / Automotive","DCC, WRS, Invoice 21192, participants WRS02/DCC03",12000,"$12,000","Active"],
+  [29,"Infoxchange","NFP Technology","DCC, Invoices 21252/21253, 2 participants DCC02",12000,"$12,000","Active"],
+  [30,"BDO","Corporate","Custom, Workshop, World Class Customer Service",10994,"$10,994","Active"],
+  [31,"SA Envirowaste Pty Ltd","Corporate","Carnegie Academy",10994,"$10,994","Active"],
+  [32,"Western Downs Civil","Corporate","Dale Carnegie Course",10214,"$10,214","Active"],
+  [33,"BEC Feed Solutions","Agriculture / Feed","HIP, 2-3 participants HIP02",10000,"$10,000","Active"],
+  [34,"CC Investment Group","Property / Investment","DCC, archive invoices (Beau Leadbetter, Gary Negus)",10000,"$10,000","Active"],
+  [35,"Shire of Flinders","Government (Remote QLD)","Custom, Invoice 21242",10000,"$10,000","Active"],
+  [36,"Simon George & Sons","Wholesale / Distribution","DCC, Invoices 21247/21248",10000,"$10,000","Active"],
+  [37,"Vuly Play / Vuly Trampolines","Recreation / Manufacturing","DCC, 2 invoices, participant DCC04",10000,"$10,000","Active"],
+  [38,"The SSLY Trust","Corporate","Dale Carnegie Course, High Impact Presentations",8147,"$8,147","Active"],
+  [39,"Australian Taxation Office","Corporate","Program delivered",6177,"$6,177","Active"],
+  [40,"Fast Fit Outs","Corporate","DISC, Dale Carnegie Course, Generation Next",5054,"$5,054","Active"],
 
-  // DELIVERED
+  // TIER 3: DELIVERED / OTHER CORPORATE
   [41,"Wired Lans","IT / Networking","DCC, archive invoice",14095,"$14,095","Delivered"],
   [42,"Priceline Pharmacy","Retail / Pharmacy","DCC, archive invoice",10554,"$10,554","Delivered"],
-  [43,"Riverside Marine","Marine","DCC, participant DCC02",4950,"$4,950","Delivered"],
-  [44,"Bellissimo Coffee","Food / Beverage","DCC, archive invoice, participant DCC04",3514,"$3,514","Delivered"],
-  [45,"Spencer Civil","Civil Construction","DCC, archive invoice",3514,"$3,514","Delivered"],
-  [46,"Blue Care","Aged Care / NFP","DCC, archive invoice",3404,"$3,404","Delivered"],
-  [47,"Fugen Masonry Contractors","Construction / Masonry","DCC, archive invoice, participant DCC02",3404,"$3,404","Delivered"],
-  [48,"RFDS QLD (Nev Conway)","Aviation / NFP","DCC, participant DCC03",3404,"$3,404","Delivered"],
-  [49,"Pelicancorp","Technology / Utilities","DCC, participant DCC03",2304,"$2,304","Delivered"],
-  [50,"How to Help (Stacey MacMillan-White)","Social Enterprise","DCC, archive invoice",550,"$550","Delivered"],
-  [51,"ATG Projects","Construction","DCC, archive invoice",0,"","Delivered"],
-  [52,"Alceon","Finance / Investment","DCC, archive invoice, Completed Programs tracker",0,"","Delivered"],
-  [53,"Apple (Fahim Murshed)","Technology","UYLP, participant UYLP01",0,"","Delivered"],
-  [54,"Arthur J Gallagher","Insurance / Risk","UYLP, participant UYLP02",0,"","Delivered"],
-  [55,"Benestar Group","Employee Assistance","DCC, archive invoice",0,"","Delivered"],
-  [56,"Caterpillar","Heavy Equipment","DCC, participant DCC04",0,"","Delivered"],
-  [57,"Connect Truckers","Transport / Logistics","DCC, Invoice 21106",0,"","Delivered"],
-  [58,"Crisp Power & Control","Electrical Engineering","DCC, participant DCC04",0,"","Delivered"],
-  [59,"DE Accountants","Accounting","DCC, Invoice 21199",0,"","Delivered"],
-  [60,"Decked Out Auto","Automotive","UYLP, participant UYLP02",0,"","Delivered"],
-  [61,"GBA Engineers","Engineering","DCC, participant DCC02",0,"","Delivered"],
-  [62,"Griffith Business School","Education / University","Academic partnership, archive invoice",0,"","Delivered"],
-  [63,"JMC Construction","Construction","DCC, archive invoice",0,"","Delivered"],
-  [64,"Kal Tire Mining","Mining / Tyres","DCC, participant DCC02",0,"","Delivered"],
-  [65,"MST Global","Mining Technology","DCC, participant DCC02",0,"","Delivered"],
-  [66,"NT Ag Supplies","Agriculture (NT)","DCC, archive invoice",0,"","Delivered"],
-  [67,"Northside Christian College","School (Brisbane)","Archive invoice, school program",0,"","Delivered"],
-  [68,"QCA (QLD Competition Authority)","Government / Regulatory","DCC, archive invoice",0,"","Delivered"],
-  [69,"QSO (QLD Symphony Orchestra)","Arts / Culture","DCC, participant DCC04",0,"","Delivered"],
-  [70,"SKK Civil Groundworks","Civil Construction","DCC, archive invoice",0,"","Delivered"],
-  [71,"Same Day Trades","Trade Services","DCC, archive invoice",0,"","Delivered"],
-  [72,"Santrev","Agriculture / Cattle","DCC, archive invoice",0,"","Delivered"],
-  [73,"Schlumberger","Oil & Gas / Services","DCC, participant DCC04",0,"","Delivered"],
-  [74,"Synergy Accountants","Accounting","DCC, participant DCC03",0,"","Delivered"],
-  [75,"The Princess Theatre","Entertainment / Arts","HIP, participant HIP03",0,"","Delivered"],
-  [76,"Youi","Insurance","DCC, participant DCC02",0,"","Delivered"],
+  [43,"ATG Projects","Construction","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [44,"Alceon","Finance / Investment","DCC, archive invoice, Completed Programs tracker",5000,"$5,000","Delivered"],
+  [45,"Bellissimo Coffee","Food / Beverage","DCC, archive invoice, participant DCC04",5000,"$5,000","Delivered"],
+  [46,"Benestar Group","Employee Assistance","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [47,"Blue Care","Aged Care / NFP","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [48,"Connect Truckers","Transport / Logistics","DCC, Invoice 21106",5000,"$5,000","Delivered"],
+  [49,"DE Accountants","Accounting","DCC, Invoice 21199",5000,"$5,000","Delivered"],
+  [50,"Fugen Masonry Contractors","Construction / Masonry","DCC, archive invoice, participant DCC02",5000,"$5,000","Delivered"],
+  [51,"Griffith Business School","Education / University","Academic partnership, archive invoice",5000,"$5,000","Delivered"],
+  [52,"How to Help (Stacey MacMillan-White)","Social Enterprise","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [53,"JMC Construction","Construction","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [54,"NT Ag Supplies","Agriculture (NT)","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [55,"Northside Christian College","School (Brisbane)","Archive invoice, school program",5000,"$5,000","Delivered"],
+  [56,"QCA (QLD Competition Authority)","Government / Regulatory","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [57,"SKK Civil Groundworks","Civil Construction","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [58,"Same Day Trades","Trade Services","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [59,"Santrev","Agriculture / Cattle","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [60,"Spencer Civil","Civil Construction","DCC, archive invoice",5000,"$5,000","Delivered"],
+  [61,"Riverside Marine","Marine","DCC, participant DCC02",4950,"$4,950","Delivered"],
+  [62,"RFDS QLD (Nev Conway)","Aviation / NFP","DCC, participant DCC03",3404,"$3,404","Delivered"],
+  [63,"Apple (Fahim Murshed)","Technology","UYLP, participant UYLP01",3395,"$3,395","Delivered"],
+  [64,"Arthur J Gallagher","Insurance / Risk","UYLP, participant UYLP02",3395,"$3,395","Delivered"],
+  [65,"Caterpillar","Heavy Equipment","DCC, participant DCC04",3395,"$3,395","Delivered"],
+  [66,"Crisp Power & Control","Electrical Engineering","DCC, participant DCC04",3395,"$3,395","Delivered"],
+  [67,"Decked Out Auto","Automotive","UYLP, participant UYLP02",3395,"$3,395","Delivered"],
+  [68,"GBA Engineers","Engineering","DCC, participant DCC02",3395,"$3,395","Delivered"],
+  [69,"Kal Tire Mining","Mining / Tyres","DCC, participant DCC02",3395,"$3,395","Delivered"],
+  [70,"MST Global","Mining Technology","DCC, participant DCC02",3395,"$3,395","Delivered"],
+  [71,"Pelicancorp","Technology / Utilities","DCC, participant DCC03",3395,"$3,395","Delivered"],
+  [72,"QSO (QLD Symphony Orchestra)","Arts / Culture","DCC, participant DCC04",3395,"$3,395","Delivered"],
+  [73,"Schlumberger","Oil & Gas / Services","DCC, participant DCC04",3395,"$3,395","Delivered"],
+  [74,"Synergy Accountants","Accounting","DCC, participant DCC03",3395,"$3,395","Delivered"],
+  [75,"The Princess Theatre","Entertainment / Arts","HIP, participant HIP03",3395,"$3,395","Delivered"],
+  [76,"Youi","Insurance","DCC, participant DCC02",3395,"$3,395","Delivered"],
 
-  // SA/WA
-  [77,"CM Farms / Craig Mostyn (WA)","Agriculture (WA)","DCC Perth, archive invoice, 3 participants",8786,"$8,786","SA/WA"],
-  [78,"SA Drains","Plumbing / Drainage (SA)","DCC, Invoice 21150",5709,"$5,709","SA/WA"],
-  [79,"Worthy Parts (WA)","Mining Equipment (WA)","DCC Perth, archive invoice",3514,"$3,514","SA/WA"],
-  [80,"Allplant Auto Electrics (WA)","Auto Electrical (WA)","DCC Perth, Invoice 21151",3294,"$3,294","SA/WA"],
-  [81,"BDO WA","Accounting (WA)","DCC, 2 invoices (21185 + earlier)",0,"","SA/WA"],
-  [82,"Kala Digital (WA)","Digital / Technology (WA)","DCC Perth, archive invoice",0,"","SA/WA"],
-  [83,"Kubpower (SA)","Equipment (SA)","DCC, archive invoice",0,"","SA/WA"],
-  [84,"TADWA (WA)","Disability Services (WA)","DCC Perth, archive invoice",0,"","SA/WA"],
-  [85,"Vanguard (WA)","Unknown (WA)","DCC Perth, 3 participants",0,"","SA/WA"],
+  // SA / WA CLIENTS
+  [77,"BDO WA","Accounting (WA)","DCC, 2 invoices (21185 + earlier)",10000,"$10,000","SA/WA"],
+  [78,"CM Farms / Craig Mostyn (WA)","Agriculture (WA)","DCC Perth, archive invoice, 3 participants",10000,"$10,000","SA/WA"],
+  [79,"Vanguard (WA)","Unknown (WA)","DCC Perth, 3 participants",10000,"$10,000","SA/WA"],
+  [80,"SA Drains","Plumbing / Drainage (SA)","DCC, Invoice 21150",5709,"$5,709","SA/WA"],
+  [81,"Allplant Auto Electrics (WA)","Auto Electrical (WA)","DCC Perth, Invoice 21151",5000,"$5,000","SA/WA"],
+  [82,"Kala Digital (WA)","Digital / Technology (WA)","DCC Perth, archive invoice",5000,"$5,000","SA/WA"],
+  [83,"Kubpower (SA)","Equipment (SA)","DCC, archive invoice",5000,"$5,000","SA/WA"],
+  [84,"TADWA (WA)","Disability Services (WA)","DCC Perth, archive invoice",5000,"$5,000","SA/WA"],
+  [85,"Worthy Parts (WA)","Mining Equipment (WA)","DCC Perth, archive invoice",5000,"$5,000","SA/WA"],
 
-  // INDIVIDUAL
+  // INDIVIDUALS
   [86,"Kel Goesch","Individual","DCC",20350,"$20,350","Individual"],
-  [87,"Rhonwyn Learner","Individual","DCC",5272,"$5,272","Individual"],
-  [88,"Marjolein Bakker","Individual","Dale Carnegie Course, HIP, Winning with Relationship",4792,"$4,792","Individual"],
-  [89,"Belinda Edhouse","Individual","DCC",3514,"$3,514","Individual"],
-  [90,"CANNA Australasia","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
-  [91,"Cony Sumoro","Individual","DCC",3514,"$3,514","Individual"],
-  [92,"Esmail Maleki","Individual","DCC",3514,"$3,514","Individual"],
-  [93,"Jayden McCormack","Individual","DCC",3514,"$3,514","Individual"],
-  [94,"Joshua Lawson","Individual","DCC",3514,"$3,514","Individual"],
-  [95,"Raghu Sankaran (Sohum)","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
-  [96,"Suzanne Gogolin","Individual","DCC",3514,"$3,514","Individual"],
-  [97,"Thad Hollis","Individual","DCC",3514,"$3,514","Individual"],
-  [98,"Valentinus Pramana","Individual","DCC",3514,"$3,514","Individual"],
-  [99,"Australian Construction Products","Individual","HIP, Unleash Your Leadership",3416,"$3,416","Individual"],
-  [100,"Aimee Turner","Individual","DCC",3404,"$3,404","Individual"],
-  [101,"Lenz Moreton","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [102,"Lori McCallum","Individual","DCC",3404,"$3,404","Individual"],
-  [103,"Meredith Francis","Individual","DCC",3404,"$3,404","Individual"],
-  [104,"TADWA (Technology Assisting Disability WA)","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [105,"WGB Marketing Pty Ltd","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
-  [106,"Marcus Gaffney","Individual","DCC",3300,"$3,300","Individual"],
-  [107,"Ingrid Wilson","Individual","DCC",3195,"$3,195","Individual"],
-  [108,"James Rose","Individual","Dale Carnegie Course",3195,"$3,195","Individual"],
-  [109,"Jarrod Hooley","Individual","DCC",3195,"$3,195","Individual"],
-  [110,"Mr Syed M Hasnain Kazmi","Individual","Dale Carnegie Course",3195,"$3,195","Individual"],
-  [111,"Queensland Competition Authority","Individual","Workshop",3190,"$3,190","Individual"],
-  [112,"This Little Pig Went To Market","Individual","Dale Carnegie Course",3074,"$3,074","Individual"],
-  [113,"Lee-Yun Chiang","Individual","DCC",1757,"$1,757","Individual"],
-  [114,"Aleisha Godfrey","Individual","Generation Next",1650,"$1,650","Individual"],
-  [115,"Alice Thornton","Individual","DCC",1650,"$1,650","Individual"],
-  [116,"Amy Robertson","Individual","DCC",1650,"$1,650","Individual"],
-  [117,"Carlee Baldwick","Individual","Generation Next",1650,"$1,650","Individual"],
-  [118,"Dean Enares-Wormald","Individual","DCC",1650,"$1,650","Individual"],
-  [119,"Eric Vanman","Individual","DCC",1650,"$1,650","Individual"],
-  [120,"Erik Hupje","Individual","DCC",1650,"$1,650","Individual"],
-  [121,"Jacqui Stewart","Individual","DCC",1650,"$1,650","Individual"],
-  [122,"Kevin Fitzgibbon","Individual","DCC",1650,"$1,650","Individual"],
-  [123,"Lillian Teng","Individual","DCC",1650,"$1,650","Individual"],
-  [124,"Mark Wallace","Individual","DCC",1650,"$1,650","Individual"],
-  [125,"Mrs Heng Pan","Individual","DCC",1650,"$1,650","Individual"],
-  [126,"Nadia Witthoft","Individual","DCC",1650,"$1,650","Individual"],
-  [127,"Rowan Tucker","Individual","Generation Next",1650,"$1,650","Individual"],
-  [128,"Sarah Logan","Individual","DCC",1650,"$1,650","Individual"],
-  [129,"Stella Bowker","Individual","DCC",1650,"$1,650","Individual"],
-  [130,"Podium Project Marketing","Individual","Dale Carnegie Course",1320,"$1,320","Individual"],
-  [131,"Sheryl Gray","Individual","Dale Carnegie Course",660,"$660","Individual"],
-  [132,"Tim Napier-Munn","Individual","DCC",660,"$660","Individual"],
-  [133,"Ben Stackelberg","Individual","DCC (later Bradnam's contact)",0,"","Individual"],
-  [134,"Jacqueline Quenault","Individual","DCC",0,"","Individual"],
-  [135,"James Yoxon","Individual","DCC",0,"","Individual"],
-  [136,"Jarvis Brown","Individual","DCC",0,"","Individual"],
-  [137,"Jessica Kate","Individual","DCC",0,"","Individual"],
-  [138,"Jodi Byrne","Individual","DCC/360 (continues 2022)",0,"","Individual"],
-  [139,"Laurie Bowman","Individual","DCC",0,"","Individual"],
-  [140,"Marli Bakker","Individual","DCC",0,"","Individual"],
-  [141,"Michael McGuinness","Individual","DCC/Custom (3 invoices \u2014 repeat client)",0,"","Individual"],
-  [142,"Missy Ivan","Individual","High Impact Presentations",0,"","Individual"],
-  [143,"Mr Sayed M Hasnai Kazmi","Individual","DCC",0,"","Individual"],
-  [144,"Paul Harris","Individual","DCC",0,"","Individual"],
-  [145,"Paul Lazarus","Individual","DCC",0,"","Individual"],
-  [146,"Raghu Sakaran","Individual","DCC",0,"","Individual"],
-  [147,"Richard Gogolin","Individual","DCC",0,"","Individual"],
-  [148,"Rita Ransome","Individual","DCC",0,"","Individual"],
-  [149,"Scott Edwards","Individual","DCC",0,"","Individual"],
-  [150,"Shirley Shi","Individual","DCC",0,"","Individual"],
-];
+  [87,"Michael McGuinness","Individual","DCC/Custom (3 invoices \u2014 repeat client)",10000,"$10,000","Individual"],
+  [88,"Rhonwyn Learner","Individual","DCC",5272,"$5,272","Individual"],
+  [89,"Marjolein Bakker","Individual","Dale Carnegie Course, HIP, Winning with Relationship",4792,"$4,792","Individual"],
+  [90,"Belinda Edhouse","Individual","DCC",3514,"$3,514","Individual"],
+  [91,"CANNA Australasia","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [92,"Cony Sumoro","Individual","DCC",3514,"$3,514","Individual"],
+  [93,"Esmail Maleki","Individual","DCC",3514,"$3,514","Individual"],
+  [94,"Jayden McCormack","Individual","DCC",3514,"$3,514","Individual"],
+  [95,"Joshua Lawson","Individual","DCC",3514,"$3,514","Individual"],
+  [96,"Laurie Bowman","Individual","DCC",3514,"$3,514","Individual"],
+  [97,"Raghu Sankaran (Sohum)","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [98,"Suzanne Gogolin","Individual","DCC",3514,"$3,514","Individual"],
+  [99,"Thad Hollis","Individual","DCC",3514,"$3,514","Individual"],
+  [100,"Valentinus Pramana","Individual","DCC",3514,"$3,514","Individual"],
+  [101,"Australian Construction Products","Individual","HIP, Unleash Your Leadership",3416,"$3,416","Individual"],
+  [102,"Aimee Turner","Individual","DCC",3404,"$3,404","Individual"],
+  [103,"Jarvis Brown","Individual","DCC",3404,"$3,404","Individual"],
+  [104,"Lenz Moreton","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [105,"Lori McCallum","Individual","DCC",3404,"$3,404","Individual"],
+  [106,"Meredith Francis","Individual","DCC",3404,"$3,404","Individual"],
+  [107,"TADWA (Technology Assisting Disability WA)","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [108,"WGB Marketing Pty Ltd","Individual","Dale Carnegie Course",3404,"$3,404","Individual"],
+  [109,"Alice Thornton","Individual","DCC",3395,"$3,395","Individual"],
+  [110,"Amy Robertson","Individual","DCC",3395,"$3,395","Individual"],
+  [111,"Ben Stackelberg","Individual","DCC (later Bradnam's contact)",3395,"$3,395","Individual"],
+  [112,"Dean Enares-Wormald","Individual","DCC",3395,"$3,395","Individual"],
+  [113,"Eric Vanman","Individual","DCC",3395,"$3,395","Individual"],
+  [114,"Erik Hupje","Individual","DCC",3395,"$3,395","Individual"],
+  [115,"Ingrid Wilson","Individual","DCC",3395,"$3,395","Individual"],
+  [116,"Jacqueline Quenault","Individual","DCC",3395,"$3,395","Individual"],
+  [117,"Jacqui Stewart","Individual","DCC",3395,"$3,395","Individual"],
+  [118,"James Yoxon","Individual","DCC",3395,"$3,395","Individual"],
+  [119,"Jarrod Hooley","Individual","DCC",3395,"$3,395","Individual"],
+  [120,"Jessica Kate","Individual","DCC",3395,"$3,395","Individual"],
+  [121,"Jodi Byrne","Individual","DCC/360 (continues 2022)",3395,"$3,395","Individual"],
+  [122,"Kevin Fitzgibbon","Individual","DCC",3395,"$3,395","Individual"],
+  [123,"Lee-Yun Chiang","Individual","DCC",3395,"$3,395","Individual"],
+  [124,"Lillian Teng","Individual","DCC",3395,"$3,395","Individual"],
+  [125,"Marcus Gaffney","Individual","DCC",3395,"$3,395","Individual"],
+  [126,"Mark Wallace","Individual","DCC",3395,"$3,395","Individual"],
+  [127,"Marli Bakker","Individual","DCC",3395,"$3,395","Individual"],
+  [128,"Mr Sayed M Hasnai Kazmi","Individual","DCC",3395,"$3,395","Individual"],
+  [129,"Mrs Heng Pan","Individual","DCC",3395,"$3,395","Individual"],
+  [130,"Nadia Witthoft","Individual","DCC",3395,"$3,395","Individual"],
+  [131,"Paul Harris","Individual","DCC",3395,"$3,395","Individual"],
+  [132,"Paul Lazarus","Individual","DCC",3395,"$3,395","Individual"],
+  [133,"Raghu Sakaran","Individual","DCC",3395,"$3,395","Individual"],
+  [134,"Richard Gogolin","Individual","DCC",3395,"$3,395","Individual"],
+  [135,"Rita Ransome","Individual","DCC",3395,"$3,395","Individual"],
+  [136,"Sarah Logan","Individual","DCC",3395,"$3,395","Individual"],
+  [137,"Scott Edwards","Individual","DCC",3395,"$3,395","Individual"],
+  [138,"Shirley Shi","Individual","DCC",3395,"$3,395","Individual"],
+  [139,"Stella Bowker","Individual","DCC",3395,"$3,395","Individual"],
+  [140,"Tim Napier-Munn","Individual","DCC",3395,"$3,395","Individual"],
+  [141,"James Rose","Individual","Dale Carnegie Course",3195,"$3,195","Individual"],
+  [142,"Mr Syed M Hasnain Kazmi","Individual","Dale Carnegie Course",3195,"$3,195","Individual"],
+  [143,"Queensland Competition Authority","Individual","Workshop",3190,"$3,190","Individual"],
+  [144,"Missy Ivan","Individual","High Impact Presentations",3074,"$3,074","Individual"],
+  [145,"This Little Pig Went To Market","Individual","Dale Carnegie Course",3074,"$3,074","Individual"],
+  [146,"Aleisha Godfrey","Individual","Generation Next",1650,"$1,650","Individual"],
+  [147,"Carlee Baldwick","Individual","Generation Next",1650,"$1,650","Individual"],
+  [148,"Rowan Tucker","Individual","Generation Next",1650,"$1,650","Individual"],
+  [149,"Podium Project Marketing","Individual","Dale Carnegie Course",1320,"$1,320","Individual"],
+  [150,"Sheryl Gray","Individual","Dale Carnegie Course",660,"$660","Individual"],
+];var activeTier = 'all';
+var searchTerm = '';
+var sortCol = 0;
+var sortDir = 1;
+
+function tierClass(t) {
+  if (t === 'Anchor') return 'tier-1';
+  if (t === 'Active') return 'tier-2';
+  if (t === 'Delivered') return 'tier-3';
+  if (t === 'School') return 'tier-school';
+  if (t === 'SA/WA') return 'tier-sa';
+  return 'tier-prospect';
+}
+
+function badgeClass(t) {
+  if (t === 'Anchor') return 'badge-anchor';
+  if (t === 'Active') return 'badge-active';
+  if (t === 'Delivered') return 'badge-delivered';
+  if (t === 'School') return 'badge-school';
+  if (t === 'Conference') return 'badge-conference';
+  if (t === 'Individual') return 'badge-individual';
+  if (t === 'SA/WA') return 'badge-sa';
+  return 'badge-prospect';
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+
+function matchesFilters(row) {
+  var tier = row[6];
+  if (activeTier !== 'all' && tier !== activeTier) return false;
+  if (searchTerm) {
+    var q = searchTerm.toLowerCase();
+    if (row[1].toLowerCase().indexOf(q) === -1 &&
+        row[2].toLowerCase().indexOf(q) === -1 &&
+        row[3].toLowerCase().indexOf(q) === -1 &&
+        row[5].toLowerCase().indexOf(q) === -1 &&
+        tier.toLowerCase().indexOf(q) === -1) return false;
+  }
+  return true;
+}
+
+function render() {
+  var filtered = DATA.filter(matchesFilters);
+  filtered.sort(function(a, b) {
+    var va = a[sortCol];
     var vb = b[sortCol];
     if (sortCol === 0 || sortCol === 4) return ((va||0) - (vb||0)) * sortDir;
     if (typeof va === 'string') va = va.toLowerCase();

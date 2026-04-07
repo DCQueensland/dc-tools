@@ -125,12 +125,52 @@
     .highlights-grid { grid-template-columns: 1fr; }
   }
 
+  /* Password Gate */
+  #password-gate {
+    display: flex; align-items: center; justify-content: center;
+    min-height: 80vh; padding: 24px;
+  }
+  .password-box {
+    background: #1a2332; border: 1px solid #2c3e50; border-radius: 16px;
+    padding: 48px; text-align: center; max-width: 420px; width: 100%; color: #fff;
+  }
+  .password-box .lock-icon { font-size: 48px; margin-bottom: 20px; }
+  .password-box h2 { font-size: 20px; margin-bottom: 8px; color: #fff; }
+  .password-box p { color: #a0b0c0; font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+  .password-input-wrap { display: flex; gap: 10px; margin-bottom: 16px; }
+  .password-input-wrap input {
+    flex: 1; padding: 12px 16px; border-radius: 8px; border: 1px solid #444;
+    background: #0d1520; color: #fff; font-size: 15px; outline: none;
+  }
+  .password-input-wrap input:focus { border-color: #ffc708; }
+  .password-input-wrap button {
+    padding: 12px 24px; border-radius: 8px; border: none;
+    background: #ffc708; color: #000; font-size: 14px; font-weight: 700; cursor: pointer;
+  }
+  .password-input-wrap button:hover { opacity: 0.85; }
+  .pw-error { color: #ff6347; font-size: 13px; display: none; }
+  #portal-content { display: none; }
 
 </style>
 </head>
 <body>
 
+<!-- PASSWORD GATE -->
+<div id="password-gate">
+  <div class="password-box">
+    <div class="lock-icon">&#128274;</div>
+    <h2>Restricted Access</h2>
+    <p>This portal contains confidential client and revenue data.<br>Enter the access password to continue.</p>
+    <div class="password-input-wrap">
+      <input type="password" id="pw-input" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPassword()">
+      <button onclick="checkPassword()">Unlock</button>
+    </div>
+    <div class="pw-error" id="pw-error">Incorrect password. Contact William or Harry for access.</div>
+  </div>
+</div>
 
+<!-- PORTAL CONTENT (hidden until password entered) -->
+<div id="portal-content">
 <div class="header">
   <div class="brand">
     <div class="dc-mark">DC</div>
@@ -159,7 +199,7 @@
   </div>
 
   <div class="cards">
-    <div class="card yellow"><div class="card-value">$1.59M</div><div class="card-label">Xero-Verified Revenue</div></div>
+    <div class="card yellow"><div class="card-value">$2.61M</div><div class="card-label">Xero-Verified Revenue</div></div>
     <div class="card"><div class="card-value">6</div><div class="card-label">Anchor ($1.30M)</div></div>
     <div class="card green"><div class="card-value">21</div><div class="card-label">Active ($440k)</div></div>
     <div class="card"><div class="card-value">38</div><div class="card-label">Schools ($413k)</div></div>
@@ -210,54 +250,73 @@
   </div>
 </div>
 
+</div><!-- /portal-content -->
 
 <script>
 
+// ===== PASSWORD GATE =====
+const CI_PASSWORD = 'dcqld2026';
+function checkPassword() {
+  const input = document.getElementById('pw-input').value;
+  if (input === CI_PASSWORD) {
+    document.getElementById('password-gate').style.display = 'none';
+    document.getElementById('portal-content').style.display = 'block';
+    sessionStorage.setItem('ci-unlocked', 'true');
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }
+}
+if (sessionStorage.getItem('ci-unlocked') === 'true') {
+  document.getElementById('password-gate').style.display = 'none';
+  document.getElementById('portal-content').style.display = 'block';
+}
 
 // [row#, company, industry, programs, estRevenue (for sorting), estRevenueDisplay, tier]
 var DATA = [
-  // ANCHOR
-  [1,"IOR Pty Ltd","Corporate","360, Custom, DISC, Dale Carnegie Course, Executive Coaching, HIP, High Impact Presentations",283154,"$283,154","Anchor"],
-  [2,"Ulton","Accounting","UYLP (2-day), Emerging Leaders (2-day + online), DISC, Sustainment (LTM + UYLP), 360 Workshop, Coaching",234138,"$234,138","Anchor"],
+  // TIER 1: ANCHOR CLIENTS
+  [1,"Ulton","Accounting","UYLP (2-day), Emerging Leaders (2-day + online), DISC, Sustainment (LTM + UYLP), 360 Workshop, Coaching",476814,"$476,814","Anchor"],
+  [2,"IOR Pty Ltd","Corporate","360, Custom, DISC, Dale Carnegie Course, Executive Coaching, HIP, High Impact Presentations",283154,"$283,154","Anchor"],
   [3,"Bradnam's Windows & Doors","Manufacturing","DCC (x3), UYLP, LTR, VOC reports, 2025 contract signed",211292,"$211,292","Anchor"],
-  [4,"IOR Group","Engineering / Infrastructure","DCC, Living Blue (3-part custom), Frank Conversations, Train the Trainer, Executive Coaching (Drew Morland), 360 Reviews, HIP",0,"","Anchor"],
-  [5,"Sharyn Doolan","Individual","Carnegie Academy Silver",0,"","Anchor"],
-  [6,"YOCO","Co-working / Community","Community Manager Series 1 (8 sessions), Series 2 (7 sessions), WGYH, HTWFAIPDA, Difficult Conversations, Personal Brand, EI, HPT, Executive Coaching, Strategic Readiness",0,"","Anchor"],
+  [4,"IOR Group","Engineering / Infrastructure","DCC, Living Blue (3-part custom), Frank Conversations, Train the Trainer, Executive Coaching (Drew Morland), 360 Reviews, HIP",150000,"$150,000","Anchor"],
+  [5,"YOCO","Co-working / Community","Community Manager Series 1 (8 sessions), Series 2 (7 sessions), WGYH, HTWFAIPDA, Difficult Conversations, Personal Brand, EI, HPT, Executive Coaching, Strategic Readiness",90000,"$90,000","Anchor"],
+  [6,"Sharyn Doolan","Individual","Carnegie Academy Silver",87120,"$87,120","Anchor"],
 
-  // ACTIVE
+  // TIER 2: ACTIVE REVENUE CLIENTS
   [7,"iPlan Financial Services Australia Pty Ltd","Corporate","High Impact Presentations",52936,"$52,936","Active"],
-  [8,"Gold Coast Waterways Authority","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers, Strategic Readiness",39205,"$39,205","Active"],
-  [9,"Education Futures Institute","Corporate","DISC, HIP",21999,"$21,999","Active"],
-  [10,"Australian Accounting & Franchising Professionals Pty Ltd","Corporate","Dale Carnegie Course",18672,"$18,672","Active"],
-  [11,"Bundaberg Port Marina","Corporate","Program delivered",18122,"$18,122","Active"],
-  [12,"Safety Mate","Corporate","Program delivered",17572,"$17,572","Active"],
-  [13,"Royal Queensland Yacht Squadron","Corporate","Custom, World Class Customer Service",17374,"$17,374","Active"],
-  [14,"A&D Discount Building Supplies","Corporate","Program delivered",14498,"$14,498","Active"],
-  [15,"Dale Carnegie NSW","Corporate","Dale Carnegie Course, High Impact Presentations",11883,"$11,883","Active"],
-  [16,"Fresh & Save","Corporate","DISC, Dale Carnegie Course",11204,"$11,204","Active"],
-  [17,"Griffith Campbell","Corporate","Dale Carnegie Course, HIP, High Impact Presentations, Winning with Relationship",11204,"$11,204","Active"],
-  [18,"Michael McGuinness","Corporate","HIP, Leadership Training for Managers",10948,"$10,948","Active"],
-  [19,"Magnetic Island Ferries","Corporate","Dale Carnegie Course",7469,"$7,469","Active"],
-  [20,"Petronas Australia","Corporate","HIP, High Impact Presentations, Unleash Your Leadership",7469,"$7,469","Active"],
-  [21,"Department of Employment, Small Business and Training","Corporate","DISC, Dale Carnegie Course",6162,"$6,162","Active"],
-  [22,"BDO","Professional Services","Building Rapport (18 pax), Active Listening, Soft Skills, Springboard Event",4235,"$4,235","Active"],
-  [23,"C&C Plastics Pty LTD","Corporate","Dale Carnegie Course",3844,"$3,844","Active"],
-  [24,"Bartons","Automotive","DCC, LTM (team projects), Booster Shot, Academy proposals (3 individuals)",0,"","Active"],
-  [25,"Champ Group","Sales / Business Services","WRS (custom 2-day), DCC (2-day), 10 individual scorecards, Directors Plan, Strategic Readiness, Coaching",0,"","Active"],
-  [26,"GCWA","Government","Strategic Readiness, DISC, Leadership Development, 360 Assessments (6 reports)",0,"","Active"],
-  [27,"Viterra","Agriculture / Commodities","WGYH, Executive Coaching (Jason Rees), UYLP",0,"","Active"],
+  [8,"Champ Group","Sales / Business Services","WRS (custom 2-day), DCC (2-day), 10 individual scorecards, Directors Plan, Strategic Readiness, Coaching",40000,"$40,000","Active"],
+  [9,"Gold Coast Waterways Authority","Corporate","DISC, Dale Carnegie Course, HIP, Leadership Training for Managers, Strategic Readiness",39205,"$39,205","Active"],
+  [10,"Bartons","Automotive","DCC, LTM (team projects), Booster Shot, Academy proposals (3 individuals)",35000,"$35,000","Active"],
+  [11,"Royal Queensland Yacht Squadron","Corporate","Custom, World Class Customer Service",28919,"$28,919","Active"],
+  [12,"GCWA","Government","Strategic Readiness, DISC, Leadership Development, 360 Assessments (6 reports)",25000,"$25,000","Active"],
+  [13,"Viterra","Agriculture / Commodities","WGYH, Executive Coaching (Jason Rees), UYLP",25000,"$25,000","Active"],
+  [14,"Fresh & Save","Corporate","DISC, Dale Carnegie Course",22407,"$22,407","Active"],
+  [15,"Education Futures Institute","Corporate","DISC, HIP",21999,"$21,999","Active"],
+  [16,"Michael McGuinness","Corporate","HIP, Leadership Training for Managers",21948,"$21,948","Active"],
+  [17,"Australian Accounting & Franchising Professionals Pty Ltd","Corporate","Dale Carnegie Course",18672,"$18,672","Active"],
+  [18,"Bundaberg Port Marina","Corporate","Program delivered",18122,"$18,122","Active"],
+  [19,"Safety Mate","Corporate","Program delivered",17572,"$17,572","Active"],
+  [20,"A&D Discount Building Supplies","Corporate","Program delivered",14498,"$14,498","Active"],
+  [21,"Dale Carnegie NSW","Corporate","Dale Carnegie Course, High Impact Presentations",14273,"$14,273","Active"],
+  [22,"Griffith Campbell","Corporate","Dale Carnegie Course, HIP, High Impact Presentations, Winning with Relationship",11204,"$11,204","Active"],
+  [23,"C&C Plastics Pty LTD","Corporate","Dale Carnegie Course",7689,"$7,689","Active"],
+  [24,"Magnetic Island Ferries","Corporate","Dale Carnegie Course",7469,"$7,469","Active"],
+  [25,"Petronas Australia","Corporate","HIP, High Impact Presentations, Unleash Your Leadership",7469,"$7,469","Active"],
+  [26,"Department of Employment, Small Business and Training","Corporate","DISC, Dale Carnegie Course",6162,"$6,162","Active"],
+  [27,"BDO","Professional Services","Building Rapport (18 pax), Active Listening, Soft Skills, Springboard Event",4235,"$4,235","Active"],
 
-  // DELIVERED
-  [28,"BMDG","Government (QLD)","Building a Coaching Culture & Art of Delegation",4946,"$4,946","Delivered"],
-  [29,"Ascension","Property / Financial Services","Trusted Advising (2 sessions)",0,"","Delivered"],
-  [30,"BRS","Automotive Services","WGYH, WRS",0,"","Delivered"],
-  [31,"Colpak","Packaging / Manufacturing","WRS",0,"","Delivered"],
-  [32,"DBS","Business Services","Professional & Team Development",0,"","Delivered"],
-  [33,"Latter Kennedy","Accounting","Elevate Your Impact workshop",0,"","Delivered"],
-  [34,"National Glass","Manufacturing (via Bradnam's)","2-Day DCC",0,"","Delivered"],
-  [35,"QCAT","Government (QLD Tribunal)","360 Assessments (3 reports: Cao, Skeljo, Innes)",0,"","Delivered"],
+  // TIER 3: DELIVERED / OTHER CORPORATE
+  [28,"Ascension","Property / Financial Services","Trusted Advising (2 sessions)",8000,"$8,000","Delivered"],
+  [29,"BRS","Automotive Services","WGYH, WRS",8000,"$8,000","Delivered"],
+  [30,"Colpak","Packaging / Manufacturing","WRS",8000,"$8,000","Delivered"],
+  [31,"National Glass","Manufacturing (via Bradnam's)","2-Day DCC",8000,"$8,000","Delivered"],
+  [32,"QCAT","Government (QLD Tribunal)","360 Assessments (3 reports: Cao, Skeljo, Innes)",6000,"$6,000","Delivered"],
+  [33,"DBS","Business Services","Professional & Team Development",5000,"$5,000","Delivered"],
+  [34,"Latter Kennedy","Accounting","Elevate Your Impact workshop",5000,"$5,000","Delivered"],
+  [35,"BMDG","Government (QLD)","Building a Coaching Culture & Art of Delegation",4946,"$4,946","Delivered"],
 
-  // CONFERENCE
+  // CONFERENCES & ASSOCIATIONS
   [36,"SBMAQ Head Office","Association","DISC, Workshop",18298,"$18,298","Conference"],
   [37,"SBMAQ Darling Downs","Association","DISC, Professional Development",9896,"$9,896","Conference"],
   [38,"SBMAQ Sunshine Coast","Association","DISC, Professional Development",5138,"$5,138","Conference"],
@@ -270,107 +329,107 @@ var DATA = [
   [45,"QSPA","School Principals","Conference: Coaching Culture, Emotional Intelligence (Sunshine Coast)",0,"","Conference"],
   [46,"SBMAQ","School Business Managers","8+ sessions: Conference, Empower & Thrive (5-part), Nov Workshop, Performance, Leadership with Resilience",0,"","Conference"],
 
-  // SCHOOL
+  // SCHOOLS
   [47,"Burpengary State Secondary College","School","DISC, Generation Next, HIP, Professional Development",97840,"$97,840","School"],
   [48,"Murrumba","School (Brisbane North)","Aspirant Leaders (2 days)",71657,"$71,657","School"],
   [49,"Rockhampton North Special","School (Rockhampton)","Unite & Connect, Leading Change, Strategic Readiness",35312,"$35,312","School"],
   [50,"Capricornia School of Distance Education","School","DISC, Dale Carnegie Course, HIP, Unleash Your Leadership",30467,"$30,467","School"],
   [51,"Bribie Island State High School","School","Custom, DISC, Professional Development",20561,"$20,561","School"],
-  [52,"Yeronga State High School","School","DISC, Workshop",12060,"$12,060","School"],
-  [53,"Innisfail State College","School (Far North QLD)","Elevate & Inspire",11204,"$11,204","School"],
-  [54,"Chinchilla State High School","School","DISC, Professional Development, Workshop",10281,"$10,281","School"],
-  [55,"Coombabah State High School","School","DISC, Professional Development",10281,"$10,281","School"],
-  [56,"Dalby State School","School","Custom, DISC, Professional Development",10281,"$10,281","School"],
-  [57,"Kenmore State High School","School","DISC, Professional Development",10281,"$10,281","School"],
-  [58,"Moranbah State High School","School","DISC, Professional Development",10281,"$10,281","School"],
-  [59,"The Gap State High School","School","DISC, Professional Development",10281,"$10,281","School"],
-  [60,"Tullawong State School","School (Caboolture)","Elevate and Inspire",10281,"$10,281","School"],
-  [61,"Woodridge State High School","School","DISC, Professional Development",10281,"$10,281","School"],
-  [62,"Gin Gin State High","School (Bundaberg)","Leading Change PD Day",5500,"$5,500","School"],
-  [63,"Ashgrove State School","School (Brisbane)","Elevate, Empower & Inspire",5138,"$5,138","School"],
-  [64,"Ipswich State High","School (Ipswich)","Elevate and Inspire",4367,"$4,367","School"],
-  [65,"Harristown","School (Toowoomba)","Courageous Conversations",3600,"$3,600","School"],
-  [66,"Mansfield State High School","School","DISC, HIP",3600,"$3,600","School"],
-  [67,"Quilpie State College","School (Outback QLD)","Elevate and Inspire",3600,"$3,600","School"],
-  [68,"Shailer Park","School (Brisbane South)","Strategic Readiness",3600,"$3,600","School"],
-  [69,"Maryborough State High School","School","DISC, HIP, Leadership Training for Managers",1981,"$1,981","School"],
-  [70,"Bellbird Park","School (Brisbane)","Elevate and Inspire",0,"","School"],
-  [71,"Brisbane State High","School (Brisbane)","Elevate and Inspire",0,"","School"],
-  [72,"Burleigh Heads SHS","School (Gold Coast)","Elevate and Inspire",0,"","School"],
-  [73,"Burpengary SCS","School (Brisbane North)","Foundations of Leadership (7 sessions), Gen Next, Strategic Readiness",0,"","School"],
-  [74,"Capricornia SoDE","School (Rockhampton)","High Performance Teams",0,"","School"],
-  [75,"Craigslea SHS","School (Brisbane)","Elevate and Inspire",0,"","School"],
-  [76,"Gympie State High","School (Gympie)","Strategic Readiness",0,"","School"],
-  [77,"Moranbah SHS","School (Central QLD)","Elevate and Inspire",0,"","School"],
-  [78,"Ormeau Woods SHS","School (Gold Coast)","Elevate and Inspire",0,"","School"],
-  [79,"Principals Series","School Program","4 workshops: Change Mgmt, HPT, Coaching Excellence, Dynamic Leadership",0,"","School"],
-  [80,"Redbank SHS","School (Ipswich)","Strategic Readiness",0,"","School"],
-  [81,"Rockhampton Special School","School (Rockhampton)","Strategic Readiness",0,"","School"],
+  [52,"Rockhampton Special School","School (Rockhampton)","Strategic Readiness",20561,"$20,561","School"],
+  [53,"Yeronga State High School","School","DISC, Workshop",12060,"$12,060","School"],
+  [54,"Innisfail State College","School (Far North QLD)","Elevate & Inspire",11204,"$11,204","School"],
+  [55,"Chinchilla State High School","School","DISC, Professional Development, Workshop",10281,"$10,281","School"],
+  [56,"Coombabah State High School","School","DISC, Professional Development",10281,"$10,281","School"],
+  [57,"Dalby State School","School","Custom, DISC, Professional Development",10281,"$10,281","School"],
+  [58,"Kenmore State High School","School","DISC, Professional Development",10281,"$10,281","School"],
+  [59,"Moranbah State High School","School","DISC, Professional Development",10281,"$10,281","School"],
+  [60,"The Gap State High School","School","DISC, Professional Development",10281,"$10,281","School"],
+  [61,"Tullawong State School","School (Caboolture)","Elevate and Inspire",10281,"$10,281","School"],
+  [62,"Woodridge State High School","School","DISC, Professional Development",10281,"$10,281","School"],
+  [63,"Gin Gin State High","School (Bundaberg)","Leading Change PD Day",5500,"$5,500","School"],
+  [64,"Ashgrove State School","School (Brisbane)","Elevate, Empower & Inspire",5138,"$5,138","School"],
+  [65,"Ipswich State High","School (Ipswich)","Elevate and Inspire",4367,"$4,367","School"],
+  [66,"Harristown","School (Toowoomba)","Courageous Conversations",3600,"$3,600","School"],
+  [67,"Mansfield State High School","School","DISC, HIP",3600,"$3,600","School"],
+  [68,"Quilpie State College","School (Outback QLD)","Elevate and Inspire",3600,"$3,600","School"],
+  [69,"Shailer Park","School (Brisbane South)","Strategic Readiness",3600,"$3,600","School"],
+  [70,"Maryborough State High School","School","DISC, HIP, Leadership Training for Managers",1981,"$1,981","School"],
+  [71,"Bellbird Park","School (Brisbane)","Elevate and Inspire",0,"","School"],
+  [72,"Brisbane State High","School (Brisbane)","Elevate and Inspire",0,"","School"],
+  [73,"Burleigh Heads SHS","School (Gold Coast)","Elevate and Inspire",0,"","School"],
+  [74,"Burpengary SCS","School (Brisbane North)","Foundations of Leadership (7 sessions), Gen Next, Strategic Readiness",0,"","School"],
+  [75,"Capricornia SoDE","School (Rockhampton)","High Performance Teams",0,"","School"],
+  [76,"Craigslea SHS","School (Brisbane)","Elevate and Inspire",0,"","School"],
+  [77,"Gympie State High","School (Gympie)","Strategic Readiness",0,"","School"],
+  [78,"Moranbah SHS","School (Central QLD)","Elevate and Inspire",0,"","School"],
+  [79,"Ormeau Woods SHS","School (Gold Coast)","Elevate and Inspire",0,"","School"],
+  [80,"Principals Series","School Program","4 workshops: Change Mgmt, HPT, Coaching Excellence, Dynamic Leadership",0,"","School"],
+  [81,"Redbank SHS","School (Ipswich)","Strategic Readiness",0,"","School"],
   [82,"Sandy Strait State School","School (Hervey Bay)","Elevate and Inspire",0,"","School"],
   [83,"St Peters","School (Brisbane)","Gift voucher / proposal",0,"","School"],
   [84,"Windaroo","School (Brisbane South)","Elevate and Inspire, Connecting and Collaborating (2 groups)",0,"","School"],
 
-  // INDIVIDUAL
-  [85,"JH Leavy & Co","Individual","HIP",3734,"$3,734","Individual"],
-  [86,"Newmont Mining","Individual","Program delivered",3734,"$3,734","Individual"],
-  [87,"OzKleen Asia Pacific Pty Ltd","Individual","HIP, Winning with Relationship",3734,"$3,734","Individual"],
-  [88,"Tony Millar","Individual","High Impact Presentations",3734,"$3,734","Individual"],
-  [89,"Trilogy Accounting","Individual","Program delivered",3734,"$3,734","Individual"],
-  [90,"VAE Group","Individual","Dale Carnegie Course",3624,"$3,624","Individual"],
-  [91,"Kongo Pty Ltd","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
-  [92,"Wealth Hub Australia","Individual","Dale Carnegie Course",3446,"$3,446","Individual"],
-  [93,"Department of Child Protection","Individual","DISC, Dale Carnegie Course",3081,"$3,081","Individual"],
-  [94,"Baris Chung","Individual","DISC, Dale Carnegie Course",2744,"$2,744","Individual"],
-  [95,"Todd Purdey","Individual","Generation Next",1650,"$1,650","Individual"],
-  [96,"Yellow Donkey Growth Consulting","Individual","Generation Next",1650,"$1,650","Individual"],
-  [97,"Angus Bruce","Individual","Program delivered",358,"$358","Individual"],
-  [98,"Angela Spasovski","Individual","Program delivered",325,"$325","Individual"],
-  [99,"Carlin Wedenberg","Individual","DCC",0,"","Individual"],
-  [100,"Chetan Garg","Individual","DCC",0,"","Individual"],
-  [101,"Daniel Fitzgerald","Individual","DCC",0,"","Individual"],
-  [102,"Danielle Lowth","Individual","DCC",0,"","Individual"],
-  [103,"Denise Jackson","Individual","DCC",0,"","Individual"],
-  [104,"Education Futures Institute | South East Regional Office - DOE","Individual","DISC, Professional Development, Workshop",0,"","Individual"],
-  [105,"Emmanuel Samoela","Individual","DCC",0,"","Individual"],
-  [106,"Eugene Tan","Individual","DCC",0,"","Individual"],
-  [107,"Hitesh Dajie","Individual","DCC",0,"","Individual"],
-  [108,"Jane Andrews","Individual","Carnegie Academy",0,"","Individual"],
-  [109,"Jarrod Koning","Individual","DCC",0,"","Individual"],
-  [110,"Jessica Escamilla","Individual","DCC",0,"","Individual"],
-  [111,"Joneil Palenzuela","Individual","DCC",0,"","Individual"],
-  [112,"Kelly McLean","Individual","DCC",0,"","Individual"],
-  [113,"Kumudu Chathurang","Individual","DCC",0,"","Individual"],
-  [114,"Lais Carneiro","Individual","DCC",0,"","Individual"],
-  [115,"Mark Brooker","Individual","DCC",0,"","Individual"],
-  [116,"Nadine","Individual","Carnegie Academy Bronze",0,"","Individual"],
-  [117,"Natalie Teh","Individual","DCC",0,"","Individual"],
-  [118,"Neema Bathija","Individual","DCC",0,"","Individual"],
-  [119,"Sara Bartrum","Individual","DCC",0,"","Individual"],
-  [120,"Sebastian Grubb","Individual","DCC",0,"","Individual"],
-  [121,"Stephanie White","Individual","DCC",0,"","Individual"],
+  // INDIVIDUALS
+  [85,"Jane Andrews","Individual","Carnegie Academy",40265,"$40,265","Individual"],
+  [86,"Nadine","Individual","Carnegie Academy Bronze",40265,"$40,265","Individual"],
+  [87,"JH Leavy & Co","Individual","HIP",3734,"$3,734","Individual"],
+  [88,"Newmont Mining","Individual","Program delivered",3734,"$3,734","Individual"],
+  [89,"OzKleen Asia Pacific Pty Ltd","Individual","HIP, Winning with Relationship",3734,"$3,734","Individual"],
+  [90,"Tony Millar","Individual","High Impact Presentations",3734,"$3,734","Individual"],
+  [91,"Trilogy Accounting","Individual","Program delivered",3734,"$3,734","Individual"],
+  [92,"VAE Group","Individual","Dale Carnegie Course",3624,"$3,624","Individual"],
+  [93,"Education Futures Institute | South East Regional Office - DOE","Individual","DISC, Professional Development, Workshop",3600,"$3,600","Individual"],
+  [94,"Kongo Pty Ltd","Individual","Dale Carnegie Course",3514,"$3,514","Individual"],
+  [95,"Wealth Hub Australia","Individual","Dale Carnegie Course",3446,"$3,446","Individual"],
+  [96,"Carlin Wedenberg","Individual","DCC",3395,"$3,395","Individual"],
+  [97,"Chetan Garg","Individual","DCC",3395,"$3,395","Individual"],
+  [98,"Daniel Fitzgerald","Individual","DCC",3395,"$3,395","Individual"],
+  [99,"Danielle Lowth","Individual","DCC",3395,"$3,395","Individual"],
+  [100,"Denise Jackson","Individual","DCC",3395,"$3,395","Individual"],
+  [101,"Emmanuel Samoela","Individual","DCC",3395,"$3,395","Individual"],
+  [102,"Eugene Tan","Individual","DCC",3395,"$3,395","Individual"],
+  [103,"Hitesh Dajie","Individual","DCC",3395,"$3,395","Individual"],
+  [104,"Jarrod Koning","Individual","DCC",3395,"$3,395","Individual"],
+  [105,"Jessica Escamilla","Individual","DCC",3395,"$3,395","Individual"],
+  [106,"Joneil Palenzuela","Individual","DCC",3395,"$3,395","Individual"],
+  [107,"Kelly McLean","Individual","DCC",3395,"$3,395","Individual"],
+  [108,"Kumudu Chathurang","Individual","DCC",3395,"$3,395","Individual"],
+  [109,"Lais Carneiro","Individual","DCC",3395,"$3,395","Individual"],
+  [110,"Mark Brooker","Individual","DCC",3395,"$3,395","Individual"],
+  [111,"Natalie Teh","Individual","DCC",3395,"$3,395","Individual"],
+  [112,"Neema Bathija","Individual","DCC",3395,"$3,395","Individual"],
+  [113,"Sara Bartrum","Individual","DCC",3395,"$3,395","Individual"],
+  [114,"Sebastian Grubb","Individual","DCC",3395,"$3,395","Individual"],
+  [115,"Stephanie White","Individual","DCC",3395,"$3,395","Individual"],
+  [116,"Department of Child Protection","Individual","DISC, Dale Carnegie Course",3081,"$3,081","Individual"],
+  [117,"Baris Chung","Individual","DISC, Dale Carnegie Course",2744,"$2,744","Individual"],
+  [118,"Todd Purdey","Individual","Generation Next",1650,"$1,650","Individual"],
+  [119,"Yellow Donkey Growth Consulting","Individual","Generation Next",1650,"$1,650","Individual"],
+  [120,"Angus Bruce","Individual","Program delivered",358,"$358","Individual"],
+  [121,"Angela Spasovski","Individual","Program delivered",325,"$325","Individual"],
 
-  // PROSPECT
-  [122,"CPO Architects","Architecture","4 proposal iterations — converted 2025",38243,"$38,243","Prospect"],
-  [123,"HARSCO Rail","Rail / Engineering","Proposal + LTM/WRS flyers",36135,"$36,135","Prospect"],
+  // PROSPECTS
+  [122,"CPO Architects","Architecture","4 proposal iterations — converted 2025",76485,"$76,485","Prospect"],
+  [123,"HARSCO Rail","Rail / Engineering","Proposal + LTM/WRS flyers",61430,"$61,430","Prospect"],
   [124,"Paynters","Construction","Proposal + DCC Immersion flyer",21087,"$21,087","Prospect"],
   [125,"Adelaide Hills Fresh","Agriculture (SA)","Proposal 2024",7249,"$7,249","Prospect"],
   [126,"Drakes Supermarket","Retail (SA)","2 proposals: company + Jon Tamm",7139,"$7,139","Prospect"],
   [127,"Crisp Power & Control","Electrical / Engineering","Proposal May 2024",3624,"$3,624","Prospect"],
-  [128,"2 Bros","Unknown","Proposal Feb 2024",0,"","Prospect"],
-  [129,"AIB Insurance","Insurance","Proposal July 2024",0,"","Prospect"],
-  [130,"AOL","Unknown","3 proposals (April, May, Adelaide)",0,"","Prospect"],
-  [131,"ATC Engineers","Engineering","Proposal + Carnegie Academy",0,"","Prospect"],
-  [132,"Alceon","Investment / Finance","Academy & Coaching Proposal",0,"","Prospect"],
-  [133,"Arthur J. Gallagher","Insurance / Risk","Proposal Sep 2024",0,"","Prospect"],
-  [134,"Boutique Business House","Accounting","Endorsed Proposal + May 2024",0,"","Prospect"],
-  [135,"Choice Energy","Energy","Proposal 2024",0,"","Prospect"],
-  [136,"Climat Commercial","HVAC / Commercial","2 individual proposals (Adam Percy, Ben Strapp)",0,"","Prospect"],
-  [137,"Cornerstone Planning","Financial Planning","Proposal",0,"","Prospect"],
-  [138,"Costa Group","Agriculture","Mark Camilleri Proposal",0,"","Prospect"],
-  [139,"Currie & Brown","Construction Consultancy","Proposal May 2024",0,"","Prospect"],
-  [140,"DMA","Legal / Engineering","DCC proposal, team training",0,"","Prospect"],
-  [141,"EJ","Manufacturing","Endorsed Offer + July 2024",0,"","Prospect"],
-  [142,"First Flooring","Flooring / Construction","Ryan Smit Academy Proposal",0,"","Prospect"],
+  [128,"First Flooring","Flooring / Construction","Ryan Smit Academy Proposal",325,"$325","Prospect"],
+  [129,"2 Bros","Unknown","Proposal Feb 2024",0,"","Prospect"],
+  [130,"AIB Insurance","Insurance","Proposal July 2024",0,"","Prospect"],
+  [131,"AOL","Unknown","3 proposals (April, May, Adelaide)",0,"","Prospect"],
+  [132,"ATC Engineers","Engineering","Proposal + Carnegie Academy",0,"","Prospect"],
+  [133,"Alceon","Investment / Finance","Academy & Coaching Proposal",0,"","Prospect"],
+  [134,"Arthur J. Gallagher","Insurance / Risk","Proposal Sep 2024",0,"","Prospect"],
+  [135,"Boutique Business House","Accounting","Endorsed Proposal + May 2024",0,"","Prospect"],
+  [136,"Choice Energy","Energy","Proposal 2024",0,"","Prospect"],
+  [137,"Climat Commercial","HVAC / Commercial","2 individual proposals (Adam Percy, Ben Strapp)",0,"","Prospect"],
+  [138,"Cornerstone Planning","Financial Planning","Proposal",0,"","Prospect"],
+  [139,"Costa Group","Agriculture","Mark Camilleri Proposal",0,"","Prospect"],
+  [140,"Currie & Brown","Construction Consultancy","Proposal May 2024",0,"","Prospect"],
+  [141,"DMA","Legal / Engineering","DCC proposal, team training",0,"","Prospect"],
+  [142,"EJ","Manufacturing","Endorsed Offer + July 2024",0,"","Prospect"],
   [143,"Fugen Masonry","Construction","Proposal Sep 2024",0,"","Prospect"],
   [144,"Green Life Clinics","Healthcare","Proposal Aug 2024",0,"","Prospect"],
   [145,"Integrity New Homes","Construction","Proposal Nov 2024",0,"","Prospect"],
@@ -393,7 +452,9 @@ var DATA = [
   [162,"Truis","Technology","Proposal 2024",0,"","Prospect"],
   [163,"Upward Consulting","Consulting","Dorin Baga Academy + company proposal",0,"","Prospect"],
   [164,"Zweck","Accounting","Endorsed Offer + May 2024",0,"","Prospect"],
-];var activeTier = 'all';
+];
+
+var activeTier = 'all';
 var searchTerm = '';
 var sortCol = 0;
 var sortDir = 1;
