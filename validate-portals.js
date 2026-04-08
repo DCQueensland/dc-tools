@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 const REQUIRED_FUNCTIONS = ['function render()', 'function tierClass', 'function badgeClass', 'function escapeHtml'];
-const MIN_RECORDS = 50; // any CI portal with fewer than this is suspicious
+const MIN_RECORDS = 5; // catches the "DATA failed to parse" case; early years (2016) legitimately have few records
 
 function validatePortal(file) {
   const issues = [];
