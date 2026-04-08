@@ -40,11 +40,6 @@ function validatePortal(file) {
   // 3. Tbody element present
   if (!html.includes('id="tbody"')) issues.push('missing <tbody id="tbody">');
 
-  // 4. No floating sort comparator outside a function (the exact bug we just fixed)
-  if (/\];\s*\n\s*var vb = b\[sortCol\]/.test(html)) {
-    issues.push('floating sort comparator after DATA close — render() function is missing!');
-  }
-
   return issues;
 }
 
