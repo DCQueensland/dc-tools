@@ -465,6 +465,48 @@ var DATA = [
   [227,"Tilly's Crawler Parts","Mining Parts","Proposal May 2023",0,"","Prospect"],
   [228,"Whyalla Beef","Agriculture","2 proposal versions (Sep 2023)",0,"","Prospect"],
 ];
+var activeTier = 'all';
+var searchTerm = '';
+var sortCol = 0;
+var sortDir = 1;
+
+function tierClass(t) {
+  if (t === 'Anchor') return 'tier-1';
+  if (t === 'Active') return 'tier-2';
+  if (t === 'Delivered') return 'tier-3';
+  if (t === 'School') return 'tier-school';
+  return 'tier-prospect';
+}
+function badgeClass(t) {
+  if (t === 'Anchor') return 'badge-anchor';
+  if (t === 'Active') return 'badge-active';
+  if (t === 'Delivered') return 'badge-delivered';
+  if (t === 'School') return 'badge-school';
+  if (t === 'Conference') return 'badge-conference';
+  if (t === 'Individual') return 'badge-individual';
+  return 'badge-prospect';
+}
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str));
+  return div.innerHTML;
+}
+function matchesFilters(row) {
+  if (activeTier !== 'all' && row[6] !== activeTier) return false;
+  if (searchTerm) {
+    var q = searchTerm.toLowerCase();
+    if (row[1].toLowerCase().indexOf(q) === -1 &&
+        row[2].toLowerCase().indexOf(q) === -1 &&
+        row[3].toLowerCase().indexOf(q) === -1 &&
+        (row[5]||'').toLowerCase().indexOf(q) === -1 &&
+        row[6].toLowerCase().indexOf(q) === -1) return false;
+  }
+  return true;
+}
+function render() {
+  var filtered = DATA.filter(matchesFilters);
+  filtered.sort(function(a, b) {
+    var va = a[sortCol];
     var vb = b[sortCol];
     if (sortCol === 0 || sortCol === 4) return ((va||0) - (vb||0)) * sortDir;
     if (typeof va === 'string') va = va.toLowerCase();
