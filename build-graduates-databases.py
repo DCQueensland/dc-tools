@@ -307,7 +307,7 @@ def build_row(p):
     atts = p['attendances']
     years = sorted({a['year'] for a in atts if a['year']})
     programs_set = sorted({a['program'] for a in atts if a['program']})
-    prog_strs = sorted({fmt_attendance(a) for a in atts})
+    prog_strs = sorted({fmt_attendance(a) for a in atts if (a['program'] or a['program_code'])})
     return {
         'First Name': p['first'],
         'Last Name': p['last'],
