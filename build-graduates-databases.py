@@ -31,16 +31,19 @@ EXCLUDE_COMPANY_SUBSTRINGS = [
 
 PROGRAM_MAP = {
     'DCC': 'DCC', 'ADCC': 'Advanced DCC', 'UYLP': 'UYLP', 'LTM': 'LTM',
-    'LTR': 'LTR', 'HIP': 'HIP', 'WRS': 'WRS', 'WGYH': 'WGYH',
+    'LTR': 'LTR', 'HIP': 'HIP', 'WRS': 'WRS', 'WGYH': 'WGYH', 'WGHY': 'WGYH',
     'SALES': 'Sales', 'HPT': 'High Performance Teams', 'WCCS': 'World Class Customer Service',
     'WCS': 'World Class Customer Service',
     'LEAD': 'Leadership', 'LEADERSHIP': 'Leadership',
     'PRES': 'HIP', 'PRESENTATIONS': 'HIP',
     'TEAMS': 'High Performance Teams',
     'CUSTOMER SERVICE': 'World Class Customer Service',
-    'GEN NEXT': 'Gen Next', 'GENNEXT': 'Gen Next',
-    'SB': 'Schools', 'SBDC': 'Schools',
+    'GEN NEXT': 'Gen Next', 'GENNEXT': 'Gen Next', 'DCCGN': 'Gen Next',
+    'SB': 'Schools', 'SBDC': 'Schools', 'SCDCC': 'Schools', 'BSBDC': 'Schools',
     'ECHR': 'ECHR',
+    'DYLP': 'UYLP',
+    'DC': 'DCC',
+    'DCCVIATRIS': 'DCC', 'TWDCC': 'DCC',
 }
 
 PROGCODE_RE = re.compile(r'^(\d{2})([A-Z]{2,4})([A-Z_]+?)(?:_([A-Za-z0-9]+))?(?:_?(\d+))?$')
