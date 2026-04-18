@@ -18,10 +18,19 @@ with open(SRC, newline='', encoding='utf-8') as f:
 
 print(f'Loaded {len(rows)} graduates.')
 
-# Strip DC staff
-dc_staff = [r for r in rows if '@dalecarnegie.com' in (r.get('Email') or '').lower()]
-rows = [r for r in rows if '@dalecarnegie.com' not in (r.get('Email') or '').lower()]
-print(f'Dropped {len(dc_staff)} DC staff. Processing {len(rows)} graduates.')
+# Strip DC staff — multiple domains + internal placeholder company
+DC_EMAIL_DOMAINS = ('@dalecarnegie.com', '@dalecarnegieqld.com', '@dalecarnegie.com.au')
+def is_dc_staff(r):
+    email = (r.get('Email') or '').lower()
+    company = (r.get('Company') or '').lower()
+    if any(d in email for d in DC_EMAIL_DOMAINS): return True
+    if company.startswith('40626a-farmer'): return True
+    if 'dale carnegie' in company: return True
+    return False
+
+dc_staff = [r for r in rows if is_dc_staff(r)]
+rows = [r for r in rows if not is_dc_staff(r)]
+print(f'Dropped {len(dc_staff)} DC staff/internal. Processing {len(rows)} graduates.')
 
 # Save full row index so we can rejoin later
 with open('/tmp/apollo_source_rows.json', 'w') as f:
