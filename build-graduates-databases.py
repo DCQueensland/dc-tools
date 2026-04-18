@@ -93,6 +93,17 @@ def state_from_zip(z):
     first = digits[0] if len(digits) >= 4 else digits[0]
     return {'2':'NSW','3':'VIC','4':'QLD','5':'SA','6':'WA','7':'TAS','0':'NT_ACT'}.get(first)
 
+def state_from_phone(p):
+    """Infer state from Australian landline area code. Mobiles (04x) return None."""
+    if not p: return None
+    digits = ''.join(c for c in str(p) if c.isdigit())
+    if not digits: return None
+    if digits.startswith('61'): digits = digits[2:]
+    if not digits.startswith('0'): digits = '0' + digits
+    if len(digits) < 3: return None
+    ac = digits[:2]
+    return {'02':'NSW','03':'VIC','07':'QLD','08':'SA_WA'}.get(ac)
+
 def normalise_state(s):
     if not s: return None
     s = str(s).strip().upper()
