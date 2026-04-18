@@ -171,9 +171,12 @@ for fname in ['Updated Graduates for Farmer 2014-2019.xls',
         year = pc_info.get('year') or (sess_date.year if sess_date else None)
         zip_state = state_from_zip(row[6])
         prog_state = pc_info.get('state_guess')
-        # SB (schools) rows: trust zipcode
         if prog_state == 'SB': prog_state = None
-        state = zip_state or prog_state
+        phone_state = state_from_phone(row[7]) or state_from_phone(row[8])
+        # Ambiguous SA_WA from phone resolves via prog_state if set
+        if phone_state == 'SA_WA':
+            phone_state = prog_state if prog_state in ('SA','WA') else None
+        state = zip_state or prog_state or phone_state
         records.append({
             'first': str(row[1]).strip(),
             'last': str(row[2]).strip(),
@@ -207,6 +210,10 @@ for idx, row in enumerate(ws.iter_rows(values_only=True)):
     pg = (d.get('Product Group Code') or '').strip()
     program = PROGRAM_MAP.get(pg.upper(), pg.title() if pg else '')
     state = normalise_state(d.get('Mailing State/Province'))
+    if not state:
+        phone_state = state_from_phone(d.get('Phone')) or state_from_phone(d.get('Mobile'))
+        if phone_state and phone_state != 'SA_WA':
+            state = phone_state
     records.append({
         'first': str(d.get('First Name') or '').strip(),
         'last': str(d.get('Last Name') or '').strip(),
